@@ -1,14 +1,13 @@
 package ClassTable.src.datasource;
 
-import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ChemicalTableDataGateway {
-
-  public void createTableChemcial() {
-    String dropTable = "DROP TABLE IF EXISTS Chemical;";
-    String createTable = "CREATE TABLE Chemical" + "(" + "chemicalID INT NOT NULL, "
-        + "name VARCHAR(20), " + "inhabits VARCHAR(20) " + ");";
+public class BaseTableDataGateway {
+  
+  public void createTableBase() {
+    String dropTable = "DROP TABLE IF EXISTS Base;";
+    String createTable = "CREATE TABLE Base" + "(" + "chemicalID INT NOT NULL, "
+        + "solute VARCHAR(20) " + ");"; // Not sure how to store solute, is a chemical
     
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -20,8 +19,5 @@ public class ChemicalTableDataGateway {
       e.printStackTrace();
     }
   }
-  
-  
-  
   
 }
