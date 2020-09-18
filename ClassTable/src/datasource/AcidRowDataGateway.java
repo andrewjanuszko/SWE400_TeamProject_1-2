@@ -2,13 +2,13 @@ package ClassTable.src.datasource;
 
 import java.sql.Statement;
 
-public class AcidTableDataGateway {
+public class AcidRowDataGateway {
   
   public void createTableBase() {
     String dropTable = "DROP TABLE IF EXISTS Acid;";
-    String createTable = "CREATE TABLE Acid" + "(" + "chemicalID INT NOT NULL, "
-        + "solute VARCHAR(20), "   // Not sure how to store solute, is a chemical
-        + "dissolves VARCHAR(20) " // Not sure how to store dissolves, is list of chemical 
+    String createTable = "CREATE TABLE Acid" + "(" + "acidId INT NOT NULL, "
+        + "solute VARCHAR(20), "   
+        + "FOREIGN KEY(acidId) REFERENCES Chemical(chemicalId)"
         + ");";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
