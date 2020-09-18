@@ -1,10 +1,11 @@
 package ClassTable.src.datasource;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import datasource.DatabaseManager;
+import ClassTable.src.datasource.DatabaseManager;
 
 public class ChemicalRowDataGateway {
 
@@ -14,7 +15,8 @@ public class ChemicalRowDataGateway {
         + "inhabits VARCHAR(20), " + "PRIMARY KEY (chemicalId)" + ");";
 
     try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      // reminder to set foregin key checks to 0 later so we can drop
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement(); 
       // Drop the table if exists first
       statement.executeUpdate(dropTable);
       // Create new Monitorings Table
@@ -25,7 +27,7 @@ public class ChemicalRowDataGateway {
   }
 
   public String getName(int chemicalId) {
-    String name; 
+    String name= ""; 
     String sql = new String("SELECT * FROM Chemical WHERE chemicalId = " + chemicalId + ";");
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -35,10 +37,11 @@ public class ChemicalRowDataGateway {
     } catch (Exception e) { 
       
     }
+    return name;
   }
 
   public String getInhabits(int chemicalId) {
-    String inhabits; 
+    String inhabits = ""; 
     String sql = new String("SELECT * FROM Chemical WHERE chemicalId = " + chemicalId + ";");
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -48,6 +51,19 @@ public class ChemicalRowDataGateway {
     } catch (Exception e) { 
       
     }
+    return inhabits;
+  }
+  
+  public void insertChemical(int id, String name, String inhabits) {
+    String insert = "INSERT INTO Chemical (chemicalId, name, inhabits) VALUES (" 
+        + id + ", " + name + ", " + inhabits + ");"; 
+    try  {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeQuery(insert);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+    
   }
   
 }

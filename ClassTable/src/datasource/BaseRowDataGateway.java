@@ -1,5 +1,6 @@
 package ClassTable.src.datasource;
 
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class BaseRowDataGateway {
@@ -23,4 +24,16 @@ public class BaseRowDataGateway {
     }
   }
   
+  
+  public void insertBase(int id, String solute) {
+    String insert = "INSERT INTO Base (baseId, solute) VALUES (" 
+        + id + ", " + solute + ");"; 
+    try  {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeQuery(insert);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+  }
 }

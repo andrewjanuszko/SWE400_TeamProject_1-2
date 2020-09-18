@@ -1,5 +1,6 @@
 package ClassTable.src.datasource;
 
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class MetalRowDataGateway {
@@ -24,4 +25,15 @@ public class MetalRowDataGateway {
     }
   }
   
+  public void insertMetal(int id, int dissolvedBy) {
+    String insert = "INSERT INTO Metal (metalId, dissolvedBy) VALUES (" 
+        + id + ", " + dissolvedBy + ");"; 
+    try  {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeQuery(insert);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+  }
 }

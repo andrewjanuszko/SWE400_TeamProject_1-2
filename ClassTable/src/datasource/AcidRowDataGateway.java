@@ -1,5 +1,6 @@
 package ClassTable.src.datasource;
 
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class AcidRowDataGateway {
@@ -21,4 +22,16 @@ public class AcidRowDataGateway {
     }
   }
   
+  
+  public void insertAcid(int id, String solute) {
+    String insert = "INSERT INTO Acid (acidId, solute) VALUES (" 
+        + id + ", " + solute + ");"; 
+    try  {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeQuery(insert);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+  }
 }
