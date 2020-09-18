@@ -2,12 +2,14 @@ package ClassTable.src.datasource;
 
 import java.sql.Statement;
 
-public class ElementTableDataGateway {
-  public void createTableElement() {
-    String dropTable = "DROP TABLE IF EXISTS Element;";
-    String createTable = "CREATE TABLE Element" + "(" + "chemicalId INT NOT NULL, "
-        + "atomicNumber INT, " + "atomicMass DOUBLE) " + ");";
-    
+public class AcidRowDataGateway {
+  
+  public void createTableBase() {
+    String dropTable = "DROP TABLE IF EXISTS Acid;";
+    String createTable = "CREATE TABLE Acid" + "(" + "acidId INT NOT NULL, "
+        + "solute VARCHAR(20), "   
+        + "FOREIGN KEY(acidId) REFERENCES Chemical(chemicalId)"
+        + ");";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       // Drop the table if exists first
@@ -18,4 +20,5 @@ public class ElementTableDataGateway {
       e.printStackTrace();
     }
   }
+  
 }

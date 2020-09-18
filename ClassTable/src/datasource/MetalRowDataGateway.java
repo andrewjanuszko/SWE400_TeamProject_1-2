@@ -2,12 +2,16 @@ package ClassTable.src.datasource;
 
 import java.sql.Statement;
 
-public class MetalTableDataGateway {
+public class MetalRowDataGateway {
   
   public void createTableMetal() {
     String dropTable = "DROP TABLE IF EXISTS Metal;";
-    String createTable = "CREATE TABLE Metal" + "(" + "chemicalId INT NOT NULL, "
-        + "dissolvedBy VARCHAR(20) " + ");"; // Unsure of how to store dissolvedBy, is an acid
+    String createTable = "CREATE TABLE Metal" + "(" 
+        + "metalId INT NOT NULL, "
+        + "dissolvedBy VARCHAR(20) , " 
+        + "FOREIGN KEY(dissolvedBy) REFERENCES Acid(acidId),"
+        + "FOREIGN KEY(metalId) REFERENCES Chemical(chemicalId)"
+        + ");"; // Unsure of how to store dissolvedBy, is an acid
     
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();

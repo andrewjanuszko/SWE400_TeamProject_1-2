@@ -6,8 +6,11 @@ public class CompoundTableDataGateway {
 
   public void createTableCompound() {
     String dropTable = "DROP TABLE IF EXISTS Compound;";
-    String createTable = "CREATE TABLE Compound" + "(" + "chemicalID INT NOT NULL, "
-        + "madeOf VARCHAR(20), " + ");"; // Not sure how to store madeOf (list of elements)
+    String createTable = "CREATE TABLE Compound" + "(" 
+        + "compoundId INT NOT NULL, "
+        + "madeOf VARCHAR(20), " 
+        + "FOREIGN KEY(compoundId) REFERENCES Chemical(chemicalId)"
+        + ");"; // Not sure how to store madeOf (list of elements)
     
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
