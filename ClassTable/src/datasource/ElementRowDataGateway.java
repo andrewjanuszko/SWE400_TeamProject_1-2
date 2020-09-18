@@ -1,4 +1,4 @@
-package ClassTable.src.datasource;
+package datasource;
 
 import java.sql.Statement;
 

@@ -1,4 +1,4 @@
-package ClassTable.src.datasource;
+package datasource;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +25,7 @@ public class ChemicalRowDataGateway {
   }
 
   public String getName(int chemicalId) {
-    String name; 
+    String name = ""; 
     String sql = new String("SELECT * FROM Chemical WHERE chemicalId = " + chemicalId + ";");
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -35,10 +35,11 @@ public class ChemicalRowDataGateway {
     } catch (Exception e) { 
       
     }
+    return name;
   }
 
   public String getInhabits(int chemicalId) {
-    String inhabits; 
+    String inhabits = ""; 
     String sql = new String("SELECT * FROM Chemical WHERE chemicalId = " + chemicalId + ";");
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -48,6 +49,7 @@ public class ChemicalRowDataGateway {
     } catch (Exception e) { 
       
     }
+    return inhabits;
   }
   
 }
