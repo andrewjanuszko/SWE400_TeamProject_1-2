@@ -1,4 +1,4 @@
-package test.datasource;
+package datasource;
 
 import java.sql.SQLException;
 

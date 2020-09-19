@@ -1,8 +1,10 @@
+package datasource;
+
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import datasource.ChemicalRowDataGateway;
-import test.datasource.DatabaseTest;
 
 class TestChemical extends DatabaseTest {
 
