@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
-import model.OptionsManager;
+import datasource.OptionsManager;
 
 /**
  * @author Merlin
