@@ -1,9 +1,8 @@
-package ClassTable.test.datasource;
-
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-
-import ClassTable.src.datasource.ChemicalRowDataGateway;
+import datasource.ChemicalRowDataGateway;
+import test.datasource.DatabaseTest;
 
 class TestChemical extends DatabaseTest {
 

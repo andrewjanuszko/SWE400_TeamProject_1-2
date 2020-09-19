@@ -52,4 +52,8 @@ public class ChemicalRowDataGateway {
     return inhabits;
   }
   
+  public void insertChemical(int id, String name, String inhabits) {
+    
+  }
+  
 }
