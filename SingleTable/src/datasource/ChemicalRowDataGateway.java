@@ -20,7 +20,7 @@ public interface ChemicalRowDataGateway {
 	/**
 	 * @param habitat - the location where the Chemical is found.
 	 */
-	void setInhabits(String habitat);
+	void setInhabits(String inhabits);
 	
 	/**
 	 * @param atomicNumber - the atomic number of the Chemical.

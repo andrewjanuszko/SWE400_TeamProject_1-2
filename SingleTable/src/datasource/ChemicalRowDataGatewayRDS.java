@@ -1,51 +1,84 @@
 package datasource;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
+/**
+ * The RDS version of the gateway for Chemical.
+ * @author andrewjanuszko
+ */
 public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 
-	public static void createTable() {
+	/**
+	 * Drop the Chemical table if it already exists, then recreate it as an empty table.
+	 * @throws DatabaseException when something goes really wrong.
+	 */
+	public static void createTable() throws DatabaseException {
 		
+		String dropTableSQL = "DROP TABLE IF EXISTS Chemical,CompoundMadeOfElement";
+		String createTableSQL = "CREATE TABLE Chemical (" +
+								"chemicalID LONG NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+								"chemicalType INT NOT NULL, " +
+								"chemicalName VARCHAR(64) NOT NULL," +
+								"inhabits VARCHAR(64) NOT NULL, " +
+								"atomicNumber INT, " +
+								"atomicMass DOUBLE, " +
+								"dissolvedBy INT, " +
+								"solute INT)";
+		// Connection connection = DatabaseManager.getSingleton().getConnection();
+		
+		try {
+			
+		} catch (SQLException e) {
+			// throw new DatabaseException("Failed to create Chemical table.", e);
+		}
 	}
 	
+	private long chemicalID;
+	private int chemicalType;
+	private String chemicalName;
+	private String inhabits;
+	private int atomicNumber;
+	private double atomicMass;
+	private long dissolvedBy;
+	private long solute;
+	
+	/**
+	 * @see datasource.ChemicalRowDataGateway#getType()
+	 */
 	@Override
 	public void setType(int type) {
-		// TODO Auto-generated method stub
-		
+		this.chemicalType = type;
 	}
 
 	@Override
 	public void setName(String name) {
-		// TODO Auto-generated method stub
-		
+		this.chemicalName = name;
 	}
 
 	@Override
-	public void setInhabits(String habitat) {
-		// TODO Auto-generated method stub
-		
+	public void setInhabits(String inhabits) {
+		this.inhabits = inhabits;
 	}
 
 	@Override
 	public void setAtomicNumber(int atomicNumber) {
-		// TODO Auto-generated method stub
-		
+		this.atomicNumber = atomicNumber;
 	}
 
 	@Override
 	public void setAtomicMass(double atomicMass) {
-		// TODO Auto-generated method stub
-		
+		this.atomicMass = atomicMass;
 	}
 
 	@Override
 	public void setDissolvedBy(long acidID) {
-		// TODO Auto-generated method stub
-		
+		this.dissolvedBy = acidID;
 	}
 
 	@Override
 	public void setSolute(long chemicalID) {
-		// TODO Auto-generated method stub
-		
+		this.solute = chemicalID;
 	}
 
 	@Override
