@@ -173,4 +173,22 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 		return this.solute;
 	}
 
+	@Override
+	public void persistData() throws DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resetData() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteInstance() throws DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

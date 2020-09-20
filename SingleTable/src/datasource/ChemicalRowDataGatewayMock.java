@@ -116,4 +116,22 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 		return 0;
 	}
 
+	@Override
+	public void persistData() throws DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resetData() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteInstance() throws DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
