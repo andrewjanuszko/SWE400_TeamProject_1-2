@@ -88,6 +88,9 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 		}
 	}
 
+	/**
+	 * Some comment for something which we dont know what it does.
+	 */
 	@Override
 	public void resetData() {
 		// I want to go to bed.
