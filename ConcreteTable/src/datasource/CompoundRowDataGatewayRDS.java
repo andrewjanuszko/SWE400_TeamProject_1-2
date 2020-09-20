@@ -2,7 +2,9 @@ package datasource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class CompoundRowDataGatewayRDS {
 
@@ -31,6 +33,39 @@ public class CompoundRowDataGatewayRDS {
 			stmt.close();
 		} catch (SQLException e) {
 			throw new DatabaseException("Unable to create InteractableItem table", e);
+		}
+	}
+	
+
+	private Connection conn;
+	
+	private int compoundID;
+	private String name;
+	private String inhabits;
+	private List<Integer> madeOf;
+	
+	
+	public CompoundRowDataGatewayRDS(String name) throws DatabaseException{
+		conn = DatabaseManager.getSingleton().getConnection();
+		this.name = name;
+		findByName(name);
+	}
+	
+	private void findByName(String name) throws DatabaseException{
+		try {
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Compound WHERE name = " + name);
+			ResultSet rs = stmt.executeQuery();
+			rs.next();
+			compoundID = rs.getInt("compoundID");
+			inhabits = rs.getString("inhabits");
+		} catch (SQLException e) {
+			throw new DatabaseException("Couldn't find element with that name", e);
+		}
+		
+		try {
+			PreparedStatement stmt = conn.prepareStatement("");
+		} catch(SQLException e) {
+			
 		}
 	}
 }
