@@ -10,7 +10,7 @@ class TestChemical extends DatabaseTest {
 
   @Test
   void testInsert() {
-    ChemicalRowDataGateway chemical = new ChemicalRowDataGateway(); 
+    ChemicalRowDataGateway chemical = new ChemicalRowDataGatewayRDS(); 
     chemical.createTableChemcial();
     
     chemical.insertChemical(1, "flub", "mars");

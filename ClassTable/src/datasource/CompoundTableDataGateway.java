@@ -1,25 +1,19 @@
 package datasource;
 
-import java.sql.Statement;
+import java.util.List;
 
-public class CompoundTableDataGateway {
+public interface CompoundTableDataGateway {
 
-  public void createTableCompound() {
-    String dropTable = "DROP TABLE IF EXISTS Compound;";
-    String createTable = "CREATE TABLE Compound" + "(" 
-        + "compoundId INT NOT NULL, "
-        + "madeOf VARCHAR(20), " 
-        + "FOREIGN KEY(compoundId) REFERENCES Chemical(chemicalId)"
-        + ");"; // Not sure how to store madeOf (list of elements)
-    
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      // Drop the table if exists first
-      statement.executeUpdate(dropTable);
-      // Create new Monitorings Table
-      statement.executeUpdate(createTable);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+
+  public void createTableCompound();
+  
+  public void insert(int compoundId, String madeOf);
+  
+  public List<Integer> compoundsThatHaveElement(int id);
+  
+  public String getMadeOf(int id);
+  
+  public String getName(int id);
+  
+  public String getInhabits(int id);
 }
