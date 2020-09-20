@@ -1,7 +1,8 @@
 package datasource;
 
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
+
 
 /**
  * The RDS version of the gateway for Chemical.
@@ -25,15 +26,10 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 								"atomicMass DOUBLE, " +
 								"dissolvedBy INT, " +
 								"solute INT)";
-		// Connection connection = DatabaseManager.getSingleton().getConnection();
-		
 		try {
-			ClosingPreparedStatement statement = new ClosingPreparedStatement(connection, dropTableSQL);
-			statement.exectue();
-			statement.close();
-			
-			statement = new ClosingPreparedStatement(connection, createTableSQL);
-			statement.exectue();
+			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+			statement.executeUpdate(dropTableSQL);
+			statement.executeUpdate(createTableSQL);
 			statement.close();
 		} catch (SQLException e) {
 		    throw new DatabaseException("Failed to create Chemical table.", e);
