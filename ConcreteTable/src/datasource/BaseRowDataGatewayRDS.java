@@ -1,31 +1,18 @@
 package datasource;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
-	/*
-	 * Creates Table
-	 * 
-	 * @throws DatabaseException if it can't create or drop table.
-	 */
-	
-	public static void createTable() throws DatabaseException
-	{
-		String drop = "DROP TABLE IF EXISTS Metal";
-		String create = "CREATE TABLE Metal (" + 
-				"metalID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
+public class BaseRowDataGatewayRDS {
+
+	public static void createTable() throws DatabaseException{
+		String drop = "DROP TABLE IF EXISTS Base";
+		String create = "CREATE TABLE Base (" + 
+				"baseID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
 				"name VARCHAR(30) NOT NULL, " +                      //maybe Unique
 				"inhabits VARCHAR(30)" +
-				"atomicNumer INT NOT NULL, " +
-				"atomicMass DOUBLE NOT NULL, " +
-				"disslovedBy INT REFERENCES Acid(acidID);";
+				"solute VARCHAR(30);";
 		
 		Connection conn = DatabaseManager.getSingleton().getConnection();
 
@@ -41,8 +28,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 			stmt = DatabaseManager.getSingleton().getConnection().prepareStatement(create);
 			stmt.execute();
 			stmt.close();
-		} catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			throw new DatabaseException("Unable to create InteractableItem table", e);
 		}
 	}
