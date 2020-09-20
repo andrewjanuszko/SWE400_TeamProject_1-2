@@ -39,7 +39,7 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	}
 
 	@Override
-	public void setInhabits(String habitat) {
+	public void setHabitat(String inhabits) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -66,6 +66,12 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	public void setSolute(long chemicalID) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public long getID() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override

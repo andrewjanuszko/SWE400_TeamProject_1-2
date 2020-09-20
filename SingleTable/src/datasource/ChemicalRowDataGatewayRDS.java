@@ -28,15 +28,21 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 		// Connection connection = DatabaseManager.getSingleton().getConnection();
 		
 		try {
+			ClosingPreparedStatement statement = new ClosingPreparedStatement(connection, dropTableSQL);
+			statement.exectue();
+			statement.close();
 			
+			statement = new ClosingPreparedStatement(connection, createTableSQL);
+			statement.exectue();
+			statement.close();
 		} catch (SQLException e) {
-			// throw new DatabaseException("Failed to create Chemical table.", e);
+		    throw new DatabaseException("Failed to create Chemical table.", e);
 		}
 	}
 	
-	private long chemicalID;
-	private int chemicalType;
-	private String chemicalName;
+	private long ID;
+	private int type;
+	private String name;
 	private String inhabits;
 	private int atomicNumber;
 	private double atomicMass;
@@ -44,83 +50,131 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	private long solute;
 	
 	/**
-	 * @see datasource.ChemicalRowDataGateway#getType()
+	 * @see datasource.ChemicalRowDataGateway#getType().
 	 */
 	@Override
 	public void setType(int type) {
-		this.chemicalType = type;
+		this.type = type;
 	}
 
+	/**
+	 * @see datasource.ChemicalRowDataGateway#getName().
+	 */
 	@Override
 	public void setName(String name) {
-		this.chemicalName = name;
+		this.name = name;
 	}
-
+	
+	/**
+	 * @see datasource.ChemicalRowDataGateway#getHabitat().
+	 */
 	@Override
-	public void setInhabits(String inhabits) {
+	public void setHabitat(String inhabits) {
 		this.inhabits = inhabits;
 	}
 
+	/**
+	 * @see datasource.ChemicalRowDataGateway#getAtomicNumber().
+	 */
 	@Override
 	public void setAtomicNumber(int atomicNumber) {
 		this.atomicNumber = atomicNumber;
 	}
 
+	/**
+	 * @see datasource.ChemicalRowDataGateway#getAtomicMass().
+	 */
 	@Override
 	public void setAtomicMass(double atomicMass) {
 		this.atomicMass = atomicMass;
 	}
 
+	/**
+	 * @see datasource.ChemicalRowDataGateway#getDissolvedBy().
+	 */
 	@Override
 	public void setDissolvedBy(long acidID) {
 		this.dissolvedBy = acidID;
 	}
 
+	/**
+	 * @see datasource.ChemicalRowDataGateway#getSolute().
+	 */
 	@Override
 	public void setSolute(long chemicalID) {
 		this.solute = chemicalID;
 	}
+	
+	/**
+	 * Get the ID.
+	 * @return the ID.
+	 */
+	@Override
+	public long getID() {
+		return this.ID;
+	}
 
+	/**
+	 * Get the type.
+	 * @return the type.
+	 */
 	@Override
 	public int getType() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.type;
 	}
 
+	/**
+	 * Get the name.
+	 * @return the name.
+	 */
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.name;
 	}
 
+	/**
+	 * Get the habitat.
+	 * @return the habitat.
+	 */
 	@Override
 	public String getHabitat() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.inhabits;
 	}
 
+	/**
+	 * Get the atomic number.
+	 * @return the atomic number.
+	 */
 	@Override
 	public int getAtomicNumber() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.atomicNumber;
 	}
-
+	
+	/**
+	 * Get the atomic mass.
+	 * @return the atomic mass.
+	 */
 	@Override
 	public double getAtomicMass() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.atomicMass;
 	}
 
+	/**
+	 * Get the acid ID.
+	 * @return the acid ID.
+	 */
 	@Override
 	public long getDissolvedBy() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.dissolvedBy;
 	}
 
+	/**
+	 * Get the solute ID.
+	 * @return the solute ID.
+	 */
 	@Override
 	public long getSolute() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.solute;
 	}
 
 }
