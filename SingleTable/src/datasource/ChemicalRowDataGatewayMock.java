@@ -193,18 +193,17 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 
 	@Override
 	public void persistData() throws DatabaseException {
-				
+		//chemicalInfo.put(ID,info);	
 	}
 
 	@Override
 	public void resetData() {
-		//hello
+		//to be done for testing
 	}
 
 	@Override
 	public void deleteInstance() throws DatabaseException {
-		// TODO Auto-generated method stub
-		
+		chemicalInfo.remove(ID);
 	}
 
 }
