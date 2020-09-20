@@ -25,7 +25,8 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 				"inhabits VARCHAR(30), " +
 				"atomicNumer INT NOT NULL, " +
 				"atomicMass DOUBLE NOT NULL, " +
-				"disslovedBy INT REFERENCES Acid(acidID);";
+				"disslovedBy INT REFERENCES Acid(acidID)," + 
+				"UNIQUE(name);";
 		
 		Connection conn = DatabaseManager.getSingleton().getConnection();
 

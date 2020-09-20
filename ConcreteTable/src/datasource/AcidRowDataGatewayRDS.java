@@ -10,9 +10,10 @@ public class AcidRowDataGatewayRDS {
 		String drop = "DROP TABLE IF EXISTS Acid";
 		String create = "CREATE TABLE Acid (" + 
 				"acidID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
-				"name VARCHAR(30) NOT NULL, " +                      //maybe Unique
+				"name VARCHAR(30) NOT NULL, " +                      
 				"inhabits VARCHAR(30)," +
-				"solute VARCHAR(30);";
+				"solute VARCHAR(30)," +
+				"UNIQUE(name);";
 	
 		Connection conn = DatabaseManager.getSingleton().getConnection();
 

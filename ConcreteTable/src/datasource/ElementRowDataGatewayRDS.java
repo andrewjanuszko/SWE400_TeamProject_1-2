@@ -12,7 +12,7 @@ public class ElementRowDataGatewayRDS {
 		String create = "CREATE TABLE Element (" + 
 				"elementID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
-				"inhabits VARCHAR(30)" +
+				"inhabits VARCHAR(30), " +
 				"atomicNumer INT NOT NULL, " +
 				"atomicMass DOUBLE NOT NULL," + 
 				"UNIQUE(name);";

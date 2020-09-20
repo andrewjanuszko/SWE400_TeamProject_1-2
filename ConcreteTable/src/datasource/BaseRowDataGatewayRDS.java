@@ -10,9 +10,10 @@ public class BaseRowDataGatewayRDS {
 		String drop = "DROP TABLE IF EXISTS Base";
 		String create = "CREATE TABLE Base (" + 
 				"baseID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
-				"name VARCHAR(30) NOT NULL, " +                      //maybe Unique
-				"inhabits VARCHAR(30)" +
-				"solute VARCHAR(30);";
+				"name VARCHAR(30) NOT NULL, " +                      
+				"inhabits VARCHAR(30), " +
+				"solute VARCHAR(30), " + 
+				"UNIQUE(name);";
 		
 		Connection conn = DatabaseManager.getSingleton().getConnection();
 
