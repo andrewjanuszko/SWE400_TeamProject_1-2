@@ -1,5 +1,7 @@
 package datasource;
 
+import java.util.HashMap;
+
 /**
  * Implementation of ChemicalRowDataGateway.
  * @author andrewjanuszko
@@ -7,8 +9,14 @@ package datasource;
  */
 public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	
+	private static HashMap<Integer, MockChemicalTableRow> chemicalInfo;
+	private static int nextKey = 1;
+	private long ID;
+	private MockChemicalTableRow info;
+	
 	private class MockChemicalTableRow {
 		
+		int type;
 		String name;
 		String inhabits;
 		int atomicNumber;
@@ -16,7 +24,8 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 		long acidID;
 		long chemicalID;
 		
-		public MockChemicalTableRow(String name, String inhabits, int atomicNumber, double atomicMass, long acidID, long chemicalID) {
+		public MockChemicalTableRow(int type, String name, String inhabits, int atomicNumber, double atomicMass, long acidID, long chemicalID) {
+			this.type = type;
 			this.name = name;
 			this.inhabits = inhabits;
 			this.atomicNumber = atomicNumber;
@@ -26,106 +35,121 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 		}
 	}
 
+	
+	public ChemicalRowDataGatewayMock(int ID) throws DatabaseException {
+		if (chemicalInfo == null ) {
+			resetData();
+		}
+		if(chemicalInfo.containsKey(ID))
+		{
+			info = chemicalInfo.get(ID);
+			this.ID = ID;
+		} else {
+			throw new DatabaseException("Couldn't find chemical with ID " + ID);
+		}
+	}
+	
+	public ChemicalRowDataGatewayMock(int type, String name, String inhabits, int atomicNumber, double atomicMass, long acidID, long chemicalID) {
+		if(chemicalInfo == null) {
+			resetData();
+		}
+		ID = nextKey;
+		nextKey++;
+		MockChemicalTableRow mockInfo = new MockChemicalTableRow(type, name,inhabits, atomicNumber, atomicMass, acidID, chemicalID);
+		chemicalInfo.put(ID,mockInfo);
+		info = mockInfo;
+	}
+	
+	public ChemicalRowDataGatewayMock() {
+	}
+
 	@Override
 	public void setType(int type) {
-		// TODO Auto-generated method stub
+		this.info.type = type;
 		
 	}
 
 	@Override
 	public void setName(String name) {
-		// TODO Auto-generated method stub
+		this.info.name = name;
 		
 	}
 
 	@Override
 	public void setHabitat(String inhabits) {
-		// TODO Auto-generated method stub
+		this.info.inhabits = inhabits;
 		
 	}
 
 	@Override
 	public void setAtomicNumber(int atomicNumber) {
-		// TODO Auto-generated method stub
-		
+		this.info.atomicNumber = atomicNumber;
 	}
 
 	@Override
 	public void setAtomicMass(double atomicMass) {
-		// TODO Auto-generated method stub
-		
+		this.info.atomicMass = atomicMass;		
 	}
 
 	@Override
 	public void setDissolvedBy(long acidID) {
-		// TODO Auto-generated method stub
-		
+		this.info.acidID = acidID;
 	}
 
 	@Override
 	public void setSolute(long chemicalID) {
-		// TODO Auto-generated method stub
-		
+		this.info.chemicalID = chemicalID;
 	}
 	
 	@Override
 	public long getID() {
-		// TODO Auto-generated method stub
-		return 0;
+		return ID;
 	}
 
 	@Override
 	public int getType() {
-		// TODO Auto-generated method stub
-		return 0;
+		return info.type;
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return info.name;
 	}
 
 	@Override
 	public String getHabitat() {
-		// TODO Auto-generated method stub
-		return null;
+		return info.inhabits;
 	}
 
 	@Override
 	public int getAtomicNumber() {
-		// TODO Auto-generated method stub
-		return 0;
+		return info.atomicNumber;
 	}
 
 	@Override
 	public double getAtomicMass() {
-		// TODO Auto-generated method stub
-		return 0;
+		return info.atomicMass;
 	}
 
 	@Override
 	public long getDissolvedBy() {
-		// TODO Auto-generated method stub
-		return 0;
+		return info.acidID;
 	}
 
 	@Override
 	public long getSolute() {
 		// TODO Auto-generated method stub
-		return 0;
+		return info.chemicalID;
 	}
 
 	@Override
 	public void persistData() throws DatabaseException {
-		// TODO Auto-generated method stub
-		
+				
 	}
 
 	@Override
 	public void resetData() {
-		// TODO Auto-generated method stub
-		
+		//hello
 	}
 
 	@Override
