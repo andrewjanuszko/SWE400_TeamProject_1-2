@@ -1,5 +1,8 @@
 package datasource;
 
+import java.sql.SQLException;
+import java.sql.Statement;
+
 /**
  * The RDS version of the gateway for CompoundMadeFromElement.
  * @author andrewjanuszko
@@ -19,9 +22,24 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 		return singletonInstance;
 	}
 
+	/**
+	 * Drop the CompoundMadeFromElement table if it already exists, then recreate it as an empty table.
+	 * @throws DatabaseException when something goes really wrong.
+	 */
 	@Override
 	public void createTable() throws DatabaseException {
-		// TODO Auto-generated method stub
+		String dropTableSQL = "DROP TABLE IF EXISTS CompoundMadeFromElement";
+		String createTableSQL = "CREATE TABLE CompoundMadeFromElement (" +
+								"compoundID LONG NOT NULL, " +
+								"elementID LONG NOT NULL)";
+		try {
+			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+			statement.executeUpdate(dropTableSQL);
+			statement.executeUpdate(createTableSQL);
+			statement.close();
+		} catch (SQLException e) {
+		    throw new DatabaseException("Failed to create CompoundMadeFromElement table.", e);
+		}
 		
 	}
 
