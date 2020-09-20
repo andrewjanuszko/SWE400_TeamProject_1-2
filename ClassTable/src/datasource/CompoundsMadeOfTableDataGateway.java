@@ -3,10 +3,6 @@ package datasource;
 import java.util.List;
 
 public interface CompoundsMadeOfTableDataGateway {
-
-  List<Integer> getCompoundId(int elementId);
-  
-  List<Integer> getElementId(int compoundId);
   
   void insert(int compoundId, int elementId);
 
@@ -15,4 +11,9 @@ public interface CompoundsMadeOfTableDataGateway {
   String getCompoundName(int compoundId);
   
   public String getInhabits(int compoundId);
+
+  List<Integer> findSetElementId(int compoundId);
+
+  List<Integer> findSetCompoundId(int elementId);
+  
 }

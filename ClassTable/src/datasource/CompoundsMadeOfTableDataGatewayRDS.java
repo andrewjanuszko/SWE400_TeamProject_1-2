@@ -11,8 +11,8 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
 
   @Override
   public void createTableDataMadeOf() {
-    String dropTable = "DROP TABLE IF EXISTS CompoundTableDataMadeOf;";
-    String createTable = "CREATE TABLE CompoundTableDataMadeOf (" + 
+    String dropTable = "DROP TABLE IF EXISTS CompoundMadeFromElement;";
+    String createTable = "CREATE TABLE CompoundMadeFromElement (" + 
         "compoundId INT NOT NULL, " +
         "c_elementId INT NOT NULL, " + 
         "FOREIGN KEY (compoundId) REFERENCES chemical(chemicalId)," +
@@ -32,12 +32,30 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
     }
   }
   
+  /** 
+   * Update entry for a given compoundId and elementId
+   * @param compoundId
+   * @param elementId 
+   */
+  public void update(int oldCompoundId, int oldElementId, int newCompoundId, int newElementId) {
+    String sql = "UPDATE CompoundMadeFromElement " +
+        "SET compoundId = " + newCompoundId + ", elementId = " + newElementId +
+        "WHERE compoundId = " + oldCompoundId + " AND elementId = " + oldElementId; 
+    
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.execute(sql);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+  }
+  
   /**
    * Get all compoundId's of elementId
    * @param elementId to search for
    */
   @Override
-  public List<Integer> getCompoundId(int elementId) {
+  public List<Integer> findSetCompoundId(int elementId) {
     String sql = "SELECT * FROM CompoundMadeFromElement WHERE elementId = " + elementId + ";";
     List<Integer> compounds = new ArrayList<>();
     try {
@@ -59,7 +77,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    * @param compoundId to search for
    */
   @Override
-  public List<Integer> getElementId(int compoundId) {
+  public List<Integer> findSetElementId(int compoundId) {
     String sql = "SELECT * FROM CompoundMadeFromElement WHERE compoundId = " + compoundId + ";";
     List<Integer> compounds = new ArrayList<>();
     
@@ -116,6 +134,10 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
     return name;
   }
   
+  /**
+   * Get inhabits from compoundID
+   * @param compoundId to find inhbaits from
+   */
   @Override
   /** Get inhabits from the Chemical table of a given chemicalId
    * @param chemicalId to search for
