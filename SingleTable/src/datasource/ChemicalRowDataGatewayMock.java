@@ -1,11 +1,31 @@
-package src;
+package datasource;
 
-public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
-
-	public static void createTable() {
-		
-	}
+/**
+ * Implementation of ChemicalRowDataGateway.
+ * @author andrewjanuszko
+ *
+ */
+public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	
+	private class MockChemicalTableRow {
+		
+		String name;
+		String inhabits;
+		int atomicNumber;
+		double atomicMass;
+		long acidID;
+		long chemicalID;
+		
+		public MockChemicalTableRow(String name, String inhabits, int atomicNumber, double atomicMass, long acidID, long chemicalID) {
+			this.name = name;
+			this.inhabits = inhabits;
+			this.atomicNumber = atomicNumber;
+			this.atomicMass = atomicMass;
+			this.acidID = acidID;
+			this.chemicalID = chemicalID;
+		}
+	}
+
 	@Override
 	public void setType(int type) {
 		// TODO Auto-generated method stub
@@ -19,7 +39,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 
 	@Override
-	public void setInhabits(String habitat) {
+	public void setHabitat(String inhabits) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -46,6 +66,12 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	public void setSolute(long chemicalID) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public long getID() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override

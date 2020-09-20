@@ -1,4 +1,4 @@
-package src;
+package datasource;
 
 /**
  * Interface for a ChemicalRowDataGateway
@@ -20,7 +20,7 @@ public interface ChemicalRowDataGateway {
 	/**
 	 * @param habitat - the location where the Chemical is found.
 	 */
-	void setInhabits(String habitat);
+	void setHabitat(String inhabits);
 	
 	/**
 	 * @param atomicNumber - the atomic number of the Chemical.
@@ -41,6 +41,11 @@ public interface ChemicalRowDataGateway {
 	 * @param chemicalID - the ID of the solute.
 	 */
 	void setSolute(long chemicalID);
+	
+	/**
+	 * @return the id of the chemical
+	 */
+	long getID();
 	
 	/**
 	 * @return the type of the chemical.

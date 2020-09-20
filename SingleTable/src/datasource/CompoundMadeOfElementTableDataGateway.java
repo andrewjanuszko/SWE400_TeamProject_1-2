@@ -1,4 +1,4 @@
-package src;
+package datasource;
 
 /**
  * A table data gateway.
