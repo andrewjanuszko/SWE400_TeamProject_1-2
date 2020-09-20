@@ -49,6 +49,16 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param type
+	 * @param name
+	 * @param inhabits
+	 * @param atomicNumber
+	 * @param atomicMass
+	 * @param acidID
+	 * @param chemicalID
+	 */
 	public ChemicalRowDataGatewayMock(int type, String name, String inhabits, int atomicNumber, double atomicMass, long acidID, long chemicalID) {
 		if(chemicalInfo == null) {
 			resetData();
