@@ -82,4 +82,22 @@ public interface ChemicalRowDataGateway {
 	 */
 	long getSolute();
 	
+	/**
+	 * Store information into the database.
+	 * @throws DatabaseException if failure to persist data.
+	 */
+	void persistData() throws DatabaseException;
+
+	/**
+	 * Used in testing.
+	 */
+	void resetData();
+
+	/**
+	 * Delete this instance of chemical.
+	 * @throws DatabaseException when it fails to delete a chemical.
+	 */
+	void deleteInstance() throws DatabaseException;
+
+	
 }
