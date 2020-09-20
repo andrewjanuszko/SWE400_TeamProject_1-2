@@ -1,5 +1,9 @@
 package datasource;
 
+/**
+ * The RDS version of the gateway for CompoundMadeFromElement.
+ * @author andrewjanuszko
+ */
 public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeFromElementTableDataGateway {
 	
 	private static CompoundMadeFromElementTableDataGateway singletonInstance;
