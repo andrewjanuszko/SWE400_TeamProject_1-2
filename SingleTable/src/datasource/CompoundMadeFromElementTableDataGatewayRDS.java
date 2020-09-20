@@ -1,5 +1,6 @@
 package datasource;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -43,21 +44,53 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 		
 	}
 
+	/**
+	 * Creates a new row in the CompoundMadeFromElement table.
+	 * @param compoundID the id of the compound.
+	 * @param elementID the id of the element.
+	 * 
+	 * @throws DatabaseException when insertion fails.
+	 */
 	@Override
 	public void createRow(long compoundID, long elementID) throws DatabaseException {
-		// TODO Auto-generated method stub
 		
+		String insertSQL = "INSERT INTO CompoundMadeFromElement SET compoundID = ?, elementID = ?";
+		
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertSQL);
+			statement.setLong(1, compoundID);
+			statement.setLong(2, elementID);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DatabaseException("Failed to create row in CompoundMadeFromElement table.", e);
+		}
 	}
-
+	
+	/**
+	 * @see datasource.CompoundMadeFromElementTableDataGateway#updateRow(long, long).
+	 */
 	@Override
-	public void updateRelation(long compoundID, long elementID) throws DatabaseException {
-		// TODO Auto-generated method stub
+	public void updateRow(long compoundID, long elementID) throws DatabaseException {
 		
+		String updateSQL = "UPDATE CompoundMadeFromElement SET compoundID = ?, elementID = ?";		
+		
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateSQL);
+			statement.setLong(1, compoundID);
+			statement.setLong(2, elementID);
+			int count = statement.executeUpdate();
+			
+			if (count == 0) {
+				this.createRow(compoundID, elementID);
+			}
+		} catch (SQLException e) {
+			throw new DatabaseException("Failed to update row in CompoundMadeFromElement table.", e);
+		}
 	}
 
 	@Override
 	public void resetData() {
-		// TODO Auto-generated method stub
+		// I want to go to bed.
 		
 	}
 

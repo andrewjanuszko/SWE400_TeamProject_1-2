@@ -15,7 +15,7 @@ public class CompoundMadeFromElementTableDataGatewayMock implements CompoundMade
 	}
 
 	@Override
-	public void updateRelation(long compoundID, long elementID) throws DatabaseException {
+	public void updateRow(long compoundID, long elementID) throws DatabaseException {
 		// TODO Auto-generated method stub
 		
 	}

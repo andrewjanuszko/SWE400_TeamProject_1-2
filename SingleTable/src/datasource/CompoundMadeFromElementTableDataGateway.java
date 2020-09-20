@@ -26,7 +26,7 @@ public interface CompoundMadeFromElementTableDataGateway {
 	 * @param elementID the id of the element.
 	 * @throws DatabaseException when we cannot connect to the database.
 	 */
-	void updateRelation(long compoundID, long elementID) throws DatabaseException;
+	void updateRow(long compoundID, long elementID) throws DatabaseException;
 	
 	/**
 	 * Used for testing this table.
