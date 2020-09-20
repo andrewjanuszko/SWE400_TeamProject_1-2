@@ -50,14 +50,14 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * the thing
-	 * @param type
-	 * @param name
-	 * @param inhabits
-	 * @param atomicNumber
-	 * @param atomicMass
-	 * @param acidID
-	 * @param chemicalID
+	 * 
+	 * @param type - the type of the Chemical.
+	 * @param name - the name of the Chemical.
+	 * @param inhabits - the location where the Chemical is found.
+	 * @param atomicNumber - the atomic number of the Chemical.
+	 * @param atomicMass - the atomic mass of the Chemical.
+	 * @param acidID - the ID of the acid that a metal can be dissolved by.
+	 * @param chemicalID - the ID of the solute.
 	 */
 	public ChemicalRowDataGatewayMock(int type, String name, String inhabits, int atomicNumber, double atomicMass, long acidID, long chemicalID) {
 		if(chemicalInfo == null) {
@@ -72,80 +72,119 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	
 	public ChemicalRowDataGatewayMock() {
 	}
-
+	
+	/*
+	 * the setter for a chemical's type.
+	 */
 	@Override
 	public void setType(int type) {
-		this.info.type = type;
-		
+		this.info.type = type;	
 	}
-
+	/*
+	 * the setter for a chemcial's name.
+	 */
 	@Override
 	public void setName(String name) {
 		this.info.name = name;
-		
 	}
-
+	/*
+	 * the setter for a chemical's habitat.
+	 */
 	@Override
 	public void setHabitat(String inhabits) {
-		this.info.inhabits = inhabits;
-		
+		this.info.inhabits = inhabits;	
 	}
 
+	/*
+	 * the setter for a chemical's atomic number.
+	 */
 	@Override
 	public void setAtomicNumber(int atomicNumber) {
 		this.info.atomicNumber = atomicNumber;
 	}
-
+	
+	/*
+	 * the setter for a chemical's atomic mass.
+	 */
 	@Override
 	public void setAtomicMass(double atomicMass) {
 		this.info.atomicMass = atomicMass;		
 	}
-
+	
+	/*
+	 * the setter for a acid the is a dissolve by a chemical.
+	 */
 	@Override
 	public void setDissolvedBy(long acidID) {
 		this.info.acidID = acidID;
 	}
 
+	/*
+	 * the setter for a chemical's soulute.
+	 */
 	@Override
 	public void setSolute(long chemicalID) {
 		this.info.chemicalID = chemicalID;
 	}
 	
+	/*
+	 * the getter for a chemical's ID.
+	 */
 	@Override
 	public long getID() {
 		return ID;
 	}
 
+	/*
+	 * the getter for a chemical's type.
+	 */
 	@Override
 	public int getType() {
 		return info.type;
 	}
 
+	/*
+	 * the getter for a chemical's name
+	 */
 	@Override
 	public String getName() {
 		return info.name;
 	}
 
+	/*
+	 * the getter for a chemical's habitat.
+	 */
 	@Override
 	public String getHabitat() {
 		return info.inhabits;
 	}
 
+	/*
+	 * the getter for a chemical's atomic number.
+	 */
 	@Override
 	public int getAtomicNumber() {
 		return info.atomicNumber;
 	}
-
+	
+	/*
+	 * the getter for a chemical's atomic mass.
+	 */
 	@Override
 	public double getAtomicMass() {
 		return info.atomicMass;
 	}
 
+	/*
+	 * the getter for a chemical's dissolved by 
+	 */
 	@Override
 	public long getDissolvedBy() {
 		return info.acidID;
 	}
-
+	/*
+	 * the getter for a chemical's solute
+	 */
 	@Override
 	public long getSolute() {
 		// TODO Auto-generated method stub
