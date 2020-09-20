@@ -24,8 +24,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 								"inhabits VARCHAR(64) NOT NULL, " +
 								"atomicNumber INT, " +
 								"atomicMass DOUBLE, " +
-								"dissolvedBy INT, " +
-								"solute INT)";
+								"dissolvedBy LONG, " +
+								"solute LONG)";
 		try {
 			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
 			statement.executeUpdate(dropTableSQL);
