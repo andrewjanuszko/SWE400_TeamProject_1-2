@@ -22,7 +22,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 		String create = "CREATE TABLE Metal (" + 
 				"metalID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
 				"name VARCHAR(30) NOT NULL, " +                      //maybe Unique
-				"inhabits VARCHAR(30)" +
+				"inhabits VARCHAR(30), " +
 				"atomicNumer INT NOT NULL, " +
 				"atomicMass DOUBLE NOT NULL, " +
 				"disslovedBy INT REFERENCES Acid(acidID);";
@@ -44,6 +44,38 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 		} catch (SQLException e)
 		{
 			throw new DatabaseException("Unable to create InteractableItem table", e);
+		}
+	}
+	
+
+	private Connection conn;
+	
+	private int metalID;
+	private String name;
+	private String inhabits;
+	private int atomicNumber;
+	private double atomicMass;
+	private int dissolvedBy;
+	
+	
+	public MetalRowDataGatewayRDS(String name) throws DatabaseException{
+		conn = DatabaseManager.getSingleton().getConnection();
+		this.name = name;
+		findByName(name);
+	}
+	
+	private void findByName(String name) throws DatabaseException{
+		try {
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Metal WHERE name = " + name);
+			ResultSet rs = stmt.executeQuery();
+			rs.next();
+			metalID = rs.getInt("metalID");
+			inhabits = rs.getString("inhabits");
+			atomicNumber = rs.getInt("atomicNumber");
+			atomicMass = rs.getDouble("atomicMass");
+			dissolvedBy = rs.getInt("dissolvedBy");
+		} catch (SQLException e) {
+			throw new DatabaseException("Couldn't find metal with that name", e);
 		}
 	}
 }
