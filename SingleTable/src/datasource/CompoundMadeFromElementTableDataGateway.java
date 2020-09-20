@@ -4,7 +4,7 @@ package datasource;
  * A table data gateway.
  * @author andrewjanuszko
  */
-public interface CompoundMadeOfElementTableDataGateway {
+public interface CompoundMadeFromElementTableDataGateway {
 
 	/**
 	 * Allows us to create tables for CompoundMadeOfElement
