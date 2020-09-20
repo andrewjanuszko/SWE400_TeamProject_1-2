@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -30,13 +31,13 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 		try
 		{
 			// drop table
-			ClosingPreparedStatement stmt;
-			stmt = new ClosingPreparedStatement(conn, drop);
+			PreparedStatement stmt;
+			stmt = DatabaseManager.getSingleton().getConnection().prepareStatement(drop);
 			stmt.execute();
 			stmt.close();
 
 			// create table
-			stmt = new ClosingPreparedStatement(conn, create);
+			stmt = DatabaseManager.getSingleton().getConnection().prepareStatement(create);
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e)
