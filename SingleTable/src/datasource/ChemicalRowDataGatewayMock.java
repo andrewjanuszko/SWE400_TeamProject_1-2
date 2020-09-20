@@ -56,7 +56,7 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 		ID = nextKey;
 		nextKey++;
 		MockChemicalTableRow mockInfo = new MockChemicalTableRow(type, name,inhabits, atomicNumber, atomicMass, acidID, chemicalID);
-		chemicalInfo.put(ID,mockInfo);
+		chemicalInfo.put((int) ID,mockInfo);
 		info = mockInfo;
 	}
 	
