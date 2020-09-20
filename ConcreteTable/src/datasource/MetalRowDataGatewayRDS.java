@@ -46,5 +46,3 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 		}
 	}
 }
-
-//Test
