@@ -50,7 +50,7 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
+	 * the thing
 	 * @param type
 	 * @param name
 	 * @param inhabits
