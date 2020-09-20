@@ -2,7 +2,7 @@ package datasource;
 
 import java.sql.Statement;
 
-public class AcidRowDataGatewayRDS extends AcidRowDataGateway {
+public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 
   @Override
   public void createTableAcid() {

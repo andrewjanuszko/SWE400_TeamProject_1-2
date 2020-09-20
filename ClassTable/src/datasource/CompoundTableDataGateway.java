@@ -1,16 +1,16 @@
 package datasource;
 
 
-public abstract class CompoundTableDataGateway {
+public interface CompoundTableDataGateway {
 
 
-  public abstract void createTableCompound();
+  public void createTableCompound();
   
-  public abstract void insert(int compoundId, String madeOf);
+  public void insert(int compoundId, String madeOf);
   
-  public abstract String getMadeOf(int id);
+  public String getMadeOf(int id);
   
-  public abstract String getName(int id);
+  public String getName(int id);
   
-  public abstract String getInhabits(int id);
+  public String getInhabits(int id);
 }

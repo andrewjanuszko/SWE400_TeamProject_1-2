@@ -1,8 +1,8 @@
 package datasource;
 
-public abstract class AcidRowDataGateway {
-  
-  public abstract void createTableAcid();
-  
-  public abstract String getSolute();
+public interface AcidRowDataGateway {
+
+  public void createTableAcid();
+
+  public String getSolute();
 }
