@@ -11,8 +11,9 @@ public class CompoundRowDataGatewayRDS {
 		String drop = "DROP TABLE IF EXISTS Compound";
 		String create = "CREATE TABLE Compound (" + 
 				"compoundID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
-				"name VARCHAR(30) NOT NULL, " +                      //maybe Unique
-				"inhabits VARCHAR(30);";
+				"name VARCHAR(30) NOT NULL, " +                      
+				"inhabits VARCHAR(30), " + 
+				"UNIQUE(name);";
 		
 		Connection conn = DatabaseManager.getSingleton().getConnection();
 
