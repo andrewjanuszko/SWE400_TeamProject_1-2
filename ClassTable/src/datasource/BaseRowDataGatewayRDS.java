@@ -1,5 +1,7 @@
 package datasource;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
@@ -19,6 +21,22 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
       // Create new Monitorings Table
       statement.executeUpdate(createTable);
     } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  @Override
+  public void insert(int baseId, int solute) {
+    try {
+      PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO Base (baseId, solute)" + "VALUES (?, ?);");
+      insert.setInt(1, baseId);
+      insert.setInt(2, solute);
+
+      insert.execute();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (DatabaseException e) {
       e.printStackTrace();
     }
   }

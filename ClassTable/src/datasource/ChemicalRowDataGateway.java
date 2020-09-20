@@ -8,6 +8,6 @@ public interface ChemicalRowDataGateway {
   public String getName(int chemicalId);
 
   public String getInhabits(int chemicalId);
-
-  public void insertChemical(int id, String name, String inhabits);
+  
+  void insert(int chemicalId, String name, String inhabits);
 }
