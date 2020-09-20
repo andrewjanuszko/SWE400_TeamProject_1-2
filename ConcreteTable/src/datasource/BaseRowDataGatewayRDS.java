@@ -43,7 +43,7 @@ public class BaseRowDataGatewayRDS {
 	private String name;
 	private String inhabits;
 	private String solute;
-	private List<Integer> dissolves;
+	
 	
 	public BaseRowDataGatewayRDS(String name) throws DatabaseException{
 		conn = DatabaseManager.getSingleton().getConnection();
@@ -61,12 +61,6 @@ public class BaseRowDataGatewayRDS {
 			solute = rs.getString("solute");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find element with that name", e);
-		}
-		
-		try {
-			PreparedStatement stmt = conn.prepareStatement("");
-		} catch(SQLException e) {
-			
 		}
 	}
 }
