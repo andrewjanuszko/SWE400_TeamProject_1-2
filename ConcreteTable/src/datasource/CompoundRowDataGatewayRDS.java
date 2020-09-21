@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class CompoundRowDataGatewayRDS {
+public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 
 	public static void createTable() throws DatabaseException{
 		

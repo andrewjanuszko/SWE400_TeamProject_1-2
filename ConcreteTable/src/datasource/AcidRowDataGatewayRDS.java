@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AcidRowDataGatewayRDS {
+public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 
 	public static void createTable() throws DatabaseException{
 		String drop = "DROP TABLE IF EXISTS Acid";
