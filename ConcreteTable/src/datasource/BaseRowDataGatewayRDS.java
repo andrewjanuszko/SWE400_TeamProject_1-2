@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class BaseRowDataGatewayRDS {
+public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 
 	public static void createTable() throws DatabaseException{
 		String drop = "DROP TABLE IF EXISTS Base";

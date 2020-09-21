@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ElementRowDataGatewayRDS {
+public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 	
 	public static void createTable() throws DatabaseException{
 		String drop = "DROP TABLE IF EXISTS Element";
