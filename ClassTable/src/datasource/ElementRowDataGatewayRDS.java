@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
+  /**
+   * Create element table
+   */
   public void createTableElement() {
     String dropTable = "DROP TABLE IF EXISTS Element;";
     String createTable = "CREATE TABLE Element" + "(" 
@@ -17,6 +20,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
     
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      
       // Drop the table if exists first
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;"); 
       statement.executeUpdate(dropTable);
@@ -24,11 +28,17 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       // Create tables
       statement.executeUpdate(createTable);
       
-    } catch (Exception e) {
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
+      System.out.println("Failed to create/drop element table");
     }
   }
 
+  /**
+   * Get atomic number of element from a given id
+   * 
+   * @param id to search for atomic number of
+   */
   @Override
   public int getAtomicNumber(int id) {
     int num = -1;
@@ -39,13 +49,18 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       ResultSet rs = statement.executeQuery(sql);
       rs.next(); // Get result
       num = rs.getInt("atomicNumber"); // Get atomic number from atomicNumber column
-    } catch (Exception e) {
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to fetch name of element");
     }
     return num;
   }
 
+  /**
+   * Get atomic mass of element from a given id
+   * 
+   * @param to search for atomic mass of
+   */
   @Override
   public int getAtomicMass(int id) {
     int mass = -1;
@@ -56,13 +71,18 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       ResultSet rs = statement.executeQuery(sql);
       rs.next(); // Get result
       mass = rs.getInt("atomicMass"); // Get atomic mass from atomicMass column
-    } catch (Exception e) {
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to fetch name of element");
     }
     return mass;
   }
 
+  /**
+   * Get name of element
+   * 
+   * @param id to search for name of
+   */
   @Override
   public String getName(int id) {
     String name = "";
@@ -74,13 +94,17 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       ResultSet rs = statement.executeQuery(sql);
       rs.next(); // Get result
       name = rs.getString("name"); // Get name from "name" column
-    } catch (Exception e) {
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to fetch name of element");
     }
     return name;
   }
 
+  /**
+   * Get inhabits of a element
+   * @param id to search for inhabits of
+   */
   @Override
   public String getInhabits(int id) {
     String inhabits = "";
@@ -91,7 +115,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       ResultSet rs = statement.executeQuery(sql); 
       rs.next();
       inhabits = rs.getString("inhabits");
-    } catch (Exception e) {
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to fetch inhabits of element");
     }
@@ -99,6 +123,12 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
     return inhabits;
   }
 
+  /**
+   * Insert an element into the table
+   * @param id to insert
+   * @param atomicNum to insert
+   * @param atomicMass to insert
+   */
   @Override
   public void insert(int id, int atomicNum, int atomicMass) {
     try {
@@ -108,7 +138,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       
       insert.setInt(1, id);
       insert.setInt(2, atomicNum);
-      insert.setInt(2, atomicMass);
+      insert.setInt(3, atomicMass);
 
       insert.execute();
     } catch (SQLException | DatabaseException e) {
