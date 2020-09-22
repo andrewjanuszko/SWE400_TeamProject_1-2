@@ -133,4 +133,16 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	    return false;
 	  }
 	}
+	
+	public void persist() {
+		try {
+			PreparedStatement stmt = conn.prepareStatement("UPDATE Acid SET"
+					+ " acidID = " + acidID
+					+ ", name = " + name
+					+ ", inhabits = " + inhabits
+					+ ", solute = " + solute );
+		} catch (SQLException e) {
+			new DatabaseException("could not update acid table");
+		}
+	}
 }
