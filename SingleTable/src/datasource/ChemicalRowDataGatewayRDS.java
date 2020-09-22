@@ -23,9 +23,9 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	private int solute;
 	
 	/**
-	 * 
-	 * @param chemicalID
-	 * @throws DatabaseException
+	 * Finder constructor for ChemicalRowDataGatewayRDS.
+	 * @param chemicalID the ID of the chemical.
+	 * @throws DatabaseException if chemical does not exist.
 	 */
 	public ChemicalRowDataGatewayRDS(int chemicalID) throws DatabaseException {
 		String findChemicalSQL = "SELECT * FROM Chemical WHERE chemicalID = ?;";
@@ -47,16 +47,16 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @param chemicalID
-	 * @param type
-	 * @param name
-	 * @param inhabits
-	 * @param atomicNumber
-	 * @param atomicMass
-	 * @param dissolvedBy
-	 * @param solute
-	 * @throws DatabaseException
+	 * Plain constructor for ChemicalRowDataGatewayRDS
+	 * @param chemicalID the ID of the chemical.
+	 * @param type the type of the chemical.
+	 * @param name the name of the chemical.
+	 * @param inhabits the habitat of the chemical.
+	 * @param atomicNumber the atomic number of the chemical.
+	 * @param atomicMass the atomic mass of the chemical.
+	 * @param dissolvedBy the acid ID that dissolves a metal.
+	 * @param solute the chemical ID for a base/solute.
+	 * @throws DatabaseException when it fails to insert a new chemical.
 	 */
 	public ChemicalRowDataGatewayRDS(int chemicalID, int type, String name, String inhabits, int atomicNumber, double atomicMass,
 			int dissolvedBy, int solute) throws DatabaseException {
@@ -79,8 +79,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @throws DatabaseException
+	 * Create a table in the database.
+	 * @throws DatabaseException if the connection to the database is lost.
 	 */
 	public void createTable() throws DatabaseException {
 		String dropTableSQL = "DROP TABLE IF EXISTS Chemical, CompoundMadeFromElement;";
@@ -107,8 +107,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @throws DatabaseException
+	 * Delete this instance of a chemical from the database.
+	 * @throws DatabaseException if the chemical fails to be deleted.
 	 */
 	@Override
 	public void deleteChemical() throws DatabaseException {
@@ -123,8 +123,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @throws DatabaseException
+	 * Update this instance of a chemical from the database.
+	 * @throws DatabaseException if the chemical fails to be updated.
 	 */
 	@Override
 	public void updateChemical() throws DatabaseException {
@@ -146,8 +146,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @return type
+	 * @see datasource.ChemicalRowDataGateway#getType().
 	 */
 	@Override
 	public int getType() {
@@ -155,8 +154,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @return name
+	 * @see datasource.ChemicalRowDataGateway#getName().
 	 */
 	@Override
 	public String getName() {
@@ -164,8 +162,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @return inhabits
+	 * @see datasource.ChemicalRowDataGateway#getInhbaits().
 	 */
 	@Override
 	public String getInhabits() {
@@ -173,8 +170,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @return atomicNumber
+	 * @see datasource.ChemicalRowDataGateway#getAtomicNumber().
 	 */
 	@Override
 	public int getAtomicNumber() {
@@ -182,8 +178,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @return atomicMass
+	 * @see datasource.ChemicalRowDataGateway#getAtomicMass().
 	 */
 	@Override
 	public double getAtomicMass() {
@@ -191,8 +186,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @return dissolvedBy
+	 * @see datasource.ChemicalRowDataGateway#getDissolvedBy().
 	 */
 	@Override
 	public int getDissolvedBy() {
@@ -200,8 +194,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @return solute
+	 * @see datasource.ChemicalRowDataGateway#getSolute().
 	 */
 	@Override
 	public int getSolute() {
@@ -209,8 +202,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @param type
+	 * @see datasource.ChemicalRowDataGateway#setType(int).
 	 */
 	@Override
 	public void setType(int type) {
@@ -218,8 +210,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @param name
+	 * @see datasource.ChemicalRowDataGateway#setName(String).
 	 */
 	@Override
 	public void setName(String name) {
@@ -227,8 +218,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @param inhabits
+	 * @see datasource.ChemicalRowDataGateway#setInhabits(String).
 	 */
 	@Override
 	public void setInhabits(String inhabits) {
@@ -236,8 +226,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @param atomicNumber
+	 * @see datasource.ChemicalRowDataGateway#setAtomicNumber(int).
 	 */
 	@Override
 	public void setAtomicNumber(int atomicNumber) {
@@ -245,8 +234,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @param atomicMass
+	 * @see datasource.ChemicalRowDataGateway#setAtomicMass(double).
 	 */
 	@Override
 	public void setAtomicMass(double atomicMass) {
@@ -254,14 +242,12 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @param dissolvedBy
-	 * @throws DatabaseException
+	 * @see datasource.ChemicalRowDataGateway#setDissolvedBy(int).
 	 */
 	@Override
 	public void setDissolvedBy(int dissolvedBy) throws DatabaseException {
-		ChemicalRowDataGatewayRDS acid = new ChemicalRowDataGatewayRDS(dissolvedBy);
-		if (acid.getType() == ChemicalEnum.ACID.getChemicalType()) {
+		ChemicalRowDataGatewayRDS possibleAcid = new ChemicalRowDataGatewayRDS(dissolvedBy);
+		if (possibleAcid.getType() == ChemicalEnum.ACID.getChemicalType()) {
 			this.dissolvedBy = dissolvedBy;
 		} else {
 			throw new DatabaseException("Chemical with ID " + chemicalID + " is not an Acid.");
@@ -269,8 +255,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @param solute
+	 * @see datasource.ChemicalRowDataGateway#setSolute(int).
 	 */
 	@Override
 	public void setSolute(int solute) {
