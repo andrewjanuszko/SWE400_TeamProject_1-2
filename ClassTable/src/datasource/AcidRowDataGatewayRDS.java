@@ -22,7 +22,6 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 			statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
 			statement.executeUpdate(dropTable);
 			
-			// Create new Monitorings Table
 			statement.executeUpdate(createTable);
 			
 		} catch (Exception e) {
