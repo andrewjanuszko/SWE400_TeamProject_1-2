@@ -170,7 +170,5 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 		} catch(SQLException sqle) {
 			throw new DatabaseException("Could not find chemical with ID: " + chemicalID, sqle);
 		}
-		
 	}
-
 }

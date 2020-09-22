@@ -11,31 +11,16 @@ import java.util.HashMap;
  */
 public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 
-	/**
-	 * 
-	 */
 	@Override
 	public void createTableChemical() throws DatabaseException {
-		String dropTableSQL = "DROP TABLE IF EXISTS Chemical, CompoundMadeFromElement;";
-		String createTableSQL = "CREATE TABLE Chemical(" +
-						   "chemicalID INT NOT NULL," +
-						   "name VARCHAR(20)," +
-						   "inhabits VARCHAR(20), " +
-						   "atomicNumber INT, " +
-						   "atomicMass DOUBLE, " +
-						   "dissolvedBy INT, " +
-						   "solute INT, " +
-						   "PRIMARY KEY (chemicalID));";
-		try {
-			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-			statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-			statement.executeUpdate(dropTableSQL);
-			
-			statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
-			statement.executeUpdate(createTableSQL);
-		} catch(SQLException dbe) {
-			throw new DatabaseException("Something went really wrong.", dbe);
-		}
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getType(int chemicalID) throws DatabaseException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
@@ -76,7 +61,7 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 
 	@Override
 	public void insert(int chemicalID, String name, String inhabits, int atomicNumber, double atomicMass,
-			int dissolvedBy, int solute) {
+			int dissolvedBy, int solute) throws DatabaseException {
 		// TODO Auto-generated method stub
 		
 	}
