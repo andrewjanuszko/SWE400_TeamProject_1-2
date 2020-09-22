@@ -65,4 +65,57 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 			throw new DatabaseException("Couldn't find element with that name", e);
 		}
 	}
+
+  @Override
+  public int getElementID() {
+    return this.elementID;
+  }
+
+  @Override
+  public String getName() {
+    return this.name;
+  }
+
+  @Override
+  public String getInhabits() {
+    return this.inhabits;
+  }
+
+  @Override
+  public int getAtomicNumber() {
+    return this.atomicNumber;
+  }
+
+  @Override
+  public double getAtomicMass() {
+    return this.atomicMass;
+  }
+
+  @Override
+  public void setElementID(int id) {
+    this.elementID = id;
+    
+  }
+
+  @Override
+  public void setName(String n) {
+    this.name = n;
+  }
+
+  @Override
+  public void setInhabits(String i) {
+    this.inhabits = i;
+  }
+
+  @Override
+  public void setAtomicNumber(int i) {
+    this.atomicNumber = i;
+    
+  }
+
+  @Override
+  public void setAtomicMass(double d) {
+    this.atomicMass = d;
+    
+  }
 }
