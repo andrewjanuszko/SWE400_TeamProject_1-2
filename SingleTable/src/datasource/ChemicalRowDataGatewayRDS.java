@@ -27,13 +27,15 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @throws DatabaseException
 	 */
 	public ChemicalRowDataGatewayRDS(int chemicalID) throws DatabaseException {
+		String findSQL
+	}
+	
+	public ChemicalRowDataGatewayRDS(int chemicalID, int type, String name, String inhabits, int atomicNumber, double atomicMass,
+			int dissolvedBy, int solute) {
 		
 	}
 	
-	public ChemicalRowDataGatewayRDS(int chemicalID, )
-	
-	@Override
-	public void createTableChemical() throws DatabaseException {
+	public void createChemical() throws DatabaseException {
 		String dropTableSQL = "DROP TABLE IF EXISTS Chemical, CompoundMadeFromElement;";
 		String createTableSQL = "CREATE TABLE Chemical(" +
 						   "chemicalID INT NOT NULL," +

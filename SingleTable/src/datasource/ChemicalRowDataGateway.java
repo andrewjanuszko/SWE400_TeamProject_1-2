@@ -7,8 +7,6 @@ package datasource;
  */
 public interface ChemicalRowDataGateway {
 	
-	public void createTableChemical() throws DatabaseException;
-	
 	public void deleteChemical() throws DatabaseException;
 	
 	public void updateChemical() throws DatabaseException;
