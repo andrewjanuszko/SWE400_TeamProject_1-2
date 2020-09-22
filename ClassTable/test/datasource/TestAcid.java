@@ -20,9 +20,8 @@ class TestAcid {
     chem.createTableChemcial();
     acid.createTableAcid();
     
-    // Insert chemical first
-    chem.insert(1, "hydrogen peroxide", "baking soda");
-    acid.insert(1, 42);
+    // Insert Acid
+    acid.insert(1, 42, "hydrogen peroxide", "baking soda");
     
     // Test
     assertEquals("hydrogen peroxide", acid.getName(1));
@@ -46,15 +45,10 @@ class TestAcid {
     acid.createTableAcid();
     chem.createTableChemcial();
     
-    // Insert chemical 
-    chem.insert(1, "chemicalname1", "inhabits1");
-    chem.insert(2, "chemicalname2", "inhabits2");
-    chem.insert(3, "chemicalname3", "inhabits3");
-    
     // Insert acid
-    acid.insert(1, 15);
-    acid.insert(2, 50);
-    acid.insert(3, 7);
+    acid.insert(1, 15, "chemicalname1", "inhabits1");
+    acid.insert(2, 50, "chemicalname2", "inhabits2");
+    acid.insert(3, 7, "chemicalname3", "inhabits3");
     
     // Test
     assertEquals("chemicalname1", acid.getName(1));
@@ -78,9 +72,9 @@ class TestAcid {
     chem.insert(3, "chemicalname3", "inhabits3");
     
     // Insert acid
-    acid.insert(1, 15);
-    acid.insert(2, 50);
-    acid.insert(3, 7);
+    acid.insert(1, 15, "chemicalname1", "inhabits1");
+    acid.insert(2, 50, "chemicalname2", "inhabits2");
+    acid.insert(3, 7, "chemicalname3", "inhabits3");
     
     // Test
     assertEquals("inhabits1", acid.getInhabits(1));

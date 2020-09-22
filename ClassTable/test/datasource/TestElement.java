@@ -15,8 +15,7 @@ class TestElement {
     chem.createTableChemcial();
     element.createTableElement();
     
-    chem.insert(1, "chemicalname1", "inhabits1");
-    element.insert(1, 55, 123);
+    element.insert(1, 55, 123, "chemicalname1", "inhabits1");
     
     assertEquals(55, element.getAtomicNumber(1));
     assertEquals(123, element.getAtomicMass(1));
@@ -30,11 +29,8 @@ class TestElement {
     chem.createTableChemcial();
     element.createTableElement();
     
-    chem.insert(1, "chemicalname1", "inhabits1");
-    element.insert(1, 55, 123);
-    
-    chem.insert(2, "chemicalname2", "inhabits2");
-    element.insert(2, 2, 22);
+    element.insert(1, 55, 123, "chemicalname1", "inhabits1");
+    element.insert(2, 2, 22, "chemicalname2", "inhabits2");
     
     assertEquals(55, element.getAtomicNumber(1));
     assertEquals(2, element.getAtomicNumber(2));
@@ -48,11 +44,8 @@ class TestElement {
     chem.createTableChemcial();
     element.createTableElement();
     
-    chem.insert(1, "chemicalname1", "inhabits1");
-    element.insert(1, 55, 123);
-    
-    chem.insert(2, "chemicalname2", "inhabits2");
-    element.insert(2, 2, 22);
+    element.insert(1, 55, 123, "chemicalname1", "inhabits1");
+    element.insert(2, 2, 22, "chemicalname2", "inhabits2");
     
     assertEquals(123, element.getAtomicMass(1));
     assertEquals(22, element.getAtomicMass(2));
@@ -66,11 +59,9 @@ class TestElement {
     chem.createTableChemcial();
     element.createTableElement();
     
-    chem.insert(1, "chemicalname1", "inhabits1");
-    element.insert(1, 55, 123);
+    element.insert(1, 55, 123, "chemicalname1", "inhabits1");
     
-    chem.insert(2, "chemicalname2", "inhabits2");
-    element.insert(2, 2, 22);
+    element.insert(2, 2, 22, "chemicalname2", "inhabits2");
     
     assertEquals("chemicalname1", element.getName(1));
     assertEquals("chemicalname2", element.getName(2));  
@@ -86,15 +77,10 @@ class TestElement {
     element.createTableElement();
     chem.createTableChemcial();
     
-    // Insert chemical 
-    chem.insert(1, "chemicalname1", "inhabits1");
-    chem.insert(2, "chemicalname2", "inhabits2");
-    chem.insert(3, "chemicalname3", "inhabits3");
-    
     // Insert element
-    element.insert(1, 15, 18);
-    element.insert(2, 50, 42);
-    element.insert(3, 7, 21);
+    element.insert(1, 15, 18, "chemicalname1", "inhabits1");
+    element.insert(2, 50, 42, "chemicalname2", "inhabits2");
+    element.insert(3, 7, 21, "chemicalname3", "inhabits3");
     
     // Test
     assertEquals("inhabits1", element.getInhabits(1));

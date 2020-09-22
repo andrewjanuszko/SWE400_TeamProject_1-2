@@ -10,6 +10,6 @@ public interface BaseRowDataGateway {
 
   public String getInhabits(int id);
 
-  void insert(int baseId, int solute);
+  void insert(int baseId, int solute, String name, String inhabits);
 
 }

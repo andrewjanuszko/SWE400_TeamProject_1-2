@@ -12,5 +12,5 @@ public interface ElementRowDataGateway {
   
   public String getInhabits(int id);
   
-  public void insert(int id, int atomicNum, int atomicMass);
+  public void insert(int id, int atomicNum, int atomicMass, String name, String inhabits);
 }

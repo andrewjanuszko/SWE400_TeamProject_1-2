@@ -11,5 +11,5 @@ public interface MetalRowDataGateway {
   
   public int getDissolvedBy(int id);
   
-  public void insert(int id, int dissolvedBy);
+  public void insert(int id, int dissolvedBy, String name, String inhabits);
 }

@@ -20,9 +20,8 @@ class TestBase {
     chem.createTableChemcial();
     base.createTableBase();
     
-    // Insert chemical first
-    chem.insert(1, "hydrogen peroxide", "baking soda");
-    base.insert(1, 42);
+    // Insert base
+    base.insert(1, 42, "hydrogen peroxide", "baking soda");
     
     // Test
     assertEquals("hydrogen peroxide", base.getName(1));
@@ -46,15 +45,10 @@ class TestBase {
     base.createTableBase();
     chem.createTableChemcial();
     
-    // Insert chemical 
-    chem.insert(1, "chemicalname1", "inhabits1");
-    chem.insert(2, "chemicalname2", "inhabits2");
-    chem.insert(3, "chemicalname3", "inhabits3");
-    
     // Insert base
-    base.insert(1, 15);
-    base.insert(2, 50);
-    base.insert(3, 7);
+    base.insert(1, 15, "chemicalname1", "inhabits1");
+    base.insert(2, 50, "chemicalname2", "inhabits2");
+    base.insert(3, 7, "chemicalname3", "inhabits3");
     
     // Test
     assertEquals("chemicalname1", base.getName(1));
@@ -72,15 +66,10 @@ class TestBase {
     base.createTableAcid();
     chem.createTableChemcial();
     
-    // Insert chemical 
-    chem.insert(1, "chemicalname1", "inhabits1");
-    chem.insert(2, "chemicalname2", "inhabits2");
-    chem.insert(3, "chemicalname3", "inhabits3");
-    
     // Insert base
-    base.insert(1, 15);
-    base.insert(2, 50);
-    base.insert(3, 7);
+    base.insert(1, 15, "chemicalname1", "inhabits1");
+    base.insert(2, 50, "chemicalname2", "inhabits2");
+    base.insert(3, 7, "chemicalname3", "inhabits3");
     
     // Test
     assertEquals("inhabits1", base.getInhabits(1));

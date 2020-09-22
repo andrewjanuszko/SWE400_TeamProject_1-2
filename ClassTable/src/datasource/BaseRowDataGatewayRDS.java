@@ -94,13 +94,20 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
     return inhabits;
   }
   @Override
-  public void insert(int baseId, int solute) {
+  public void insert(int baseId, int solute, String name, String inhabits) {
+    
     try {
+      PreparedStatement insertChemical =  DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+      insertChemical.setInt(1, baseId);
+      insertChemical.setString(2, name);
+      insertChemical.setString(3, inhabits);
       PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Base (baseId, solute)" + "VALUES (?, ?);");
       insert.setInt(1, baseId);
       insert.setInt(2, solute);
 
+      insertChemical.execute();
       insert.execute();
     } catch (SQLException e) {
       e.printStackTrace();

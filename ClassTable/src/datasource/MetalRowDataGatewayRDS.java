@@ -83,13 +83,19 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
   }
 
   @Override
-  public void insert(int id, int dissolvedBy) {
+  public void insert(int id, int dissolvedBy, String name, String inhabits) {
     try {
+      PreparedStatement insertChemical =  DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+      insertChemical.setInt(1, id);
+      insertChemical.setString(2, name);
+      insertChemical.setString(3, inhabits);
       PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Metal (metalId, dissolvedBy)" + " VALUES (?, ?);");
       insert.setInt(1, id); // Set chemicalId
       insert.setInt(2, dissolvedBy); // Set name
 
+      insertChemical.execute();
       insert.execute(); // Insert
 
     } catch (SQLException | DatabaseException e) {
