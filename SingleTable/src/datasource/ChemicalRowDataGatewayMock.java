@@ -72,7 +72,7 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	public ChemicalRowDataGatewayMock(int chemicalID, int type, String name, String inhabits,
 			int atomicNumber, double atomicMass, int dissolvedBy, int soulute) {
 //		if (chemicalInfo == null) {
-//			restDate();        The hashmap will be reset if it empty.
+//			resetDate();       // The hashmap will be reset if it empty.
 //		}
 		
 		key = nextKey;
@@ -82,11 +82,11 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	}
 	
 	/*
-	 * Wellington had it so why not
+	 * Constructor
 	 */
 	public ChemicalRowDataGatewayMock() {}
 	
-//	public void resetData () {
+//	public void resetData () { need to make 
 //		chemicalInfo = new HashMap<Integer, MockPlayerTableRow>();
 //		nextKey = 1;
 //		for(ChemicalsForTest c : ChemicalsForTest.values()) {
@@ -133,85 +133,71 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	}
 	@Override
 	public int getType() {
-		// TODO Auto-generated method stub
 		return info.type;
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return info.name;
 	}
 
 	@Override
 	public String getInhabits() {
-		// TODO Auto-generated method stub
 		return info.inhabits;
 	}
 
 	@Override
 	public int getAtomicNumber() {
-		// TODO Auto-generated method stub
 		return info.atomicNumber;
 	}
 
 	@Override
 	public double getAtomicMass() {
-		// TODO Auto-generated method stub
 		return info.atomicMass;
 	}
 
 	@Override
 	public int getDissolvedBy() {
-		// TODO Auto-generated method stub
 		return info.dissolvedBy;
 	}
 
 	@Override
 	public int getSolute() {
-		// TODO Auto-generated method stub
 		return info.solute;
 	}
 
 	@Override
 	public void setType(int type) {
-		// TODO Auto-generated method stub
 		this.info.type = type;
 	}
 
 	@Override
 	public void setName(String name) {
-		// TODO Auto-generated method stub
 		this.info.name = name;
 	}
 
 	@Override
 	public void setInhabits(String inhabits) {
-		// TODO Auto-generated method stub
 		this.info.inhabits = inhabits;
 	}
 
 	@Override
 	public void setAtomicNumber(int atomicNumber) {
-		// TODO Auto-generated method stub
 		this.info.atomicNumber = atomicNumber;
 	}
 
 	@Override
 	public void setAtomicMass(double atomicMass) {
-		// TODO Auto-generated method stub
 		this.info.atomicMass = atomicMass;
 	}
 
 	@Override
 	public void setDissolvedBy(int dissolvedBy) throws DatabaseException {
-		// TODO Auto-generated method stub
 		this.info.dissolvedBy = dissolvedBy;
 	}
 
 	@Override
 	public void setSolute(int solute) {
-		// TODO Auto-generated method stub
 		this.info.solute = solute;
 	}
 
