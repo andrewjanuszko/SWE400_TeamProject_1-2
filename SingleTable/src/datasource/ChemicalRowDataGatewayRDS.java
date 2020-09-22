@@ -11,279 +11,166 @@ import java.sql.Statement;
  * @author andrewjanuszko
  */
 public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
-
+	
 	/**
-	 * Drop the Chemical table if it already exists, then recreate it as an empty table.
-	 * @throws DatabaseException when something goes really wrong.
+	 * 
 	 */
-	public static void createTable() throws DatabaseException {
-		String dropTableSQL = "DROP TABLE IF EXISTS Chemical,CompoundMadeOfElement";
-		String createTableSQL = "CREATE TABLE Chemical (" +
-								"chemicalID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
-								"chemicalType INT NOT NULL, " +
-								"chemicalName VARCHAR(64) NOT NULL," +
-								"inhabits VARCHAR(64) NOT NULL, " +
-								"atomicNumber INT, " +
-								"atomicMass DOUBLE, " +
-								"dissolvedBy INT, " +
-								"solute INT)";
+	@Override
+	public void createTableChemical() throws DatabaseException {
+		String dropTableSQL = "DROP TABLE IF EXISTS Chemical, CompoundMadeFromElement;";
+		String createTableSQL = "CREATE TABLE Chemical(" +
+						   "chemicalID INT NOT NULL," +
+						   "type INT NOT NULL, " +
+						   "name VARCHAR(20)," +
+						   "inhabits VARCHAR(20), " +
+						   "atomicNumber INT, " +
+						   "atomicMass DOUBLE, " +
+						   "dissolvedBy INT, " +
+						   "solute INT, " +
+						   "PRIMARY KEY (chemicalID));";
 		try {
 			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+			statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
 			statement.executeUpdate(dropTableSQL);
-			statement.executeUpdate(createTableSQL);
-			statement.close();
-		} catch (SQLException e) {
-		    throw new DatabaseException("Failed to create Chemical table.", e);
-		}
-	}
-	
-	private int chemicalID;
-	private int type;
-	private String name;
-	private String inhabits;
-	private int atomicNumber;
-	private double atomicMass;
-	private int dissolvedBy;
-	private int solute;
-	
-	/**
-	 * Constructor that finds chemicals by ID.
-	 * @param chemicalID the ID of the chemical we are working with.
-	 * @throws DatabaseException if the chemical is not in the database.
-	 */
-	public ChemicalRowDataGatewayRDS(int chemicalID) throws DatabaseException {
-		this.chemicalID = chemicalID;
-		String selectSQL = "SELECT * FROM Chemical WHERE chemicalID = ?";
-		try {
-			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-			statement.setInt(1, chemicalID);
-			ResultSet result = statement.executeQuery();
-			this.type = result.getInt("type");
-			this.name = result.getString("name");
-			this.inhabits = result.getString("inhabits");
-			this.atomicNumber = result.getInt("atomicNumber");
-			this.atomicMass = result.getDouble("atomicMass");
-			this.dissolvedBy = result.getInt("dissolvedBy");
-			this.solute = result.getInt("solute");
-		} catch(SQLException e) {	
-			throw new DatabaseException("Could not find chemical with ID " + chemicalID, e);
-		}
-	}
-	
-	/**
-	 * 
-	 * @param type
-	 * @param name
-	 * @param inhabits
-	 * @param atomicNumber
-	 * @param atomicMass
-	 * @param dissolvedBy
-	 * @param solute
-	 * @throws DatabaseException
-	 */
-	public ChemicalRowDataGatewayRDS(int type, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy, int solute) throws DatabaseException {
-		
-		String insertSQL = "INSERT INTO CHEMICAL SET type = ?, name = ?, inhabits = ?, atomicNumber = ?, atomicMass = ?, dissolvedBy = ?, solute = ?";
-		
-		try {
-			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
-			statement.setInt(1, type);
-			statement.setString(2, name);
-			statement.setString(3, inhabits);
-			statement.setInt(4, atomicNumber);
-			statement.setDouble(5, atomicMass);
-			statement.setInt(6, dissolvedBy);
-			statement.setInt(7, solute);
-			statement.executeUpdate();
 			
-			ResultSet result = statement.getGeneratedKeys();
-			if(result.next()) {
-				chemicalID = result.getInt(1);
-				this.type = type;
-				this.name = name;
-				this.inhabits = inhabits;
-				this.atomicNumber = atomicNumber;
-				this.atomicMass = atomicMass;
-				this.dissolvedBy = dissolvedBy;
-				this.solute = solute;
-			} else {
-				throw new DatabaseException("Generated key for Chemical not found.");
-			}
-		} catch(SQLException e) {
-			throw new DatabaseException("Failed to create record for Chemical with ID " + chemicalID, e);
+			statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
+			statement.executeUpdate(createTableSQL);
+		} catch(SQLException sqle) {
+			throw new DatabaseException("Something went really wrong.", sqle);
 		}
 	}
 	
-	/**
-	 * @see datasource.ChemicalRowDataGateway#getType().
-	 */
 	@Override
-	public void setType(int type) {
-		this.type = type;
-	}
-
-	/**
-	 * @see datasource.ChemicalRowDataGateway#getName().
-	 */
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	/**
-	 * @see datasource.ChemicalRowDataGateway#getHabitat().
-	 */
-	@Override
-	public void setHabitat(String inhabits) {
-		this.inhabits = inhabits;
-	}
-
-	/**
-	 * @see datasource.ChemicalRowDataGateway#getAtomicNumber().
-	 */
-	@Override
-	public void setAtomicNumber(int atomicNumber) {
-		this.atomicNumber = atomicNumber;
-	}
-
-	/**
-	 * @see datasource.ChemicalRowDataGateway#getAtomicMass().
-	 */
-	@Override
-	public void setAtomicMass(double atomicMass) {
-		this.atomicMass = atomicMass;
-	}
-
-	/**
-	 * @see datasource.ChemicalRowDataGateway#getDissolvedBy().
-	 */
-	@Override
-	public void setDissolvedBy(int acidID) {
-		this.dissolvedBy = acidID;
-	}
-
-	/**
-	 * @see datasource.ChemicalRowDataGateway#getSolute().
-	 */
-	@Override
-	public void setSolute(int chemicalID) {
-		this.solute = chemicalID;
-	}
-	
-	/**
-	 * Get the ID.
-	 * @return the ID.
-	 */
-	@Override
-	public int getChemicalID() {
-		return this.chemicalID;
-	}
-
-	/**
-	 * Get the type.
-	 * @return the type.
-	 */
-	@Override
-	public int getType() {
-		return this.type;
-	}
-
-	/**
-	 * Get the name.
-	 * @return the name.
-	 */
-	@Override
-	public String getName() {
-		return this.name;
-	}
-
-	/**
-	 * Get the habitat.
-	 * @return the habitat.
-	 */
-	@Override
-	public String getHabitat() {
-		return this.inhabits;
-	}
-
-	/**
-	 * Get the atomic number.
-	 * @return the atomic number.
-	 */
-	@Override
-	public int getAtomicNumber() {
-		return this.atomicNumber;
-	}
-	
-	/**
-	 * Get the atomic mass.
-	 * @return the atomic mass.
-	 */
-	@Override
-	public double getAtomicMass() {
-		return this.atomicMass;
-	}
-
-	/**
-	 * Get the acid ID.
-	 * @return the acid ID.
-	 */
-	@Override
-	public int getDissolvedBy() {
-		return this.dissolvedBy;
-	}
-
-	/**
-	 * Get the solute ID.
-	 * @return the solute ID.
-	 */
-	@Override
-	public int getSolute() {
-		return this.solute;
-	}
-
-	/**
-	 * 
-	 * @throws DatabaseException
-	 */
-	@Override
-	public void persistData() throws DatabaseException {
-		String updateSQL = "UPDATE CHEMICAL SET type = ?, name = ?, inhabits = ?, atomicNumber = ?, atomicMass = ?, dissolvedBy = ?, solute = ? WHERE chemicaID = ?";
+	public int getType(int chemicalID) throws DatabaseException {
+		int type = 0;
+		String getTypeSQL = "SELECT type FROM Chemical WHERE chemicalID = ?;";
 		try {
-			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateSQL);
-			statement.setInt(1, type);
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(getTypeSQL);
+			statement.setInt(1, chemicalID);
+			ResultSet result = statement.executeQuery(getTypeSQL);
+			result.next();
+			type = result.getInt("type");
+		} catch(SQLException sqle) {
+			throw new DatabaseException("Could not find chemical with ID: " + chemicalID, sqle);
+		}
+		return type;
+	}
+
+	@Override
+	public String getName(int chemicalID) throws DatabaseException {
+		String chemicalName = "";
+		String getNameSQL = "SELECT name FROM Chemical WHERE chemicalID = ?;";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(getNameSQL);
+			statement.setInt(1, chemicalID);
+			ResultSet result = statement.executeQuery(getNameSQL);
+			result.next();
+			chemicalName = result.getString("name");
+		} catch(SQLException sqle) {
+			throw new DatabaseException("Could not find chemical with ID: " + chemicalID, sqle);
+		}
+		return chemicalName;
+	}
+
+	@Override
+	public String getInhabits(int chemicalID) throws DatabaseException {
+		String chemicalInhabits = "";
+		String getInhabitsSQL = "SELECT inhabits FROM Chemical WHERE chemicalID = ?;";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(getInhabitsSQL);
+			statement.setInt(1, chemicalID);
+			ResultSet result = statement.executeQuery(getInhabitsSQL);
+			result.next();
+			chemicalInhabits = result.getString("inhabits");
+		} catch(SQLException sqle) {
+			throw new DatabaseException("Could not find chemical with ID: " + chemicalID, sqle);
+		}
+		return chemicalInhabits;
+	}
+
+	@Override
+	public int getAtomicNumber(int chemicalID) throws DatabaseException {
+		int atomicNumber = 0;
+		String getAtomicNumberSQL = "SELECT atomicNumber FROM Chemical WHERE chemicalID = ?;";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(getAtomicNumberSQL);
+			statement.setInt(1, chemicalID);
+			ResultSet result = statement.executeQuery(getAtomicNumberSQL);
+			result.next();
+			atomicNumber = result.getInt("atomicNumber");
+		} catch(SQLException sqle) {
+			throw new DatabaseException("Could not find chemical with ID: " + chemicalID, sqle);
+		}
+		return atomicNumber;
+	}
+
+	@Override
+	public double getAtomicMass(int chemicalID) throws DatabaseException {
+		double atomicMass = 0.0;
+		String getAtomicMassSQL = "SELECT atomicMass FROM Chemical WHERE chemicalID = ?;";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(getAtomicMassSQL);
+			statement.setInt(1, chemicalID);
+			ResultSet result = statement.executeQuery(getAtomicMassSQL);
+			result.next();
+			atomicMass = result.getDouble("atomicMass");
+		} catch(SQLException sqle) {
+			throw new DatabaseException("Could not find chemical with ID: " + chemicalID, sqle);
+		}
+		return atomicMass;
+	}
+
+	@Override
+	public int getDissolvedBy(int chemicalID) throws DatabaseException {
+		int dissolvedBy = 0;
+		String getDissolvedBySQL = "SELECT dissolvedBy FROM Chemical WHERE chemicalID = ?;";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(getDissolvedBySQL);
+			statement.setInt(1, chemicalID);
+			ResultSet result = statement.executeQuery(getDissolvedBySQL);
+			result.next();
+			dissolvedBy = result.getInt("dissolvedBy");
+		} catch(SQLException sqle) {
+			throw new DatabaseException("Could not find chemical with ID: " + chemicalID, sqle);
+		}
+		return dissolvedBy;
+	}
+
+	@Override
+	public int getSolute(int chemicalID) throws DatabaseException {
+		int solute = 0;
+		String getSoluteSQL = "SELECT solute FROM Chemical WHERE chemicalID = ?;";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(getSoluteSQL);
+			statement.setInt(1, chemicalID);
+			ResultSet result = statement.executeQuery(getSoluteSQL);
+			result.next();
+			solute = result.getInt("solute");
+		} catch(SQLException sqle) {
+			throw new DatabaseException("Could not find chemical with ID: " + chemicalID, sqle);
+		}
+		return solute;
+	}
+
+	@Override
+	public void insert(int chemicalID, String name, String inhabits, int atomicNumber, double atomicMass,
+			int dissolvedBy, int solute) throws DatabaseException {
+		String insertSQL = "INSERT INTO Chemical (chemicaID, name, inhabits, atomicNumber, atomicMass, dissolvedBy, solute)" +
+						   "VALUES (?, ?, ?, ?, ?, ?, ?);";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertSQL);
+			statement.setInt(1, chemicalID);
 			statement.setString(2, name);
 			statement.setString(3, inhabits);
 			statement.setInt(4, atomicNumber);
 			statement.setDouble(5, atomicMass);
 			statement.setInt(6, dissolvedBy);
 			statement.setInt(7, solute);
-			statement.setInt(8, chemicalID);
-			statement.executeUpdate();
-		} catch(SQLException e) {
-			throw new DatabaseException("Could not persist data for Chemical with ID " + chemicalID, e);
-		}
-	}
-
-	@Override
-	public void resetData() {
-		// EMPTY
-	}
-
-	/**
-	 * 
-	 * @throws DatabaseException
-	 */
-	@Override
-	public void deleteInstance() throws DatabaseException {
-		String deleteSQL = "DELETE FROM Chemical WHERE Chemical.chemicalID = ?";
-		try {
-			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteSQL);
-			statement.setInt(1, chemicalID);
 			statement.execute();
-		} catch(SQLException e) {
-			throw new DatabaseException("Could not delete Chemical with ID " + chemicalID, e);
+		} catch(SQLException sqle) {
+			throw new DatabaseException("Could not find chemical with ID: " + chemicalID, sqle);
 		}
+		
 	}
 
 }

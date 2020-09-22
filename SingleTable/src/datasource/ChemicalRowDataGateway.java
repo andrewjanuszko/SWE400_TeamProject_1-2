@@ -8,95 +8,78 @@ package datasource;
 public interface ChemicalRowDataGateway {
 	
 	/**
-	 * @param type - the type of the chemical.
+	 * Drops a Chemical table if it already exists, then creates a new empty one.
+	 * @throws DatabaseException
 	 */
-	void setType(int type);
+	public void createTableChemical() throws DatabaseException;
 	
 	/**
-	 * @param name - the name of the Chemical.
-	 */
-	void setName(String name);
-	
-	/**
-	 * @param habitat - the location where the Chemical is found.
-	 */
-	void setHabitat(String inhabits);
-	
-	/**
-	 * @param atomicNumber - the atomic number of the Chemical.
-	 */
-	void setAtomicNumber(int atomicNumber);
-	
-	/**
-	 * @param atomicMass - the atomic mass of the Chemical.
-	 */
-	void setAtomicMass(double atomicMass);
-	
-	/**
-	 * @param acidID - the ID of the acid that a metal can be dissolved by.
-	 */
-	void setDissolvedBy(int acidID);
-	
-	/**
-	 * @param chemicalID - the ID of the solute.
-	 */
-	void setSolute(int chemicalID);
-	
-	/**
-	 * @return the id of the chemical
-	 */
-	int getChemicalID();
-	
-	/**
+	 * 
+	 * @param chemicalID the ID of the chemical.
 	 * @return the type of the chemical.
+	 * @throws DatabaseException
 	 */
-	int getType();
+	public int getType(int chemicalID) throws DatabaseException;
 	
 	/**
-	 * @return the name of the Chemical.
+	 * 
+	 * @param chemicalID the ID of the chemical.
+	 * @return the name of the chemical.
+	 * @throws DatabaseException
 	 */
-	String getName();
+	public String getName(int chemicalID) throws DatabaseException;
 	
 	/**
-	 * @return the habitat of the Chemical.
+	 * 
+	 * @param chemicalID the ID of the chemical.
+	 * @return the habitat of the chemical.
+	 * @throws DatabaseException
 	 */
-	String getHabitat();
+	public String getInhabits(int chemicalID) throws DatabaseException;
 	
 	/**
-	 * @return the atomic number of the Chemical.
+	 * 
+	 * @param chemicalID the ID of the chemical.
+	 * @return the atomic number of the chemical.
+	 * @throws DatabaseException
 	 */
-	int getAtomicNumber();
+	public int getAtomicNumber(int chemicalID) throws DatabaseException;
 	
 	/**
-	 * @return the atomic mass of the Chemical.
+	 * 
+	 * @param chemicalID the ID of the chemical.
+	 * @return the atomic mass of the chemical.
+	 * @throws DatabaseException
 	 */
-	double getAtomicMass();
+	public double getAtomicMass(int chemicalID) throws DatabaseException;
 	
 	/**
-	 * @return the acidID that a Chemical is dissolved by.
+	 * 
+	 * @param chemicalID the ID of the chemical.
+	 * @return the acid ID that dissolves a chemical.
+	 * @throws DatabaseException
 	 */
-	int getDissolvedBy();
+	public int getDissolvedBy(int chemicalID) throws DatabaseException;
 	
 	/**
-	 * @return the chemicalID of the solute.
+	 * 
+	 * @param chemicalID the ID of the chemical.
+	 * @return the solute ID of that chemical.
+	 * @throws DatabaseException
 	 */
-	int getSolute();
+	public int getSolute(int chemicalID) throws DatabaseException;
 	
 	/**
-	 * Store information into the database.
-	 * @throws DatabaseException if failure to persist data.
+	 * 
+	 * @param chemicalID the ID of the chemical.
+	 * @param name the name of the chemical.
+	 * @param inhabits the habitat of the chemical.
+	 * @param atomicNumber the atomic number of the chemical.
+	 * @param atomicMass the atomic mass of the chemical.
+	 * @param dissolvedBy the acid ID that dissolves a chemical.
+	 * @param solute the solute ID of that chemical.
+	 * @throws DatabaseException
 	 */
-	void persistData() throws DatabaseException;
-
-	/**
-	 * Used in testing.
-	 */
-	void resetData();
-
-	/**
-	 * Delete this instance of chemical.
-	 * @throws DatabaseException when it fails to delete a chemical.
-	 */
-	void deleteInstance() throws DatabaseException;
+	public void insert(int chemicalID, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy, int solute) throws DatabaseException;
 	
 }
