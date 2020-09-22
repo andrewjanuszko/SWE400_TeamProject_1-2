@@ -126,6 +126,11 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	public int getKey() {
 		return key;
 	}
+	
+	public MockPlayerTableRow getInfo() {
+		return info;
+		
+	}
 	@Override
 	public int getType() {
 		// TODO Auto-generated method stub
