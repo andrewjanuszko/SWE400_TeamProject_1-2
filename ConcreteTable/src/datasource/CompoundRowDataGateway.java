@@ -26,5 +26,5 @@ public interface CompoundRowDataGateway {
 	/*
 	 * deletes and element from make up of compound.
 	 */
-	public void deleteElementFromCompound(int id);
+	public boolean deleteElementFromCompound(int id);
 }

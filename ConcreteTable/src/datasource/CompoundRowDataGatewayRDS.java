@@ -68,4 +68,56 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 			
 		}
 	}
+
+  @Override
+  public int getCompoundID() {
+    return this.compoundID;
+  }
+
+  @Override
+  public String getName() {
+    return this.name;
+  }
+
+  @Override
+  public String getInhabits() {
+    return this.inhabits;
+  }
+  
+  //should we be...
+  @Override
+  public List<Integer> getMadeOf() {
+    return this.madeOf;
+  }
+
+  @Override
+  public void setCompoundID(int id) {
+   this.compoundID = id;
+  }
+
+  @Override
+  public void setName(String n) {
+   this.name = n;
+  }
+
+  @Override
+  public void setInhabits(String i) {
+    this.inhabits = i;
+  }
+
+  @Override
+  public void addElementToCompound(int id) {
+    this.madeOf.add(id);
+  }
+
+  @Override
+  public boolean deleteElementFromCompound(int id) {
+    if(madeOf.contains(id)) {
+      madeOf.remove(madeOf.indexOf(id)); 
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
 }
