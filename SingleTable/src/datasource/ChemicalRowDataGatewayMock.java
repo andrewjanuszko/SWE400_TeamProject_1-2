@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 
 
-	private static HashMap<Integer, MockPlayerTableRow> ChemicalInfo;
+	private static HashMap<Integer, MockPlayerTableRow> chemicalInfo;
 	private static int nextKey = 1;
 	private int key;
 	private MockPlayerTableRow info;
@@ -41,100 +41,154 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 		
 	}
 	
+	/**
+	 *  Finder constructor
+	 * @param ID
+	 * @throws DatebaseException
+	 */
+	public ChemicalRowDataGatewayMock(int ID) throws DatebaseException {
+//		if (chemicalInfo == null) {
+//			resetDate();        The hashmap will be reset if it empty.
+//		}
+		
+		if(chemicalInfo.containsKey(ID)) {
+			info = chemicalInfo.get(ID);
+			this.key = ID;
+		} else {throw new DatabaseException("Could not find chemical with ID" + ID);}
+	}
+	
+	
+	public ChemicalRowDataGatewayMock(int chemicalID, int type, String name, String inhabits,
+			int atomicNumber, double atomicMass, int dissolvedBy, int soulute) {
+//		if (chemicalInfo == null) {
+//			restDate();        The hashmap will be reset if it empty.
+//		}
+		
+		key = nextKey;
+		nextKey++;
+		MockPlayerTableRow mockInfo = new MockPlayerTableRow(chemicalID, type, name, inhabits, atomicNumber, atomicMass, dissolvedBy, soulute);
+		chemicalInfo.put(key, mockInfo); // puts the mock row into the hashmap.
+	}
+	
+	/*
+	 * Wellington had it so why not
+	 */
+	public ChemicalRowDataGatewayMock() {}
+	
+//	public void resetData () {
+//		chemicalInfo = new HashMap<Integer, MockPlayerTableRow>();
+//		nextKey = 1;
+//		for(ChemicalsForTest c : ChemicalsForTest.values()) {
+//			chemicalInfo.put(nextKey, new MockPlayerTableRow())
+//			nextKey++;
+//		}
+//	}
+	
+	/**
+	 * get the number of the chemicals in the hashmap
+	 * @return
+	 */
+	public int getNumberOfMockChemicals() {
+		return chemicalInfo.size();
+	}
+	
 	@Override
 	public void deleteChemical() throws DatabaseException {
-		// TODO Auto-generated method stub
+		chemicalInfo.remove(key);
 		
 	}
 
 	@Override
 	public void updateChemical() throws DatabaseException {
-		// TODO Auto-generated method stub
+		chemicalInfo.put(key, info);
 		
 	}
 
+	public int getKey() {
+		return key;
+	}
 	@Override
 	public int getType() {
 		// TODO Auto-generated method stub
-		return 0;
+		return info.type;
 	}
 
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return null;
+		return info.name;
 	}
 
 	@Override
 	public String getInhabits() {
 		// TODO Auto-generated method stub
-		return null;
+		return info.inhabits;
 	}
 
 	@Override
 	public int getAtomicNumber() {
 		// TODO Auto-generated method stub
-		return 0;
+		return info.atomicNumber;
 	}
 
 	@Override
 	public double getAtomicMass() {
 		// TODO Auto-generated method stub
-		return 0;
+		return info.atomicMass;
 	}
 
 	@Override
 	public int getDissolvedBy() {
 		// TODO Auto-generated method stub
-		return 0;
+		return info.dissolvedBy;
 	}
 
 	@Override
 	public int getSolute() {
 		// TODO Auto-generated method stub
-		return 0;
+		return info.solute;
 	}
 
 	@Override
 	public void setType(int type) {
 		// TODO Auto-generated method stub
-		
+		this.info.type = type;
 	}
 
 	@Override
 	public void setName(String name) {
 		// TODO Auto-generated method stub
-		
+		this.info.name = name;
 	}
 
 	@Override
 	public void setInhabits(String inhabits) {
 		// TODO Auto-generated method stub
-		
+		this.info.inhabits = inhabits;
 	}
 
 	@Override
 	public void setAtomicNumber(int atomicNumber) {
 		// TODO Auto-generated method stub
-		
+		this.info.atomicNumber = atomicNumber;
 	}
 
 	@Override
 	public void setAtomicMass(double atomicMass) {
 		// TODO Auto-generated method stub
-		
+		this.info.atomicMass = atomicMass;
 	}
 
 	@Override
 	public void setDissolvedBy(int dissolvedBy) throws DatabaseException {
 		// TODO Auto-generated method stub
-		
+		this.info.dissolvedBy = dissolvedBy;
 	}
 
 	@Override
 	public void setSolute(int solute) {
 		// TODO Auto-generated method stub
-		
+		this.info.solute = solute;
 	}
 
 }
