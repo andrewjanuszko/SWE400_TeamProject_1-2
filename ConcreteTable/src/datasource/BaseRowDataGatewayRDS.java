@@ -63,4 +63,47 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 			throw new DatabaseException("Couldn't find element with that name", e);
 		}
 	}
+
+  @Override
+  public int getBaseID() {
+    return this.baseID;
+  }
+
+  @Override
+  public String getName() {
+    return this.name;
+  }
+
+  @Override
+  public String getInhabits() {
+    return this.inhabits;
+  }
+
+  @Override
+  public String getSolute() {
+    return this.solute;
+  }
+
+  @Override
+  public void setBaseID(int id) {
+    this.baseID = id;
+    
+  }
+
+  @Override
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public void setInhabits(String inhabits) {
+    this.inhabits = inhabits;
+  }
+
+  @Override
+  public void setSolute(String solute) {
+    this.solute = solute;
+  }
 }
+
+  
