@@ -111,12 +111,6 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
   }
 
   @Override
-  public void setMetalID(int id) {
-    this.metalID = id;
-    
-  }
-
-  @Override
   public void setName(String s) {
     this.name = s;
   }
@@ -152,7 +146,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 				+ ", dissolvedBy = " + dissolvedBy
 				+ " WHERE metalID = " + metalID);
 		
-		stmt.execute();
+		stmt.executeUpdate();
 	} catch (SQLException e) {
 		new DatabaseException("could't update element table");
 	}

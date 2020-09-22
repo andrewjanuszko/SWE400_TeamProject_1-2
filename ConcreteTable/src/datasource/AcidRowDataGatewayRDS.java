@@ -113,6 +113,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 					+ ", inhabits = " + inhabits
 					+ ", solute = " + solute 
 					+ " WHERE acidID = " + acidID);
+			stmt.executeUpdate();
 		} catch (SQLException e) {
 			new DatabaseException("could not update acid table");
 		}

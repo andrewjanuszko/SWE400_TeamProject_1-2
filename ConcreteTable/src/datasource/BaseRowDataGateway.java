@@ -10,8 +10,6 @@ public interface BaseRowDataGateway {
 	
 	public String getSolute();
 	
-	public void setBaseID(int id);
-	
 	public void setName(String name);
 	
 	public void setInhabits(String inhabits);

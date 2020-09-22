@@ -91,11 +91,6 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
   }
 
   @Override
-  public void setCompoundID(int id) {
-   this.compoundID = id;
-  }
-
-  @Override
   public void setName(String n) {
    this.name = n;
   }
@@ -105,19 +100,4 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
     this.inhabits = i;
   }
 
-  @Override
-  public void addElementToCompound(int id) {
-    this.madeOf.add(id);
-  }
-
-  @Override
-  public boolean deleteElementFromCompound(int id) {
-    if(madeOf.contains(id)) {
-      madeOf.remove(madeOf.indexOf(id)); 
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
 }

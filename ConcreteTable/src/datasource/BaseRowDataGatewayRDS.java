@@ -85,12 +85,6 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
   }
 
   @Override
-  public void setBaseID(int id) {
-    this.baseID = id;
-    
-  }
-
-  @Override
   public void setName(String name) {
     this.name = name;
   }
@@ -103,6 +97,20 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
   @Override
   public void setSolute(String solute) {
     this.solute = solute;
+  }
+  
+  public void persist() {
+	  try {
+		PreparedStatement stmt = conn.prepareStatement("UPDATE Base SET"
+				+ " baseID = " + baseID
+				+ ", name = " + name
+				+ ", inhabits = " + inhabits
+				+ ", solute = " + solute
+				+ " WHERE baseID = " + baseID);
+		stmt.executeUpdate();
+	} catch (SQLException e) {
+		new DatabaseException("Couldn't update Base table");
+	}
   }
 }
 
