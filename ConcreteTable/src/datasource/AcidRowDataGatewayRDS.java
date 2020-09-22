@@ -91,17 +91,6 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	}
 
 	@Override
-	public List<Integer> getDissloves() {
-		return this.dissolves;
-	}
-
-	@Override
-	public void setAcidID(int id) {
-		this.acidID = id;
-		
-	}
-
-	@Override
 	public void setName(String n) {
 	  this.name = n;
 	}
@@ -116,23 +105,6 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 		this.solute = s;
 	}
 	
-	//not sure if implemented correctly
-	@Override
-	public boolean addDissolves(int id) {
-		this.dissolves.add(id);
-		return false;
-	}
-
-	@Override
-	public boolean deleteDisolves(int id) {
-	  if(dissolves.contains(id)) {
-	    dissolves.remove(dissolves.indexOf(id)); 
-	    return true;
-	  }
-	  else {
-	    return false;
-	  }
-	}
 	
 	public void persist() {
 		try {
@@ -140,7 +112,8 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 					+ " acidID = " + acidID
 					+ ", name = " + name
 					+ ", inhabits = " + inhabits
-					+ ", solute = " + solute );
+					+ ", solute = " + solute 
+					+ " WHERE acidID = " + acidID);
 		} catch (SQLException e) {
 			new DatabaseException("could not update acid table");
 		}
