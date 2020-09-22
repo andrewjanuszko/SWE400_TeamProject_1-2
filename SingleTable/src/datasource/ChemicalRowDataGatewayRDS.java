@@ -1,5 +1,7 @@
 package datasource;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -15,17 +17,16 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @throws DatabaseException when something goes really wrong.
 	 */
 	public static void createTable() throws DatabaseException {
-		
 		String dropTableSQL = "DROP TABLE IF EXISTS Chemical,CompoundMadeOfElement";
 		String createTableSQL = "CREATE TABLE Chemical (" +
-								"chemicalID LONG NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+								"chemicalID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
 								"chemicalType INT NOT NULL, " +
 								"chemicalName VARCHAR(64) NOT NULL," +
 								"inhabits VARCHAR(64) NOT NULL, " +
 								"atomicNumber INT, " +
 								"atomicMass DOUBLE, " +
-								"dissolvedBy LONG, " +
-								"solute LONG)";
+								"dissolvedBy INT, " +
+								"solute INT)";
 		try {
 			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
 			statement.executeUpdate(dropTableSQL);
@@ -36,14 +37,82 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 		}
 	}
 	
-	private long ID;
+	private int chemicalID;
 	private int type;
 	private String name;
 	private String inhabits;
 	private int atomicNumber;
 	private double atomicMass;
-	private long dissolvedBy;
-	private long solute;
+	private int dissolvedBy;
+	private int solute;
+	
+	/**
+	 * Constructor that finds chemicals by ID.
+	 * @param chemicalID the ID of the chemical we are working with.
+	 * @throws DatabaseException if the chemical is not in the database.
+	 */
+	public ChemicalRowDataGatewayRDS(int chemicalID) throws DatabaseException {
+		this.chemicalID = chemicalID;
+		String selectSQL = "SELECT * FROM Chemical WHERE chemicalID = ?";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
+			statement.setInt(1, chemicalID);
+			ResultSet result = statement.executeQuery();
+			this.type = result.getInt("type");
+			this.name = result.getString("name");
+			this.inhabits = result.getString("inhabits");
+			this.atomicNumber = result.getInt("atomicNumber");
+			this.atomicMass = result.getDouble("atomicMass");
+			this.dissolvedBy = result.getInt("dissolvedBy");
+			this.solute = result.getInt("solute");
+		} catch(SQLException e) {	
+			throw new DatabaseException("Could not find chemical with ID " + chemicalID, e);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * @param name
+	 * @param inhabits
+	 * @param atomicNumber
+	 * @param atomicMass
+	 * @param dissolvedBy
+	 * @param solute
+	 * @throws DatabaseException
+	 */
+	public ChemicalRowDataGatewayRDS(int type, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy, int solute) throws DatabaseException {
+		
+		String insertSQL = "INSERT INTO CHEMICAL SET type = ?, name = ?, inhabits = ?, atomicNumber = ?, atomicMass = ?, dissolvedBy = ?, solute = ?";
+		
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
+			statement.setInt(1, type);
+			statement.setString(2, name);
+			statement.setString(3, inhabits);
+			statement.setInt(4, atomicNumber);
+			statement.setDouble(5, atomicMass);
+			statement.setInt(6, dissolvedBy);
+			statement.setInt(7, solute);
+			statement.executeUpdate();
+			
+			ResultSet result = statement.getGeneratedKeys();
+			if(result.next()) {
+				chemicalID = result.getInt(1);
+				this.type = type;
+				this.name = name;
+				this.inhabits = inhabits;
+				this.atomicNumber = atomicNumber;
+				this.atomicMass = atomicMass;
+				this.dissolvedBy = dissolvedBy;
+				this.solute = solute;
+			} else {
+				throw new DatabaseException("Generated key for Chemical not found.");
+			}
+		} catch(SQLException e) {
+			throw new DatabaseException("Failed to create record for Chemical with ID " + chemicalID, e);
+		}
+	}
 	
 	/**
 	 * @see datasource.ChemicalRowDataGateway#getType().
@@ -89,7 +158,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @see datasource.ChemicalRowDataGateway#getDissolvedBy().
 	 */
 	@Override
-	public void setDissolvedBy(long acidID) {
+	public void setDissolvedBy(int acidID) {
 		this.dissolvedBy = acidID;
 	}
 
@@ -97,7 +166,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @see datasource.ChemicalRowDataGateway#getSolute().
 	 */
 	@Override
-	public void setSolute(long chemicalID) {
+	public void setSolute(int chemicalID) {
 		this.solute = chemicalID;
 	}
 	
@@ -106,8 +175,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @return the ID.
 	 */
 	@Override
-	public long getID() {
-		return this.ID;
+	public int getChemicalID() {
+		return this.chemicalID;
 	}
 
 	/**
@@ -160,7 +229,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @return the acid ID.
 	 */
 	@Override
-	public long getDissolvedBy() {
+	public int getDissolvedBy() {
 		return this.dissolvedBy;
 	}
 
@@ -169,26 +238,52 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @return the solute ID.
 	 */
 	@Override
-	public long getSolute() {
+	public int getSolute() {
 		return this.solute;
 	}
 
+	/**
+	 * 
+	 * @throws DatabaseException
+	 */
 	@Override
 	public void persistData() throws DatabaseException {
-		// TODO Auto-generated method stub
-		
+		String updateSQL = "UPDATE CHEMICAL SET type = ?, name = ?, inhabits = ?, atomicNumber = ?, atomicMass = ?, dissolvedBy = ?, solute = ? WHERE chemicaID = ?";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateSQL);
+			statement.setInt(1, type);
+			statement.setString(2, name);
+			statement.setString(3, inhabits);
+			statement.setInt(4, atomicNumber);
+			statement.setDouble(5, atomicMass);
+			statement.setInt(6, dissolvedBy);
+			statement.setInt(7, solute);
+			statement.setInt(8, chemicalID);
+			statement.executeUpdate();
+		} catch(SQLException e) {
+			throw new DatabaseException("Could not persist data for Chemical with ID " + chemicalID, e);
+		}
 	}
 
 	@Override
 	public void resetData() {
-		// TODO Auto-generated method stub
-		
+		// EMPTY
 	}
 
+	/**
+	 * 
+	 * @throws DatabaseException
+	 */
 	@Override
 	public void deleteInstance() throws DatabaseException {
-		// TODO Auto-generated method stub
-		
+		String deleteSQL = "DELETE FROM Chemical WHERE Chemical.chemicalID = ?";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteSQL);
+			statement.setInt(1, chemicalID);
+			statement.execute();
+		} catch(SQLException e) {
+			throw new DatabaseException("Could not delete Chemical with ID " + chemicalID, e);
+		}
 	}
 
 }

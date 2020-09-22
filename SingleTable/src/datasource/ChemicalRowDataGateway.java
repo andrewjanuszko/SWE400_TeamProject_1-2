@@ -35,17 +35,17 @@ public interface ChemicalRowDataGateway {
 	/**
 	 * @param acidID - the ID of the acid that a metal can be dissolved by.
 	 */
-	void setDissolvedBy(long acidID);
+	void setDissolvedBy(int acidID);
 	
 	/**
 	 * @param chemicalID - the ID of the solute.
 	 */
-	void setSolute(long chemicalID);
+	void setSolute(int chemicalID);
 	
 	/**
 	 * @return the id of the chemical
 	 */
-	long getID();
+	int getChemicalID();
 	
 	/**
 	 * @return the type of the chemical.
@@ -75,12 +75,12 @@ public interface ChemicalRowDataGateway {
 	/**
 	 * @return the acidID that a Chemical is dissolved by.
 	 */
-	long getDissolvedBy();
+	int getDissolvedBy();
 	
 	/**
 	 * @return the chemicalID of the solute.
 	 */
-	long getSolute();
+	int getSolute();
 	
 	/**
 	 * Store information into the database.
@@ -98,6 +98,5 @@ public interface ChemicalRowDataGateway {
 	 * @throws DatabaseException when it fails to delete a chemical.
 	 */
 	void deleteInstance() throws DatabaseException;
-
 	
 }

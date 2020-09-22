@@ -11,7 +11,7 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	
 	private static HashMap<Integer, MockChemicalTableRow> chemicalInfo;
 	private static int nextKey = 1;
-	private long ID;
+	private int chemicalID;
 	private MockChemicalTableRow info;
 	
 	private class MockChemicalTableRow {
@@ -21,17 +21,17 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 		String inhabits;
 		int atomicNumber;
 		double atomicMass;
-		long acidID;
-		long chemicalID;
+		int dissolvedBy;
+		int solute;
 		
-		public MockChemicalTableRow(int type, String name, String inhabits, int atomicNumber, double atomicMass, long acidID, long chemicalID) {
+		public MockChemicalTableRow(int type, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy, int solute) {
 			this.type = type;
 			this.name = name;
 			this.inhabits = inhabits;
 			this.atomicNumber = atomicNumber;
 			this.atomicMass = atomicMass;
-			this.acidID = acidID;
-			this.chemicalID = chemicalID;
+			this.dissolvedBy = dissolvedBy;
+			this.solute = solute;
 		}
 	}
 
@@ -43,7 +43,7 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 		if(chemicalInfo.containsKey(ID))
 		{
 			info = chemicalInfo.get(ID);
-			this.ID = ID;
+			this.chemicalID = ID;
 		} else {
 			throw new DatabaseException("Couldn't find chemical with ID " + ID);
 		}
@@ -59,14 +59,14 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	 * @param acidID - the ID of the acid that a metal can be dissolved by.
 	 * @param chemicalID - the ID of the solute.
 	 */
-	public ChemicalRowDataGatewayMock(int type, String name, String inhabits, int atomicNumber, double atomicMass, long acidID, long chemicalID) {
+	public ChemicalRowDataGatewayMock(int type, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy, int solute) {
 		if(chemicalInfo == null) {
 			resetData();
 		}
-		ID = nextKey;
+		chemicalID = nextKey;
 		nextKey++;
-		MockChemicalTableRow mockInfo = new MockChemicalTableRow(type, name,inhabits, atomicNumber, atomicMass, acidID, chemicalID);
-		chemicalInfo.put((int) ID,mockInfo);
+		MockChemicalTableRow mockInfo = new MockChemicalTableRow(type, name,inhabits, atomicNumber, atomicMass, dissolvedBy, solute);
+		chemicalInfo.put(chemicalID,mockInfo);
 		info = mockInfo;
 	}
 	
@@ -115,24 +115,24 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	 * the setter for a acid the is a dissolve by a chemical.
 	 */
 	@Override
-	public void setDissolvedBy(long acidID) {
-		this.info.acidID = acidID;
+	public void setDissolvedBy(int dissolvedBy) {
+		this.info.dissolvedBy = dissolvedBy;
 	}
 
 	/*
 	 * the setter for a chemical's soulute.
 	 */
 	@Override
-	public void setSolute(long chemicalID) {
-		this.info.chemicalID = chemicalID;
+	public void setSolute(int solute) {
+		this.info.solute = solute;
 	}
 	
 	/*
 	 * the getter for a chemical's ID.
 	 */
 	@Override
-	public long getID() {
-		return ID;
+	public int getChemicalID() {
+		return chemicalID;
 	}
 
 	/*
@@ -179,21 +179,21 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	 * the getter for a chemical's dissolved by 
 	 */
 	@Override
-	public long getDissolvedBy() {
-		return info.acidID;
+	public int getDissolvedBy() {
+		return info.dissolvedBy;
 	}
 	/*
 	 * the getter for a chemical's solute
 	 */
 	@Override
-	public long getSolute() {
+	public int getSolute() {
 		// TODO Auto-generated method stub
-		return info.chemicalID;
+		return info.solute;
 	}
 
 	@Override
 	public void persistData() throws DatabaseException {
-		//chemicalInfo.put(ID,info);	
+		chemicalInfo.put(chemicalID,info);	
 	}
 
 	@Override
@@ -203,7 +203,7 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 
 	@Override
 	public void deleteInstance() throws DatabaseException {
-		chemicalInfo.remove(ID);
+		chemicalInfo.remove(chemicalID);
 	}
 
 }
