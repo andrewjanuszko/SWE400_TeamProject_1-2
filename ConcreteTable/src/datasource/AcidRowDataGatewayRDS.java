@@ -97,37 +97,40 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 
 	@Override
 	public void setAcidID(int id) {
-		// TODO Auto-generated method stub
+		this.acidID = id;
 		
 	}
 
 	@Override
 	public void setName(String n) {
-		// TODO Auto-generated method stub
-		
+	  this.name = n;
 	}
 
 	@Override
 	public void setInhabits(String i) {
-		// TODO Auto-generated method stub
-		
+	  this.inhabits = i;
 	}
 
 	@Override
 	public void setSolute(String s) {
-		// TODO Auto-generated method stub
-		
+		this.solute = s;
 	}
-
+	
+	//not sure if implemented correctly
 	@Override
 	public boolean addDissolves(int id) {
-		// TODO Auto-generated method stub
+		this.dissolves.add(id);
 		return false;
 	}
 
 	@Override
 	public boolean deleteDisolves(int id) {
-		// TODO Auto-generated method stub
-		return false;
+	  if(dissolves.contains(id)) {
+	    dissolves.remove(dissolves.indexOf(id)); 
+	    return true;
+	  }
+	  else {
+	    return false;
+	  }
 	}
 }
