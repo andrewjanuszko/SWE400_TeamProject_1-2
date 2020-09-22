@@ -103,4 +103,27 @@ public interface ChemicalRowDataGateway {
 	 */
 	public void setSolute(int solute);
 	
+	/**
+	 * 
+	 * @param atomicNumber
+	 * @throws DatabaseException
+	 */
+	public void findByAtomicNumber(int atomicNumber) throws DatabaseException;
+	
+	/**
+	 * 
+	 * @param atomicMass
+	 * @throws DatabaseException
+	 */
+	public void findByAtomicMass(double atomicMass) throws DatabaseException;
+	
+	/**
+	 * 
+	 * @param name
+	 * @throws DatabaseException
+	 */
+	public void findByName(String name) throws DatabaseException;
+	
+	
+	
 }

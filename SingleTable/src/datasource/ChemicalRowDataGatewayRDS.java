@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
 import dataENUM.ChemicalEnum;
 
 
@@ -79,6 +81,50 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
+	 * Find a set of chemicals with a given type.
+	 * @param type is the chemical type.
+	 * @return a set of chemical IDs.
+	 * @throws DatabaseException if the chemical type does not exist.
+	 */
+	public ArrayList<Integer> findChemicalsByType(int type) throws DatabaseException {
+		ArrayList<Integer> resultSet = new ArrayList<Integer>();
+		String selectSQL = "SELECT chemicalID FROM Chemical WHERE Chemical.type = ?";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
+			statement.setInt(1, type);
+			ResultSet results = statement.executeQuery();
+			while (results.next()) {
+				resultSet.add(results.getInt("chemicalID"));
+			}
+		} catch(SQLException e) {
+			throw new DatabaseException("Chemicals of type " + type + " cannot be found.", e);
+		}
+		return resultSet;
+	}
+	
+	/**
+	 * 
+	 * @param inhabits
+	 * @return
+	 * @throws DatabaseException
+	 */
+	public ArrayList<Integer> findChemicalByHabitat(String inhabits) throws DatabaseException {
+		ArrayList<Integer> resultSet = new ArrayList<Integer>();
+		String selectSQL = "SELECT chemicalID FROM Chemical WHERE Chemical.inhabits = ?";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
+			statement.setString(1, inhabits);
+			ResultSet results = statement.executeQuery();
+			while (results.next()) {
+				resultSet.add(results.getInt("chemicalID"));
+			}
+		} catch(SQLException e) {
+			throw new DatabaseException("Chemicals of habitat " + inhabits + " cannot be found.", e);
+		}
+		return resultSet;
+	}
+	
+	/**
 	 * Create a table in the database.
 	 * @throws DatabaseException if the connection to the database is lost.
 	 */
@@ -114,6 +160,24 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	public void deleteChemical() throws DatabaseException {
 		String deleteChemicalSQL = "DELETE FROM Chemical WHERE Chemical.chemicalID = ?;";
 		try {
+			if (this.type == ChemicalEnum.ACID.getChemicalType()) {
+				//
+				String metalsDissolvedByAcidSQL = "SELECT chemicalID FROM Chemical WHERE Chemical.dissolvedBy = ?;";
+				PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(metalsDissolvedByAcidSQL);
+				statement.setInt(1, this.chemicalID);
+				ResultSet results = statement.executeQuery();
+				ArrayList<Integer> metalIDs = new ArrayList<Integer>();
+				while (results.next()) {
+					metalIDs.add(results.getInt("chemicalID"));
+				}
+				for (Integer metalID : metalIDs) {
+					ChemicalRowDataGatewayRDS metal = new ChemicalRowDataGatewayRDS(metalID);
+					metal.setDissolvedBy(0);
+					metal.updateChemical();
+				}
+				//
+			}
+		
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteChemicalSQL);
 			statement.setInt(1, this.chemicalID);
 			statement.execute();
@@ -260,6 +324,76 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	@Override
 	public void setSolute(int solute) {
 		this.solute = solute;
+	}
+	
+	/**
+	 * @see datasource.ChemicalRowDataGateway#getByAtomicNumber(int).
+	 */
+	@Override
+	public void findByAtomicNumber(int atomicNumber) throws DatabaseException {
+		String findSQL = "SELECT * FROM Chemical WHERE Chemical.atomicNumber = ?;";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(findSQL);
+			statement.setInt(1, atomicNumber);
+			ResultSet result = statement.executeQuery();
+			result.next();
+			this.chemicalID = result.getInt("chemicalID");
+			this.type = result.getInt("type");
+			this.name = result.getString("name");
+			this.inhabits = result.getString("inhabits");
+			this.atomicNumber = result.getInt("atomicNumber");
+			this.atomicMass = result.getDouble("atomicMass");
+			this.dissolvedBy = result.getInt("dissolvedBy");
+			this.solute = result.getInt("solute");
+		} catch(SQLException e) {
+			throw new DatabaseException("No chemical with atomic number " + atomicNumber + " could be found.", e);
+		}
+	}
+
+	/**
+	 * @see datasource.ChemicalRowDataGateway#getByAtomicMass(double).
+	 */
+	@Override
+	public void findByAtomicMass(double atomicMass) throws DatabaseException {
+		String findSQL = "SELECT * FROM Chemical WHERE Chemical.atomicMass = ?;";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(findSQL);
+			statement.setDouble(1, atomicMass);
+			ResultSet result = statement.executeQuery();
+			result.next();
+			this.chemicalID = result.getInt("chemicalID");
+			this.type = result.getInt("type");
+			this.name = result.getString("name");
+			this.inhabits = result.getString("inhabits");
+			this.atomicNumber = result.getInt("atomicNumber");
+			this.atomicMass = result.getDouble("atomicMass");
+			this.dissolvedBy = result.getInt("dissolvedBy");
+			this.solute = result.getInt("solute");
+		} catch(SQLException e) {
+			throw new DatabaseException("No chemical with atomic mass " + atomicMass + " could be found.", e);
+		}
+	}
+
+	@Override
+	public void findByName(String name) throws DatabaseException {
+		String findSQL = "SELECT * FROM Chemical WHERE Chemical.name = ?;";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(findSQL);
+			statement.setString(1, name);
+			ResultSet result = statement.executeQuery();
+			result.next();
+			this.chemicalID = result.getInt("chemicalID");
+			this.type = result.getInt("type");
+			this.name = result.getString("name");
+			this.inhabits = result.getString("inhabits");
+			this.atomicNumber = result.getInt("atomicNumber");
+			this.atomicMass = result.getDouble("atomicMass");
+			this.dissolvedBy = result.getInt("dissolvedBy");
+			this.solute = result.getInt("solute");
+		} catch(SQLException e) {
+			throw new DatabaseException("No chemical with name " + name + " could be found.", e);
+		}
+		
 	}
 	
 }
