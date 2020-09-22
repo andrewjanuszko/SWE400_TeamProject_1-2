@@ -16,8 +16,6 @@ public interface MetalRowDataGateway {
 	
 	public int getDissolvedBy();
 	
-	public void setMetalID(int id);
-	
 	public void setName(String s);
 	
 	public void setInhabits(String s);

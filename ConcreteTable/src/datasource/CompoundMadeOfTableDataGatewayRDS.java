@@ -2,9 +2,16 @@ package datasource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CompoundMadeOfTableDataGatewatRDS implements CompoundMadeOfTableDataGateway{
+import datadto.CompoundMadeOfDTO;
+
+public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDataGateway{
+	
+	Connection conn = DatabaseManager.getSingleton().getConnection();
 	
 	public static void createTable() throws DatabaseException {
 		String drop = "DROP TABLE IF EXISTS CompoundMadeOf";
@@ -15,7 +22,6 @@ public class CompoundMadeOfTableDataGatewatRDS implements CompoundMadeOfTableDat
 				"FOREIGN KEY(elementID) REFERENCES Element(elementID) ";
 				
 	
-		Connection conn = DatabaseManager.getSingleton().getConnection();
 
 		try
 		{
@@ -33,4 +39,24 @@ public class CompoundMadeOfTableDataGatewatRDS implements CompoundMadeOfTableDat
 			throw new DatabaseException("Unable to create the CompoundMadeOf table", e);
 		}
 	}
+
+	@Override
+	public List<CompoundMadeOfDTO> getCompoundMadeOf(int compoundID) {
+		
+		List<CompoundMadeOfDTO> dtoList = new ArrayList<CompoundMadeOfDTO>();
+		
+		try {
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM CompoundMadeOf WHERE compoundID = " + compoundID);
+			
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				dtoList.add(new CompoundMadeOfDTO(rs.getInt("compoundID"), rs.getInt("elementID")));
+			}
+		} catch (SQLException e) {
+			new DatabaseException("could not get CompoundMadeOf");
+		}
+		
+		return dtoList;
+	}
+
 }
