@@ -46,6 +46,18 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param chemicalID
+	 * @param type
+	 * @param name
+	 * @param inhabits
+	 * @param atomicNumber
+	 * @param atomicMass
+	 * @param dissolvedBy
+	 * @param solute
+	 * @throws DatabaseException
+	 */
 	public ChemicalRowDataGatewayRDS(int chemicalID, int type, String name, String inhabits, int atomicNumber, double atomicMass,
 			int dissolvedBy, int solute) throws DatabaseException {
 		String insertChemicalSQL = "INSERT INTO Chemical (chemicalID, type, name, inhabits, atomicNumber, atomicMass, dissolvedBy, solute) " +
@@ -66,6 +78,10 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 		}
 	}
 	
+	/**
+	 * 
+	 * @throws DatabaseException
+	 */
 	public void createTable() throws DatabaseException {
 		String dropTableSQL = "DROP TABLE IF EXISTS Chemical, CompoundMadeFromElement;";
 		String createTableSQL = "CREATE TABLE Chemical(" +
@@ -90,77 +106,158 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 		}
 	}
 	
+	/**
+	 * 
+	 * @throws DatabaseException
+	 */
 	@Override
 	public void deleteChemical() throws DatabaseException {
-		// TODO Auto-generated method stub
-		
+		String deleteChemicalSQL = "DELETE FROM Chemical WHERE Chemical.chemicalID = ?;";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteChemicalSQL);
+			statement.setInt(1, this.chemicalID);
+			statement.execute();
+		} catch(SQLException e) {
+			throw new DatabaseException("Failed to delete Chemical with ID " + chemicalID + ".", e);
+		}
 	}
 	
+	/**
+	 * 
+	 * @throws DatabaseException
+	 */
 	@Override
 	public void updateChemical() throws DatabaseException {
-		// TODO Auto-generated method stub
+		String updateChemicalSQL = "UPDATE Chemical SET type = ?, name = ?, inhabits = ?, atomicNumber = ?, atomicMass = ?, dissolvedBy = ?, solute = ? WHERE chemicalID = ?;";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateChemicalSQL);
+			statement.setInt(1, type);
+			statement.setString(2, name);
+			statement.setString(3, inhabits);
+			statement.setInt(4, atomicNumber);
+			statement.setDouble(5, atomicMass);
+			statement.setInt(6, dissolvedBy);
+			statement.setInt(7, solute);
+			statement.setInt(8, chemicalID);
+			statement.execute();
+		} catch(SQLException e) {
+			throw new DatabaseException("Failed to update Chemical with ID " + chemicalID + ".", e);
+		}
 	}
 	
+	/**
+	 * 
+	 * @return type
+	 */
 	@Override
 	public int getType() {
 		return this.type;
 	}
 	
+	/**
+	 * 
+	 * @return name
+	 */
 	@Override
 	public String getName() {
 		return this.name;
 	}
 	
+	/**
+	 * 
+	 * @return inhabits
+	 */
 	@Override
 	public String getInhabits() {
 		return this.inhabits;
 	}
 	
+	/**
+	 * 
+	 * @return atomicNumber
+	 */
 	@Override
 	public int getAtomicNumber() {
 		return this.atomicNumber;
 	}
 	
+	/**
+	 * 
+	 * @return atomicMass
+	 */
 	@Override
 	public double getAtomicMass() {
 		return this.atomicMass;
 	}
 	
+	/**
+	 * 
+	 * @return dissolvedBy
+	 */
 	@Override
 	public int getDissolvedBy() {
 		return this.dissolvedBy;
 	}
 	
+	/**
+	 * 
+	 * @return solute
+	 */
 	@Override
 	public int getSolute() {
 		return this.solute;
 	}
 	
+	/**
+	 * 
+	 * @param type
+	 */
 	@Override
 	public void setType(int type) {
 		this.type = type;
 	}
 	
+	/**
+	 * 
+	 * @param name
+	 */
 	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 	
+	/**
+	 * 
+	 * @param inhabits
+	 */
 	@Override
 	public void setInhabits(String inhabits) {
 		this.inhabits = inhabits;
 	}
 	
+	/**
+	 * 
+	 * @param atomicNumber
+	 */
 	@Override
 	public void setAtomicNumber(int atomicNumber) {
 		this.atomicNumber = atomicNumber;
 	}
 	
+	/**
+	 * 
+	 * @param atomicMass
+	 */
 	@Override
 	public void setAtomicMass(double atomicMass) {
 		this.atomicMass = atomicMass;
 	}
 	
+	/**
+	 * 
+	 * @param dissolvedBy
+	 * @throws DatabaseException
+	 */
 	@Override
 	public void setDissolvedBy(int dissolvedBy) throws DatabaseException {
 		ChemicalRowDataGatewayRDS acid = new ChemicalRowDataGatewayRDS(dissolvedBy);
@@ -171,6 +268,10 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param solute
+	 */
 	@Override
 	public void setSolute(int solute) {
 		this.solute = solute;
