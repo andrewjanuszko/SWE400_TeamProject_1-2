@@ -46,7 +46,7 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	 * @param ID
 	 * @throws DatebaseException
 	 */
-	public ChemicalRowDataGatewayMock(int ID) throws DatebaseException {
+	public ChemicalRowDataGatewayMock(int ID) throws DatabaseException {
 //		if (chemicalInfo == null) {
 //			resetDate();        The hashmap will be reset if it empty.
 //		}
