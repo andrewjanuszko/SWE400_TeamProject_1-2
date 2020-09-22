@@ -47,7 +47,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * @param chemicalId to search for
    */
   public String getInhabits(int chemicalId) {
-    String inhabits = "",; 
+    String inhabits = ""; 
     String sql = new String("SELECT * FROM Chemical WHERE chemicalId = " + chemicalId + ";");
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
