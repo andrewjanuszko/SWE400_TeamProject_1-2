@@ -140,4 +140,21 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
   public void setDissolvedBy(int i) {
     this.dissolvedBy = i;
   }
+  
+
+  public void persist() {
+	  try {
+		PreparedStatement stmt = conn.prepareStatement("UPDATE Metal SET"
+				+ " name = " + name
+				+ ", inhabits = " + inhabits
+				+ ", atomicNumber = " + atomicNumber
+				+ ", atomicMass = " + atomicMass
+				+ ", dissolvedBy = " + dissolvedBy
+				+ " WHERE metalID = " + metalID);
+		
+		stmt.execute();
+	} catch (SQLException e) {
+		new DatabaseException("could't update element table");
+	}
+  }
 }

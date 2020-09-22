@@ -12,8 +12,6 @@ public interface ElementRowDataGateway {
 	
 	public double getAtomicMass();
 	
-	public void setElementID(int id);
-	
 	public void setName(String s);
 	
 	public void setInhabits(String s);

@@ -92,12 +92,6 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
   }
 
   @Override
-  public void setElementID(int id) {
-    this.elementID = id;
-    
-  }
-
-  @Override
   public void setName(String n) {
     this.name = n;
   }
@@ -117,5 +111,20 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
   public void setAtomicMass(double d) {
     this.atomicMass = d;
     
+  }
+  
+  public void persist() {
+	  try {
+		PreparedStatement stmt = conn.prepareStatement("UPDATE Element SET"
+				+ " name = " + name
+				+ ", inhabits = " + inhabits
+				+ ", atomicNumber = " + atomicNumber
+				+ ", atomicMass = " + atomicMass
+				+ " WHERE elementID = " + elementID);
+		
+		stmt.executeUpdate();
+	} catch (SQLException e) {
+		new DatabaseException("could't update element table");
+	}
   }
 }

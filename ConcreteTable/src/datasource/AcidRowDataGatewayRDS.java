@@ -109,8 +109,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	public void persist() {
 		try {
 			PreparedStatement stmt = conn.prepareStatement("UPDATE Acid SET"
-					+ " acidID = " + acidID
-					+ ", name = " + name
+					+ " name = " + name
 					+ ", inhabits = " + inhabits
 					+ ", solute = " + solute 
 					+ " WHERE acidID = " + acidID);
