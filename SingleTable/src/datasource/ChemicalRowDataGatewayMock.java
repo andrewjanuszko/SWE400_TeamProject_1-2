@@ -11,6 +11,36 @@ import java.util.HashMap;
  */
 public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 
+
+	private static HashMap<Integer, MockPlayerTableRow> ChemicalInfo;
+	private static int nextKey = 1;
+	private int key;
+	private MockPlayerTableRow info;
+	
+	private class MockPlayerTableRow {
+		private int chemicalID;
+		private int type;
+		private String name;
+		private String inhabits;
+		private int atomicNumber;
+		private double atomicMass;
+		private int dissolvedBy;
+		private int solute;
+		
+		public MockPlayerTableRow(int chemicalID, int type, String name, String inhabits,
+				int atomicNumber, double atomicMass, int dissolvedBy, int soulute) {
+			this.chemicalID = chemicalID;
+			this.type = type;
+			this.name = name;
+			this.inhabits = inhabits;
+			this.atomicNumber = atomicNumber;
+			this.atomicMass = atomicMass;
+			this.dissolvedBy =dissolvedBy;
+			this.solute = soulute;
+		}
+		
+	}
+	
 	@Override
 	public void deleteChemical() throws DatabaseException {
 		// TODO Auto-generated method stub
