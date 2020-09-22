@@ -1,8 +1,12 @@
 package datasource;
 
+import java.util.List;
+
+import datadto.CompoundMadeOfDTO;
+
 public interface CompoundMadeOfTableDataGateway {
 	
-	public void getCompoundMadeOf(int compoundID);
+	public List<CompoundMadeOfDTO> getCompoundMadeOf(int compoundID);
 	
-	public void getCompoundMadeOf(String name);
+	public List<CompoundMadeOfDTO> getCompoundMadeOf(String name);
 }
