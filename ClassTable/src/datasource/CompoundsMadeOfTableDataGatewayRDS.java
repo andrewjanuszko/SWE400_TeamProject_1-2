@@ -9,14 +9,18 @@ import java.util.List;
 
 public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableDataGateway {
 
+  /**
+   * Create tables for CompoundMadeFromElement
+   */
   @Override
   public void createTableDataMadeOf() {
     String dropTable = "DROP TABLE IF EXISTS CompoundMadeFromElement;";
-    String createTable = "CREATE TABLE CompoundMadeFromElement (" + 
+    String createTable = "CREATE TABLE CompoundMadeFromElement(" + 
         "compoundId INT NOT NULL, " +
-        "c_elementId INT NOT NULL, " + 
-        "FOREIGN KEY (compoundId) REFERENCES chemical(chemicalId)," +
-        "FOREIGN KEY (c_elementId) REFERENCES Element(elementId)";
+        "elementId INT NOT NULL, " + 
+        "FOREIGN KEY (compoundId) REFERENCES Chemical(chemicalId), " +
+        "FOREIGN KEY (elementId) REFERENCES Element(elementId));";
+    
     
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -25,11 +29,12 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;"); 
       statement.executeUpdate(dropTable);
       
-      // Create new Monitorings Table
+      //
       statement.executeUpdate(createTable);
       
-    } catch (Exception e) {
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
+      System.out.println("Failed to create/drop CompoundMadeFromElement");
     }
   }
   
@@ -104,17 +109,16 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   public void insert(int compoundId, int elementId) {
     try {
       PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO CompoundsMadeOfElement (compoundId, madeOf)" + "VALUES (?, ?);");
+          .prepareStatement("INSERT INTO CompoundMadeFromElement (compoundId, elementId)" + "VALUES (?, ?);");
       insert.setInt(1, compoundId); // Set compoundId
       insert.setInt(2, elementId); // Set elementId
 
       insert.execute(); // Insert into table
       
-    } catch (SQLException e) {
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-    } catch (DatabaseException e) {
-      e.printStackTrace();
-    }
+      System.out.println("Failed to insert compoundmadeof");
+    } 
   }
 
   /** Get compound name from compoundId
@@ -123,35 +127,31 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   @Override
   public String getCompoundName(int compoundId) {
     String name = ""; 
-    String sql = new String("SELECT Chemical.name FROM Chemical INNER JOIN Compound ON Chemical.chemicalId = " + compoundId + ";");
+    String sql = new String("SELECT Chemical.name FROM Chemical INNER JOIN CompoundMadeFromElement ON Chemical.chemicalId = " + compoundId + ";");
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       rs.next(); // Get result
       name = rs.getString("name"); // Get name from "name" column
-    } catch (Exception e) { 
+    } catch (SQLException | DatabaseException e) { 
       e.printStackTrace();
     }
     return name;
   }
   
-  /**
-   * Get inhabits from compoundID
-   * @param compoundId to find inhbaits from
-   */
   @Override
   /** Get inhabits from the Chemical table of a given chemicalId
    * @param chemicalId to search for
    */
   public String getInhabits(int compoundId) {
     String inhabits = ""; 
-    String sql = new String("SELECT Chemical.inhabits FROM Chemical INNER JOIN Compound ON Chemical.chemicalId = " + compoundId + ";");
+    String sql = new String("SELECT Chemical.inhabits FROM Chemical INNER JOIN CompoundMadeFromElement ON Chemical.chemicalId = " + compoundId + ";");
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       rs.next();
       inhabits = rs.getString("inhabits");
-    } catch (Exception e) { 
+    } catch (SQLException | DatabaseException e) { 
       e.printStackTrace();
     }
     return inhabits;

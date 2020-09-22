@@ -1,5 +1,6 @@
 package datasource;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -72,11 +73,33 @@ class TestElement {
     element.insert(2, 2, 22);
     
     assertEquals("chemicalname1", element.getName(1));
-    assertEquals("chemicalname2", element.getName(2));  }
+    assertEquals("chemicalname2", element.getName(2));  
+  }
   
   @Test
   void testGetInhabits() {
-    fail("Not yet implemented");
+    // Create row data gateways
+    ElementRowDataGateway element = new ElementRowDataGatewayRDS();
+    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
+    
+    // Create base, chemical tables
+    element.createTableElement();
+    chem.createTableChemcial();
+    
+    // Insert chemical 
+    chem.insert(1, "chemicalname1", "inhabits1");
+    chem.insert(2, "chemicalname2", "inhabits2");
+    chem.insert(3, "chemicalname3", "inhabits3");
+    
+    // Insert element
+    element.insert(1, 15, 18);
+    element.insert(2, 50, 42);
+    element.insert(3, 7, 21);
+    
+    // Test
+    assertEquals("inhabits1", element.getInhabits(1));
+    assertEquals("inhabits2", element.getInhabits(2));
+    assertEquals("inhabits3", element.getInhabits(3));
   }
 
 }
