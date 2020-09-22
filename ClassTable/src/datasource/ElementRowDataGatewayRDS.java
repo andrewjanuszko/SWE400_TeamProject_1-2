@@ -15,6 +15,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       // Drop the table if exists first
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;"); 
       statement.executeUpdate(dropTable);
       // Create new Monitorings Table
       statement.executeUpdate(createTable);

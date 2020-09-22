@@ -1,6 +1,8 @@
 package datasource;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
@@ -11,11 +13,13 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 	@Override
 	public void createTableAcid() {
 		String dropTable = "DROP TABLE IF EXISTS Acid;";
-		String createTable = "CREATE TABLE Acid" + "(" + "acidId INT NOT NULL, " + "solute VARCHAR(20), "
-				+ "FOREIGN KEY(acidId) REFERENCES Chemical(chemicalId)" + ");";
+		String createTable = "CREATE TABLE Acid" + "(acidId INT NOT NULL, " + 
+		"solute INT, " + "FOREIGN KEY(acidId) REFERENCES Chemical(chemicalId)" + ");";
 		try {
 			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+			
 			// Drop the table if exists first
+			statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
 			statement.executeUpdate(dropTable);
 			
 			// Create new Monitorings Table
@@ -57,8 +61,9 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 	@Override
 	public String getName(int id) {
 		String name = "";
-		String sql = new String(
-				"SELECT Chemical.name FROM Chemical INNER JOIN Acid ON Chemical.chemicalId = " + id + ";");
+		String sql =
+				"SELECT Chemical.name FROM Chemical INNER JOIN Acid ON Chemical.chemicalId = " + id + ";";
+		
 		try {
 			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
 			ResultSet rs = statement.executeQuery(sql);
@@ -80,7 +85,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 	public String getInhabits(int id) {
 		String inhabits = "";
 		String sql = new String(
-				"SELECT Chemical.inhabits FROM Chemical INNER JOIN Compound ON Chemical.chemicalId = " + id + ";");
+				"SELECT Chemical.inhabits FROM Chemical INNER JOIN Acid ON Chemical.chemicalId = " + id + ";");
 		try {
 			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
 			ResultSet rs = statement.executeQuery(sql); 
@@ -93,4 +98,48 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 		
 		return inhabits;
 	}
+
+	/**
+	 * Insert into acid table.
+	 * @param id
+	 * @param soluteId
+	 */
+	public void insert(int id, int soluteId) {
+	  try {
+	    // Insert chemical
+	    PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
+        .prepareStatement("INSERT INTO Acid (acidId, solute)" + "VALUES (?, ?);");
+	    insertChemical.setInt(1, id); // Set acid id
+	    insertChemical.setInt(2, soluteId); // set solute id
+	    
+	    insertChemical.execute(); // Insert acid
+	    
+	  } catch(Exception e) {
+	    e.printStackTrace();
+	  }
+	}
+	
+//	public void insert(int id, String name, String inhabits, int soluteId) {
+//	  try {
+//	    // Insert chemical
+//      PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
+//          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+//      insertChemical.setInt(1, id); // Set chemicalId
+//      insertChemical.setString(2, name); // Set name
+//      insertChemical.setString(3, inhabits); // Set inhabits
+//      
+//      insertChemical.execute(); // Insert chemical
+//      
+//      // Insert acid
+//      PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
+//          .prepareStatement("INSERT INTO Acid (acidId, solute)" + "VALUES (?, ?);");
+//      insertAcid.setInt(1, id); // Set chemicalId
+//      insertAcid.setInt(2, soluteId); // Set name
+//
+//      insertAcid.execute(); // Insert acid
+//      
+//    } catch (SQLException | DatabaseException e) {
+//      e.printStackTrace();
+//    } 
+//	}
 }

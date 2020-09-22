@@ -18,8 +18,10 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       // Drop the table if exists first
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;"); 
       statement.executeUpdate(dropTable);
       // Create new Monitorings Table
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
       statement.executeUpdate(createTable);
     } catch (Exception e) {
       e.printStackTrace();

@@ -16,7 +16,7 @@ public class DatabaseManager
 {
 	private static DatabaseManager singleton;
 	private HashMap<Long, Connection> connections;
-	private static int patternNumber = 1;
+	private static int patternNumber = 2;
 
 	/**
 	 * @return the only one
@@ -52,8 +52,8 @@ public class DatabaseManager
 				System.err.println("Need a config file that specifies a db number");
 				throw new DatabaseException("No config file found");
 			}
-			return openConnectionTo("jdbc:mysql://db.cs.ship.edu:3306/swe400_2"+ patternNumber + "?autoReconnect=true",
-					"swe400_2", "pwd4swe400_2F20");
+			return openConnectionTo("jdbc:mysql://db.cs.ship.edu:3306/swe400_6"+ patternNumber + "?autoReconnect=true",
+					"swe400_6", "pwd4swe400_6F20");
 		
 	}
 
