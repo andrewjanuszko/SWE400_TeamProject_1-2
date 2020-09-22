@@ -79,4 +79,65 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 			throw new DatabaseException("Couldn't find metal with that name", e);
 		}
 	}
+
+  @Override
+  public int getMetalID() {
+    return this.getMetalID();
+  }
+
+  @Override
+  public String getName() {
+    return this.name;
+  }
+
+  @Override
+  public String getInhabits() {
+    return this.inhabits;
+  }
+
+  @Override
+  public int getAtomicNumber() {
+    return this.atomicNumber;
+  }
+
+  @Override
+  public double getAtomicMass() {
+    return this.atomicMass;
+  }
+
+  @Override
+  public int getDissolvedBy() {
+    return this.dissolvedBy;
+  }
+
+  @Override
+  public void setMetalID(int id) {
+    this.metalID = id;
+    
+  }
+
+  @Override
+  public void setName(String s) {
+    this.name = s;
+  }
+
+  @Override
+  public void setInhabits(String s) {
+   this.inhabits = s;
+  }
+
+  @Override
+  public void setAtomicNumber(int i) {
+    this.atomicNumber = i;
+  }
+
+  @Override
+  public void setAtomicMass(double d) {
+    this.atomicMass = d;
+  }
+
+  @Override
+  public void setDissolvedBy(int i) {
+    this.dissolvedBy = i;
+  }
 }
