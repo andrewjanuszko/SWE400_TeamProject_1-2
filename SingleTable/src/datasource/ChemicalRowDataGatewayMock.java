@@ -58,6 +58,17 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 	}
 	
 	
+	/**
+	 * Adds rows to the hashmap.
+	 * @param chemicalID
+	 * @param type
+	 * @param name
+	 * @param inhabits
+	 * @param atomicNumber
+	 * @param atomicMass
+	 * @param dissolvedBy
+	 * @param soulute
+	 */
 	public ChemicalRowDataGatewayMock(int chemicalID, int type, String name, String inhabits,
 			int atomicNumber, double atomicMass, int dissolvedBy, int soulute) {
 //		if (chemicalInfo == null) {
@@ -92,18 +103,26 @@ public class ChemicalRowDataGatewayMock implements ChemicalRowDataGateway {
 		return chemicalInfo.size();
 	}
 	
+	/**
+	 * will delete a chemical
+	 */
 	@Override
 	public void deleteChemical() throws DatabaseException {
 		chemicalInfo.remove(key);
 		
 	}
 
+	/**
+	 * will update any changes made to a chemical
+	 */
 	@Override
 	public void updateChemical() throws DatabaseException {
 		chemicalInfo.put(key, info);
 		
 	}
-
+	
+//Just getters/Setters beyond this point
+	
 	public int getKey() {
 		return key;
 	}
