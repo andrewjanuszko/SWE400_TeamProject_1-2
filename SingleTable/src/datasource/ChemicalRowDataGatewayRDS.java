@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import dataENUM.ChemicalEnum;
 
 
 /**
@@ -27,15 +28,45 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @throws DatabaseException
 	 */
 	public ChemicalRowDataGatewayRDS(int chemicalID) throws DatabaseException {
-		String findSQL
+		String findChemicalSQL = "SELECT * FROM Chemical WHERE chemicalID = ?;";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(findChemicalSQL);
+			statement.setInt(1, chemicalID);
+			ResultSet result = statement.executeQuery();
+			result.next();
+			this.type = result.getInt("type");
+			this.name = result.getString("name");
+			this.inhabits = result.getString("inhabits");
+			this.atomicNumber = result.getInt("atomicNumber");
+			this.atomicMass = result.getDouble("atomicMass");
+			this.dissolvedBy = result.getInt("dissolvedBy");
+			this.solute = result.getInt("solute");
+		} catch(SQLException e) {
+			throw new DatabaseException("Could not find Chemical with ID " + chemicalID + ".", e);
+		}
 	}
 	
 	public ChemicalRowDataGatewayRDS(int chemicalID, int type, String name, String inhabits, int atomicNumber, double atomicMass,
-			int dissolvedBy, int solute) {
-		
+			int dissolvedBy, int solute) throws DatabaseException {
+		String insertChemicalSQL = "INSERT INTO Chemical (chemicalID, type, name, inhabits, atomicNumber, atomicMass, dissolvedBy, solute) " +
+								   "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertChemicalSQL);
+			statement.setInt(1, chemicalID);
+			statement.setInt(2, type);
+			statement.setString(3, name);
+			statement.setString(4, inhabits);
+			statement.setInt(5, atomicNumber);
+			statement.setDouble(6, atomicMass);
+			statement.setInt(7, dissolvedBy);
+			statement.setInt(8, solute);
+			statement.execute();
+		} catch(SQLException e) {
+			throw new DatabaseException("Failed to insert Chemical into database.", e);
+		}
 	}
 	
-	public void createChemical() throws DatabaseException {
+	public void createTable() throws DatabaseException {
 		String dropTableSQL = "DROP TABLE IF EXISTS Chemical, CompoundMadeFromElement;";
 		String createTableSQL = "CREATE TABLE Chemical(" +
 						   "chemicalID INT NOT NULL," +
@@ -54,8 +85,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 			
 			statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
 			statement.executeUpdate(createTableSQL);
-		} catch(SQLException sqle) {
-			throw new DatabaseException("Something went really wrong.", sqle);
+		} catch(SQLException e) {
+			throw new DatabaseException("Failed to drop/create table.", e);
 		}
 	}
 	
@@ -68,91 +99,81 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	@Override
 	public void updateChemical() throws DatabaseException {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override
 	public int getType() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.type;
 	}
 	
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.name;
 	}
 	
 	@Override
 	public String getInhabits() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.inhabits;
 	}
 	
 	@Override
 	public int getAtomicNumber() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.atomicNumber;
 	}
 	
 	@Override
 	public double getAtomicMass() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.atomicMass;
 	}
 	
 	@Override
 	public int getDissolvedBy() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.dissolvedBy;
 	}
 	
 	@Override
 	public int getSolute() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.solute;
 	}
 	
 	@Override
 	public void setType(int type) {
-		// TODO Auto-generated method stub
-		
+		this.type = type;
 	}
 	
 	@Override
-	public void setName() {
-		// TODO Auto-generated method stub
-		
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	@Override
 	public void setInhabits(String inhabits) {
-		// TODO Auto-generated method stub
-		
+		this.inhabits = inhabits;
 	}
 	
 	@Override
 	public void setAtomicNumber(int atomicNumber) {
-		// TODO Auto-generated method stub
-		
+		this.atomicNumber = atomicNumber;
 	}
 	
 	@Override
 	public void setAtomicMass(double atomicMass) {
-		// TODO Auto-generated method stub
-		
+		this.atomicMass = atomicMass;
 	}
 	
 	@Override
-	public void setDissolvedBy(int dissolvedBy) {
-		// TODO Auto-generated method stub
-		
+	public void setDissolvedBy(int dissolvedBy) throws DatabaseException {
+		ChemicalRowDataGatewayRDS acid = new ChemicalRowDataGatewayRDS(dissolvedBy);
+		if (acid.getType() == ChemicalEnum.ACID.getChemicalType()) {
+			this.dissolvedBy = dissolvedBy;
+		} else {
+			throw new DatabaseException("Chemical with ID " + chemicalID + " is not an Acid.");
+		}
 	}
 	
 	@Override
 	public void setSolute(int solute) {
-		// TODO Auto-generated method stub
-		
+		this.solute = solute;
 	}
 	
 }

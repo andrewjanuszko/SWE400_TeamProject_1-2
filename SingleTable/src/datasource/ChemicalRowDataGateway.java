@@ -27,7 +27,7 @@ public interface ChemicalRowDataGateway {
 	
 	public void setType(int type);
 	
-	public void setName();
+	public void setName(String name);
 	
 	public void setInhabits(String inhabits);
 	
@@ -35,7 +35,7 @@ public interface ChemicalRowDataGateway {
 	
 	public void setAtomicMass(double atomicMass);
 
-	public void setDissolvedBy(int dissolvedBy);
+	public void setDissolvedBy(int dissolvedBy) throws DatabaseException;
 	
 	public void setSolute(int solute);
 	

@@ -1,4 +1,4 @@
-package datasource;
+package dataENUM;
 
 /**
  * An enum to hold all the chemical types.
