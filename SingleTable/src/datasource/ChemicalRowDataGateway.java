@@ -1,5 +1,7 @@
 package datasource;
 
+import java.util.ArrayList;
+
 /**
  * Interface for a ChemicalRowDataGateway
  * @author andrewjanuszko
@@ -105,6 +107,29 @@ public interface ChemicalRowDataGateway {
 	
 	/**
 	 * 
+	 * @param type
+	 * @return
+	 * @throws DatabaseException
+	 */
+	public ArrayList<Integer> findByType(int type) throws DatabaseException;
+	
+	/**
+	 * 
+	 * @param name
+	 * @throws DatabaseException
+	 */
+	public void findByName(String name) throws DatabaseException;
+
+	/**
+	 * 
+	 * @param inhabits
+	 * @return
+	 * @throws DatabaseException
+	 */
+	public ArrayList<Integer> findByHabitat(String inhabits) throws DatabaseException;
+	
+	/**
+	 * 
 	 * @param atomicNumber
 	 * @throws DatabaseException
 	 */
@@ -119,10 +144,24 @@ public interface ChemicalRowDataGateway {
 	
 	/**
 	 * 
-	 * @param name
+	 * @param dissolvedBy
+	 * @return
 	 * @throws DatabaseException
 	 */
-	public void findByName(String name) throws DatabaseException;
+	public ArrayList<Integer> findByDissolvedBy(int dissolvedBy) throws DatabaseException;
+	
+	/**
+	 * 
+	 * @param solute
+	 * @return
+	 * @throws DatabaseException
+	 */
+	public ArrayList<Integer> findBySolute(int solute) throws DatabaseException;
+
+	
+	
+
+
 	
 	
 	
