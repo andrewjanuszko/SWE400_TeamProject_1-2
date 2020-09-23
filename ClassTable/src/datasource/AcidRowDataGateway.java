@@ -4,12 +4,20 @@ public interface AcidRowDataGateway {
 
   public void createTableAcid();
 
-  public int getSoluteId(int id);
+  public int getSolute();
   
-  public String getName(int id);
+  public void setSolute(int newSolute);
   
-  public String getInhabits(int id);
+  public String getName();
   
-  public void insert(int id, int soluteId, String name, String inhabits);
-
+  public void setName(String newName);
+  
+  public String getInhabits();
+  
+  void setInhabits(String newInhabits); 
+  
+  public void update() throws DatabaseException; 
+  
+  public void delete(int id);
+  
 }
