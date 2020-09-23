@@ -108,7 +108,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @return
 	 * @throws DatabaseException
 	 */
-	public ArrayList<Integer> findChemicalByHabitat(String inhabits) throws DatabaseException {
+	public ArrayList<Integer> findChemicalsByHabitat(String inhabits) throws DatabaseException {
 		ArrayList<Integer> resultSet = new ArrayList<Integer>();
 		String selectSQL = "SELECT chemicalID FROM Chemical WHERE Chemical.inhabits = ?";
 		try {
@@ -123,6 +123,22 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 		}
 		return resultSet;
 	}
+	
+	public ArrayList<Integer> findChemicalsByDissolvedBy(int dissolvedBy) throws DatabaseException {
+		ArrayList<Integer> resultSet = new ArrayList<Integer>();
+		String selectSQL = "SELECT chemicalID FROM Chemical WHERE Chemical.dissolvedBy = ?";
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
+			statement.setInt(1, dissolvedBy);
+			ResultSet results = statement.executeQuery();
+			while (results.next()) {
+				resultSet.add(results.getInt("chemicalID"));
+			}
+		} catch(SQLException e) {
+			throw new DatabaseException("Chemicals of dissolvedBy " + dissolvedBy + " cannot be found.", e);
+		}
+		return resultSet;
+	} 
 	
 	/**
 	 * Create a table in the database.
@@ -161,21 +177,12 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 		String deleteChemicalSQL = "DELETE FROM Chemical WHERE Chemical.chemicalID = ?;";
 		try {
 			if (this.type == ChemicalEnum.ACID.getChemicalType()) {
-				//
-				String metalsDissolvedByAcidSQL = "SELECT chemicalID FROM Chemical WHERE Chemical.dissolvedBy = ?;";
-				PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(metalsDissolvedByAcidSQL);
-				statement.setInt(1, this.chemicalID);
-				ResultSet results = statement.executeQuery();
-				ArrayList<Integer> metalIDs = new ArrayList<Integer>();
-				while (results.next()) {
-					metalIDs.add(results.getInt("chemicalID"));
-				}
-				for (Integer metalID : metalIDs) {
+				ArrayList<Integer> results = findChemicalsByDissolvedBy(chemicalID);
+				for (Integer metalID : results) {
 					ChemicalRowDataGatewayRDS metal = new ChemicalRowDataGatewayRDS(metalID);
 					metal.setDissolvedBy(0);
 					metal.updateChemical();
 				}
-				//
 			}
 		
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteChemicalSQL);
