@@ -3,11 +3,14 @@ package datasource;
 
 public interface ChemicalRowDataGateway {
 
-  public void createTableChemcial();
+  public void createTableChemical();
 
-  public String getName(int chemicalId);
-
-  public String getInhabits(int chemicalId);
+  public String getName();
   
-  void insert(int chemicalId, String name, String inhabits);
+  public void setName(String newName);
+
+  public String getInhabits();
+  
+  public void setInhabits(String newInhabits);
+  
 }

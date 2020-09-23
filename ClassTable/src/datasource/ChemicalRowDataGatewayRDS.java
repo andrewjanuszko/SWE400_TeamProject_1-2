@@ -6,11 +6,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
+  int id;
+  String name, inhabits;
   
   /** 
    * Create Chemical table 
    */
-  public void createTableChemcial() {
+  public void createTableChemical() {
     String dropTable = "DROP TABLE IF EXISTS Chemical;";
     String createTable = "CREATE TABLE Chemical" + "(" + "chemicalId INT NOT NULL, " + "name VARCHAR(20), "
         + "inhabits VARCHAR(20), " + "PRIMARY KEY (chemicalId)" + ");";
@@ -20,7 +22,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
       // Drop the table if exists first
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;"); 
       statement.executeUpdate(dropTable);
-      // Create new Monitorings Table
+      // Create table
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
       statement.executeUpdate(createTable);
     } catch (Exception e) {
@@ -28,61 +30,89 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
     }
   }
 
-  /** Get name from Chemical table of a given chemicalId.
-   * @param chemicalId to search for
+  /**
+   * ChemicalRowDataGatewayRDS constructor, Search for existing chemical via id
+   * @param id
    */
-  public String getName(int chemicalId) {
-    String name = ""; 
-    String sql = new String("SELECT * FROM Chemical WHERE chemicalId = " + chemicalId + ";");
+  public ChemicalRowDataGatewayRDS(int id) {
+    this.id = id; 
+    
+    String getChem = new String("SELECT * FROM Chemical WHERE chemicalId = " + id + ";");
+    
     try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-      rs.next(); // Get result
-      name = rs.getString("name");
-    } catch (Exception e) { 
+      // Get acid information
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement(); 
+      ResultSet rs = statement.executeQuery(getChem); 
+      rs.next(); 
+      this.name = rs.getString("name"); 
+      this.inhabits = rs.getString("inhabits"); 
+      
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
+      System.out.println("Failed to fetch ID & retrieve values");
     }
+  }
+  
+  /**
+   * ChemicalRowDataGatewayRDS constructor, create new chemical
+   * @param id of new id
+   * @param name of new id
+   * @param inhabits of new id
+   */
+  public ChemicalRowDataGatewayRDS(int id, String name, String inhabits) {
+    // Set instance variables
+    this.id = id;
+    this.name = name;
+    this.inhabits = inhabits;
+    
+    // Attempt to add chemical
+    try {
+      PreparedStatement insert= DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+      
+      insert.setInt(1, id);
+      insert.setString(2, name);
+      insert.setString(3, inhabits);
+      
+      insert.execute();
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Failed to insert new chemical");
+    }
+    
+  }
+  
+  /**
+   * Get name
+   */
+  @Override
+  public String getName() {
     return name;
   }
 
-  /** Get inhabits from the Chemical table of a given chemicalId
-   * @param chemicalId to search for
-   */
-  public String getInhabits(int chemicalId) {
-    String inhabits = ""; 
-    String sql = new String("SELECT * FROM Chemical WHERE chemicalId = " + chemicalId + ";");
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-      rs.next();
-      inhabits = rs.getString("inhabits");
-    } catch (Exception e) { 
-      e.printStackTrace();
-    }
-    return inhabits;
-  }
-  
-  /** Insert a given chemicalId, name and inhabits into the Chemical table. 
-   * @param chemicalId to insert
-   * @param name to insert
-   * @param inhabits to insert
+  /**
+   * Set name
+   * @param newName new name to set
    */
   @Override
-  public void insert(int chemicalId, String name, String inhabits) {
-    try {
-      PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
-      insert.setInt(1, chemicalId); // Set chemicalId
-      insert.setString(2, name); // Set name
-      insert.setString(3, inhabits); // Set inhabits
+  public void setName(String newName) {
+    this.name = newName;
+  }
 
-      insert.execute(); // Insert
-      
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } catch (DatabaseException e) {
-      e.printStackTrace();
-    }
+  /**
+   * Get inhabits
+   */
+  public String getInhabits() {
+    return inhabits;
+  }
+
+  /**
+   * Set inhabits
+   * @param newInhabits new inhabits to set
+   */
+  @Override
+  public void setInhabits(String newInhabits) {
+    this.inhabits = newInhabits;
   }
 
 }

@@ -4,12 +4,16 @@ public interface BaseRowDataGateway {
 
   public void createTableBase();
   
-  public int getSoluteId(int id);
+  public int getSolute();
+  
+  public void setSolute(int newSolute);
 
-  public String getName(int id);
+  public String getName();
+  
+  public void setName(String newName);
 
-  public String getInhabits(int id);
-
-  void insert(int baseId, int solute, String name, String inhabits);
+  public String getInhabits();
+  
+  public void setInhabits(String newInhabits);
 
 }
