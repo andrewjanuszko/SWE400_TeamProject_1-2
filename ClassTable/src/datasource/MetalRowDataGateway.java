@@ -5,11 +5,14 @@ public interface MetalRowDataGateway {
   
   public void createTableMetal();
   
-  public String getName(int id);
+  public String getName();
   
-  public String getInhabits(int id);
+  public String getInhabits();
   
-  public int getDissolvedBy(int id);
+  public int getDissolvedBy();
   
-  public void insert(int id, int dissolvedBy, String name, String inhabits);
+  public void delete(int id);
+  
+  public void update(int id, int dissolvedById, String name, String inhabits);
+  
 }

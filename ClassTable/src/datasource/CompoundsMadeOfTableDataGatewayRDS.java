@@ -12,42 +12,40 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   /**
    * Create tables for CompoundMadeFromElement
    */
+
   @Override
   public void createTableDataMadeOf() {
     String dropTable = "DROP TABLE IF EXISTS CompoundMadeFromElement;";
-    String createTable = "CREATE TABLE CompoundMadeFromElement(" + 
-        "compoundId INT NOT NULL, " +
-        "elementId INT NOT NULL, " + 
-        "FOREIGN KEY (compoundId) REFERENCES Chemical(chemicalId), " +
-        "FOREIGN KEY (elementId) REFERENCES Element(elementId));";
-    
-    
+    String createTable = "CREATE TABLE CompoundMadeFromElement(" + "compoundId INT NOT NULL, "
+        + "elementId INT NOT NULL, " + "FOREIGN KEY (compoundId) REFERENCES Chemical(chemicalId), "
+        + "FOREIGN KEY (elementId) REFERENCES Element(elementId));";
+
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      
+
       // Drop the table if exists first
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;"); 
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
       statement.executeUpdate(dropTable);
-      
+
       //
       statement.executeUpdate(createTable);
-      
+
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to create/drop CompoundMadeFromElement");
     }
   }
-  
-  /** 
+
+  /**
    * Update entry for a given compoundId and elementId
+   * 
    * @param compoundId
-   * @param elementId 
+   * @param elementId
    */
   public void update(int oldCompoundId, int oldElementId, int newCompoundId, int newElementId) {
-    String sql = "UPDATE CompoundMadeFromElement " +
-        "SET compoundId = " + newCompoundId + ", elementId = " + newElementId +
-        "WHERE compoundId = " + oldCompoundId + " AND elementId = " + oldElementId; 
-    
+    String sql = "UPDATE CompoundMadeFromElement " + "SET compoundId = " + newCompoundId + ", elementId = "
+        + newElementId + "WHERE compoundId = " + oldCompoundId + " AND elementId = " + oldElementId;
+
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.execute(sql);
@@ -55,10 +53,12 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
       e.printStackTrace();
     }
   }
-  
+
   /**
    * Get all compoundId's of elementId
-   * @param elementId to search for
+   * 
+   * @param elementId
+   *          to search for
    */
   @Override
   public List<Integer> findSetCompoundId(int elementId) {
@@ -68,7 +68,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       // While there are still results to search through
-      while(rs.next()) {
+      while (rs.next()) {
         // Add each result to compound list
         compounds.add(rs.getInt("compoundId"));
       }
@@ -80,18 +80,20 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
 
   /**
    * Get all elementId's of of compoundId
-   * @param compoundId to search for
+   * 
+   * @param compoundId
+   *          to search for
    */
   @Override
   public List<Integer> findSetElementId(int compoundId) {
     String sql = "SELECT * FROM CompoundMadeFromElement WHERE compoundId = " + compoundId + ";";
     List<Integer> compounds = new ArrayList<>();
-    
+
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       // While there are still results to search through
-      while(rs.next()) {
+      while (rs.next()) {
         // Add each result to compound list
         compounds.add(rs.getInt("elementId"));
       }
@@ -101,9 +103,14 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
     return compounds;
   }
 
-  /** Insert a given compoundId and elementId into the CompoundsMadeOfElement table. 
-   * @param compoundId to insert
-   * @param elementId to insert
+  /**
+   * Insert a given compoundId and elementId into the CompoundsMadeOfElement
+   * table.
+   * 
+   * @param compoundId
+   *          to insert
+   * @param elementId
+   *          to insert
    */
   @Override
   public void insert(int compoundId, int elementId) {
@@ -114,46 +121,72 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
       insert.setInt(2, elementId); // Set elementId
 
       insert.execute(); // Insert into table
-      
+
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert compoundmadeof");
-    } 
+    }
   }
 
-  /** Get compound name from compoundId
-   * @param compoundId compoundId of id searching for
+  /**
+   * Get compound name from compoundId
+   * 
+   * @param compoundId
+   *          compoundId of id searching for
    */
   @Override
   public String getCompoundName(int compoundId) {
-    String name = ""; 
-    String sql = new String("SELECT Chemical.name FROM Chemical INNER JOIN CompoundMadeFromElement ON Chemical.chemicalId = " + compoundId + ";");
+    String name = "";
+    String sql = new String(
+        "SELECT Chemical.name FROM Chemical INNER JOIN CompoundMadeFromElement ON Chemical.chemicalId = " + compoundId
+            + ";");
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       rs.next(); // Get result
       name = rs.getString("name"); // Get name from "name" column
-    } catch (SQLException | DatabaseException e) { 
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
     return name;
   }
-  
+
   @Override
-  /** Get inhabits from the Chemical table of a given chemicalId
-   * @param chemicalId to search for
+  /**
+   * Get inhabits from the Chemical table of a given chemicalId
+   * 
+   * @param chemicalId
+   *          to search for
    */
   public String getInhabits(int compoundId) {
-    String inhabits = ""; 
-    String sql = new String("SELECT Chemical.inhabits FROM Chemical INNER JOIN CompoundMadeFromElement ON Chemical.chemicalId = " + compoundId + ";");
+    String inhabits = "";
+    String sql = new String(
+        "SELECT Chemical.inhabits FROM Chemical INNER JOIN CompoundMadeFromElement ON Chemical.chemicalId = "
+            + compoundId + ";");
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       rs.next();
       inhabits = rs.getString("inhabits");
-    } catch (SQLException | DatabaseException e) { 
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
     return inhabits;
+  }
+
+  @Override
+  public void delete(int id) {
+    try {
+      PreparedStatement sql = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("DELETE FROM CompoundMadeFromElement WHERE compoundId = " + id + ";");
+      sql.execute();
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void update() {
+    
   }
 }

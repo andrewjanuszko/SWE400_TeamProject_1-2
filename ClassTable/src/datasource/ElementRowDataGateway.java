@@ -4,13 +4,15 @@ public interface ElementRowDataGateway {
   
   public void createTableElement();
   
-  public int getAtomicNumber(int id);
+  public int getAtomicNumber();
   
-  public int getAtomicMass(int id);
+  public int getAtomicMass();
   
-  public String getName(int id);
+  public String getName();
   
-  public String getInhabits(int id);
+  public String getInhabits();
   
-  public void insert(int id, int atomicNum, int atomicMass, String name, String inhabits);
+  public void delete(int id);
+  
+  public void update(int id, int atomicNum, int atomicMass, String name, String inhabits);
 }
