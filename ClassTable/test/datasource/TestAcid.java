@@ -7,71 +7,36 @@ import org.junit.jupiter.api.Test;
 
 class TestAcid {
   
-  // Implement after metal is properly implemented (?)
-  @Test
-  void testGetSolute() {
-    fail("Not yet implemented");
-  }
-  
   @Test
   void testGetName() {
-    AcidRowDataGateway insertAcid1, insertAcid2, insertAcid3;
+    AcidRowDataGateway 
+      initialize = new AcidRowDataGatewayRDS(),
+      acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
+      acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
+      acid3 = new AcidRowDataGatewayRDS(3, 6, "acidname3", "acidihabits3"),
+      acid1_fetch = new AcidRowDataGatewayRDS(1),
+      acid2_fetch = new AcidRowDataGatewayRDS(2),
+      acid3_fetch = new AcidRowDataGatewayRDS(3);
     
+    // Testing to see if they still hold values after adding
+    assertEquals("acidname1", acid1.getName());
+    assertEquals("acidname2", acid2.getName());
+    assertEquals("acidname3", acid3.getName());
     
-    insertAcid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1");
-    insertAcid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2");
-    insertAcid3 = new AcidRowDataGatewayRDS(3, 6, "acidname3", "acidihabits3");
+    // Testing to see if new gateways can properly fetch
+    assertEquals("acidname1", acid1_fetch.getName());
+    assertEquals("acidname2", acid2_fetch.getName());
+    assertEquals("acidname3", acid3_fetch.getName());
     
+    // Testing to see if we can change existing gateway to a new id
+    acid1.fetch(2);
+    assertEquals("acidname2", acid1.getName());
+    acid2.fetch(3);
+    assertEquals("acidname3", acid2.getName());
+    acid3.fetch(1);
+    assertEquals("acidname1", acid3.getName());
     
-    
-    
+    initialize.dropAllTables();
   }
   
-//  @Test
-//  void testGetName() {
-//    // Create acid row data gateway
-//    AcidRowDataGateway acid = new AcidRowDataGatewayRDS(); 
-//    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-//    
-//    // Create acid, chemical tables
-//    acid.createTableAcid();
-//    chem.createTableChemcial();
-//    
-//    // Insert acid
-//    acid.insert(1, 15, "chemicalname1", "inhabits1");
-//    acid.insert(2, 50, "chemicalname2", "inhabits2");
-//    acid.insert(3, 7, "chemicalname3", "inhabits3");
-//    
-//    // Test
-//    assertEquals("chemicalname1", acid.getName(1));
-//    assertEquals("chemicalname2", acid.getName(2));
-//    assertEquals("chemicalname3", acid.getName(3));
-//   }
-  
-  @Test
-  void testGetInhabits() {
- // Create acid row data gateway
-    AcidRowDataGateway acid = new AcidRowDataGatewayRDS(); 
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    
-    // Create acid, chemical tables
-    acid.createTableAcid();
-    chem.createTableChemcial();
-    
-    // Insert chemical 
-    chem.insert(1, "chemicalname1", "inhabits1");
-    chem.insert(2, "chemicalname2", "inhabits2");
-    chem.insert(3, "chemicalname3", "inhabits3");
-    
-    // Insert acid
-    acid.insert(1, 15, "chemicalname1", "inhabits1");
-    acid.insert(2, 50, "chemicalname2", "inhabits2");
-    acid.insert(3, 7, "chemicalname3", "inhabits3");
-    
-    // Test
-    assertEquals("inhabits1", acid.getInhabits(1));
-    assertEquals("inhabits2", acid.getInhabits(2));
-    assertEquals("inhabits3", acid.getInhabits(3));
-  }
-
 }

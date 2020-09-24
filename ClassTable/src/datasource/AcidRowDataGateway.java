@@ -2,8 +2,6 @@ package datasource;
 
 public interface AcidRowDataGateway {
 
-  public void createTableAcid();
-
   public int getSolute();
   
   public void setSolute(int newSolute);
@@ -20,4 +18,11 @@ public interface AcidRowDataGateway {
   
   public void delete(int id);
   
+  public void dropTableAcid();
+  
+  public void dropTableChemical();
+  
+  public void dropAllTables();
+  
+  public void fetch(int newId);
 }
