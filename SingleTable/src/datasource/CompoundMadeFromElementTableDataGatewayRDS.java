@@ -22,7 +22,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 * @return the singleton instance.
 	 */
 	public static synchronized CompoundMadeFromElementTableDataGateway getSingleton() {
-		if (singletonInstance.equals(null)) { //Possible error point (.equals vs ==)
+		if (singletonInstance == null) { //Possible error point (.equals vs ==)
 			singletonInstance = new CompoundMadeFromElementTableDataGatewayRDS();
 		}
 		return singletonInstance;
@@ -59,7 +59,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 */
 	public void createRow(long compoundID, long elementID) throws DatabaseException {
 		
-		String insertSQL = "INSERT INTO CompoundMadeFromElement SET compoundID = ?, elementID = ?";
+		String insertSQL = "INSERT INTO CompoundMadeFromElement SET compoundID = ?, elementID = ?;";
 		
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertSQL);
@@ -77,7 +77,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	@Override
 	public void updateRow(long compoundID, long elementID) throws DatabaseException {
 		
-		String updateSQL = "UPDATE CompoundMadeFromElement SET compoundID = ?, elementID = ?";		
+		String updateSQL = "UPDATE CompoundMadeFromElement SET compoundID = ?, elementID = ?;";		
 		
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateSQL);
