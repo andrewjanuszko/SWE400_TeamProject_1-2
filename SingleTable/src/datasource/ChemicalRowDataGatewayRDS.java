@@ -48,6 +48,22 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 		}
 	}
 	
+	public ChemicalRowDataGatewayRDS(int chemicalID, int type, String name, String inhabits) {
+		if (type == ChemicalEnum.CHEMICAL.getChemicalType()) {
+			//this(chemicalID, type, name, inhabits, -1, 0.0, -1, -1);
+		} else {
+			// throw new DatabaseException("Failed to insert due to invalid type. Looking for Chemical type (0) but recieved " + type + ".");
+		}
+	}
+	
+	public ChemicalRowDataGatewayRDS createElement(int chemicalID, int type, String name, String inhabits, int atomicNumber, double atomicMass) throws DatabaseException {
+		if (type != ChemicalEnum.ELEMENT.getChemicalType()) {
+			throw new DatabaseException("Failed to insert due to invalid type. Looking for Chemical type (1) but recieved " + type + ".");
+		}
+		ChemicalRowDataGatewayRDS element = new ChemicalRowDataGatewayRDS(chemicalID, type, name, inhabits, atomicNumber, atomicMass, -1, -1);
+		return element;
+	}
+	
 	/**
 	 * Plain constructor for ChemicalRowDataGatewayRDS
 	 * @param chemicalID the ID of the chemical.
@@ -60,7 +76,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @param solute the chemical ID for a base/solute.
 	 * @throws DatabaseException when it fails to insert a new chemical.
 	 */
-	public ChemicalRowDataGatewayRDS(int chemicalID, int type, String name, String inhabits, int atomicNumber, double atomicMass,
+	private ChemicalRowDataGatewayRDS(int chemicalID, int type, String name, String inhabits, int atomicNumber, double atomicMass,
 			int dissolvedBy, int solute) throws DatabaseException {
 		String insertChemicalSQL = "INSERT INTO Chemical (chemicalID, type, name, inhabits, atomicNumber, atomicMass, dissolvedBy, solute) " +
 								   "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
@@ -112,18 +128,19 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * 
 	 */
 	@Override
-	public void deleteChemical() throws DatabaseException {
+	public void delete() throws DatabaseException {
 		String deleteChemicalSQL = "DELETE FROM Chemical WHERE Chemical.chemicalID = ?;";
 		try {
 			if (this.type == ChemicalEnum.ACID.getChemicalType()) {
 				ArrayList<Integer> results = findByDissolvedBy(chemicalID);
-				for (Integer metalID : results) {
-					ChemicalRowDataGatewayRDS metal = new ChemicalRowDataGatewayRDS(metalID);
-					metal.setDissolvedBy(0);
-					metal.updateChemical();
+				if (!results.isEmpty()) {
+					for (Integer metalID : results) {
+						ChemicalRowDataGatewayRDS metal = new ChemicalRowDataGatewayRDS(metalID);
+						metal.setDissolvedBy(0);
+						metal.update();
+					}
 				}
 			}
-		
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteChemicalSQL);
 			statement.setInt(1, this.chemicalID);
 			statement.execute();
@@ -136,7 +153,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * 
 	 */
 	@Override
-	public void updateChemical() throws DatabaseException {
+	public void update() throws DatabaseException {
 		String updateChemicalSQL = "UPDATE Chemical SET type = ?, name = ?, inhabits = ?, atomicNumber = ?, atomicMass = ?, dissolvedBy = ?, solute = ? WHERE chemicalID = ?;";
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateChemicalSQL);
@@ -277,7 +294,15 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	@Override
 	public ArrayList<Integer> findByType(int type) throws DatabaseException {
 		ArrayList<Integer> resultSet = new ArrayList<Integer>();
-		String selectSQL = "SELECT chemicalID FROM Chemical WHERE Chemical.type = ?";
+		String selectSQL = "";
+		if (type == ChemicalEnum.ELEMENT.getChemicalType()) {
+			selectSQL = "SELECT chemicalID FROM Chemical WHERE Chemical.type = ? or Chemical.type = 2";
+		}
+		if (type == ChemicalEnum.CHEMICAL.getChemicalType()) {
+			selectSQL = "SELECT chemicalID FROM Chemical";
+		} else {
+			selectSQL = "SELECT chemicalID FROM Chemical WHERE Chemical.type = ?";
+		}
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
 			statement.setInt(1, type);

@@ -12,13 +12,13 @@ public interface ChemicalRowDataGateway {
 	 * Deletes an instance of a Chemical from the table.
 	 * @throws DatabaseException when chemical not found.
 	 */
-	public void deleteChemical() throws DatabaseException;
+	public void delete() throws DatabaseException;
 	
 	/**
 	 * Updates the chemical in the table.
 	 * @throws DatabaseException when chemical not found.
 	 */
-	public void updateChemical() throws DatabaseException;
+	public void update() throws DatabaseException;
 	
 	/**
 	 * Get the type of the chemical.
