@@ -24,10 +24,20 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	private int dissolvedBy;
 	private int solute;
 	
+	private static int key = 1;
+	
 	/**
-	 * Finder constructor for ChemicalRowDataGatewayRDS.
-	 * @param chemicalID the ID of the chemical.
-	 * @throws DatabaseException if chemical does not exist.
+	 * 
+	 * @throws DatabaseException
+	 */
+	public ChemicalRowDataGatewayRDS() throws DatabaseException{
+		createTable();
+	}
+	
+	/**
+	 * 
+	 * @param chemicalID
+	 * @throws DatabaseException
 	 */
 	public ChemicalRowDataGatewayRDS(int chemicalID) throws DatabaseException {
 		String findChemicalSQL = "SELECT * FROM Chemical WHERE chemicalID = ?;";
@@ -36,6 +46,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 			statement.setInt(1, chemicalID);
 			ResultSet result = statement.executeQuery();
 			result.next();
+			this.chemicalID = result.getInt("chemicalID");
 			this.type = result.getInt("type");
 			this.name = result.getString("name");
 			this.inhabits = result.getString("inhabits");
@@ -48,41 +59,107 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 		}
 	}
 	
-	public ChemicalRowDataGatewayRDS(int chemicalID, int type, String name, String inhabits) {
-		if (type == ChemicalEnum.CHEMICAL.getChemicalType()) {
-			//this(chemicalID, type, name, inhabits, -1, 0.0, -1, -1);
+	/**
+	 * Create new chemical entry for database.
+	 * @param type
+	 * @param name
+	 * @param inhabits
+	 * @throws DatabaseException
+	 */
+	public ChemicalRowDataGatewayRDS(int type, String name, String inhabits) throws DatabaseException {
+		if (type != ChemicalEnum.CHEMICAL.getChemicalType()) {
+			throw new DatabaseException("Chemical must be of type 0. Attempted type was " + type + ".");
 		} else {
-			// throw new DatabaseException("Failed to insert due to invalid type. Looking for Chemical type (0) but recieved " + type + ".");
+			insert(type,name,inhabits,-1,-1.0,-1,-1);
 		}
-	}
-	
-	public ChemicalRowDataGatewayRDS createElement(int chemicalID, int type, String name, String inhabits, int atomicNumber, double atomicMass) throws DatabaseException {
-		if (type != ChemicalEnum.ELEMENT.getChemicalType()) {
-			throw new DatabaseException("Failed to insert due to invalid type. Looking for Chemical type (1) but recieved " + type + ".");
-		}
-		ChemicalRowDataGatewayRDS element = new ChemicalRowDataGatewayRDS(chemicalID, type, name, inhabits, atomicNumber, atomicMass, -1, -1);
-		return element;
 	}
 	
 	/**
-	 * Plain constructor for ChemicalRowDataGatewayRDS
-	 * @param chemicalID the ID of the chemical.
-	 * @param type the type of the chemical.
-	 * @param name the name of the chemical.
-	 * @param inhabits the habitat of the chemical.
-	 * @param atomicNumber the atomic number of the chemical.
-	 * @param atomicMass the atomic mass of the chemical.
-	 * @param dissolvedBy the acid ID that dissolves a metal.
-	 * @param solute the chemical ID for a base/solute.
-	 * @throws DatabaseException when it fails to insert a new chemical.
+	 * Create new element entry for database.
+	 * @param type
+	 * @param name
+	 * @param inhabits
+	 * @param atomicNumber
+	 * @param atomicMass
+	 * @throws DatabaseException
 	 */
-	private ChemicalRowDataGatewayRDS(int chemicalID, int type, String name, String inhabits, int atomicNumber, double atomicMass,
-			int dissolvedBy, int solute) throws DatabaseException {
-		String insertChemicalSQL = "INSERT INTO Chemical (chemicalID, type, name, inhabits, atomicNumber, atomicMass, dissolvedBy, solute) " +
-								   "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+	public ChemicalRowDataGatewayRDS(int type, String name, String inhabits, int atomicNumber, double atomicMass) throws DatabaseException {
+		if (type != ChemicalEnum.ELEMENT.getChemicalType()) {
+			throw new DatabaseException("Chemical must be of type 1. Attempted type was " + type + ".");
+		} else {
+			insert(type,name,inhabits,atomicNumber,atomicMass,-1,-1);
+		}
+	}
+	
+	/**
+	 * Create new metal entry for database.
+	 * @param type
+	 * @param name
+	 * @param inhabits
+	 * @param atomicNumber
+	 * @param atomicMass
+	 * @throws DatabaseException
+	 */
+	public ChemicalRowDataGatewayRDS(int type, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy) throws DatabaseException {
+		if (type != ChemicalEnum.METAL.getChemicalType()) {
+			throw new DatabaseException("Chemical must be of type 2. Attempted type was " + type + ".");
+		} else {
+			if(isAcid(dissolvedBy)) {
+				insert(type,name,inhabits,atomicNumber,atomicMass,-1,-1);
+			} else {
+				throw new DatabaseException("Dissolved by must be of type Acid.");
+			}
+		}
+	}
+	
+	/**
+	 * Create new compound entry for database.
+	 * @param type
+	 * @param name
+	 * @param inhabits
+	 * @param solute
+	 * @param Elements
+	 * @throws DatabaseException
+	 */
+	public ChemicalRowDataGatewayRDS(int type, String name, String inhabits, int solute, ArrayList<Integer> Elements) throws DatabaseException {
+		System.out.println("Not done.");
+	}
+	
+	/**
+	 * Create new acid/base entry for database.
+	 * @param type
+	 * @param name
+	 * @param inhabits
+	 * @param atomicNumber
+	 * @param atomicMass
+	 * @throws DatabaseException
+	 */
+	public ChemicalRowDataGatewayRDS(int type, String name, String inhabits, int solute) throws DatabaseException {
+		if (type != ChemicalEnum.ACID.getChemicalType() && type != ChemicalEnum.BASE.getChemicalType()) {
+			throw new DatabaseException("Chemical must be of type 4 or 5. Attempted type was " + type + ".");
+		} else {
+			insert(type,name,inhabits,-1,-1.0,-1,solute);
+		}
+	}
+	
+	
+	
+	/**
+	 * Insert new chemical entry into the database.
+	 * @param type
+	 * @param name
+	 * @param inhabits
+	 * @param atomicNumber
+	 * @param atomicMass
+	 * @param dissolvedBy
+	 * @param solute
+	 * @throws DatabaseException
+	 */
+	private void insert(int type, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy, int solute) throws DatabaseException {
+		String insertChemicalSQL = "INSERT INTO Chemical SET chemicalID = ?, type = ?, name = ?, inhabits = ?, atomicNumber = ?, atomicMass = ?, dissolvedBy = ?, solute = ?;";
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertChemicalSQL);
-			statement.setInt(1, chemicalID);
+			statement.setInt(1, key);
 			statement.setInt(2, type);
 			statement.setString(3, name);
 			statement.setString(4, inhabits);
@@ -91,6 +168,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 			statement.setInt(7, dissolvedBy);
 			statement.setInt(8, solute);
 			statement.execute();
+			key = key + 1;
 		} catch(SQLException e) {
 			throw new DatabaseException("Failed to insert Chemical into database.", e);
 		}
@@ -100,7 +178,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * Create a table in the database.
 	 * @throws DatabaseException if the connection to the database is lost.
 	 */
-	public void createTable() throws DatabaseException {
+	private void createTable() throws DatabaseException {
 		String dropTableSQL = "DROP TABLE IF EXISTS Chemical, CompoundMadeFromElement;";
 		String createTableSQL = "CREATE TABLE Chemical(" +
 						   "chemicalID INT NOT NULL," +
@@ -125,22 +203,22 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
+	 * @see datasource.ChemicalRowDataGateway#delete(void).
 	 */
 	@Override
 	public void delete() throws DatabaseException {
-		String deleteChemicalSQL = "DELETE FROM Chemical WHERE Chemical.chemicalID = ?;";
 		try {
-			if (this.type == ChemicalEnum.ACID.getChemicalType()) {
-				ArrayList<Integer> results = findByDissolvedBy(chemicalID);
-				if (!results.isEmpty()) {
-					for (Integer metalID : results) {
-						ChemicalRowDataGatewayRDS metal = new ChemicalRowDataGatewayRDS(metalID);
-						metal.setDissolvedBy(0);
-						metal.update();
-					}
-				}
-			}
+//			if (this.type == ChemicalEnum.ACID.getChemicalType()) {
+//				ArrayList<Integer> results = findByDissolvedBy(chemicalID);
+//				if (!results.isEmpty()) {
+//					for (Integer metalID : results) {
+//						ChemicalRowDataGatewayRDS metal = new ChemicalRowDataGatewayRDS(metalID);
+//						metal.setDissolvedBy(0);
+//						metal.update();
+//					}
+//				}
+//			}
+			String deleteChemicalSQL = "DELETE FROM Chemical WHERE Chemical.chemicalID = ?;";
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteChemicalSQL);
 			statement.setInt(1, this.chemicalID);
 			statement.execute();
@@ -150,25 +228,33 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
+	 * @see datasource.ChemicalRowDataGateway#update(void).
 	 */
 	@Override
 	public void update() throws DatabaseException {
 		String updateChemicalSQL = "UPDATE Chemical SET type = ?, name = ?, inhabits = ?, atomicNumber = ?, atomicMass = ?, dissolvedBy = ?, solute = ? WHERE chemicalID = ?;";
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateChemicalSQL);
-			statement.setInt(1, type);
-			statement.setString(2, name);
-			statement.setString(3, inhabits);
-			statement.setInt(4, atomicNumber);
-			statement.setDouble(5, atomicMass);
-			statement.setInt(6, dissolvedBy);
-			statement.setInt(7, solute);
-			statement.setInt(8, chemicalID);
+			statement.setInt(1, this.type);
+			statement.setString(2, this.name);
+			statement.setString(3, this.inhabits);
+			statement.setInt(4, this.atomicNumber);
+			statement.setDouble(5, this.atomicMass);
+			statement.setInt(6, this.dissolvedBy);
+			statement.setInt(7, this.solute);
+			statement.setInt(8, this.chemicalID);
 			statement.execute();
 		} catch(SQLException e) {
 			throw new DatabaseException("Failed to update Chemical with ID " + chemicalID + ".", e);
 		}
+	}
+	
+	/**
+	 * Returns the ID of a chemical.
+	 * @return the ID.
+	 */
+	private int getID() {
+		return this.chemicalID;
 	}
 	
 	/**
@@ -268,15 +354,35 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
+	 * Checks to see if a chemical is an Acid
+	 * @param acidID the id of the chemical.
+	 * @return true / false
+	 * @throws DatabaseException if the acid is not inserted.
+	 */
+	public boolean isAcid(int acidID) throws DatabaseException {
+		ChemicalRowDataGatewayRDS possibleAcid;
+		try {
+			possibleAcid = new ChemicalRowDataGatewayRDS(acidID);
+		} catch(DatabaseException e) {
+			throw new DatabaseException("Acids must be inserted into the table before metals.", e);
+		}
+		return (possibleAcid.getType() == ChemicalEnum.ACID.getChemicalType()) ? true : false;
+	}
+	
+	/**
 	 * @see datasource.ChemicalRowDataGateway#setDissolvedBy(int).
 	 */
 	@Override
 	public void setDissolvedBy(int dissolvedBy) throws DatabaseException {
-		ChemicalRowDataGatewayRDS possibleAcid = new ChemicalRowDataGatewayRDS(dissolvedBy);
-		if (possibleAcid.getType() == ChemicalEnum.ACID.getChemicalType()) {
-			this.dissolvedBy = dissolvedBy;
+		if (this.type == ChemicalEnum.METAL.getChemicalType()) {
+			ChemicalRowDataGatewayRDS possibleAcid = new ChemicalRowDataGatewayRDS(dissolvedBy);
+			if (possibleAcid.getType() == ChemicalEnum.ACID.getChemicalType()) {
+				this.dissolvedBy = dissolvedBy;
+			} else {
+				throw new DatabaseException("Chemical with ID " + chemicalID + " is not an Acid.");
+			}
 		} else {
-			throw new DatabaseException("Chemical with ID " + chemicalID + " is not an Acid.");
+			throw new DatabaseException("The current chemical is not an element metal.");
 		}
 	}
 	
@@ -289,7 +395,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
+	 * @see datasource.ChemicalRowDataGateway#findByType(int).
 	 */
 	@Override
 	public ArrayList<Integer> findByType(int type) throws DatabaseException {
@@ -317,7 +423,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
+	 * @see datasource.ChemicalRowDataGateway#findByName(String);
 	 */
 	@Override
 	public void findByName(String name) throws DatabaseException {
@@ -341,7 +447,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 	
 	/**
-	 * 
+	 * @see datasource.ChemicalRowDataGateway#findByHabitat(String);
 	 */
 	@Override
 	public ArrayList<Integer> findByHabitat(String inhabits) throws DatabaseException {
@@ -409,7 +515,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	}
 
 	/**
-	 * 
+	 * @see datasource.ChemicalRowDataGateway#findByDissolvedBy(int);
 	 */
 	@Override
 	public ArrayList<Integer> findByDissolvedBy(int dissolvedBy) throws DatabaseException {
@@ -429,7 +535,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	} 
 	
 	/**
-	 * 
+	 * @see datasource.ChemicalRowDataGateway#findBySolute(int);
 	 */
 	@Override
 	public ArrayList<Integer> findBySolute(int solute) throws DatabaseException {
