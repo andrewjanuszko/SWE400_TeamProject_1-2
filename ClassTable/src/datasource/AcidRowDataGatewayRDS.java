@@ -45,7 +45,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * @param name
    * @param inhabits
    */
-  public void AcidRowDataGateway(int id, int solute, String name, String inhabits) {
+  public AcidRowDataGatewayRDS(int id, int solute, String name, String inhabits) {
     try {
       // Insert chemical 
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -94,6 +94,15 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 	}
 
 	/**
+	 * Create acid table if it does not exist
+	 */
+	public void dropTableAcid() {
+	  String dropTables
+	  
+	  statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+    statement.executeUpdate(dropTable);
+	}
+	/**
 	 * Delete an acid from both acid and chemical tables
 	 * @param id
 	 */
@@ -110,7 +119,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Error deleting " + id);
+      System.out.println("Error deleting acid " + id);
     }
   }
 
