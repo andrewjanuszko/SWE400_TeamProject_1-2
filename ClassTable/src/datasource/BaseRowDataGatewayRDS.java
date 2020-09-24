@@ -24,7 +24,6 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    * @param id
    */
   public BaseRowDataGatewayRDS(int id) {
-    this.baseId = id; 
     
     // Select statements
     String getAcid = new String("SELECT * FROM Base WHERE acidId = " + id + ";"),
@@ -47,6 +46,8 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
       e.printStackTrace();
       System.out.println("Failed to fetch ID");
     }
+
+    this.baseId = id; 
   }
   
   /**
@@ -56,7 +57,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    * @param name
    * @param inhabits
    */
-  public void BaseRowDataGateway(int id, int solute, String name, String inhabits) {   
+  public BaseRowDataGatewayRDS(int id, int solute, String name, String inhabits) {   
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
