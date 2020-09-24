@@ -41,13 +41,13 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
       rs.next(); 
       this.name = rs.getString("name"); 
       this.inhabits = rs.getString("inhabits"); 
+      this.baseId = id; 
       
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to fetch ID");
     }
-
-    this.baseId = id; 
+    
   }
   
   /**
@@ -191,6 +191,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
       tmpInh = rs.getString("inhabits"); 
       
       // If we get to this point without errors, then it is safe to update our variables
+      this.baseId = newId;
       this.name = tmpName;
       this.solute = tmpSol;
       this.inhabits = tmpInh;
