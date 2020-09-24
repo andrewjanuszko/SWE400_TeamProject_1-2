@@ -16,7 +16,7 @@ public interface AcidRowDataGateway {
   
   public void update(); 
   
-  public void delete(int id);
+  public void delete();
   
   public void dropTableAcid();
   
@@ -25,4 +25,5 @@ public interface AcidRowDataGateway {
   public void dropAllTables();
   
   public void fetch(int newId);
+  
 }

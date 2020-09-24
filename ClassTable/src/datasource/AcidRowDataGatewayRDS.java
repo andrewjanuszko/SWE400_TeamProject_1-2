@@ -19,7 +19,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
   }
   
   /**
-   * AcidRowDataGatewayRDS constructor, search for specific existing acid via id
+   * AcidRowDataGatewayRDS constructor, search for specific existing acid via id.
    * @param id
    */
   public AcidRowDataGatewayRDS(int id) {
@@ -48,7 +48,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
   }
   
   /**
-   * AcidRowDataGateway constructor for creating a new acid
+   * AcidRowDataGateway constructor for creating a new acid.
    * @param id
    * @param solute
    * @param name
@@ -99,12 +99,12 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Failed to create acid table");
+      System.out.println("Failed to create acid and/or chemical table");
     }
   }
   
 	/**
-	 * Drop the acid table if it exists
+	 * Drop the acid table if it exists.
 	 */
 	public void dropTableAcid() {
 	  String dropTable = "DROP TABLE IF EXISTS Acid";
@@ -119,7 +119,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 	}
 	
 	/**
-	 * Drop the chemical table if it exists
+	 * Drop the chemical table if it exists.
 	 */
 	public void dropTableChemical() {
 	  String dropTable = "DROP TABLE IF EXISTS Chemical";
@@ -141,15 +141,13 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 	  dropTableChemical();
 	}
 	
-
 	/**
 	 * Delete an acid from both acid and chemical tables
-	 * @param id to delete
 	 */
   @Override
-  public void delete(int id) {
-    String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + id + ";",
-        deleteAcid = "DELETE FROM Acid WHERE AcidId = " + id + ";";
+  public void delete() {
+    String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + acidId + ";",
+        deleteAcid = "DELETE FROM Acid WHERE AcidId = " + acidId + ";";
     
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -159,7 +157,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Error deleting acid " + id);
+      System.out.println("Error deleting acid " + acidId);
     }
   }
 
@@ -211,6 +209,10 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
     this.inhabits = newInhabits;
   }
 
+  /**
+   * Fetch a new acid.
+   * @param newId to fetch
+   */
   public void fetch(int newId) {
     String getAcid = new String("SELECT * FROM Acid WHERE acidId = " + newId + ";"),
         getChem = new String("SELECT * FROM Chemical INNER JOIN Acid ON Chemical.chemicalId = " + newId + ";");
@@ -244,7 +246,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
   }
   
   /**
-   * Update the database entry
+   * Update the database.
    */
   @Override
   public void update() {
