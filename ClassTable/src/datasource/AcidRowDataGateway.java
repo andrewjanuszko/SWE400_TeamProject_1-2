@@ -14,7 +14,7 @@ public interface AcidRowDataGateway {
   
   void setInhabits(String newInhabits); 
   
-  public void update() throws DatabaseException; 
+  public void update(); 
   
   public void delete(int id);
   

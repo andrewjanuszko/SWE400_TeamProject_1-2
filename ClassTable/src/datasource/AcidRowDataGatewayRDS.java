@@ -14,7 +14,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * creating tables.
    */
   public AcidRowDataGatewayRDS() {
-    dropAllTables();
+    dropAllTables(); // this should probably not be here
     createTable();
   }
   

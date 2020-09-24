@@ -9,25 +9,23 @@ class TestAcid {
   
   @Test
   void testGetName() {
-    AcidRowDataGateway 
-      initialize = new AcidRowDataGatewayRDS(),
-      acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
-      acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
-      acid3 = new AcidRowDataGatewayRDS(3, 6, "acidname3", "acidihabits3"),
-      acid1_fetch = new AcidRowDataGatewayRDS(1),
-      acid2_fetch = new AcidRowDataGatewayRDS(2),
-      acid3_fetch = new AcidRowDataGatewayRDS(3);
-    
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+        acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
+        acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
+        acid3 = new AcidRowDataGatewayRDS(3, 6, "acidname3", "acidihabits3"),
+        acid1_fetch = new AcidRowDataGatewayRDS(1), acid2_fetch = new AcidRowDataGatewayRDS(2),
+        acid3_fetch = new AcidRowDataGatewayRDS(3);
+
     // Testing to see if they still hold values after adding
     assertEquals("acidname1", acid1.getName());
     assertEquals("acidname2", acid2.getName());
     assertEquals("acidname3", acid3.getName());
-    
+
     // Testing to see if new gateways can properly fetch
     assertEquals("acidname1", acid1_fetch.getName());
     assertEquals("acidname2", acid2_fetch.getName());
     assertEquals("acidname3", acid3_fetch.getName());
-    
+
     // Testing to see if we can change existing gateway to a new id
     acid1.fetch(2);
     assertEquals("acidname2", acid1.getName());
@@ -35,39 +33,98 @@ class TestAcid {
     assertEquals("acidname3", acid2.getName());
     acid3.fetch(1);
     assertEquals("acidname1", acid3.getName());
-    
+
     initialize.dropAllTables();
   }
   
   @Test
   void testGetInhabits() {
-    AcidRowDataGateway 
-    initialize = new AcidRowDataGatewayRDS(),
-    acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
-    acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
-    acid3 = new AcidRowDataGatewayRDS(3, 6, "acidname3", "acidihabits3"),
-    acid1_fetch = new AcidRowDataGatewayRDS(1),
-    acid2_fetch = new AcidRowDataGatewayRDS(2),
-    acid3_fetch = new AcidRowDataGatewayRDS(3);
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+        acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
+        acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
+        acid3 = new AcidRowDataGatewayRDS(3, 6, "acidname3", "acidihabits3"),
+        acid1_fetch = new AcidRowDataGatewayRDS(1), acid2_fetch = new AcidRowDataGatewayRDS(2),
+        acid3_fetch = new AcidRowDataGatewayRDS(3);
+
+    // Testing to see if they still hold values after adding
+    assertEquals("acidihabits1", acid1.getInhabits());
+    assertEquals("acidihabits2", acid2.getInhabits());
+    assertEquals("acidihabits3", acid3.getInhabits());
+
+    // Testing to see if new gateways can properly fetch
+    assertEquals("acidihabits1", acid1_fetch.getInhabits());
+    assertEquals("acidihabits2", acid2_fetch.getInhabits());
+    assertEquals("acidihabits3", acid3_fetch.getInhabits());
+
+    // Testing to see if we can change existing gateway to a new id
+    acid1.fetch(2);
+    assertEquals("acidihabits2", acid1.getInhabits());
+    acid2.fetch(3);
+    assertEquals("acidihabits3", acid2.getInhabits());
+    acid3.fetch(1);
+    assertEquals("acidihabits1", acid3.getInhabits());
+
+    initialize.dropAllTables();
+  }
   
-  // Testing to see if they still hold values after adding
-  assertEquals("acidihabits1", acid1.getInhabits());
-  assertEquals("acidihabits2", acid2.getInhabits());
-  assertEquals("acidihabits3", acid3.getInhabits());
+  @Test
+  void testGetSolute() {
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+        acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
+        acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
+        acid3 = new AcidRowDataGatewayRDS(3, 6, "acidname3", "acidihabits3"),
+        acid1_fetch = new AcidRowDataGatewayRDS(1), acid2_fetch = new AcidRowDataGatewayRDS(2),
+        acid3_fetch = new AcidRowDataGatewayRDS(3);
+
+    // Testing to see if they still hold values after adding
+    assertEquals(2, acid1.getSolute());
+    assertEquals(4, acid2.getSolute());
+    assertEquals(6, acid3.getSolute());
+
+    // Testing to see if new gateways can properly fetch
+    assertEquals(2, acid1_fetch.getSolute());
+    assertEquals(4, acid2_fetch.getSolute());
+    assertEquals(6, acid3_fetch.getSolute());
+
+    // Testing to see if we can change existing gateway to a new id
+    acid1.fetch(2);
+    assertEquals(4, acid1.getSolute());
+    acid2.fetch(3);
+    assertEquals(6, acid2.getSolute());
+    acid3.fetch(1);
+    assertEquals(2, acid3.getSolute());
+
+    initialize.dropAllTables();
+  }
   
-  // Testing to see if new gateways can properly fetch
-  assertEquals("acidihabits1", acid1_fetch.getInhabits());
-  assertEquals("acidihabits2", acid2_fetch.getInhabits());
-  assertEquals("acidihabits3", acid3_fetch.getInhabits());
+  @Test
+  void testDelete() {
+    fail("Not yet implemented");
+  }
   
-  // Testing to see if we can change existing gateway to a new id
-  acid1.fetch(2);
-  assertEquals("acidihabits2", acid1.getInhabits());
-  acid2.fetch(3);
-  assertEquals("acidihabits3", acid2.getInhabits());
-  acid3.fetch(1);
-  assertEquals("acidihabits1", acid3.getInhabits());
-  
-  initialize.dropAllTables();
+  @Test
+  void testUpdate() {
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+        acid = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidinhabits1");
+    
+    // Test solute
+    assertEquals(2, acid.getSolute());
+    acid.setSolute(3);
+    acid.update();
+    assertEquals(3, acid.getSolute());
+    
+    // Test name
+    assertEquals("acidname1", acid.getName());
+    acid.setName("acidname2");
+    acid.update();
+    assertEquals("acidname2", acid.getName());
+    
+    // Test inhabits
+    assertEquals("acidinhabits1", acid.getInhabits());
+    acid.setInhabits("acidinhabits2");
+    acid.update();
+    assertEquals("acidinhabits2", acid.getInhabits());
+    
+    initialize.dropAllTables();
   }
 }
