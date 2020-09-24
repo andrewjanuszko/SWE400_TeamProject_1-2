@@ -26,13 +26,13 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
   public BaseRowDataGatewayRDS(int id) {
     
     // Select statements
-    String getAcid = new String("SELECT * FROM Base WHERE acidId = " + id + ";"),
+    String getBase = new String("SELECT * FROM Base WHERE baseId = " + id + ";"),
         getChem = new String("SELECT * FROM Chemical INNER JOIN Base ON Chemical.chemicalId = " + id + ";");
     
     try {
       // Get acid information
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement(); 
-      ResultSet rs = statement.executeQuery(getAcid); 
+      ResultSet rs = statement.executeQuery(getBase); 
       rs.next(); // Get result 
       this.solute = rs.getInt("solute"); 
       
@@ -171,7 +171,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    */
   public void fetch(int newId) {
     String getBase = new String("SELECT * FROM Base WHERE baseId = " + newId + ";"),
-        getChem = new String("SELECT * FROM Chemical INNER JOIN Acid ON Chemical.chemicalId = " + newId + ";");
+        getChem = new String("SELECT * FROM Chemical INNER JOIN Base ON Chemical.chemicalId = " + newId + ";");
     
     // Temporary variables
     String tmpName, tmpInh;
@@ -196,7 +196,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
       this.inhabits = tmpInh;
       
     } catch (SQLException | DatabaseException e) {
-      //e.printStackTrace();
+      e.printStackTrace();
       System.out.println("Failed to update to " + newId + ", id likely does not exist.");
     }
   }  

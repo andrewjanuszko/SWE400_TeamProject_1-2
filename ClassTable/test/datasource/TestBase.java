@@ -36,81 +36,97 @@ class TestBase {
 
     initialize.dropAllTables();
     
-    
   }
   
+  @Test
+  void testGetInhabits() {
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+        base1 = new AcidRowDataGatewayRDS(1, 2, "basename1", "baseihabits1"),
+        base2 = new AcidRowDataGatewayRDS(2, 4, "basename2", "baseihabits2"),
+        base3 = new AcidRowDataGatewayRDS(3, 6, "basename3", "baseihabits3"),
+        base1_fetch = new AcidRowDataGatewayRDS(1), base2_fetch = new AcidRowDataGatewayRDS(2),
+        base3_fetch = new AcidRowDataGatewayRDS(3);
+
+    // Testing to see if they still hold values after adding
+    assertEquals("baseihabits1", base1.getInhabits());
+    assertEquals("baseihabits2", base2.getInhabits());
+    assertEquals("baseihabits3", base3.getInhabits());
+
+    // Testing to see if new gateways can properly fetch
+    assertEquals("baseihabits1", base1_fetch.getInhabits());
+    assertEquals("baseihabits2", base2_fetch.getInhabits());
+    assertEquals("baseihabits3", base3_fetch.getInhabits());
+
+    // Testing to see if we can change existing gateway to a new id
+    base1.fetch(2);
+    assertEquals("baseihabits2", base1.getInhabits());
+    base2.fetch(3);
+    assertEquals("baseihabits3", base2.getInhabits());
+    base3.fetch(1);
+    assertEquals("baseihabits1", base3.getInhabits());
+
+    initialize.dropAllTables();
+  }
   
+  @Test
+  void testGetSolute() {
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+        base1 = new AcidRowDataGatewayRDS(1, 2, "basename1", "baseihabits1"),
+        base2 = new AcidRowDataGatewayRDS(2, 4, "basename2", "baseihabits2"),
+        base3 = new AcidRowDataGatewayRDS(3, 6, "basename3", "baseihabits3"),
+        base1_fetch = new AcidRowDataGatewayRDS(1), base2_fetch = new AcidRowDataGatewayRDS(2),
+        base3_fetch = new AcidRowDataGatewayRDS(3);
+
+    // Testing to see if they still hold values after adding
+    assertEquals(2, base1.getSolute());
+    assertEquals(4, base2.getSolute());
+    assertEquals(6, base3.getSolute());
+
+    // Testing to see if new gateways can properly fetch
+    assertEquals(2, base1_fetch.getSolute());
+    assertEquals(4, base2_fetch.getSolute());
+    assertEquals(6, base3_fetch.getSolute());
+
+    // Testing to see if we can change existing gateway to a new id
+    base1.fetch(2);
+    assertEquals(4, base1.getSolute());
+    base2.fetch(3);
+    assertEquals(6, base2.getSolute());
+    base3.fetch(1);
+    assertEquals(2, base3.getSolute());
+
+    initialize.dropAllTables();
+  }
   
+  @Test
+  void testUpdate() {
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+        base = new AcidRowDataGatewayRDS(1, 2, "basename1", "baseinhabits1");
+    
+    // Test solute
+    assertEquals(2, base.getSolute());
+    base.setSolute(3);
+    base.update();
+    assertEquals(3, base.getSolute());
+    
+    // Test name
+    assertEquals("basename1", base.getName());
+    base.setName("basename2");
+    base.update();
+    assertEquals("basename2", base.getName());
+    
+    // Test inhabits
+    assertEquals("baseinhabits1", base.getInhabits());
+    base.setInhabits("baseinhabits2");
+    base.update();
+    assertEquals("baseinhabits2", base.getInhabits());
+    
+    initialize.dropAllTables();
+  }
   
+  @Test
+  void testDelete() {
+    fail("Not yet implemented");
+  }
   
-  
-//  /**
-//   * Test insert
-//   */
-//  @Test
-//  void testInsert() {
-//    // Create base row data gateway
-//    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
-//    BaseRowDataGateway base = new BaseRowDataGatewayRDS(); 
-//    
-//    // Create base table
-//    chem.createTableChemcial();
-//    base.createTableBase();
-//    
-//    // Insert base
-//    base.insert(1, 42, "hydrogen peroxide", "baking soda");
-//    
-//    // Test
-//    assertEquals("hydrogen peroxide", base.getName(1));
-//    assertEquals(42, base.getSoluteId(1));
-//    assertEquals("baking soda", base.getInhabits(1));
-//  }
-//  
-//  // Implement after metal is properly implemented (?)
-//  @Test
-//  void testGetSolute() {
-//    fail("Not yet implemented");
-//  }
-//  
-//  @Test
-//  void testGetName() {
-//    // Create base row data gateway
-//    BaseRowDataGateway base = new BaseRowDataGatewayRDS(); 
-//    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-//    
-//    // Create base, chemical tables
-//    base.createTableBase();
-//    chem.createTableChemcial();
-//    
-//    // Insert base
-//    base.insert(1, 15, "chemicalname1", "inhabits1");
-//    base.insert(2, 50, "chemicalname2", "inhabits2");
-//    base.insert(3, 7, "chemicalname3", "inhabits3");
-//    
-//    // Test
-//    assertEquals("chemicalname1", base.getName(1));
-//    assertEquals("chemicalname2", base.getName(2));
-//    assertEquals("chemicalname3", base.getName(3));
-//   }
-//  
-//  @Test
-//  void testGetInhabits() {
-// // Create base row data gateway
-//    AcidRowDataGateway base = new AcidRowDataGatewayRDS(); 
-//    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-//    
-//    // Create base, chemical tables
-//    base.createTableAcid();
-//    chem.createTableChemcial();
-//    
-//    // Insert base
-//    base.insert(1, 15, "chemicalname1", "inhabits1");
-//    base.insert(2, 50, "chemicalname2", "inhabits2");
-//    base.insert(3, 7, "chemicalname3", "inhabits3");
-//    
-//    // Test
-//    assertEquals("inhabits1", base.getInhabits(1));
-//    assertEquals("inhabits2", base.getInhabits(2));
-//    assertEquals("inhabits3", base.getInhabits(3));
-//  }
 }

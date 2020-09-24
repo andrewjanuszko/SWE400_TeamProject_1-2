@@ -5,6 +5,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * TODO: Test update to nonexistant id
+ * TODO: Test delete
+ * TODO: Test changing to invalid ids
+ * @author Isabella
+ *
+ */
 class TestAcid {
   
   @Test
