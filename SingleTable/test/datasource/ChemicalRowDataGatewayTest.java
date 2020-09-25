@@ -1,48 +1,11 @@
 package datasource;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.ArrayList;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
-import dataDTO.ChemicalDTO;
-import dataENUM.ChemicalEnum;
-
 class ChemicalRowDataGatewayTest extends DatabaseTest {
-	
-
-	ChemicalRowDataGatewayRDS chemicalTable;
-	
-	public void createTable() throws DatabaseException {
-		chemicalTable = new ChemicalRowDataGatewayRDS();
-	}
-	
-	public void fillTable() throws DatabaseException {
-		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011);
-		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Hydrogen", "The Moon", 1, 1.008);
-		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Oxygen", "Mercury", 8, 15.999);
-		chemicalTable = new ChemicalRowDataGatewayRDS(4, "Sucrose", "Earth", 1);
-		chemicalTable = new ChemicalRowDataGatewayRDS(4, "Potassium Hydroxide", "The Moon", 1);
-		chemicalTable = new ChemicalRowDataGatewayRDS(4, "Lithium Hydroxide", "Mars", 2);
-		chemicalTable = new ChemicalRowDataGatewayRDS(5, "Hydrochloric Acid", "Earth", 3);
-		chemicalTable = new ChemicalRowDataGatewayRDS(5, "Sulphuric Acid", "The Moon", 3);
-		chemicalTable = new ChemicalRowDataGatewayRDS(5, "Nitric Acid", "Mars", 2);
-		chemicalTable = new ChemicalRowDataGatewayRDS(2, "Zinc", "Mercury", 30, 65.380, 7);
-		chemicalTable = new ChemicalRowDataGatewayRDS(2, "Copper", "The Moon", 29, 63.546, 8);
-		chemicalTable = new ChemicalRowDataGatewayRDS(2, "Chromium", "Earth", 24, 51.996, 9);
-		ArrayList<Integer> elements = new ArrayList<Integer>();
-		elements.add(1);
-		elements.add(2);
-		elements.add(3);
-		chemicalTable = new ChemicalRowDataGatewayRDS(3, "Sugar", "Mercury", elements);
-	}
-
-	@Test
-	void testCreateAndFill() throws DatabaseException {
-		createTable();
-		fillTable();
-	}
 	
 	/**
 	 * Test the creation of a table and inserting into it.
@@ -50,18 +13,19 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 	 */
 	@Test
 	void testCreateAndInsert() throws DatabaseException {
-//		ChemicalRowDataGatewayRDS chemicalTable = new ChemicalRowDataGatewayRDS();
-//		chemicalTable = new ChemicalRowDataGatewayRDS(0, "UnknownChemical", "The Moon");
-//		ArrayList<ChemicalDTO> results = gateway.fetchByName("UnknownChemical");
-//		assertEquals("UnknownChemical", results.get(0).getName());
-		
 		ChemicalRowDataGatewayRDS chemicalTable = new ChemicalRowDataGatewayRDS();
-		chemicalTable = new ChemicalRowDataGatewayRDS(0, "UnknownChemical", "The Moon");
+		
+		chemicalTable = new ChemicalRowDataGatewayRDS(0, "UnknownChemical", "The Moon", -1, -1.0, -1, -1);
 		chemicalTable = new ChemicalRowDataGatewayRDS(1);
-		assertEquals(1, chemicalTable.getID());
+		
+		assertEquals(1, chemicalTable.getChemicalID());
 		assertEquals(0, chemicalTable.getType());
 		assertEquals("UnknownChemical", chemicalTable.getName());
 		assertEquals("The Moon", chemicalTable.getInhabits());
+		assertEquals(-1, chemicalTable.getAtomicNumber());
+		assertEquals(-1.0, chemicalTable.getAtomicMass(), 0.001);
+		assertEquals(-1, chemicalTable.getDissolvedBy());
+		assertEquals(-1, chemicalTable.getSolute());
 	}
 	
 	/**
@@ -69,16 +33,19 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 	 * @throws DatabaseException
 	 */
 	@Test
-	void testDrop() throws DatabaseException {
+	void testDropTable() throws DatabaseException {
 		ChemicalRowDataGatewayRDS chemicalTable = new ChemicalRowDataGatewayRDS();
 		
-		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011);
+		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);
 		chemicalTable = new ChemicalRowDataGatewayRDS(1);
-		assertEquals(1, chemicalTable.getID());
+		
+		assertEquals(1, chemicalTable.getChemicalID());
 		assertEquals(1, chemicalTable.getType());
 		assertEquals("Carbon", chemicalTable.getName());
 		assertEquals(6, chemicalTable.getAtomicNumber());
 		assertEquals(12.011, chemicalTable.getAtomicMass(), 0.001);
+		assertEquals(-1, chemicalTable.getDissolvedBy());
+		assertEquals(-1, chemicalTable.getSolute());
 		
 		chemicalTable = new ChemicalRowDataGatewayRDS();
 
@@ -95,11 +62,12 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 	 * @throws DatabaseException
 	 */
 	@Test
-	void testDelete() throws DatabaseException {
+	void testDeleteChemical() throws DatabaseException {
 		ChemicalRowDataGatewayRDS chemicalTable = new ChemicalRowDataGatewayRDS();
 		
-		chemicalTable = new ChemicalRowDataGatewayRDS(0, "UnknownChemical", "The Moon");
+		chemicalTable = new ChemicalRowDataGatewayRDS(0, "UnknownChemical", "The Moon", -1, -1.0, -1, -1);
 		chemicalTable = new ChemicalRowDataGatewayRDS(1);
+		
 		chemicalTable.delete();
 		
 		try {
@@ -118,42 +86,29 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 	void testUpdate() throws DatabaseException {
 		ChemicalRowDataGatewayRDS chemicalTable = new ChemicalRowDataGatewayRDS();
 		
-		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011);
-		
+		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);		
 		chemicalTable = new ChemicalRowDataGatewayRDS(1);
+		
+		assertEquals(1, chemicalTable.getChemicalID());
+		assertEquals(1, chemicalTable.getType());
 		assertEquals("Carbon", chemicalTable.getName());
+		assertEquals(6, chemicalTable.getAtomicNumber());
 		assertEquals(12.011, chemicalTable.getAtomicMass(), 0.001);
+		assertEquals(-1, chemicalTable.getDissolvedBy());
+		assertEquals(-1, chemicalTable.getSolute());
 		
 		chemicalTable.setName("Carbon-13");
 		chemicalTable.setAtomicMass(13.003);
 		chemicalTable.update();
 		
 		chemicalTable = new ChemicalRowDataGatewayRDS(1);
+		
+		assertEquals(1, chemicalTable.getChemicalID());
+		assertEquals(1, chemicalTable.getType());
 		assertEquals("Carbon-13", chemicalTable.getName());
 		assertEquals(13.003, chemicalTable.getAtomicMass(), 0.001);
-	}
-	
-//	@Test
-//	void testGetAllBases() throws DatabaseException {
-//		
-//		
-//
-//		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011);
-//		
-//		ArrayList<ChemicalDTO> results = gateway.fetchBases();
-//		assertFalse(results.isEmpty());
-//		for (ChemicalDTO base : results) {
-//			assertEquals(4, base.getType());
-//		}
-//
-//	}
-	
-	@Test
-	void createMetal() throws DatabaseException {
-		ChemicalRowDataGatewayRDS chemicalTable = new ChemicalRowDataGatewayRDS();
-		chemicalTable = new ChemicalRowDataGatewayRDS(5, "acid", "Earth", 6);
-		chemicalTable = new ChemicalRowDataGatewayRDS(1);
-		chemicalTable = new ChemicalRowDataGatewayRDS(2, "Iron", "Earth", 1, 2.0, 1);
+		assertEquals(-1, chemicalTable.getDissolvedBy());
+		assertEquals(-1, chemicalTable.getSolute());
 	}
 
 }

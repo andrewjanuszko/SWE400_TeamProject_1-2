@@ -1,24 +1,23 @@
 package datasource;
 
+import dataDTO.ChemicalDTO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import dataDTO.ChemicalDTO;
-
 /**
- * 
+ * Implements a ChemicalTableDataGateway.
  * @author andrewjanuszko
- *
  */
 public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	
 	private static ChemicalTableDataGateway singletonInstance;
 	
 	/**
-	 * 
-	 * @return
+	 * Retrieves a Singleton instance of ChemicalTableDataGateway.
+	 * Creates a new one if it does not exist.
+	 * @return a Singleton instance of ChemicalTableDataGateway.
 	 */
 	public static synchronized ChemicalTableDataGateway getSingletonInstance() {
 		if(singletonInstance == null) {
@@ -28,10 +27,10 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	}
 	
 	/**
-	 * 
-	 * @param statement
-	 * @return
-	 * @throws DatabaseException
+	 * Converts a query to a list of ChemicalDTOs.
+	 * @param statement the query on the database.
+	 * @return a list of ChemicalDTOs.
+	 * @throws DatabaseException when things go wrong.
 	 */
 	private ArrayList<ChemicalDTO> convertToDTO(PreparedStatement statement) throws DatabaseException {
 		ArrayList<ChemicalDTO> listDTO = new ArrayList<ChemicalDTO>();
@@ -51,14 +50,13 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 				listDTO.add(chemical);
 			}
 		} catch(SQLException e) {
-			throw new DatabaseException("Failed to load all Chemicals.", e);
+			throw new DatabaseException("Failed to load Chemicals.", e);
 		}
 		return listDTO;
 	}
 	
-
 	/**
-	 * 
+	 * @see datasource.ChemicalTableDataGateway#fetchAll();
 	 */
 	@Override
 	public ArrayList<ChemicalDTO> fetchAll() throws DatabaseException {
@@ -72,7 +70,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	}
 
 	/**
-	 * 
+	 * @see datasource.ChemicalTableDataGateway#fetchELements();
 	 */
 	@Override
 	public ArrayList<ChemicalDTO> fetchElements() throws DatabaseException {
@@ -86,7 +84,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	}
 
 	/**
-	 * 
+	 * @see datasource.ChemicalTableDataGateway#fetchMetals();
 	 */
 	@Override
 	public ArrayList<ChemicalDTO> fetchMetals() throws DatabaseException {
@@ -100,7 +98,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	}
 
 	/**
-	 * 
+	 * @see datasource.ChemicalTableDataGateway#fetchCompounds();
 	 */
 	@Override
 	public ArrayList<ChemicalDTO> fetchCompounds() throws DatabaseException {
@@ -114,7 +112,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	}
 
 	/**
-	 * 
+	 * @see datasource.ChemicalTableDataGateway#fetchBases();
 	 */
 	@Override
 	public ArrayList<ChemicalDTO> fetchBases() throws DatabaseException {
@@ -128,7 +126,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	}
 
 	/**
-	 * 
+	 * @see datasource.ChemicalTableDataGateway#fetchAcids();
 	 */
 	@Override
 	public ArrayList<ChemicalDTO> fetchAcids() throws DatabaseException {
@@ -142,7 +140,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	}
 
 	/**
-	 * 
+	 * @see datasource.ChemicalTableDataGateway#fetchByName(String);
 	 */
 	@Override
 	public ArrayList<ChemicalDTO> fetchByName(String name) throws DatabaseException {
@@ -157,7 +155,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	}
 
 	/**
-	 * 
+	 * @see datasource.ChemicalTableDataGateway#fetchByHabitat(String);
 	 */
 	@Override
 	public ArrayList<ChemicalDTO> fetchByHabitat(String habitat) throws DatabaseException {
@@ -172,7 +170,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	}
 
 	/**
-	 * 
+	 * @see datasource.ChemicalTableDataGateway#fetchByAtomicNumber(int);
 	 */
 	@Override
 	public ArrayList<ChemicalDTO> fetchByAtomicNumber(int atomicNumber) throws DatabaseException {
@@ -187,7 +185,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	}
 
 	/**
-	 * 
+	 * @see datasource.ChemicalTableDataGateway#fetchByAtomicMassRange(double, double);
 	 */
 	@Override
 	public ArrayList<ChemicalDTO> fetchByAtomicMassRange(double min, double max) throws DatabaseException {
@@ -203,7 +201,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	}
 
 	/**
-	 * 
+	 * @see datasource.ChemicalTableDataGateway#fetchByDissolvedBy(int);
 	 */
 	@Override
 	public ArrayList<ChemicalDTO> fetchByDissolvedBy(int acidID) throws DatabaseException {
@@ -218,7 +216,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 	}
 
 	/**
-	 * 
+	 * @see datasource.ChemicalTableDataGateway#fetchBySolute(int);
 	 */
 	@Override
 	public ArrayList<ChemicalDTO> fetchBySolute(int chemicalID) throws DatabaseException {
@@ -231,6 +229,5 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 			throw new DatabaseException("Failed to fetch all Bases/Acids with solute '" + chemicalID + "'.", e);
 		}
 	}
-
-	 
+	
 }

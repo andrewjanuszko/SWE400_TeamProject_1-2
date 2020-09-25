@@ -22,7 +22,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 * @return the singleton instance.
 	 */
 	public static synchronized CompoundMadeFromElementTableDataGateway getSingleton() {
-		if (singletonInstance == null) { //Possible error point (.equals vs ==)
+		if (singletonInstance == null) {
 			singletonInstance = new CompoundMadeFromElementTableDataGatewayRDS();
 		}
 		return singletonInstance;
