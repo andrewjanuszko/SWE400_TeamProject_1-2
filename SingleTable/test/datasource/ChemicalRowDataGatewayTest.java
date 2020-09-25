@@ -9,7 +9,7 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 	
 	/**
 	 * Test the creation of a table and inserting into it.
-	 * @throws DatabaseException
+	 * @throws DatabaseException when things go wrong.
 	 */
 	@Test
 	void testCreateAndInsert() throws DatabaseException {
@@ -26,11 +26,23 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 		assertEquals(-1.0, chemicalTable.getAtomicMass(), 0.001);
 		assertEquals(-1, chemicalTable.getDissolvedBy());
 		assertEquals(-1, chemicalTable.getSolute());
+		
+		chemicalTable = new ChemicalRowDataGatewayRDS(1, "FunkyChemical", "Mars", 17, 9.810, -1, -1);
+		chemicalTable = new ChemicalRowDataGatewayRDS(2);
+		
+		assertEquals(2, chemicalTable.getChemicalID());
+		assertEquals(1, chemicalTable.getType());
+		assertEquals("FunkyChemical", chemicalTable.getName());
+		assertEquals("Mars", chemicalTable.getInhabits());
+		assertEquals(17, chemicalTable.getAtomicNumber());
+		assertEquals(9.810, chemicalTable.getAtomicMass(), 0.001);
+		assertEquals(-1, chemicalTable.getDissolvedBy());
+		assertEquals(-1, chemicalTable.getSolute());
 	}
 	
 	/**
 	 * Test if drop table works.
-	 * @throws DatabaseException
+	 * @throws DatabaseException when things go wrong.
 	 */
 	@Test
 	void testDropTable() throws DatabaseException {
@@ -59,7 +71,7 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 	
 	/**
 	 * Test dropping a chemical from the table.
-	 * @throws DatabaseException
+	 * @throws DatabaseException when things go wrong.
 	 */
 	@Test
 	void testDeleteChemical() throws DatabaseException {
@@ -80,7 +92,7 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 	
 	/**
 	 * Test updating an entry in the database.
-	 * @throws DatabaseException
+	 * @throws DatabaseException when things go wrong.
 	 */
 	@Test
 	void testUpdate() throws DatabaseException {
