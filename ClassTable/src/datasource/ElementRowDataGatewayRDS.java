@@ -9,11 +9,11 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   /**
    * Create element table
    */
-  int elementId;
-  int atomicNumber;
-  double atomicMass;
-  String name;
-  String inhabits;
+  private int elementId;
+  private int atomicNumber;
+  private double atomicMass;
+  private String name;
+  private String inhabits;
 
   public ElementRowDataGatewayRDS() {
     dropAllTables();
@@ -68,6 +68,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
     }
   }
 
+  @Override
   public void createTableElement() {
     String createTable = "CREATE TABLE IF NOT EXISTS Element" + "(" + "elementId INT NOT NULL, " + "atomicNumber INT, "
         + "atomicMass DOUBLE, " + "FOREIGN KEY(elementId) REFERENCES Chemical(chemicalId)" + ");";
@@ -131,6 +132,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
     return this.inhabits;
   }
   
+  @Override
   public void dropTableElement() {
     String dropTable = "DROP TABLE IF EXISTS Element";
     try {
@@ -146,6 +148,8 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   /**
    * Drop the chemical table if it exists.
    */
+  
+  @Override
   public void dropTableChemical() {
     String dropTable = "DROP TABLE IF EXISTS Chemical";
     try {
@@ -161,6 +165,8 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   /**
    * Drop acid and all tables connected (acid & chemical)
    */
+  
+  @Override
   public void dropAllTables() {
     dropTableElement();
     dropTableChemical();

@@ -12,10 +12,10 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   /**
    * Create tables for CompoundMadeFromElement
    */
-  int compoundId;
-  List<Integer> elementId;
-  String name;
-  String inhabits;
+  private int compoundId;
+  private List<Integer> elementId;
+  private String name;
+  private String inhabits;
 
   public CompoundsMadeOfTableDataGatewayRDS() {
     this.dropTableCompoundMadeFromElement();
@@ -36,7 +36,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
       while (rs.next()) {
         elementId.add(rs.getInt("elementId"));
       }
-      
+
       rs = statement.executeQuery(sqlChem);
       rs.next();
       this.name = rs.getString("name");
@@ -68,24 +68,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
     }
   }
 
-  /**
-   * Update entry for a given compoundId and elementId
-   * 
-   * @param compoundId
-   * @param elementId
-   */
-  public void update(int oldCompoundId, int oldElementId, int newCompoundId, int newElementId) {
-    String sql = "UPDATE CompoundMadeFromElement " + "SET compoundId = " + newCompoundId + ", elementId = "
-        + newElementId + "WHERE compoundId = " + oldCompoundId + " AND elementId = " + oldElementId;
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.execute(sql);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-    }
-  }
-
+  @Override
   public void dropTableCompoundMadeFromElement() {
     String dropTable = "DROP TABLE IF EXISTS CompoundMadeFromElement";
     try {

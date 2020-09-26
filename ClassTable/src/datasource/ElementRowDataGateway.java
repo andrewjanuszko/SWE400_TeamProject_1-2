@@ -15,4 +15,10 @@ public interface ElementRowDataGateway {
   public void delete(int id);
   
   public void update(int id, int atomicNum, int atomicMass, String name, String inhabits);
+  
+  public void dropTableElement();
+  
+  public void dropTableChemical();
+  
+  public void dropAllTables();
 }

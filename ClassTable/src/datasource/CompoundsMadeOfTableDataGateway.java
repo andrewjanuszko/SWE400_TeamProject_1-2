@@ -18,4 +18,6 @@ public interface CompoundsMadeOfTableDataGateway {
   
   public void delete(int id);
   
+  public void dropTableCompoundMadeFromElement();
+  
 }
