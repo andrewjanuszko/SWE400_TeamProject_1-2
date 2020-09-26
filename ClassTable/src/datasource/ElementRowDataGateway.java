@@ -6,7 +6,7 @@ public interface ElementRowDataGateway {
   
   public int getAtomicNumber();
   
-  public int getAtomicMass();
+  public double getAtomicMass();
   
   public String getName();
   

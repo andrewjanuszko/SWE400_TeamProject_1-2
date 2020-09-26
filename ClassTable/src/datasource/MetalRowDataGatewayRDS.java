@@ -21,7 +21,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
     this.metalId = id;
 
     String sqlChem = "SELECT * FROM Chemical INNER JOIN Metal ON Chemical.chemicalId = " + id + ";";
-    String sqlElement = "SELECT * FROM Element where elementId = " + id + ";";
+    String sqlElement = "SELECT * FROM Metal where metalId = " + id + ";";
     try {
 
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();

@@ -183,13 +183,13 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
     return this.name;
   }
 
-  @Override
   /**
    * Get inhabits from the Chemical table of a given chemicalId
    * 
    * @param chemicalId
    *          to search for
    */
+  @Override
   public String getInhabits() {
     return this.inhabits;
   }

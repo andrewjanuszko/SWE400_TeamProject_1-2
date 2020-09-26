@@ -105,8 +105,8 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
    *          search for atomic mass of
    */
   @Override
-  public int getAtomicMass() {
-    return this.getAtomicMass();
+  public double getAtomicMass() {
+    return this.atomicMass;
   }
 
   /**

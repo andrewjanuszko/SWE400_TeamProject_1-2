@@ -20,9 +20,9 @@ class TestMetal {
   @Test
   void testGetInhabits() {
     // Create row data gateways
-    MetalRowDataGateway metal = new MetalRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
     AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
+    MetalRowDataGateway metal = new MetalRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
     
     MetalRowDataGateway metalGet = new MetalRowDataGatewayRDS(1);
 
@@ -32,9 +32,9 @@ class TestMetal {
 
   @Test
   void testGetDissolvedBy() {
-    MetalRowDataGateway metal = new MetalRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
     AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
+    MetalRowDataGateway metal = new MetalRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
 
     MetalRowDataGateway metalGet = new MetalRowDataGatewayRDS(1);
     // Test
