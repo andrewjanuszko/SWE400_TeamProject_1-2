@@ -15,6 +15,10 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   String name;
   String inhabits;
 
+  public ElementRowDataGatewayRDS() {
+    dropAllTables();
+    createTableElement();
+  }
   public ElementRowDataGatewayRDS(int id) {
     this.createTableElement();
     this.elementId = id;
@@ -65,8 +69,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   }
 
   public void createTableElement() {
-    String dropTable = "DROP TABLE IF EXISTS Element;";
-    String createTable = "CREATE TABLE Element" + "(" + "elementId INT NOT NULL, " + "atomicNumber INT, "
+    String createTable = "CREATE TABLE IF NOT EXISTS Element" + "(" + "elementId INT NOT NULL, " + "atomicNumber INT, "
         + "atomicMass DOUBLE, " + "FOREIGN KEY(elementId) REFERENCES Chemical(chemicalId)" + ");";
 
     try {
@@ -74,7 +77,6 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
 
       // Drop the table if exists first
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
 
       // Create tables
       statement.executeUpdate(createTable);
@@ -127,6 +129,41 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   @Override
   public String getInhabits() {
     return this.inhabits;
+  }
+  
+  public void dropTableElement() {
+    String dropTable = "DROP TABLE IF EXISTS Element";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping element table");
+    }
+  }
+  
+  /**
+   * Drop the chemical table if it exists.
+   */
+  public void dropTableChemical() {
+    String dropTable = "DROP TABLE IF EXISTS Chemical";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping chemical table");
+    }
+  }
+  
+  /**
+   * Drop acid and all tables connected (acid & chemical)
+   */
+  public void dropAllTables() {
+    dropTableElement();
+    dropTableChemical();
   }
 
   @Override

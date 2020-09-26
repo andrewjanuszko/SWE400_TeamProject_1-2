@@ -14,8 +14,7 @@ class TestCompoundsMadeOf {
   void testGetName() {
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
     CompoundsMadeOfTableDataGateway compounds = new CompoundsMadeOfTableDataGatewayRDS();
-    
-    chem.createTableChemcial();
+    chem.createTable();
     compounds.createTableDataMadeOf();
     
     chem.insert(1, "chemicalname1", "inhabits1");
@@ -24,8 +23,11 @@ class TestCompoundsMadeOf {
     chem.insert(2, "chemicalname2", "inhabits2");
     compounds.insert(2, 2);
     
-    assertEquals("chemicalname1", compounds.getCompoundName(1));
-    assertEquals("chemicalname2", compounds.getCompoundName(2));  
+    CompoundsMadeOfTableDataGateway compoundsGet1 = new CompoundsMadeOfTableDataGatewayRDS(1);
+    CompoundsMadeOfTableDataGateway compoundsGet2 = new CompoundsMadeOfTableDataGatewayRDS(2);
+    
+    assertEquals("chemicalname1", compoundsGet1.getCompoundName());
+    assertEquals("chemicalname2", compoundsGet2.getCompoundName());  
   }
   
   @Test
@@ -35,7 +37,7 @@ class TestCompoundsMadeOf {
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
     
     // Create tables
-    chem.createTableChemcial();
+    chem.createTable();
     compound.createTableDataMadeOf();
     
     // Insert chemical 
@@ -48,10 +50,13 @@ class TestCompoundsMadeOf {
     compound.insert(2, 50);
     compound.insert(3, 7);
     
+    CompoundsMadeOfTableDataGateway compoundGet1 = new CompoundsMadeOfTableDataGatewayRDS(1);
+    CompoundsMadeOfTableDataGateway compoundGet2 = new CompoundsMadeOfTableDataGatewayRDS(2);
+    CompoundsMadeOfTableDataGateway compoundGet3 = new CompoundsMadeOfTableDataGatewayRDS(3);
     // Test
-    assertEquals("inhabits1", compound.getInhabits(1));
-    assertEquals("inhabits2", compound.getInhabits(2));
-    assertEquals("inhabits3", compound.getInhabits(3));
+    assertEquals("inhabits1", compoundGet1.getInhabits());
+    assertEquals("inhabits2", compoundGet2.getInhabits());
+    assertEquals("inhabits3", compoundGet3.getInhabits());
   }
 
   @Test
@@ -59,7 +64,7 @@ class TestCompoundsMadeOf {
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
     CompoundsMadeOfTableDataGateway compounds = new CompoundsMadeOfTableDataGatewayRDS();
     
-    chem.createTableChemcial();
+    chem.createTable();
     compounds.createTableDataMadeOf();
     
     chem.insert(1, "chemicalname1", "inhabits1");
@@ -78,7 +83,7 @@ class TestCompoundsMadeOf {
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
     CompoundsMadeOfTableDataGateway compounds = new CompoundsMadeOfTableDataGatewayRDS();
     
-    chem.createTableChemcial();
+    chem.createTable();
     compounds.createTableDataMadeOf();
     
     chem.insert(1, "chemicalname1", "inhabits1");
