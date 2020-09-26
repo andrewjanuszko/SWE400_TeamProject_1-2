@@ -7,10 +7,10 @@ import java.sql.Statement;
 
 public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
 
-  int metalId;
-  int dissolvedById;
-  String name;
-  String inhabits;
+  private int metalId;
+  private int dissolvedById;
+  private String name;
+  private String inhabits;
   
   public MetalRowDataGatewayRDS() {
     dropAllTables();
@@ -62,6 +62,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
       System.out.println("Failed to insert");
     }
   }
+  @Override
   public void createTableMetal() {
     String createTable = "CREATE TABLE IF NOT EXISTS Metal" + "(" 
         + "metalId INT NOT NULL, "
@@ -96,6 +97,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
     return this.dissolvedById;
   }
   
+  @Override
   public void dropTableMetal() {
     String dropTable = "DROP TABLE IF EXISTS Metal";
     try {
@@ -111,6 +113,8 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
   /**
    * Drop the chemical table if it exists.
    */
+  
+  @Override
   public void dropTableChemical() {
     String dropTable = "DROP TABLE IF EXISTS Chemical";
     try {
@@ -126,6 +130,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
   /**
    * Drop acid and all tables connected (acid & chemical)
    */
+  @Override
   public void dropAllTables() {
     dropTableMetal();
     dropTableChemical();
