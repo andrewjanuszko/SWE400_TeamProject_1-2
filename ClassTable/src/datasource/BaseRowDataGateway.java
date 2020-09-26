@@ -1,8 +1,6 @@
 package datasource;
 
 public interface BaseRowDataGateway {
-
-  public void createTableBase();
   
   public int getSolute();
   
@@ -16,4 +14,16 @@ public interface BaseRowDataGateway {
   
   public void setInhabits(String newInhabits);
 
+  public void update();
+
+  public void delete();
+  
+  public void dropTableBase();
+  
+  public void dropTableChemical();
+  
+  public void dropAllTables(); 
+  
+  public void fetch(int id);
+  
 }
