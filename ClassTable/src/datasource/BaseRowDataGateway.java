@@ -1,5 +1,7 @@
 package datasource;
 
+import java.sql.SQLException;
+
 public interface BaseRowDataGateway {
   
   public int getSolute();
@@ -24,6 +26,6 @@ public interface BaseRowDataGateway {
   
   public void dropAllTables(); 
   
-  public void fetch(int id);
+  public void fetch(int id) throws SQLException, DatabaseException;
   
 }

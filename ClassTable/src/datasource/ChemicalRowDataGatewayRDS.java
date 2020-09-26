@@ -10,9 +10,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
   String name, inhabits;
   
   /**
-   * Initialize DB by dropping all tables and then creating them,
-   * Probably shouldn't drop all tables, but it makes the tests 
-   * pass atm. 
+   * Constructor for resetting chemical, drop & recreate the chemical tables.
    */
   public ChemicalRowDataGatewayRDS() {
     dropTable(); // Should not be here, maybe
@@ -151,6 +149,12 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
       
   }  
   
+  /**
+   * Insert a chemical.
+   * @param id
+   * @param name
+   * @param inhabits
+   */
   public void insert(int id, String name, String inhabits) {
     try {
     // Insert chemical

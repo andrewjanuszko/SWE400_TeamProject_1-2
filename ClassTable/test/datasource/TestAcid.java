@@ -1,7 +1,11 @@
 package datasource;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.sql.SQLException;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +19,7 @@ import org.junit.jupiter.api.Test;
 class TestAcid {
   
   @Test
-  void testGetName() {
+  void testGetName() throws SQLException, DatabaseException {
     AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
         acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
         acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
@@ -45,7 +49,7 @@ class TestAcid {
   }
   
   @Test
-  void testGetInhabits() {
+  void testGetInhabits() throws SQLException, DatabaseException {
     AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
         acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
         acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
@@ -75,7 +79,7 @@ class TestAcid {
   }
   
   @Test
-  void testGetSolute() {
+  void testGetSolute() throws SQLException, DatabaseException {
     AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
         acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
         acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
@@ -106,7 +110,21 @@ class TestAcid {
   
   @Test
   void testDelete() {
-    fail("Not yet implemented");
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+        acid = new AcidRowDataGatewayRDS(1, 2, "chemname1", "cheminhabits1");
+    
+    // Ensure it has been added
+    assertEquals("chemname1", acid.getName());
+    assertEquals("cheminhabits1", acid.getInhabits());
+    
+    acid.delete();
+    
+    try { 
+      acid.fetch(1);
+      fail("");
+    } catch(DatabaseException | SQLException e) {
+      assertTrue(true); 
+    }
   }
   
   @Test

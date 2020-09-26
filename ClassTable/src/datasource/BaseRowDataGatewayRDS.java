@@ -10,12 +10,10 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
   String name, inhabits; 
   
   /**
-   * Initialize DB by dropping all tables and then creating.
-   * Probably shouldn't drop all tables but it makes the tests 
-   * pass atm. 
+   * Constructor to reset base by dropping tables and recreating them.
    */
   public BaseRowDataGatewayRDS() {
-    dropAllTables(); // Should not be here
+    dropAllTables(); 
     createTable();
   }
   
@@ -59,6 +57,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    */
   public BaseRowDataGatewayRDS(int id, int solute, String name, String inhabits) {   
     createTable();
+    
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -94,7 +93,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
   public void createTable() {
     String createChem = "CREATE TABLE IF NOT EXISTS Chemical" + "(" + "chemicalId INT NOT NULL, " + "name VARCHAR(20), "
         + "inhabits VARCHAR(20), " + "PRIMARY KEY (chemicalId)" + ");",
-        createBase = "CREATE TABLE Base" + "(" + "baseId INT NOT NULL, "
+        createBase = "CREATE TABLE IF NOT EXISTS Base" + "(" + "baseId INT NOT NULL, "
             + "solute VARCHAR(20), " 
             + "FOREIGN KEY(baseId) REFERENCES Chemical(chemicalId)" + ");";
 
@@ -152,7 +151,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    */
   public void delete() {
     String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + baseId + ";",
-        deleteBase = "DELETE FROM Base WHERE Base = " + baseId + ";";
+        deleteBase = "DELETE FROM Base WHERE baseId = " + baseId + ";";
     
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -169,8 +168,10 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
   /**
    * Fetch a new base.
    * @param newId to fetch
+   * @throws DatabaseException 
+   * @throws SQLException 
    */
-  public void fetch(int newId) {
+  public void fetch(int newId) throws SQLException, DatabaseException {
     String getBase = new String("SELECT * FROM Base WHERE baseId = " + newId + ";"),
         getChem = new String("SELECT * FROM Chemical INNER JOIN Base ON Chemical.chemicalId = " + newId + ";");
     
@@ -178,31 +179,32 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
     String tmpName, tmpInh;
     int tmpSol; 
     
-    try {
-      // Get base information
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement(); 
-      ResultSet rs = statement.executeQuery(getBase); 
-      rs.next(); // Get result 
-      tmpSol = rs.getInt("solute"); 
+    // Get base information
+    Statement statement = DatabaseManager.getSingleton().getConnection().createStatement(); 
+    ResultSet rs = statement.executeQuery(getBase); 
+    rs.next(); // Get result 
+    tmpSol = rs.getInt("solute"); 
       
-      // Get chemical information 
-      rs = statement.executeQuery(getChem); 
-      rs.next(); 
-      tmpName = rs.getString("name"); 
-      tmpInh = rs.getString("inhabits"); 
+    // Get chemical information 
+    rs = statement.executeQuery(getChem); 
+    rs.next(); 
+    tmpName = rs.getString("name"); 
+    tmpInh = rs.getString("inhabits"); 
       
-      // If we get to this point without errors, then it is safe to update our variables
-      this.baseId = newId;
-      this.name = tmpName;
-      this.solute = tmpSol;
-      this.inhabits = tmpInh;
-      
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to update to " + newId + ", id likely does not exist.");
-    }
+    // If we get to this point without errors, then it is safe to update our variables
+    this.baseId = newId;
+    this.name = tmpName;
+    this.solute = tmpSol;
+    this.inhabits = tmpInh;    
   }  
   
+  /**
+   * Insert a new base.
+   * @param id
+   * @param solute
+   * @param name
+   * @param inhabits
+   */
   public void insert(int id, int solute, String name, String inhabits) {
     try {
       // Insert chemical
