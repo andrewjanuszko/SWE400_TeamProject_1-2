@@ -160,6 +160,29 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       System.out.println("Error deleting acid " + acidId);
     }
   }
+  
+  public void insert(int id, int solute, String name, String inhabits) {
+    try {
+      // Insert chemical 
+      PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+      insertChemical.setInt(1, id);
+      insertChemical.setString(2, name);
+      insertChemical.setString(3, inhabits);
+      
+      // Insert Acid
+      PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
+        .prepareStatement("INSERT INTO Acid (acidId, solute)" + "VALUES (?, ?);");
+      insertAcid.setInt(1, id); // Set acid id
+      insertAcid.setInt(2, solute); // set solute id
+      
+      insertChemical.execute(); // Insert chemical
+      insertAcid.execute();  // Insert acid
+      
+    } catch(SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+  }
 
   /**
    * Return solute of acid

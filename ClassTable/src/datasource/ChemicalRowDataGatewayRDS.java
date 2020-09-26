@@ -24,8 +24,9 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * @param id to search for
    */
   public ChemicalRowDataGatewayRDS(int id) {
+    createTable();
     // Select statement
-    String getChem = new String("SELECT * FROM Chemical WHERE chemmicalId = " + id + ";");
+    String getChem = new String("SELECT * FROM Chemical WHERE chemicalId = " + id + ";");
     
     try {
       // Get chemical information
@@ -51,6 +52,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * @param inhabits
    */
   public ChemicalRowDataGatewayRDS(int id, String name, String inhabits) {
+    createTable();
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -125,32 +127,43 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
   /**
    * Fetch a new chemical.
    * @param newId to fetch
+   * @throws DatabaseException 
+   * @throws SQLException 
    */
-  public void fetch(int newId) {
+  public void fetch(int newId) throws SQLException, DatabaseException {
     String getChem = new String("SELECT * FROM Chemical WHERE Chemical.chemicalId = " + newId + ";");
     
     // Temporary variables
     String tmpName, tmpInh;
     
-    try {
-      // Get chemical information
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement(); 
-      ResultSet rs = statement.executeQuery(getChem); 
-      rs.next(); // Get result 
+    // Get chemical information
+    Statement statement = DatabaseManager.getSingleton().getConnection().createStatement(); 
+    ResultSet rs = statement.executeQuery(getChem); 
+    rs.next(); // Get result 
+    
+    tmpName = rs.getString("name"); 
+    tmpInh = rs.getString("inhabits"); 
+    
+    // If we get to this point without errors, then it is safe to update our variables
+    this.id = newId;
+    this.name = tmpName;
+    this.inhabits = tmpInh;
       
-      tmpName = rs.getString("name"); 
-      tmpInh = rs.getString("inhabits"); 
-      
-      // If we get to this point without errors, then it is safe to update our variables
-      this.id = newId;
-      this.name = tmpName;
-      this.inhabits = tmpInh;
-      
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to update to " + newId + ", id likely does not exist.");
-    }
   }  
+  
+  public void insert(int id, String name, String inhabits) {
+    try {
+    // Insert chemical
+    PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
+        .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+    insertChemical.setInt(1, id);
+    insertChemical.setString(2, name);
+    insertChemical.setString(3, inhabits);
+    insertChemical.execute(); // Insert chemical
+    } catch(SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+  }
   
   /**
    * Update the database.

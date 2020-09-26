@@ -1,5 +1,6 @@
 package datasource;
 
+import java.sql.SQLException;
 
 public interface ChemicalRowDataGateway {
 
@@ -9,7 +10,7 @@ public interface ChemicalRowDataGateway {
   
   public void delete();
   
-  public void fetch(int newId);
+  public void fetch(int newId) throws SQLException, DatabaseException;
   
   public void update(); 
   

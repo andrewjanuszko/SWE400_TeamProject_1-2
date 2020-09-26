@@ -24,7 +24,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    * @param id
    */
   public BaseRowDataGatewayRDS(int id) {
-    
+    createTable();
     // Select statements
     String getBase = new String("SELECT * FROM Base WHERE baseId = " + id + ";"),
         getChem = new String("SELECT * FROM Chemical INNER JOIN Base ON Chemical.chemicalId = " + id + ";");
@@ -58,6 +58,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    * @param inhabits
    */
   public BaseRowDataGatewayRDS(int id, int solute, String name, String inhabits) {   
+    createTable();
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -201,6 +202,29 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
       System.out.println("Failed to update to " + newId + ", id likely does not exist.");
     }
   }  
+  
+  public void insert(int id, int solute, String name, String inhabits) {
+    try {
+      // Insert chemical
+      PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+      insertChemical.setInt(1, id);
+      insertChemical.setString(2, name);
+      insertChemical.setString(3, inhabits);
+      
+      // Insert Base
+      PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
+        .prepareStatement("INSERT INTO Base (baseId, solute)" + "VALUES (?, ?);");
+      insertAcid.setInt(1, id); // Set acid id
+      insertAcid.setInt(2, solute); // set solute id
+      
+      insertChemical.execute(); // Insert chemical
+      insertAcid.execute();  // Insert acid
+      
+    } catch(SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+  }
   
   /**
    * Update the database.
