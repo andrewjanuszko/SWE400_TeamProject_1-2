@@ -58,7 +58,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 			compoundID = rs.getInt("compoundID");
 			inhabits = rs.getString("inhabits");
 		} catch (SQLException e) {
-			throw new DatabaseException("Couldn't find element with that name", e);
+			throw new DatabaseException("Couldn't find Compound with that name", e);
 		}
 		
 	}
@@ -77,7 +77,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 			compoundID = rs.getInt("compoundID");
 			inhabits = rs.getString("inhabits");
 		} catch (SQLException e) {
-			throw new DatabaseException("Couldn't find element with that name", e);
+			throw new DatabaseException("Couldn't find Compound with that name", e);
 		}
 	}
 
@@ -117,7 +117,14 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
   }
   
   public void delete() {
-	  
+	try {
+		PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM CompoundMadeOf WHERE compoundID = " + compoundID);
+		stmt1.execute();
+		PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Compound WHERE compoundID = " + compoundID);
+		stmt2.execute();
+	} catch (SQLException e) {
+		new DatabaseException("could not delete Compound");
+	}
   }
   
 }

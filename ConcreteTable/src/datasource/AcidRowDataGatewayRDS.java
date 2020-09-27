@@ -60,7 +60,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 			inhabits = rs.getString("inhabits");
 			solute = rs.getString("solute");
 		} catch (SQLException e) {
-			throw new DatabaseException("Couldn't find element with that name", e);
+			throw new DatabaseException("Couldn't find Acid with that name", e);
 		}
 	}
 	
@@ -79,7 +79,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 			inhabits = rs.getString("inhabits");
 			solute = rs.getString("solute");
 		} catch (SQLException e) {
-			throw new DatabaseException("Couldn't find element with that name", e);
+			throw new DatabaseException("Couldn't find Acid with that name", e);
 		}
 		
 		try {
@@ -139,6 +139,13 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	}
 	
 	public void delete() {
-		
+		try {
+			PreparedStatement stmt1 = conn.prepareStatement("UPDATE Metal SET acidID = NULL WHERE dissovledBy = " + acidID);
+			stmt1.execute();
+			PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Acid WHERE acidID = " + acidID);
+			stmt2.execute();
+		} catch (SQLException e) {
+			new DatabaseException("could not delete acid");
+		}
 	}
 }

@@ -59,7 +59,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 			inhabits = rs.getString("inhabits");
 			solute = rs.getString("solute");
 		} catch (SQLException e) {
-			throw new DatabaseException("Couldn't find element with that name", e);
+			throw new DatabaseException("Couldn't find Base with that name", e);
 		}
 	}
 	
@@ -78,7 +78,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 			inhabits = rs.getString("inhabits");
 			solute = rs.getString("solute");
 		} catch (SQLException e) {
-			throw new DatabaseException("Couldn't find element with that name", e);
+			throw new DatabaseException("Couldn't find Base with that name", e);
 		}
 	}
 

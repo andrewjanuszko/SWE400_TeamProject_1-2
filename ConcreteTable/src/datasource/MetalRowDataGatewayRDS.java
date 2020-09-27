@@ -44,7 +44,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 			stmt.close();
 		} catch (SQLException e)
 		{
-			throw new DatabaseException("Unable to create InteractableItem table", e);
+			throw new DatabaseException("Unable to create Metal table", e);
 		}
 	}
 	
@@ -168,13 +168,18 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 		
 		stmt.executeUpdate();
 	} catch (SQLException e) {
-		new DatabaseException("could't update element table");
+		new DatabaseException("could't update metal table");
 	}
   }
 
   @Override
   public void delete() {
-	  // TODO Auto-generated method stub
-	
+	  try {
+		  PreparedStatement stmt = conn.prepareStatement("DELETE FROM Metal WHERE metalID = " + metalID);  
+		  stmt.execute();
+	  } catch (SQLException e) {
+			new DatabaseException("couldn't delete metal");
+	  }
   }
+	  
 }

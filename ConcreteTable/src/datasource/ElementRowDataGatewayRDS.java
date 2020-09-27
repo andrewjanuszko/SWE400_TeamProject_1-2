@@ -149,7 +149,13 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 
   @Override
   public void delete() {
-	  // TODO Auto-generated method stub
-	
+	  try {
+			PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM CompoundMadeOf WHERE elementID = " + elementID);
+			stmt1.execute();
+			PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Element WHERE elementID = " + elementID);
+			stmt2.execute();
+		} catch (SQLException e) {
+			new DatabaseException("could not delete Element");
+		}
   }
 }
