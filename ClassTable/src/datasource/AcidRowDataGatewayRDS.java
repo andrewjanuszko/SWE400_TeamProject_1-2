@@ -138,7 +138,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 	 */
 	public void dropAllTables() {
 	  dropTableAcid();
-	  dropTableChemical();
+//	  dropTableChemical();
 	}
 	
 	/**

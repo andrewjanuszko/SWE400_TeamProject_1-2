@@ -143,7 +143,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    */
   public void dropAllTables() {
     dropTableBase();
-    dropTableChemical();
+//    dropTableChemical();
   }
   
   /**
