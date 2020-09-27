@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class AcidRowDataGateway {
 
 	@Test
-	void testthis() {
+	void testGetters() {
 		fail("Not yet implemented");
 	}
 
