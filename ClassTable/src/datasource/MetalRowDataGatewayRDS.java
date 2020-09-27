@@ -184,13 +184,8 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       while(rs.next()) {
-        String insideSql = "SELECT * FROM Chemical INNER JOIN Metal ON Chemical.chemicalId = " + rs.getInt("metalId") + ";";
-        ResultSet rs2 = statement.executeQuery(insideSql);
-        while(rs2.next()) {
-          MetalRowDataGatewayRDS dumb = new MetalRowDataGatewayRDS(rs2.getInt("chemicalId"), dissolvedById, rs2.getString("name"), rs2.getString("inhabits"));
+          MetalRowDataGatewayRDS dumb = new MetalRowDataGatewayRDS(rs.getInt("metalId"));
           results.add(dumb);
-          
-        }
       }
     } catch (SQLException | DatabaseException e) {
 
