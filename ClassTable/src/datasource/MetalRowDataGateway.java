@@ -1,5 +1,6 @@
 package datasource;
 
+import java.util.List;
 
 public interface MetalRowDataGateway {
   
@@ -20,4 +21,6 @@ public interface MetalRowDataGateway {
   public void dropTableChemical();
   
   public void dropAllTables();
+  
+//  public List<MetalRowDataGatewayRDS> findSet(int dissolvedById);
 }

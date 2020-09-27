@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   /**
@@ -16,9 +18,10 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   private String inhabits;
 
   public ElementRowDataGatewayRDS() {
-    dropAllTables();
+    dropTableElement();
     createTableElement();
   }
+
   public ElementRowDataGatewayRDS(int id) {
     this.createTableElement();
     this.elementId = id;
@@ -131,7 +134,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   public String getInhabits() {
     return this.inhabits;
   }
-  
+
   @Override
   public void dropTableElement() {
     String dropTable = "DROP TABLE IF EXISTS Element";
@@ -144,11 +147,11 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       System.out.println("Error dropping element table");
     }
   }
-  
+
   /**
    * Drop the chemical table if it exists.
    */
-  
+
   @Override
   public void dropTableChemical() {
     String dropTable = "DROP TABLE IF EXISTS Chemical";
@@ -161,11 +164,11 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       System.out.println("Error dropping chemical table");
     }
   }
-  
+
   /**
    * Drop acid and all tables connected (acid & chemical)
    */
-  
+
   @Override
   public void dropAllTables() {
     dropTableElement();
@@ -197,13 +200,13 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       updateElement.setInt(1, atomicNum);
       updateElement.setDouble(2, atomicMass);
       updateElement.setInt(3, id);
-      
+
       PreparedStatement updateChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Chemical SET name = ?, inhabits = ? WHERE chemicalId = ?;");
       updateChemical.setString(1, name);
       updateChemical.setString(2, inhabits);
       updateChemical.setInt(3, id);
-      
+
       updateElement.execute();
       updateChemical.execute();
     } catch (SQLException | DatabaseException e) {
@@ -212,5 +215,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
     }
 
   }
+
+
 
 }
