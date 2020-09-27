@@ -10,21 +10,20 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
   private String name, inhabits;
   
   /**
-   * AcidRowDataGateawyRDS constructor, used to initialize DB by
-   * creating tables.
+   * Constructor used for resetting Acid/Chemical tables.
+   * Delete all tables, and then make them again.
    */
   public AcidRowDataGatewayRDS() {
-    dropAllTables(); // this should probably not be here
-    createTable();
+    dropAllTables(); // Drop Acid and Chemical table.
+    createTable(); // re-create Acid and Chemical table.
   }
   
   /**
-   * AcidRowDataGatewayRDS constructor, search for specific existing acid via id.
-   * @param id
+   * Constructor used to find an existing Acid.
+   * @param id of the acid to find
    */
   public AcidRowDataGatewayRDS(int id) {
-    this.acidId = id; 
-    
+    // Statements to find existing acid/chemical and collect their information.
     String getAcid = new String("SELECT * FROM Acid WHERE acidId = " + id + ";"),
         getChem = new String("SELECT * FROM Chemical INNER JOIN Acid ON Chemical.chemicalId = " + id + ";");
     
@@ -40,6 +39,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       rs.next(); 
       this.name = rs.getString("name"); 
       this.inhabits = rs.getString("inhabits"); 
+      this.acidId = id; 
       
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -49,10 +49,10 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
   
   /**
    * AcidRowDataGateway constructor for creating a new acid.
-   * @param id
-   * @param solute
-   * @param name
-   * @param inhabits
+   * @param id of acid to insert
+   * @param solute of acid to insert
+   * @param name of acid to insert
+   * @param inhabits of acid to isnert
    */
   public AcidRowDataGatewayRDS(int id, int solute, String name, String inhabits) {
     try {
@@ -72,15 +72,15 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       insertChemical.execute(); // Insert chemical
       insertAcid.execute();  // Insert acid
       
+      this.acidId = id;
+      this.solute = solute; 
+      this.name = name;
+      this.inhabits = inhabits;
+      
     } catch(SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert acid through constructor");
     }
-    
-    this.acidId = id;
-    this.solute = solute; 
-    this.name = name;
-    this.inhabits = inhabits;
   }
 
   /**
@@ -138,7 +138,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 	 */
 	public void dropAllTables() {
 	  dropTableAcid();
-	  dropTableChemical();
+//	  dropTableChemical();
 	}
 	
 	/**
@@ -158,6 +158,36 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Error deleting acid " + acidId);
+    }
+  }
+  
+  /**
+   * Insert a new acid.
+   * @param id to insert
+   * @param solute to insert
+   * @param name to insert
+   * @param inhabits to insert
+   */
+  public void insert(int id, int solute, String name, String inhabits) {
+    try {
+      // Insert chemical 
+      PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+      insertChemical.setInt(1, id);
+      insertChemical.setString(2, name);
+      insertChemical.setString(3, inhabits);
+      
+      // Insert Acid
+      PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
+        .prepareStatement("INSERT INTO Acid (acidId, solute)" + "VALUES (?, ?);");
+      insertAcid.setInt(1, id); // Set acid id
+      insertAcid.setInt(2, solute); // set solute id
+      
+      insertChemical.execute(); // Insert chemical
+      insertAcid.execute();  // Insert acid
+      
+    } catch(SQLException | DatabaseException e) {
+      e.printStackTrace();
     }
   }
 
@@ -212,8 +242,10 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
   /**
    * Fetch a new acid.
    * @param newId to fetch
+   * @throws DatabaseException 
+   * @throws SQLException 
    */
-  public void fetch(int newId) {
+  public void fetch(int newId) throws SQLException, DatabaseException {
     String getAcid = new String("SELECT * FROM Acid WHERE acidId = " + newId + ";"),
         getChem = new String("SELECT * FROM Chemical INNER JOIN Acid ON Chemical.chemicalId = " + newId + ";");
     
@@ -221,7 +253,6 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
     String tmpName, tmpInh;
     int tmpSol; 
     
-    try {
       // Get acid information
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement(); 
       ResultSet rs = statement.executeQuery(getAcid); 
@@ -239,10 +270,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       this.solute = tmpSol;
       this.inhabits = tmpInh;
       
-    } catch (SQLException | DatabaseException e) {
-      //e.printStackTrace();
-      System.out.println("Failed to update to " + newId + ", id likely does not exist.");
-    }
+    
   }
   
   /**

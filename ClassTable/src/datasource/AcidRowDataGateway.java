@@ -1,5 +1,7 @@
 package datasource;
 
+import java.sql.SQLException;
+
 public interface AcidRowDataGateway {
 
   public int getSolute();
@@ -24,6 +26,6 @@ public interface AcidRowDataGateway {
   
   public void dropAllTables();
   
-  public void fetch(int newId);
+  public void fetch(int newId) throws SQLException, DatabaseException;
   
 }
