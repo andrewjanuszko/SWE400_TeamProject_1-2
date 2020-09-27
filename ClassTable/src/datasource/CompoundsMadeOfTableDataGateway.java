@@ -8,9 +8,9 @@ public interface CompoundsMadeOfTableDataGateway {
   
   void createTableDataMadeOf(); 
   
-  String getCompoundName(int compoundId);
+  String getCompoundName();
   
-  public String getInhabits(int compoundId);
+  public String getInhabits();
 
   List<Integer> findSetElementId(int compoundId);
 
@@ -18,6 +18,6 @@ public interface CompoundsMadeOfTableDataGateway {
   
   public void delete(int id);
   
-  public void update();
+  public void dropTableCompoundMadeFromElement();
   
 }

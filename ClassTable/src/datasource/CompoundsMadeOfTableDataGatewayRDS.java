@@ -12,11 +12,45 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   /**
    * Create tables for CompoundMadeFromElement
    */
+  private int compoundId;
+  private List<Integer> elementId;
+  private String name;
+  private String inhabits;
+
+  public CompoundsMadeOfTableDataGatewayRDS() {
+    this.dropTableCompoundMadeFromElement();
+    this.createTableDataMadeOf();
+  }
+
+  public CompoundsMadeOfTableDataGatewayRDS(int compoundId) {
+    this.createTableDataMadeOf();
+    this.compoundId = compoundId;
+    String sqlChem = "SELECT * FROM Chemical INNER JOIN Metal ON CompoundMadeFromElement.compoundId = " + compoundId
+        + ";";
+    String sqlElement = "SELECT * FROM CompoundMadeFromElement where compoundId = " + compoundId + ";";
+    try {
+
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sqlElement);
+
+      while (rs.next()) {
+        elementId.add(rs.getInt("elementId"));
+      }
+
+      rs = statement.executeQuery(sqlChem);
+      rs.next();
+      this.name = rs.getString("name");
+      this.inhabits = rs.getString("inhabits");
+
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("No entry with id " + compoundId);
+    }
+  }
 
   @Override
   public void createTableDataMadeOf() {
-    String dropTable = "DROP TABLE IF EXISTS CompoundMadeFromElement;";
-    String createTable = "CREATE TABLE CompoundMadeFromElement(" + "compoundId INT NOT NULL, "
+    String createTable = "CREATE TABLE IF NOT EXISTS CompoundMadeFromElement(" + "compoundId INT NOT NULL, "
         + "elementId INT NOT NULL, " + "FOREIGN KEY (compoundId) REFERENCES Chemical(chemicalId), "
         + "FOREIGN KEY (elementId) REFERENCES Element(elementId));";
 
@@ -25,8 +59,6 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
 
       // Drop the table if exists first
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-
       //
       statement.executeUpdate(createTable);
 
@@ -36,21 +68,16 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
     }
   }
 
-  /**
-   * Update entry for a given compoundId and elementId
-   * 
-   * @param compoundId
-   * @param elementId
-   */
-  public void update(int oldCompoundId, int oldElementId, int newCompoundId, int newElementId) {
-    String sql = "UPDATE CompoundMadeFromElement " + "SET compoundId = " + newCompoundId + ", elementId = "
-        + newElementId + "WHERE compoundId = " + oldCompoundId + " AND elementId = " + oldElementId;
-
+  @Override
+  public void dropTableCompoundMadeFromElement() {
+    String dropTable = "DROP TABLE IF EXISTS CompoundMadeFromElement";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.execute(sql);
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
+      System.out.println("Error dropping Compound table");
     }
   }
 
@@ -135,43 +162,19 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    *          compoundId of id searching for
    */
   @Override
-  public String getCompoundName(int compoundId) {
-    String name = "";
-    String sql = new String(
-        "SELECT Chemical.name FROM Chemical INNER JOIN CompoundMadeFromElement ON Chemical.chemicalId = " + compoundId
-            + ";");
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-      rs.next(); // Get result
-      name = rs.getString("name"); // Get name from "name" column
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-    }
-    return name;
+  public String getCompoundName() {
+    return this.name;
   }
 
-  @Override
   /**
    * Get inhabits from the Chemical table of a given chemicalId
    * 
    * @param chemicalId
    *          to search for
    */
-  public String getInhabits(int compoundId) {
-    String inhabits = "";
-    String sql = new String(
-        "SELECT Chemical.inhabits FROM Chemical INNER JOIN CompoundMadeFromElement ON Chemical.chemicalId = "
-            + compoundId + ";");
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-      rs.next();
-      inhabits = rs.getString("inhabits");
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-    }
-    return inhabits;
+  @Override
+  public String getInhabits() {
+    return this.inhabits;
   }
 
   @Override
@@ -185,8 +188,4 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
     }
   }
 
-  @Override
-  public void update() {
-    
-  }
 }

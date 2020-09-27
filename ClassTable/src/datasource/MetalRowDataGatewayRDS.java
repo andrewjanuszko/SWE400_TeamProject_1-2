@@ -4,20 +4,27 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
 
-  int metalId;
-  int dissolvedById;
-  String name;
-  String inhabits;
-  
+  private int metalId;
+  private int dissolvedById;
+  private String name;
+  private String inhabits;
+
+  public MetalRowDataGatewayRDS() {
+    this.dropTableMetal();
+    createTableMetal();
+  }
+
   public MetalRowDataGatewayRDS(int id) {
     this.createTableMetal();
     this.metalId = id;
 
     String sqlChem = "SELECT * FROM Chemical INNER JOIN Metal ON Chemical.chemicalId = " + id + ";";
-    String sqlElement = "SELECT * FROM Element where elementId = " + id + ";";
+    String sqlElement = "SELECT * FROM Metal where metalId = " + id + ";";
     try {
 
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -58,20 +65,17 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
       System.out.println("Failed to insert");
     }
   }
+
+  @Override
   public void createTableMetal() {
-    String dropTable = "DROP TABLE IF EXISTS Metal;";
-    String createTable = "CREATE TABLE Metal" + "(" 
-        + "metalId INT NOT NULL, "
-        + "dissolvedBy INT," 
-        + "FOREIGN KEY(dissolvedBy) REFERENCES Acid(acidId),"
-        + "FOREIGN KEY(metalId) REFERENCES Chemical(chemicalId)"
-        + ");"; 
-    
+    String createTable = "CREATE TABLE IF NOT EXISTS Metal" + "(" + "metalId INT NOT NULL, " + "dissolvedBy INT,"
+        + "FOREIGN KEY(dissolvedBy) REFERENCES Acid(acidId)," + "FOREIGN KEY(metalId) REFERENCES Chemical(chemicalId)"
+        + ");";
+
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       // Drop the table if exists first
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;"); 
-      statement.executeUpdate(dropTable);
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
       // Create new Monitorings Table
       statement.executeUpdate(createTable);
     } catch (Exception e) {
@@ -93,6 +97,46 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
   public int getDissolvedBy() {
     return this.dissolvedById;
   }
+
+  @Override
+  public void dropTableMetal() {
+    String dropTable = "DROP TABLE IF EXISTS Metal";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping metal table");
+    }
+  }
+
+  /**
+   * Drop the chemical table if it exists.
+   */
+
+  @Override
+  public void dropTableChemical() {
+    String dropTable = "DROP TABLE IF EXISTS Chemical";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping chemical table");
+    }
+  }
+
+  /**
+   * Drop acid and all tables connected (acid & chemical)
+   */
+  @Override
+  public void dropAllTables() {
+    dropTableMetal();
+    dropTableChemical();
+  }
+
   @Override
   public void delete(int id) {
 
@@ -117,13 +161,13 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
           .prepareStatement("UPDATE Element SET atomicNumber = ?, atomicMass = ? WHERE elementId = ?;");
       updateMetal.setInt(1, dissolvedById);
       updateMetal.setInt(2, id);
-      
+
       PreparedStatement updateChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Chemical SET name = ?, inhabits = ? WHERE chemicalId = ?;");
       updateChemical.setString(1, name);
       updateChemical.setString(2, inhabits);
       updateChemical.setInt(3, id);
-      
+
       updateMetal.execute();
       updateChemical.execute();
     } catch (SQLException | DatabaseException e) {
@@ -131,5 +175,26 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
       System.out.println("Failed to update");
     }
 
+  }
+  //SELECT * FROM Chemical INNER JOIN Metal ON Chemical.chemicalId = (
+  public static List<MetalRowDataGatewayRDS> findSet(int dissolvedById) {
+    List<MetalRowDataGatewayRDS> results = new ArrayList<>();
+    try {
+      String sql = "SELECT * FROM Metal WHERE dissolvedBy = "+ dissolvedById + ";";
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sql);
+      while(rs.next()) {
+        String insideSql = "SELECT * FROM Chemical INNER JOIN Metal ON Chemical.chemicalId = " + rs.getInt("metalId") + ";";
+        ResultSet rs2 = statement.executeQuery(insideSql);
+        while(rs2.next()) {
+          MetalRowDataGatewayRDS dumb = new MetalRowDataGatewayRDS(rs2.getInt("chemicalId"), dissolvedById, rs2.getString("name"), rs2.getString("inhabits"));
+          results.add(dumb);
+          
+        }
+      }
+    } catch (SQLException | DatabaseException e) {
+
+    }
+    return results;
   }
 }

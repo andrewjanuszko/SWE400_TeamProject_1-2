@@ -7,16 +7,6 @@ import org.junit.jupiter.api.Test;
 
 class TestElement {
 
-  @Test
-  void testInsert() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 55, 123, "chemicalname1", "inhabits1");
-    
-    ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
-    
-    assertEquals(55, elementGet.getAtomicNumber());
-    assertEquals(123, elementGet.getAtomicMass());
-  }
   
   @Test
   void testGetAtomicNumber() {
@@ -35,8 +25,7 @@ class TestElement {
     
     ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
     
-    assertEquals(123, elementGet.getAtomicMass());
-    assertEquals(22, elementGet.getAtomicMass());
+    assertEquals(123, elementGet.getAtomicMass(), .01);
   }
   
   @Test
@@ -52,8 +41,8 @@ class TestElement {
   @Test
   void testGetInhabits() {
     // Create row data gateways
-    ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 15, 18, "chemicalname1", "inhabits1");
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
+    ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 15, 18, "chemicalname1", "inhabits1");
     
     ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
     

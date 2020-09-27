@@ -4,16 +4,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   /**
    * Create element table
    */
-  int elementId;
-  int atomicNumber;
-  double atomicMass;
-  String name;
-  String inhabits;
+  private int elementId;
+  private int atomicNumber;
+  private double atomicMass;
+  private String name;
+  private String inhabits;
+
+  public ElementRowDataGatewayRDS() {
+    dropTableElement();
+    createTableElement();
+  }
 
   public ElementRowDataGatewayRDS(int id) {
     this.createTableElement();
@@ -64,9 +71,9 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
     }
   }
 
+  @Override
   public void createTableElement() {
-    String dropTable = "DROP TABLE IF EXISTS Element;";
-    String createTable = "CREATE TABLE Element" + "(" + "elementId INT NOT NULL, " + "atomicNumber INT, "
+    String createTable = "CREATE TABLE IF NOT EXISTS Element" + "(" + "elementId INT NOT NULL, " + "atomicNumber INT, "
         + "atomicMass DOUBLE, " + "FOREIGN KEY(elementId) REFERENCES Chemical(chemicalId)" + ");";
 
     try {
@@ -74,7 +81,6 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
 
       // Drop the table if exists first
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
 
       // Create tables
       statement.executeUpdate(createTable);
@@ -103,8 +109,8 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
    *          search for atomic mass of
    */
   @Override
-  public int getAtomicMass() {
-    return this.getAtomicMass();
+  public double getAtomicMass() {
+    return this.atomicMass;
   }
 
   /**
@@ -127,6 +133,46 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   @Override
   public String getInhabits() {
     return this.inhabits;
+  }
+
+  @Override
+  public void dropTableElement() {
+    String dropTable = "DROP TABLE IF EXISTS Element";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping element table");
+    }
+  }
+
+  /**
+   * Drop the chemical table if it exists.
+   */
+
+  @Override
+  public void dropTableChemical() {
+    String dropTable = "DROP TABLE IF EXISTS Chemical";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping chemical table");
+    }
+  }
+
+  /**
+   * Drop acid and all tables connected (acid & chemical)
+   */
+
+  @Override
+  public void dropAllTables() {
+    dropTableElement();
+    dropTableChemical();
   }
 
   @Override
@@ -154,13 +200,13 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       updateElement.setInt(1, atomicNum);
       updateElement.setDouble(2, atomicMass);
       updateElement.setInt(3, id);
-      
+
       PreparedStatement updateChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Chemical SET name = ?, inhabits = ? WHERE chemicalId = ?;");
       updateChemical.setString(1, name);
       updateChemical.setString(2, inhabits);
       updateChemical.setInt(3, id);
-      
+
       updateElement.execute();
       updateChemical.execute();
     } catch (SQLException | DatabaseException e) {
@@ -169,5 +215,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
     }
 
   }
+
+
 
 }
