@@ -15,4 +15,8 @@ public interface BaseRowDataGateway {
 	public void setInhabits(String inhabits);
 	
 	public void setSolute(String solute);
+	
+	public void persist();
+	
+	public void delete();
 }

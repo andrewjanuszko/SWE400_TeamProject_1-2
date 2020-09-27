@@ -32,7 +32,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
-			throw new DatabaseException("Unable to create InteractableItem table", e);
+			throw new DatabaseException("Unable to create Base table", e);
 		}
 	}
 	
@@ -44,6 +44,24 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	private String inhabits;
 	private String solute;
 	
+	public BaseRowDataGatewayRDS(int id) throws DatabaseException {
+		conn = DatabaseManager.getSingleton().getConnection();
+		this.baseID = id;
+		findByID(id);
+	}
+	
+	private void findByID(int id) throws DatabaseException {
+		try {
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Base WHERE baseID = " + id);
+			ResultSet rs = stmt.executeQuery();
+			rs.next();
+			name = rs.getString("name");
+			inhabits = rs.getString("inhabits");
+			solute = rs.getString("solute");
+		} catch (SQLException e) {
+			throw new DatabaseException("Couldn't find element with that name", e);
+		}
+	}
 	
 	public BaseRowDataGatewayRDS(String name) throws DatabaseException{
 		conn = DatabaseManager.getSingleton().getConnection();
@@ -111,6 +129,10 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	} catch (SQLException e) {
 		new DatabaseException("Couldn't update Base table");
 	}
+  }
+  
+  public void delete() {
+	  
   }
 }
 

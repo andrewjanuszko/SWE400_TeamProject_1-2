@@ -19,4 +19,8 @@ public interface ElementRowDataGateway {
 	public void setAtomicNumber(int i);
 	
 	public void setAtomicMass(double d);
+	
+	public void persist();
+	
+	public void delete();
 }

@@ -45,6 +45,25 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 	private int atomicNumber;
 	private double atomicMass;
 	
+	public ElementRowDataGatewayRDS(int id) throws DatabaseException {
+		conn = DatabaseManager.getSingleton().getConnection();
+		this.elementID = id;
+		findByID(id);
+	}
+	
+	private void findByID(int id) throws DatabaseException {
+		try {
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Element WHERE elementID = " + id);
+			ResultSet rs = stmt.executeQuery();
+			rs.next();
+			name = rs.getString("name");
+			inhabits = rs.getString("inhabits");
+			atomicNumber = rs.getInt("atomicNumber");
+			atomicMass = rs.getDouble("atomicMass");
+		} catch (SQLException e) {
+			throw new DatabaseException("Couldn't find element with that name", e);
+		}
+	}
 	
 	public ElementRowDataGatewayRDS(String name) throws DatabaseException{
 		conn = DatabaseManager.getSingleton().getConnection();
@@ -126,5 +145,11 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 	} catch (SQLException e) {
 		new DatabaseException("could't update element table");
 	}
+  }
+
+  @Override
+  public void delete() {
+	  // TODO Auto-generated method stub
+	
   }
 }

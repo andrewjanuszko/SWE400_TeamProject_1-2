@@ -58,6 +58,26 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 	private double atomicMass;
 	private int dissolvedBy;
 	
+	public MetalRowDataGatewayRDS(int id) throws DatabaseException {
+		conn = DatabaseManager.getSingleton().getConnection();
+		this.metalID = id;
+		findByID(id);
+	}
+	
+	private void findByID(int id) throws DatabaseException{
+		try {
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Metal WHERE metalID = " + id);
+			ResultSet rs = stmt.executeQuery();
+			rs.next();
+			name = rs.getString("name");
+			inhabits = rs.getString("inhabits");
+			atomicNumber = rs.getInt("atomicNumber");
+			atomicMass = rs.getDouble("atomicMass");
+			dissolvedBy = rs.getInt("dissolvedBy");
+		} catch (SQLException e) {
+			throw new DatabaseException("Couldn't find metal with that name", e);
+		}
+	}
 	
 	public MetalRowDataGatewayRDS(String name) throws DatabaseException{
 		conn = DatabaseManager.getSingleton().getConnection();
@@ -150,5 +170,11 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 	} catch (SQLException e) {
 		new DatabaseException("could't update element table");
 	}
+  }
+
+  @Override
+  public void delete() {
+	  // TODO Auto-generated method stub
+	
   }
 }

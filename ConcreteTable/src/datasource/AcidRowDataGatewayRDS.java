@@ -13,8 +13,8 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 		String create = "CREATE TABLE Acid (" + 
 				"acidID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
-				"inhabits VARCHAR(30)," +
-				"solute VARCHAR(30)," +
+				"inhabits VARCHAR(30), " +
+				"solute VARCHAR(30), " +
 				"UNIQUE(name);";
 	
 		Connection conn = DatabaseManager.getSingleton().getConnection();
@@ -32,7 +32,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
-			throw new DatabaseException("Unable to create InteractableItem table", e);
+			throw new DatabaseException("Unable to create Acid table", e);
 		}
 	}
 	
@@ -44,6 +44,25 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	private String inhabits;
 	private String solute;
 	private List<Integer> dissolves;
+	
+	public AcidRowDataGatewayRDS(int id) throws DatabaseException {
+		conn = DatabaseManager.getSingleton().getConnection();
+		this.acidID = id;
+		findByID(id);
+	}
+	
+	private void findByID(int id) throws DatabaseException {
+		try {
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Acid WHERE acidID = " + id);
+			ResultSet rs = stmt.executeQuery();
+			rs.next();
+			name = rs.getString("name");
+			inhabits = rs.getString("inhabits");
+			solute = rs.getString("solute");
+		} catch (SQLException e) {
+			throw new DatabaseException("Couldn't find element with that name", e);
+		}
+	}
 	
 	public AcidRowDataGatewayRDS(String name) throws DatabaseException{
 		conn = DatabaseManager.getSingleton().getConnection();
@@ -117,5 +136,9 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 		} catch (SQLException e) {
 			new DatabaseException("could not update acid table");
 		}
+	}
+	
+	public void delete() {
+		
 	}
 }

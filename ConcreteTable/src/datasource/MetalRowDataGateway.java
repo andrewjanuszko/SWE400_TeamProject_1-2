@@ -25,4 +25,8 @@ public interface MetalRowDataGateway {
 	public void setAtomicMass(double d);
 	
 	public void setDissolvedBy(int i);
+	
+	public void persist();
+	
+	public void delete();
 }

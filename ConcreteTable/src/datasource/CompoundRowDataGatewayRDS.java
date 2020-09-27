@@ -32,7 +32,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
-			throw new DatabaseException("Unable to create InteractableItem table", e);
+			throw new DatabaseException("Unable to create compound table", e);
 		}
 	}
 	
@@ -44,6 +44,24 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 	private String inhabits;
 	private List<Integer> madeOf;
 	
+	public CompoundRowDataGatewayRDS(int id) throws DatabaseException {
+		conn = DatabaseManager.getSingleton().getConnection();
+		this.compoundID = id;
+		findByID(id);
+	}
+	
+	private void findByID(int id) throws DatabaseException {
+		try {
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Compound WHERE compoundID = " + id);
+			ResultSet rs = stmt.executeQuery();
+			rs.next();
+			compoundID = rs.getInt("compoundID");
+			inhabits = rs.getString("inhabits");
+		} catch (SQLException e) {
+			throw new DatabaseException("Couldn't find element with that name", e);
+		}
+		
+	}
 	
 	public CompoundRowDataGatewayRDS(String name) throws DatabaseException{
 		conn = DatabaseManager.getSingleton().getConnection();
@@ -60,12 +78,6 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 			inhabits = rs.getString("inhabits");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find element with that name", e);
-		}
-		
-		try {
-			PreparedStatement stmt = conn.prepareStatement("");
-		} catch(SQLException e) {
-			
 		}
 	}
 
@@ -100,4 +112,12 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
     this.inhabits = i;
   }
 
+  public void persist() {
+	  
+  }
+  
+  public void delete() {
+	  
+  }
+  
 }
