@@ -147,7 +147,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	
 	public void delete() {
 		try {
-			PreparedStatement stmt1 = conn.prepareStatement("UPDATE Metal SET acidID = NULL WHERE dissovledBy = " + acidID);
+			PreparedStatement stmt1 = conn.prepareStatement("UPDATE Metal SET dissolvedBy = NULL WHERE dissovledBy = " + acidID);
 			stmt1.execute();
 			PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Acid WHERE acidID = " + acidID);
 			stmt2.execute();

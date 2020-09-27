@@ -11,7 +11,7 @@ import datadto.CompoundMadeOfDTO;
 
 public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDataGateway{
 	
-	Connection conn = DatabaseManager.getSingleton().getConnection();
+	Connection conn;
 	
 	public static void createTable() throws DatabaseException {
 		String drop = "DROP TABLE IF EXISTS CompoundMadeOf";
@@ -40,11 +40,14 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
 		}
 	}
 
+	List<CompoundMadeOfDTO> dtoList = new ArrayList<CompoundMadeOfDTO>();
+	
+	private CompoundMadeOfTableDataGatewayRDS() {
+	}
+	
 	@Override
-	public List<CompoundMadeOfDTO> getCompoundMadeOf(int compoundID) {
-		
-		List<CompoundMadeOfDTO> dtoList = new ArrayList<CompoundMadeOfDTO>();
-		
+	public List<CompoundMadeOfDTO> getCompoundMadeOf(int compoundID) throws DatabaseException {
+		conn = DatabaseManager.getSingleton().getConnection();
 		try {
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM CompoundMadeOf WHERE compoundID = " + compoundID);
 			
@@ -57,6 +60,16 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
 		}
 		
 		return dtoList;
+	}
+	
+	public synchronized void addElementToCompound(int elementID, int compoundID) {
+		dtoList.add(new CompoundMadeOfDTO(compoundID, elementID));
+		try {
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO CompoundMadeOf Values (" + compoundID + ", " + elementID + ");");
+			stmt.execute();
+		}catch(SQLException e) {
+			new DatabaseException("couldn't insert into CompoundMadeOf");
+		}
 	}
 
 }

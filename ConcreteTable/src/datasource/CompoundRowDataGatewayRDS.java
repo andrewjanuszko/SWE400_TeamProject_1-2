@@ -84,6 +84,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 		compoundID = id;
 		this.name = name;
 		this.inhabits = inhabits;
+		this.persist();
 	}
 
   @Override
@@ -101,12 +102,6 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
     return this.inhabits;
   }
   
-  //should we be...
-  @Override
-  public List<Integer> getMadeOf() {
-    return this.madeOf;
-  }
-
   @Override
   public void setName(String n) {
    this.name = n;
