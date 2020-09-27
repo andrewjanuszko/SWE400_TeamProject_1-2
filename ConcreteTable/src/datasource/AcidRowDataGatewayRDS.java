@@ -43,7 +43,6 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	private String name;
 	private String inhabits;
 	private String solute;
-	private List<Integer> dissolves;
 	
 	public AcidRowDataGatewayRDS(int id) throws DatabaseException {
 		conn = DatabaseManager.getSingleton().getConnection();
@@ -87,6 +86,14 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 		} catch(SQLException e) {
 			
 		}
+	}
+	
+	public AcidRowDataGatewayRDS(int id, String name, String inhabits, String solute) {
+		acidID = id;
+		this.name = name;
+		this.inhabits = inhabits;
+		this.solute = solute;
+		this.persist();
 	}
 
 	@Override

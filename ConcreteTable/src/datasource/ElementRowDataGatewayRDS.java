@@ -10,7 +10,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 	public static void createTable() throws DatabaseException{
 		String drop = "DROP TABLE IF EXISTS Element";
 		String create = "CREATE TABLE Element (" + 
-				"elementID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
+				"elementID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + //check later
 				"name VARCHAR(30) NOT NULL, " +                      
 				"inhabits VARCHAR(30), " +
 				"atomicNumer INT NOT NULL, " +
@@ -32,7 +32,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
-			throw new DatabaseException("Unable to create InteractableItem table", e);
+			throw new DatabaseException("Unable to create Element table", e);
 		}
 		
 	}
@@ -85,6 +85,15 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 		}
 	}
 
+	public ElementRowDataGatewayRDS(int id, String name, String inhabits, int atomicNumber, double atomicMass) {
+		elementID = id;
+		this.name = name;
+		this.inhabits = inhabits;
+		this.atomicNumber = atomicNumber;
+		this.atomicMass = atomicMass;
+		this.persist();                //may be an issue
+	}
+	
   @Override
   public int getElementID() {
     return this.elementID;

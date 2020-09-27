@@ -42,7 +42,6 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 	private int compoundID;
 	private String name;
 	private String inhabits;
-	private List<Integer> madeOf;
 	
 	public CompoundRowDataGatewayRDS(int id) throws DatabaseException {
 		conn = DatabaseManager.getSingleton().getConnection();
@@ -79,6 +78,12 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find Compound with that name", e);
 		}
+	}
+	
+	public CompoundRowDataGatewayRDS(int id, String name, String inhabits) {
+		compoundID = id;
+		this.name = name;
+		this.inhabits = inhabits;
 	}
 
   @Override

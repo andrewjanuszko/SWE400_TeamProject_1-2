@@ -99,6 +99,16 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 			throw new DatabaseException("Couldn't find metal with that name", e);
 		}
 	}
+	
+	public MetalRowDataGatewayRDS(int id, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy) {
+		metalID = id;
+		this.name = name;
+		this.inhabits = inhabits;
+		this.atomicNumber = atomicNumber;
+		this.atomicMass = atomicMass;
+		this.dissolvedBy = dissolvedBy;
+		this.persist();
+	}
 
   @Override
   public int getMetalID() {

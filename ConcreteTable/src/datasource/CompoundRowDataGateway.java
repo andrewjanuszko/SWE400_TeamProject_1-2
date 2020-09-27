@@ -10,8 +10,6 @@ public interface CompoundRowDataGateway {
 	
 	public String getInhabits();
 	
-	public List<Integer> getMadeOf();
-	
 	public void setName(String n);
 	
 	public void setInhabits(String i);

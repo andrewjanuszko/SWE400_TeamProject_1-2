@@ -81,6 +81,14 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 			throw new DatabaseException("Couldn't find Base with that name", e);
 		}
 	}
+	
+	public BaseRowDataGatewayRDS(int id, String name, String inhabits, String solute) {
+		baseID = id;
+		this.name = name;
+		this.inhabits = inhabits;
+		this.solute = solute;
+		this.persist();
+	}
 
   @Override
   public int getBaseID() {
