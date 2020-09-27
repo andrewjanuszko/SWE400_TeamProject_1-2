@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,13 +21,17 @@ class TestAcid {
   
   @Test
   void testGetName() throws SQLException, DatabaseException {
-    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS();
+    
+    initialize.dropAllTables();
+    
+    AcidRowDataGateway
         acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
         acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
         acid3 = new AcidRowDataGatewayRDS(3, 6, "acidname3", "acidihabits3"),
         acid1_fetch = new AcidRowDataGatewayRDS(1), acid2_fetch = new AcidRowDataGatewayRDS(2),
         acid3_fetch = new AcidRowDataGatewayRDS(3);
-
+    
     // Testing to see if they still hold values after adding
     assertEquals("acidname1", acid1.getName());
     assertEquals("acidname2", acid2.getName());
@@ -50,13 +55,17 @@ class TestAcid {
   
   @Test
   void testGetInhabits() throws SQLException, DatabaseException {
-    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS();
+    
+    initialize.dropAllTables();
+    
+    AcidRowDataGateway 
         acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
         acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
         acid3 = new AcidRowDataGatewayRDS(3, 6, "acidname3", "acidihabits3"),
         acid1_fetch = new AcidRowDataGatewayRDS(1), acid2_fetch = new AcidRowDataGatewayRDS(2),
         acid3_fetch = new AcidRowDataGatewayRDS(3);
-
+    
     // Testing to see if they still hold values after adding
     assertEquals("acidihabits1", acid1.getInhabits());
     assertEquals("acidihabits2", acid2.getInhabits());
@@ -80,13 +89,17 @@ class TestAcid {
   
   @Test
   void testGetSolute() throws SQLException, DatabaseException {
-    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS();
+    
+    initialize.dropAllTables();
+    
+    AcidRowDataGateway 
         acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
         acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
         acid3 = new AcidRowDataGatewayRDS(3, 6, "acidname3", "acidihabits3"),
         acid1_fetch = new AcidRowDataGatewayRDS(1), acid2_fetch = new AcidRowDataGatewayRDS(2),
         acid3_fetch = new AcidRowDataGatewayRDS(3);
-
+    
     // Testing to see if they still hold values after adding
     assertEquals(2, acid1.getSolute());
     assertEquals(4, acid2.getSolute());
@@ -110,7 +123,11 @@ class TestAcid {
   
   @Test
   void testDelete() {
-    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS();
+    
+    initialize.dropAllTables();
+    
+    AcidRowDataGateway
         acid = new AcidRowDataGatewayRDS(1, 2, "chemname1", "cheminhabits1");
     
     // Ensure it has been added
@@ -129,7 +146,11 @@ class TestAcid {
   
   @Test
   void testUpdate() {
-    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
+    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS();
+    
+    initialize.dropAllTables();
+    
+    AcidRowDataGateway
         acid = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidinhabits1");
     
     // Test solute
@@ -151,5 +172,17 @@ class TestAcid {
     assertEquals("acidinhabits2", acid.getInhabits());
     
     initialize.dropAllTables();
+  }
+  
+  @Test
+  void testGetSet() {
+    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, 15, "acidname1", "acidinhabits1");
+    AcidRowDataGatewayRDS acid2 = new AcidRowDataGatewayRDS(2, 15, "acidname2", "acidinhabits2");
+    
+    List<AcidRowDataGatewayRDS> acidGet = acid2.findSet(15);
+    
+    assertEquals("acidname1", acidGet.get(0).getName());
+    assertEquals("acidname2", acidGet.get(1).getName());
   }
 }

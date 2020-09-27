@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
   int baseId, solute;
@@ -13,7 +15,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    * Constructor to reset base by dropping tables and recreating them.
    */
   public BaseRowDataGatewayRDS() {
-    dropAllTables(); 
+    dropTableBase(); 
     createTable();
   }
   
@@ -28,7 +30,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
         getChem = new String("SELECT * FROM Chemical INNER JOIN Base ON Chemical.chemicalId = " + id + ";");
     
     try {
-      // Get acid information
+      // Get base information
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement(); 
       ResultSet rs = statement.executeQuery(getBase); 
       rs.next(); // Get result 
@@ -49,7 +51,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
   }
   
   /**
-   * AcidRowDataGateway constructor for creating a new base
+   * constructor for creating a new base
    * @param id
    * @param solute
    * @param name
@@ -67,17 +69,17 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
       insertChemical.setString(3, inhabits);
       
       // Insert Base
-      PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
+      PreparedStatement insertBase = DatabaseManager.getSingleton().getConnection()
         .prepareStatement("INSERT INTO Base (baseId, solute)" + "VALUES (?, ?);");
-      insertAcid.setInt(1, id); // Set acid id
-      insertAcid.setInt(2, solute); // set solute id
+      insertBase.setInt(1, id); // Set base id
+      insertBase.setInt(2, solute); // set solute id
       
       insertChemical.execute(); // Insert chemical
-      insertAcid.execute();  // Insert acid
+      insertBase.execute();  // Insert base
       
     } catch(SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Failed to insert acid through constructor");
+      System.out.println("Failed to insert base through constructor");
     }
     
     // Set instance variables
@@ -143,7 +145,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    */
   public void dropAllTables() {
     dropTableBase();
-//    dropTableChemical();
+    dropTableChemical();
   }
   
   /**
@@ -209,19 +211,19 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + " VALUES (?, ?, ?);");
       insertChemical.setInt(1, id);
       insertChemical.setString(2, name);
       insertChemical.setString(3, inhabits);
       
       // Insert Base
-      PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
-        .prepareStatement("INSERT INTO Base (baseId, solute)" + "VALUES (?, ?);");
-      insertAcid.setInt(1, id); // Set acid id
-      insertAcid.setInt(2, solute); // set solute id
+      PreparedStatement insertBase = DatabaseManager.getSingleton().getConnection()
+        .prepareStatement("INSERT INTO Base (baseId, solute)" + " VALUES (?, ?);");
+      insertBase.setInt(1, id); // Set base id
+      insertBase.setInt(2, solute); // set solute id
       
       insertChemical.execute(); // Insert chemical
-      insertAcid.execute();  // Insert acid
+      insertBase.execute();  // Insert base
       
     } catch(SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -233,7 +235,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    */
   public void update() {
     String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inhabits = ? WHERE chemicalID = " + baseId
-        + ";", updateBaseSQL = "UPDATE Base SET baseId = ?, solute = ? WHERE acidId = " + baseId + ";";
+        + ";", updateBaseSQL = "UPDATE Base SET baseId = ?, solute = ? WHERE baseId = " + baseId + ";";
 
     try {
       // Chemical
@@ -245,17 +247,38 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
       chem.execute();
       
       // Base
-      PreparedStatement acid = DatabaseManager.getSingleton().getConnection().prepareStatement(updateBaseSQL);
-      acid.setInt(1, baseId);
-      acid.setInt(2, solute);
+      PreparedStatement base = DatabaseManager.getSingleton().getConnection().prepareStatement(updateBaseSQL);
+      base.setInt(1, baseId);
+      base.setInt(2, solute);
       
-      acid.execute();
+      base.execute();
       
       
     } catch(SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to update base");
     }
+  }
+  
+  /**
+   * Find set 
+   * @param dissolvedById
+   * @return
+   */
+  public static List<BaseRowDataGatewayRDS> findSet(int soluteId) {
+    List<BaseRowDataGatewayRDS> results = new ArrayList<>();
+    try {
+      String sql = "SELECT * FROM Base WHERE solute = "+ soluteId + ";";
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sql);
+      while(rs.next()) {
+        BaseRowDataGatewayRDS soluteIds = new BaseRowDataGatewayRDS(rs.getInt("baseId"));
+          results.add(soluteIds);
+      }
+    } catch (SQLException | DatabaseException e) {
+      //
+    }
+    return results;
   }
   
   /**
@@ -305,5 +328,6 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
   public void setInhabits(String newInhabits) {
     this.inhabits = newInhabits;
   }
+  
 
 }

@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
   private int acidId, solute;
@@ -14,7 +16,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * Delete all tables, and then make them again.
    */
   public AcidRowDataGatewayRDS() {
-    dropAllTables(); // Drop Acid and Chemical table.
+    dropTableAcid(); // Drop Acid and Chemical table.
     createTable(); // re-create Acid and Chemical table.
   }
   
@@ -55,6 +57,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * @param inhabits of acid to isnert
    */
   public AcidRowDataGatewayRDS(int id, int solute, String name, String inhabits) {
+    createTable();
     try {
       // Insert chemical 
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -138,7 +141,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 	 */
 	public void dropAllTables() {
 	  dropTableAcid();
-//	  dropTableChemical();
+	  dropTableChemical();
 	}
 	
 	/**
@@ -305,4 +308,24 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
 
   }
 	
+  /**
+   * Find set 
+   * @param dissolvedById
+   * @return
+   */
+  public static List<AcidRowDataGatewayRDS> findSet(int soluteId) {
+    List<AcidRowDataGatewayRDS> results = new ArrayList<>();
+    try {
+      String sql = "SELECT * FROM Acid WHERE solute = "+ soluteId + ";";
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sql);
+      while(rs.next()) {
+        AcidRowDataGatewayRDS soluteIds = new AcidRowDataGatewayRDS(rs.getInt("acidId"));
+          results.add(soluteIds);
+      }
+    } catch (SQLException | DatabaseException e) {
+      //
+    }
+    return results;
+  }
 }
