@@ -193,7 +193,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 			String selectSQL = "SELECT * FROM Chemical WHERE Chemical.atomicMass BETWEEN ? AND ?;";
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
 			statement.setDouble(1, min);
-			statement.setDouble(1, max);
+			statement.setDouble(2, max);
 			return convertToDTO(statement);
 		} catch(SQLException e) {
 			throw new DatabaseException("Failed to fetch all Elements with atomic mass between '" + min + "' and '" + max + "'.", e);

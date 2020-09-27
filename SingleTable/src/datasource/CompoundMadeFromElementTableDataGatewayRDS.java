@@ -35,8 +35,8 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	public void createTable() throws DatabaseException {
 		String dropTableSQL = "DROP TABLE IF EXISTS CompoundMadeFromElement";
 		String createTableSQL = "CREATE TABLE CompoundMadeFromElement (" +
-								"compoundID LONG NOT NULL, " +
-								"elementID LONG NOT NULL, " +
+								"compoundID INTEGER NOT NULL, " +
+								"elementID INTEGER NOT NULL, " +
 								"FOREIGN KEY (compondID) REFERENCES Chemical(chemicalID), " +
 								"FOREIGN KEY (elementID) REFERENCES Chemical(chemicalID));";
 		try {
@@ -57,14 +57,14 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 * 
 	 * @throws DatabaseException when insertion fails.
 	 */
-	public void createRow(long compoundID, long elementID) throws DatabaseException {
+	public void createRow(int compoundID, int elementID) throws DatabaseException {
 		
 		String insertSQL = "INSERT INTO CompoundMadeFromElement SET compoundID = ?, elementID = ?;";
 		
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertSQL);
-			statement.setLong(1, compoundID);
-			statement.setLong(2, elementID);
+			statement.setInt(1, compoundID);
+			statement.setInt(2, elementID);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new DatabaseException("Failed to create row in CompoundMadeFromElement table.", e);
@@ -75,14 +75,14 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 * @see datasource.CompoundMadeFromElementTableDataGateway#updateRow(long, long).
 	 */
 	@Override
-	public void updateRow(long compoundID, long elementID) throws DatabaseException {
+	public void updateRow(int compoundID, int elementID) throws DatabaseException {
 		
 		String updateSQL = "UPDATE CompoundMadeFromElement SET compoundID = ?, elementID = ?;";		
 		
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateSQL);
-			statement.setLong(1, compoundID);
-			statement.setLong(2, elementID);
+			statement.setInt(1, compoundID);
+			statement.setInt(2, elementID);
 			int count = statement.executeUpdate();
 			
 			if (count == 0) {
@@ -101,7 +101,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 		String selectSQL = "SELECT * FROM CompoundMadeFromElement WHERE compoundID = ?;";	
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-			statement.setLong(1, compoundID);
+			statement.setInt(1, compoundID);
 			ResultSet r = statement.executeQuery();
 			while (r.next()) {
 				resultSet.add(new CompoundMadeFromElementRecordDTO(r.getInt("compoundID"), r.getInt("elementID")));
@@ -119,7 +119,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 		String selectSQL = "SELECT * FROM CompoundMadeFromElement WHERE elementID = ?;";	
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-			statement.setLong(1, elementID);
+			statement.setInt(1, elementID);
 			ResultSet r = statement.executeQuery();
 			while (r.next()) {
 				resultSet.add(new CompoundMadeFromElementRecordDTO(r.getInt("compoundID"), r.getInt("elementID")));

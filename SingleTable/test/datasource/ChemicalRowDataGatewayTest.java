@@ -22,10 +22,10 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 		assertEquals(0, chemicalTable.getType());
 		assertEquals("UnknownChemical", chemicalTable.getName());
 		assertEquals("The Moon", chemicalTable.getInhabits());
-		assertEquals(-1, chemicalTable.getAtomicNumber());
-		assertEquals(-1.0, chemicalTable.getAtomicMass(), 0.001);
-		assertEquals(-1, chemicalTable.getDissolvedBy());
-		assertEquals(-1, chemicalTable.getSolute());
+		assertEquals(0, chemicalTable.getAtomicNumber());
+		assertEquals(0, chemicalTable.getAtomicMass(), 0.001);
+		assertEquals(0, chemicalTable.getDissolvedBy());
+		assertEquals(0, chemicalTable.getSolute());
 		
 		chemicalTable = new ChemicalRowDataGatewayRDS(1, "FunkyChemical", "Mars", 17, 9.810, -1, -1);
 		chemicalTable = new ChemicalRowDataGatewayRDS(2);
@@ -36,8 +36,8 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 		assertEquals("Mars", chemicalTable.getInhabits());
 		assertEquals(17, chemicalTable.getAtomicNumber());
 		assertEquals(9.810, chemicalTable.getAtomicMass(), 0.001);
-		assertEquals(-1, chemicalTable.getDissolvedBy());
-		assertEquals(-1, chemicalTable.getSolute());
+		assertEquals(0, chemicalTable.getDissolvedBy());
+		assertEquals(0, chemicalTable.getSolute());
 	}
 	
 	/**
@@ -56,8 +56,8 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 		assertEquals("Carbon", chemicalTable.getName());
 		assertEquals(6, chemicalTable.getAtomicNumber());
 		assertEquals(12.011, chemicalTable.getAtomicMass(), 0.001);
-		assertEquals(-1, chemicalTable.getDissolvedBy());
-		assertEquals(-1, chemicalTable.getSolute());
+		assertEquals(0, chemicalTable.getDissolvedBy());
+		assertEquals(0, chemicalTable.getSolute());
 		
 		chemicalTable = new ChemicalRowDataGatewayRDS();
 
@@ -106,8 +106,8 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 		assertEquals("Carbon", chemicalTable.getName());
 		assertEquals(6, chemicalTable.getAtomicNumber());
 		assertEquals(12.011, chemicalTable.getAtomicMass(), 0.001);
-		assertEquals(-1, chemicalTable.getDissolvedBy());
-		assertEquals(-1, chemicalTable.getSolute());
+		assertEquals(0, chemicalTable.getDissolvedBy());
+		assertEquals(0, chemicalTable.getSolute());
 		
 		chemicalTable.setName("Carbon-13");
 		chemicalTable.setAtomicMass(13.003);
@@ -119,8 +119,8 @@ class ChemicalRowDataGatewayTest extends DatabaseTest {
 		assertEquals(1, chemicalTable.getType());
 		assertEquals("Carbon-13", chemicalTable.getName());
 		assertEquals(13.003, chemicalTable.getAtomicMass(), 0.001);
-		assertEquals(-1, chemicalTable.getDissolvedBy());
-		assertEquals(-1, chemicalTable.getSolute());
+		assertEquals(0, chemicalTable.getDissolvedBy());
+		assertEquals(0, chemicalTable.getSolute());
 	}
 
 }

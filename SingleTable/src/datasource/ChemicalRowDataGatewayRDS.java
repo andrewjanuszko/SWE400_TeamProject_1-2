@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
+
 
 /**
  * The RDS version of the gateway for Chemical.
@@ -73,11 +75,37 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 			statement.setInt(1, key);
 			statement.setInt(2, type);
 			statement.setString(3, name);
-			statement.setString(4, inhabits);
-			statement.setInt(5, atomicNumber);
-			statement.setDouble(6, atomicMass);
-			statement.setInt(7, dissolvedBy);
-			statement.setInt(8, solute);
+			
+			if (inhabits.isEmpty()) {
+				statement.setNull(5, Types.VARCHAR);
+			} else {
+				statement.setString(4, inhabits);
+			}
+			
+			if (atomicNumber == -1) {  
+				statement.setNull(5, Types.INTEGER);
+			} else {
+				statement.setInt(5, atomicNumber);
+			}
+			
+			if (atomicMass == -1.0) {  
+				statement.setNull(6, Types.DOUBLE);
+			} else {
+				statement.setDouble(6, atomicMass);
+			}
+			
+			if (dissolvedBy == -1) {  
+				statement.setNull(7, Types.INTEGER);
+			} else {
+				statement.setInt(7, dissolvedBy);
+			}
+			
+			if (solute == -1) {  
+				statement.setNull(8, Types.INTEGER);
+			} else {
+				statement.setInt(8, solute);
+			}
+			
 			statement.execute();
 			key = key + 1;
 		} catch(SQLException e) {
@@ -93,14 +121,14 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	private void createTable() throws DatabaseException {
 		String dropTableSQL = "DROP TABLE IF EXISTS Chemical, CompoundMadeFromElement;";
 		String createTableSQL = "CREATE TABLE Chemical(" +
-						   "chemicalID INT NOT NULL," +
-						   "type INT NOT NULL, " +
-						   "name VARCHAR(20)," +
+						   "chemicalID INTEGER NOT NULL," +
+						   "type INTEGER NOT NULL, " +
+						   "name VARCHAR(20) NOT NULL UNIQUE," +
 						   "inhabits VARCHAR(20), " +
-						   "atomicNumber INT, " +
+						   "atomicNumber INTEGER, " +
 						   "atomicMass DOUBLE, " +
-						   "dissolvedBy INT, " +
-						   "solute INT, " +
+						   "dissolvedBy INTEGER, " +
+						   "solute INTEGER, " +
 						   "PRIMARY KEY (chemicalID));";
 		try {
 			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -111,7 +139,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 			statement.executeUpdate(createTableSQL);
 			key = 1;
 		} catch(SQLException e) {
-			throw new DatabaseException("Failed to drop/create table.", e);
+			throw new DatabaseException("Failed to drop/create table. ", e);
 		}
 	}
 	
