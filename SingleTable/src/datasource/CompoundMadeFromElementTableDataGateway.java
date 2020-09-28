@@ -19,6 +19,14 @@ public interface CompoundMadeFromElementTableDataGateway {
 	void updateRow(int compoundID, int elementID) throws DatabaseException;
 	
 	/**
+	 * Create a row
+	 * @param compoundID
+	 * @param elementID
+	 * @throws DatabaseException
+	 */
+	public void createRow(int compoundID, int elementID) throws DatabaseException;
+	
+	/**
 	 * Get all elements that are in a given compound.
 	 * @param compoundID the compound.
 	 * @return a list of all elements in that compound.

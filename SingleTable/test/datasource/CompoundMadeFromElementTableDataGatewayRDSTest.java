@@ -25,26 +25,27 @@ public abstract class CompoundMadeFromElementTableDataGatewayRDSTest extends Dat
 	 */
 	@BeforeEach
 	void fillDatabase() throws DatabaseException {
-		gateway.getSingletonInstance();
-		gateway.createRow(1, 2);
-		gateway.createRow(1, 3);
-		gateway.createRow(1, 4);
-		gateway.createRow(1, 5);
-		gateway.createRow(6, 7);
-		gateway.createRow(6, 8);
-		gateway.createRow(6, 9);
-		gateway.createRow(6, 1);
-		gateway.createRow(11, 2);
-		gateway.createRow(11, 3);
-		gateway.createRow(11, 4);
-		gateway.createRow(11, 5);
+		gateway = getSingletonInstance();
+		ChemicalRowDataGatewayRDS chemicalTable = new ChemicalRowDataGatewayRDS();
+		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);
+		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Oxygen", "Earth", 8, 15.999, -1, -1);
+		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Hydrogen", "Earth", 1, 1.007, -1, -1);
+		chemicalTable = new ChemicalRowDataGatewayRDS(3, "Water", "Earth", -1, -1, -1, -1);
+		chemicalTable = new ChemicalRowDataGatewayRDS(3, "Carbon Monoxide", "Earth", -1, -1, -1, -1);
+		// water is made of hydrogen and oxygen
+		gateway.createRow(4, 2);
+		gateway.createRow(4, 3);
+		// carbon monoxide is made of carbon and oxygen
+		gateway.createRow(5, 1);
+		gateway.createRow(5, 2);
+		// NOTE: might want to make a createRow() that takes in an array
 	}
 	
 	@Test
 	void testGetCompoundsFromElement() throws DatabaseException {
-		ArrayList<CompoundMadeFromElementDTO> compounds = gateway.findCompoundsByElementID(7);
+		ArrayList<CompoundMadeFromElementDTO> compounds = gateway.findCompoundsByElementID(4);
 		CompoundMadeFromElementDTO cmp1 = compounds.get(0);
-		assertEquals(6, cmp1.getCompoundId());
+		assertEquals(4, cmp1.getCompoundId());
 	}
 
 
