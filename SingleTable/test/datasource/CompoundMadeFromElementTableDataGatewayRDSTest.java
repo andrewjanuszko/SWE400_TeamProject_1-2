@@ -50,6 +50,15 @@ public abstract class CompoundMadeFromElementTableDataGatewayRDSTest extends Dat
 //		gateway.resetData();
 //	}
 	
+	@Test
+	public void isASingleton()
+	{
+		CompoundMadeFromElementTableDataGateway x = getSingletonInstance();
+		CompoundMadeFromElementTableDataGateway y = getSingletonInstance();
+		assertSame(x, y);
+		assertNotNull(x);
+	}
+
 	/**
 	 * Tests the  to find a compound by giving an element it is made up of 
 	 * @throws DatabaseException
