@@ -10,7 +10,7 @@ import dataDTO.CompoundMadeFromElementDTO;
 public interface CompoundMadeFromElementTableDataGateway {
 	
 	/**
-	 * Updates a row in a table
+	 * Updates a row in a table.
 	 * @param compoundID the id of the compound.
 	 * @param elementID the id of the element.
 	 * @throws DatabaseException when we cannot connect to the database.
@@ -18,7 +18,7 @@ public interface CompoundMadeFromElementTableDataGateway {
 	public void updateRow(int oldCID, int oldEID, int compoundID, int elementID) throws DatabaseException;
 	
 	/**
-	 * Create a row
+	 * Create a row.
 	 * @param compoundID
 	 * @param elementID
 	 * @throws DatabaseException
@@ -42,10 +42,16 @@ public interface CompoundMadeFromElementTableDataGateway {
 	ArrayList<CompoundMadeFromElementDTO> findCompoundsByElementID(int elementID) throws DatabaseException;
 	
 	/**
-	 * resets the data for testing
+	 * resets the data for testing.
 	 * @throws DatabaseException
 	 */
 	public void resetData() throws DatabaseException;
 	
+	/**
+	 * Delete a row from the TDG.
+	 * @param compoundID
+	 * @param elementID
+	 * @throws DatabaseException
+	 */
 	public void delete(int compoundID, int elementID) throws DatabaseException;
 }

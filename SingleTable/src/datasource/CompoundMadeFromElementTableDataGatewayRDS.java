@@ -137,7 +137,9 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 		}
 		return resultSet;
 	}
-	
+	/**
+	 * Delete a row from the table.
+	 */
 	@Override
 	public void delete(int compoundID, int elementID) throws DatabaseException {
 		String deleteSQL = "DELETE FROM CompoundMadeFromElement WHERE compoundID = ? and elementID = ?;";	
@@ -150,6 +152,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 			throw new DatabaseException("Could not delete compound "+compoundID+" with element "+elementID+".", e);
 		}
 	}
+	
 	/**
 	 * this is for testing only.
 	 * @throws DatabaseException
