@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +26,7 @@ public abstract class CompoundMadeFromElementTableDataGatewayRDSTest extends Dat
 	 */
 	@BeforeEach
 	void fillDatabase() throws DatabaseException {
+		@SuppressWarnings("unused")
 		ChemicalRowDataGatewayRDS chemicalTable = new ChemicalRowDataGatewayRDS();
 		gateway = getSingletonInstance();
 		//Inserting 3 elements to make up the compounds

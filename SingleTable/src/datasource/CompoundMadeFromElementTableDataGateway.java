@@ -1,7 +1,6 @@
 package datasource;
 
 import java.util.ArrayList;
-import dataDTO.ChemicalDTO;
 import dataDTO.CompoundMadeFromElementDTO;
 
 /**

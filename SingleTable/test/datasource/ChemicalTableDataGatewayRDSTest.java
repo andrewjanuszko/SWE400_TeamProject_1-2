@@ -22,6 +22,7 @@ public abstract class ChemicalTableDataGatewayRDSTest extends DatabaseTest {
 	 */
 	@BeforeEach
 	void fillDatabase() throws DatabaseException {
+		@SuppressWarnings("unused")
 		ChemicalRowDataGatewayRDS rowGateway = new ChemicalRowDataGatewayRDS();
 		gateway = getSingletonInstance();
 		
