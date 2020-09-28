@@ -39,7 +39,6 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 * @throws DatabaseException when something goes really wrong.
 	 */
 	private void createTable() throws DatabaseException {
-		System.out.println("TRYING MY BEST");
 		String dropTableSQL = "DROP TABLE IF EXISTS CompoundMadeFromElement";
 		String createTableSQL = "CREATE TABLE CompoundMadeFromElement (" +
 								"compoundID INTEGER NOT NULL, " +
@@ -64,9 +63,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 * @throws DatabaseException when insertion fails.
 	 */
 	public void createRow(int compoundID, int elementID) throws DatabaseException {
-		
 		String insertSQL = "INSERT INTO CompoundMadeFromElement SET compoundID = ?, elementID = ?;";
-		
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertSQL);
 			statement.setInt(1, compoundID);
@@ -82,9 +79,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 */
 	@Override
 	public void updateRow(int compoundID, int elementID) throws DatabaseException {
-		
 		String updateSQL = "UPDATE CompoundMadeFromElement SET compoundID = ?, elementID = ?;";		
-		
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateSQL);
 			statement.setInt(1, compoundID);
