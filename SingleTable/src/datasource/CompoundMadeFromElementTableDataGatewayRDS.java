@@ -41,6 +41,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 * @throws DatabaseException when something goes really wrong.
 	 */
 	private void createTable() throws DatabaseException {
+		System.out.println("TRYING MY BEST");
 		String dropTableSQL = "DROP TABLE IF EXISTS CompoundMadeFromElement";
 		String createTableSQL = "CREATE TABLE CompoundMadeFromElement (" +
 								"compoundID INTEGER NOT NULL, " +
@@ -148,12 +149,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 */
 	@Override
 	public void resetData() throws DatabaseException {
-		String deleteChemicalSQL = "DELETE FROM CompoundMadeFromElement WHERE compoundID = 4 or compoundID = 5;";		
-		try {
-			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteChemicalSQL);
-			statement.execute();
-			
-		} catch (SQLException e) { throw new DatabaseException("oof", e);}
+		singletonInstance = null;
 	}
 		
 }

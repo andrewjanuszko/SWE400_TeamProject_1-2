@@ -45,10 +45,10 @@ public abstract class CompoundMadeFromElementTableDataGatewayRDSTest extends Dat
 		// NOTE: might want to make a createRow() that takes in an array
 	}
 
-//	@AfterEach
-//	void resetTable() throws DatabaseException {
-//		gateway.resetData();
-//	}
+	@AfterEach
+	void resetTable() throws DatabaseException {
+		gateway.resetData();
+	}
 	
 	@Test
 	public void isASingleton()
