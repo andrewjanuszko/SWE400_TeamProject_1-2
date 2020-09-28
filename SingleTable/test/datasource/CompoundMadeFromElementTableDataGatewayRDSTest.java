@@ -84,6 +84,29 @@ public abstract class CompoundMadeFromElementTableDataGatewayRDSTest extends Dat
 		// NOTE: because it is made of two elements it has to rows this might be a problem
 	}
 	
-
+	@Test
+	void testUpdateCompound() throws DatabaseException {
+		ArrayList<CompoundMadeFromElementDTO> compounds = gateway.findCompoundsByElementID(1);
+		assertEquals(5, compounds.get(0).getCompoundId());
+		assertEquals(1, compounds.get(0).getElementId());
+		gateway.updateRow(5, 1, 5, 3);
+		compounds = gateway.findCompoundsByElementID(1);
+		assertEquals(0,compounds.size());
+		compounds = gateway.findCompoundsByElementID(3);
+		assertEquals(5, compounds.get(1).getCompoundId());
+		assertEquals(3, compounds.get(1).getElementId());
+	}
 	
+	@Test
+	void testDelete() throws DatabaseException {
+		ArrayList<CompoundMadeFromElementDTO> compounds = gateway.findCompoundsByElementID(1);
+		assertEquals(5, compounds.get(0).getCompoundId());
+		assertEquals(1, compounds.get(0).getElementId());
+//		ChemicalRowDataGatewayRDS chemicalTable = new ChemicalRowDataGatewayRDS(5);
+//		assertEquals("Carbon Monoxide", chemicalTable.getName());
+//		chemicalTable.delete();
+		gateway.delete(5, 1);
+		compounds = gateway.findCompoundsByElementID(1);
+		assertEquals(0,compounds.size());
+	}
 }

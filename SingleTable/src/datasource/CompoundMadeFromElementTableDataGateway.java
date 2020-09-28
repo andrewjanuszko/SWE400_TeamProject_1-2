@@ -15,7 +15,7 @@ public interface CompoundMadeFromElementTableDataGateway {
 	 * @param elementID the id of the element.
 	 * @throws DatabaseException when we cannot connect to the database.
 	 */
-	void updateRow(int compoundID, int elementID) throws DatabaseException;
+	public void updateRow(int oldCID, int oldEID, int compoundID, int elementID) throws DatabaseException;
 	
 	/**
 	 * Create a row
@@ -46,4 +46,6 @@ public interface CompoundMadeFromElementTableDataGateway {
 	 * @throws DatabaseException
 	 */
 	public void resetData() throws DatabaseException;
+	
+	public void delete(int compoundID, int elementID) throws DatabaseException;
 }

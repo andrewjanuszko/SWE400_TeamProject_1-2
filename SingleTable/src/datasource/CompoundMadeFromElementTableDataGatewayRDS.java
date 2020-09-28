@@ -78,12 +78,14 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 * @see datasource.CompoundMadeFromElementTableDataGateway#updateRow(long, long).
 	 */
 	@Override
-	public void updateRow(int compoundID, int elementID) throws DatabaseException {
-		String updateSQL = "UPDATE CompoundMadeFromElement SET compoundID = ?, elementID = ?;";		
+	public void updateRow(int oldCID, int oldEID, int compoundID, int elementID) throws DatabaseException {
+		String updateSQL = "UPDATE CompoundMadeFromElement SET compoundID = ?, elementID = ? WHERE compoundID = ? and elementID = ?;";		
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateSQL);
 			statement.setInt(1, compoundID);
 			statement.setInt(2, elementID);
+			statement.setInt(3, oldCID);
+			statement.setInt(4, oldEID);
 			int count = statement.executeUpdate();
 			
 			if (count == 0) {
@@ -136,6 +138,18 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 		return resultSet;
 	}
 	
+	@Override
+	public void delete(int compoundID, int elementID) throws DatabaseException {
+		String deleteSQL = "DELETE FROM CompoundMadeFromElement WHERE compoundID = ? and elementID = ?;";	
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteSQL);
+			statement.setInt(1, compoundID);
+			statement.setInt(2, elementID);
+			statement.execute();	
+		} catch (SQLException e) {
+			throw new DatabaseException("Could not delete compound "+compoundID+" with element "+elementID+".", e);
+		}
+	}
 	/**
 	 * this is for testing only.
 	 * @throws DatabaseException
