@@ -45,11 +45,18 @@ public abstract class CompoundMadeFromElementTableDataGatewayRDSTest extends Dat
 		// NOTE: might want to make a createRow() that takes in an array
 	}
 
+	/**
+	 * resets the singleton after every test
+	 * @throws DatabaseException
+	 */
 	@AfterEach
 	void resetTable() throws DatabaseException {
 		gateway.resetData();
 	}
 	
+	/**
+	 * Tests if the gateway is a singleton.
+	 */
 	@Test
 	public void isASingleton()
 	{
@@ -60,7 +67,7 @@ public abstract class CompoundMadeFromElementTableDataGatewayRDSTest extends Dat
 	}
 
 	/**
-	 * Tests the  to find a compound by giving an element it is made up of 
+	 * Tests the ability to find a compound by giving an element it is made up of 
 	 * @throws DatabaseException
 	 */
 	@Test
@@ -84,6 +91,10 @@ public abstract class CompoundMadeFromElementTableDataGatewayRDSTest extends Dat
 		// NOTE: because it is made of two elements it has to rows this might be a problem
 	}
 	
+	/**
+	 * Tests the ability to update a row.
+	 * @throws DatabaseException
+	 */
 	@Test
 	void testUpdateCompound() throws DatabaseException {
 		ArrayList<CompoundMadeFromElementDTO> compounds = gateway.findCompoundsByElementID(1);
@@ -97,14 +108,16 @@ public abstract class CompoundMadeFromElementTableDataGatewayRDSTest extends Dat
 		assertEquals(3, compounds.get(1).getElementId());
 	}
 	
+	/**
+	 * Tests the ability to delete a row.
+	 * @throws DatabaseException
+	 */
 	@Test
 	void testDelete() throws DatabaseException {
 		ArrayList<CompoundMadeFromElementDTO> compounds = gateway.findCompoundsByElementID(1);
 		assertEquals(5, compounds.get(0).getCompoundId());
 		assertEquals(1, compounds.get(0).getElementId());
-//		ChemicalRowDataGatewayRDS chemicalTable = new ChemicalRowDataGatewayRDS(5);
-//		assertEquals("Carbon Monoxide", chemicalTable.getName());
-//		chemicalTable.delete();
+
 		gateway.delete(5, 1);
 		compounds = gateway.findCompoundsByElementID(1);
 		assertEquals(0,compounds.size());
