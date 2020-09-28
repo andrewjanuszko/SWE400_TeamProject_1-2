@@ -1,17 +1,11 @@
 package dataDTO;
 
-public class CompoundMadeFromElementRecordDTO {
+public class CompoundMadeFromElementDTO {
 	
 	private int compoundID;
 	private int elementID;
 	
-	
-	/**
-	 * empty constructor
-	 */
-	public CompoundMadeFromElementRecordDTO() {}
-	
-	public CompoundMadeFromElementRecordDTO(int compoundId, int elementId) {
+	public CompoundMadeFromElementDTO(int compoundId, int elementId) {
 		this.setCompoundId(compoundId);
 		this.setElementId(elementId);
 	}

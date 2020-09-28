@@ -14,11 +14,6 @@ public class ChemicalDTO {
 	private int dissolvedBy;
 	private int solute;
 	
-	/**
-	 * empty constructor 
-	 */
-	public ChemicalDTO () {}
-	
 	public ChemicalDTO(int chemicalID, int type, String name, String inhabits, int atomicNumber, 
 			double atomicMass, int dissolvedBy,int solute) {
 		

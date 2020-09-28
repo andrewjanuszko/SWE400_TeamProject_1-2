@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
-class ChemicalRowDataGatewayTest extends DatabaseTest {
+class ChemicalRowDataGatewayRDSTest extends DatabaseTest {
 	
 	/**
 	 * Test the creation of a table and inserting into it.

@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import dataDTO.ChemicalDTO;
-import dataDTO.CompoundMadeFromElementRecordDTO;
+import dataDTO.CompoundMadeFromElementDTO;
 
 /**
  * The RDS version of the gateway for CompoundMadeFromElement.
@@ -21,23 +21,31 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 * Get the singleton instance of the RDS gateway.
 	 * @return the singleton instance.
 	 */
-	public static synchronized CompoundMadeFromElementTableDataGateway getSingleton() {
+	public static synchronized CompoundMadeFromElementTableDataGateway getSingletonInstance() {
 		if (singletonInstance == null) {
 			singletonInstance = new CompoundMadeFromElementTableDataGatewayRDS();
 		}
 		return singletonInstance;
+	}
+	
+	private CompoundMadeFromElementTableDataGatewayRDS() {
+		try {
+			createTable();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Drop the CompoundMadeFromElement table if it already exists, then recreate it as an empty table.
 	 * @throws DatabaseException when something goes really wrong.
 	 */
-	public void createTable() throws DatabaseException {
+	private void createTable() throws DatabaseException {
 		String dropTableSQL = "DROP TABLE IF EXISTS CompoundMadeFromElement";
 		String createTableSQL = "CREATE TABLE CompoundMadeFromElement (" +
 								"compoundID INTEGER NOT NULL, " +
 								"elementID INTEGER NOT NULL, " +
-								"FOREIGN KEY (compondID) REFERENCES Chemical(chemicalID), " +
+								"FOREIGN KEY (compoundID) REFERENCES Chemical(chemicalID), " +
 								"FOREIGN KEY (elementID) REFERENCES Chemical(chemicalID));";
 		try {
 			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -54,7 +62,6 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 * Creates a new row in the CompoundMadeFromElement table.
 	 * @param compoundID the id of the compound.
 	 * @param elementID the id of the element.
-	 * 
 	 * @throws DatabaseException when insertion fails.
 	 */
 	public void createRow(int compoundID, int elementID) throws DatabaseException {
@@ -92,19 +99,20 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 			throw new DatabaseException("Failed to update row in CompoundMadeFromElement table.", e);
 		}
 	}
-
-
-
+	
+	/**
+	 * @see datasource.CompoundMadeFromElementTableDataGateway#findElementsByCompoundID(int).
+	 */
 	@Override
-	public ArrayList<CompoundMadeFromElementRecordDTO> findElementsByCompoundID(int compoundID) throws DatabaseException {
-		ArrayList<CompoundMadeFromElementRecordDTO> resultSet = new ArrayList<CompoundMadeFromElementRecordDTO>();
+	public ArrayList<CompoundMadeFromElementDTO> findElementsByCompoundID(int compoundID) throws DatabaseException {
+		ArrayList<CompoundMadeFromElementDTO> resultSet = new ArrayList<CompoundMadeFromElementDTO>();
 		String selectSQL = "SELECT * FROM CompoundMadeFromElement WHERE compoundID = ?;";	
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
 			statement.setInt(1, compoundID);
 			ResultSet r = statement.executeQuery();
 			while (r.next()) {
-				resultSet.add(new CompoundMadeFromElementRecordDTO(r.getInt("compoundID"), r.getInt("elementID")));
+				resultSet.add(new CompoundMadeFromElementDTO(r.getInt("compoundID"), r.getInt("elementID")));
 			}
 			
 		} catch (SQLException e) {
@@ -113,16 +121,19 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 		return resultSet;
 	}
 
+	/**
+	 * @see datasource.CompoundMadeFromElementTableDataGateway#findCompoundsByElementID(int).
+	 */
 	@Override
-	public ArrayList<CompoundMadeFromElementRecordDTO> findCompoundsByElementID(int elementID) throws DatabaseException {
-		ArrayList<CompoundMadeFromElementRecordDTO> resultSet = new ArrayList<CompoundMadeFromElementRecordDTO>();
+	public ArrayList<CompoundMadeFromElementDTO> findCompoundsByElementID(int elementID) throws DatabaseException {
+		ArrayList<CompoundMadeFromElementDTO> resultSet = new ArrayList<CompoundMadeFromElementDTO>();
 		String selectSQL = "SELECT * FROM CompoundMadeFromElement WHERE elementID = ?;";	
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
 			statement.setInt(1, elementID);
 			ResultSet r = statement.executeQuery();
 			while (r.next()) {
-				resultSet.add(new CompoundMadeFromElementRecordDTO(r.getInt("compoundID"), r.getInt("elementID")));
+				resultSet.add(new CompoundMadeFromElementDTO(r.getInt("compoundID"), r.getInt("elementID")));
 			}
 			
 		} catch (SQLException e) {

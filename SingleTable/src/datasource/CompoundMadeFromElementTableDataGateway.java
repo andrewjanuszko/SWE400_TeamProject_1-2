@@ -2,7 +2,7 @@ package datasource;
 
 import java.util.ArrayList;
 import dataDTO.ChemicalDTO;
-import dataDTO.CompoundMadeFromElementRecordDTO;
+import dataDTO.CompoundMadeFromElementDTO;
 
 /**
  * A table data gateway.
@@ -24,7 +24,7 @@ public interface CompoundMadeFromElementTableDataGateway {
 	 * @return a list of all elements in that compound.
 	 * @throws DatabaseException if the compound does not exist.
 	 */
-	ArrayList<CompoundMadeFromElementRecordDTO> findElementsByCompoundID(int compoundID) throws DatabaseException;
+	ArrayList<CompoundMadeFromElementDTO> findElementsByCompoundID(int compoundID) throws DatabaseException;
 	
 	/**
 	 * Get all compounds made of a given element.
@@ -32,5 +32,5 @@ public interface CompoundMadeFromElementTableDataGateway {
 	 * @return a list of all compounds made from that element.
 	 * @throws DatabaseException if the element does not exist.
 	 */
-	ArrayList<CompoundMadeFromElementRecordDTO> findCompoundsByElementID(int elementID) throws DatabaseException;
+	ArrayList<CompoundMadeFromElementDTO> findCompoundsByElementID(int elementID) throws DatabaseException;
 }
