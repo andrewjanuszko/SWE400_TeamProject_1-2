@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,15 +44,37 @@ public abstract class CompoundMadeFromElementTableDataGatewayRDSTest extends Dat
 		gateway.createRow(5, 2);
 		// NOTE: might want to make a createRow() that takes in an array
 	}
+
+//	@AfterEach
+//	void resetTable() throws DatabaseException {
+//		gateway.resetData();
+//	}
 	
+	/**
+	 * Tests the  to find a compound by giving an element it is made up of 
+	 * @throws DatabaseException
+	 */
 	@Test
-	void testGetCompoundsFromElement() throws DatabaseException {
-		ArrayList<CompoundMadeFromElementDTO> compounds = gateway.findCompoundsByElementID(4);
-		CompoundMadeFromElementDTO cmp1 = compounds.get(0);
-		assertEquals(4, cmp1.getCompoundId());
+	void testGetCompoundsFromElementID() throws DatabaseException {
+		// finds compounds the are oxygen in them
+		ArrayList<CompoundMadeFromElementDTO> compounds = gateway.findCompoundsByElementID(2);
+		// checks to make sure that both are gotten and that they are correct
+		assertEquals(2, compounds.size());
+		assertEquals(4, compounds.get(0).getCompoundId());
+		assertEquals(5, compounds.get(1).getCompoundId());
 	}
 
-
+	@Test
+	void testGetCompoundFromCompoundID() throws DatabaseException {
+		// finds carbon Monoxide
+		ArrayList<CompoundMadeFromElementDTO> compounds = gateway.findElementsByCompoundID(5);
+		// checks to make sure that both are gotten and that they are correct
+		assertEquals(2, compounds.size());
+		assertEquals(5, compounds.get(0).getCompoundId());
+		assertEquals(5, compounds.get(1).getCompoundId());
+		// NOTE: because it is made of two elements it has to rows this might be a problem
+	}
+	
 
 	
 }

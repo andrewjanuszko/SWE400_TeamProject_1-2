@@ -141,5 +141,20 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 		}
 		return resultSet;
 	}
-
+	
+	/**
+	 * this is for testing only.
+	 * @throws DatabaseException
+	 */
+	@Override
+	public void resetData() throws DatabaseException {
+		String deleteChemicalSQL = "DELETE FROM CompoundMadeFromElement WHERE compoundID = 4 or compoundID = 5;";		
+		try {
+			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteChemicalSQL);
+			statement.execute();
+			
+		} catch (SQLException e) { throw new DatabaseException("oof", e);}
+	}
+		
 }
+

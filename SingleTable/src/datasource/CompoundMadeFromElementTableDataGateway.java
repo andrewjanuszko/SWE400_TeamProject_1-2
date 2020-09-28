@@ -41,4 +41,10 @@ public interface CompoundMadeFromElementTableDataGateway {
 	 * @throws DatabaseException if the element does not exist.
 	 */
 	ArrayList<CompoundMadeFromElementDTO> findCompoundsByElementID(int elementID) throws DatabaseException;
+	
+	/**
+	 * resets the data for testing
+	 * @throws DatabaseException
+	 */
+	public void resetData() throws DatabaseException;
 }
