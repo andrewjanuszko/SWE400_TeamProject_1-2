@@ -25,11 +25,13 @@ public abstract class CompoundMadeFromElementTableDataGatewayRDSTest extends Dat
 	 */
 	@BeforeEach
 	void fillDatabase() throws DatabaseException {
-		gateway = getSingletonInstance();
 		ChemicalRowDataGatewayRDS chemicalTable = new ChemicalRowDataGatewayRDS();
+		gateway = getSingletonInstance();
+		//Inserting 3 elements to make up the compounds
 		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);
 		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Oxygen", "Earth", 8, 15.999, -1, -1);
 		chemicalTable = new ChemicalRowDataGatewayRDS(1, "Hydrogen", "Earth", 1, 1.007, -1, -1);
+		//Inserting 2 compounds
 		chemicalTable = new ChemicalRowDataGatewayRDS(3, "Water", "Earth", -1, -1, -1, -1);
 		chemicalTable = new ChemicalRowDataGatewayRDS(3, "Carbon Monoxide", "Earth", -1, -1, -1, -1);
 		// water is made of hydrogen and oxygen
