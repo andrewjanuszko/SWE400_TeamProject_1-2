@@ -155,6 +155,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * @param name
    * @param inhabits
    */
+  @Override
   public void insert(int id, String name, String inhabits) {
     try {
     // Insert chemical

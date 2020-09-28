@@ -22,4 +22,6 @@ public interface ChemicalRowDataGateway {
   
   public void setInhabits(String newInhabits);
   
+  public void insert(int id, String name, String inhabits);
+  
 }

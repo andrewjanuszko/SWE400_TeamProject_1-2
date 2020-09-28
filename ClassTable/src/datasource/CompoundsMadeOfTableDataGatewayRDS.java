@@ -17,6 +17,27 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   private String name;
   private String inhabits;
 
+  public CompoundsMadeOfTableDataGatewayRDS(int compoundId, int elementId, String name, String inhabits) {
+    try {
+      PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+      insertChemical.setInt(1, compoundId);
+      insertChemical.setString(2, name);
+      insertChemical.setString(3, inhabits);
+      PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO CompoundMadeFromElement (compoundId, elementId)" + "VALUES (?, ?);");
+      insert.setInt(1, compoundId); // Set compoundId
+      insert.setInt(2, elementId); // Set elementId
+
+      insert.execute(); // Insert into table
+
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Failed to insert compoundmadeof");
+    }
+
+  }
+
   public CompoundsMadeOfTableDataGatewayRDS() {
     this.dropTableCompoundMadeFromElement();
     this.createTableDataMadeOf();
@@ -25,22 +46,22 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   public CompoundsMadeOfTableDataGatewayRDS(int compoundId) {
     this.createTableDataMadeOf();
     this.compoundId = compoundId;
-    String sqlChem = "SELECT * FROM Chemical INNER JOIN Metal ON CompoundMadeFromElement.compoundId = " + compoundId
+    String sqlChem = "SELECT * FROM Chemical INNER JOIN CompoundMadeFromElement ON Chemical.chemicalId = " + compoundId
         + ";";
     String sqlElement = "SELECT * FROM CompoundMadeFromElement where compoundId = " + compoundId + ";";
     try {
 
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sqlElement);
+      ResultSet rs = statement.executeQuery(sqlChem);
 
+      if (rs.next()) {
+        this.name = rs.getString("name");
+        this.inhabits = rs.getString("inhabits");
+      }
+      rs = statement.executeQuery(sqlElement);
       while (rs.next()) {
         elementId.add(rs.getInt("elementId"));
       }
-
-      rs = statement.executeQuery(sqlChem);
-      rs.next();
-      this.name = rs.getString("name");
-      this.inhabits = rs.getString("inhabits");
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -142,6 +163,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   @Override
   public void insert(int compoundId, int elementId) {
     try {
+
       PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO CompoundMadeFromElement (compoundId, elementId)" + "VALUES (?, ?);");
       insert.setInt(1, compoundId); // Set compoundId
