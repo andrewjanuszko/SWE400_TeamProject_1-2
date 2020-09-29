@@ -50,7 +50,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 				listDTO.add(chemical);
 			}
 		} catch(SQLException e) {
-			throw new DatabaseException("Failed to load Chemicals.", e);
+			throw new DatabaseException("Failed to convert query to DTO.", e);
 		}
 		return listDTO;
 	}
