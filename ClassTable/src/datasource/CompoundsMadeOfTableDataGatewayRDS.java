@@ -9,68 +9,69 @@ import java.util.List;
 
 public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableDataGateway {
 
-  /**
-   * Create tables for CompoundMadeFromElement
-   */
   private int compoundId;
-  private List<Integer> elementId;
+  private List<Integer> madeOf; // Element ids
   private String name;
   private String inhabits;
-
-  public CompoundsMadeOfTableDataGatewayRDS(int compoundId, int elementId, String name, String inhabits) {
+  
+  public CompoundsMadeOfTableDataGatewayRDS(int compoundId, List<Integer> madeOf, String name, String inhabits) {
+    createTableCompoundMadeFrom();
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+        .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
       insertChemical.setInt(1, compoundId);
       insertChemical.setString(2, name);
       insertChemical.setString(3, inhabits);
-      PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO CompoundMadeFromElement (compoundId, elementId)" + "VALUES (?, ?);");
-      insert.setInt(1, compoundId); // Set compoundId
-      insert.setInt(2, elementId); // Set elementId
-
-      insert.execute(); // Insert into table
-
+      
+      insertChemical.execute();
+      
+      for(int i = 0; i < madeOf.size(); i++) {
+        PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
+            .prepareStatement("INSERT INTO CompoundMadeFromElement (compoundId, elementId)" + "VALUES (?, ?);");
+        
+        insert.setInt(1, compoundId);
+        insert.setInt(2, madeOf.get(i));
+        insert.execute();
+      }
+      
+      this.compoundId = compoundId;
+      this.madeOf = madeOf;
+      this.name = name;
+      this.inhabits = inhabits; 
+      
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Failed to insert compoundmadeof");
+      System.out.println("Problem inserting CompoundsMadeOfTableDataGatewayRDS");
     }
-
   }
 
   public CompoundsMadeOfTableDataGatewayRDS() {
     this.dropTableCompoundMadeFromElement();
-    this.createTableDataMadeOf();
+    this.createTableCompoundMadeFrom();
   }
-
+  
   public CompoundsMadeOfTableDataGatewayRDS(int compoundId) {
-    this.createTableDataMadeOf();
-    this.compoundId = compoundId;
-    String sqlChem = "SELECT * FROM Chemical INNER JOIN CompoundMadeFromElement ON Chemical.chemicalId = " + compoundId
-        + ";";
-    String sqlElement = "SELECT * FROM CompoundMadeFromElement where compoundId = " + compoundId + ";";
+    this.createTableCompoundMadeFrom();
+    String sql = "SELECT * FROM Chemical WHERE chemicalId = "
+        + compoundId + ";"; 
+    
     try {
-
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sqlChem);
-
-      if (rs.next()) {
-        this.name = rs.getString("name");
-        this.inhabits = rs.getString("inhabits");
-      }
-      rs = statement.executeQuery(sqlElement);
-      while (rs.next()) {
-        elementId.add(rs.getInt("elementId"));
-      }
-
+      ResultSet rs = statement.executeQuery(sql);
+      
+      rs.next();
+      
+      this.name = rs.getString("name");
+      this.inhabits = rs.getString("inhabits");
+      this.compoundId = compoundId;
+      
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("No entry with id " + compoundId);
     }
   }
 
   @Override
-  public void createTableDataMadeOf() {
+  public void createTableCompoundMadeFrom() {
     String createTable = "CREATE TABLE IF NOT EXISTS CompoundMadeFromElement(" + "compoundId INT NOT NULL, "
         + "elementId INT NOT NULL, " + "FOREIGN KEY (compoundId) REFERENCES Chemical(chemicalId), "
         + "FOREIGN KEY (elementId) REFERENCES Element(elementId));";

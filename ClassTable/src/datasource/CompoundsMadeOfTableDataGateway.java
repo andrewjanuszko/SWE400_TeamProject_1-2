@@ -6,7 +6,7 @@ public interface CompoundsMadeOfTableDataGateway {
   
   void insert(int compoundId, int elementId);
   
-  void createTableDataMadeOf(); 
+  void createTableCompoundMadeFrom(); 
   
   String getCompoundName();
   
