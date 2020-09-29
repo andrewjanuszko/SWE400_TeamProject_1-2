@@ -1,35 +1,34 @@
 package dataDTO;
 
-public class CompoundMadeFromElementDTO {
+public final class CompoundMadeFromElementDTO {
 	
-	private int compoundID;
-	private int elementID;
+	private final int compoundID;
+	private final int elementID;
 	
 	public CompoundMadeFromElementDTO(int compoundId, int elementId) {
-		this.setCompoundId(compoundId);
-		this.setElementId(elementId);
+		
+		this.compoundID = compoundId;
+		this.elementID = elementId;
 	}
 
 	/**
-	 * getter for a compound's ID
+	 * getter for a compound's ID.
 	 * @return compoundId
 	 */
 	public int getCompoundId() {
 		return compoundID;
 	}
 
-	public void setCompoundId(int compoundId) {
-		this.compoundID = compoundId;
-	}
 
+	/**
+	 * getter for a compound's elementID.
+	 * @return
+	 */
 	public int getElementId() {
 		return elementID;
 	}
 
-	public void setElementId(int elementId) {
-		this.elementID = elementId;
-	}
-	
+
 	
 	
 	
