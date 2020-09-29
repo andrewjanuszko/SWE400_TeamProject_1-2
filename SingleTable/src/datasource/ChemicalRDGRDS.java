@@ -11,7 +11,7 @@ import java.sql.Types;
  * The RDS version of the gateway for Chemical.
  * @author andrewjanuszko
  */
-public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
+public class ChemicalRDGRDS implements ChemicalRDG {
 	
 	private int chemicalID;
 	private int type;
@@ -28,7 +28,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * Constructor for creating the table in the database.
 	 * @throws DatabaseException when things go wrong.
 	 */
-	public ChemicalRowDataGatewayRDS() throws DatabaseException{
+	public ChemicalRDGRDS() throws DatabaseException{
 		createTable();
 	}
 	
@@ -37,7 +37,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @param chemicalID the ID of the Chemical.
 	 * @throws DatabaseException when things go wrong.
 	 */
-	public ChemicalRowDataGatewayRDS(int chemicalID) throws DatabaseException {
+	public ChemicalRDGRDS(int chemicalID) throws DatabaseException {
 		String findChemicalSQL = "SELECT * FROM Chemical WHERE chemicalID = ?;";
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(findChemicalSQL);
@@ -68,7 +68,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @param solute the Acid or Base that the Chemical dissolves in.
 	 * @throws DatabaseException when things go wrong.
 	 */
-	public ChemicalRowDataGatewayRDS(int type, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy, int solute) throws DatabaseException {
+	public ChemicalRDGRDS(int type, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy, int solute) throws DatabaseException {
 		String insertChemicalSQL = "INSERT INTO Chemical SET chemicalID = ?, type = ?, name = ?, inhabits = ?, atomicNumber = ?, atomicMass = ?, dissolvedBy = ?, solute = ?;";
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertChemicalSQL);
@@ -124,7 +124,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 						   "chemicalID INTEGER NOT NULL," +
 						   "type INTEGER NOT NULL, " +
 						   "name VARCHAR(20) NOT NULL UNIQUE," +
-						   "inhabits VARCHAR(20), " +
+						   "inhabits VARCHAR(20) NOT NULL, " +
 						   "atomicNumber INTEGER, " +
 						   "atomicMass DOUBLE, " +
 						   "dissolvedBy INTEGER, " +

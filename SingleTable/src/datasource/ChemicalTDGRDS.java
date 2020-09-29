@@ -10,18 +10,18 @@ import java.util.ArrayList;
  * Implements a ChemicalTableDataGateway.
  * @author andrewjanuszko
  */
-public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
+public class ChemicalTDGRDS implements ChemicalTDG {
 	
-	private static ChemicalTableDataGateway singletonInstance;
+	private static ChemicalTDG singletonInstance;
 	
 	/**
 	 * Retrieves a Singleton instance of ChemicalTableDataGateway.
 	 * Creates a new one if it does not exist.
 	 * @return a Singleton instance of ChemicalTableDataGateway.
 	 */
-	public static synchronized ChemicalTableDataGateway getSingletonInstance() {
+	public static synchronized ChemicalTDG getSingletonInstance() {
 		if(singletonInstance == null) {
-			singletonInstance = new ChemicalTableDataGatewayRDS();
+			singletonInstance = new ChemicalTDGRDS();
 		}
 		return singletonInstance;
 	}

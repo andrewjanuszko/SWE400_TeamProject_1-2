@@ -6,7 +6,6 @@ package dataENUM;
  */
 public enum ChemicalEnum {
 
-	CHEMICAL (00),
 	ELEMENT (01),
 	METAL (02),
 	COMPOUND (03),

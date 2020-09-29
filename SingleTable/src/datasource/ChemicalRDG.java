@@ -4,7 +4,7 @@ package datasource;
  * Interface for a ChemicalRowDataGateway
  * @author andrewjanuszko
  */
-public interface ChemicalRowDataGateway {
+public interface ChemicalRDG {
 	
 	/**
 	 * Deletes an instance of a Chemical from the table.

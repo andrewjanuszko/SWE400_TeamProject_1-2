@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Table Data Gateway for Chemical.
  * @author andrewjanuszko
  */
-public interface ChemicalTableDataGateway {
+public interface ChemicalTDG {
 
 	/**
 	 * Fetch all Chemicals.

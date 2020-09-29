@@ -33,7 +33,7 @@ public final class CompoundDTO {
 	 * Return the Elements in the Compound.
 	 * @return the Elements in the Compound.
 	 */
-	public ArrayList<Integer> getMadeOfElements() {
+	public ArrayList<Integer> madeOf() {
 		return this.elements;
 	}
 

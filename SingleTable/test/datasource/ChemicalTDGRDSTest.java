@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import dataDTO.ChemicalDTO;
 
-public abstract class ChemicalTableDataGatewayRDSTest extends DatabaseTest {
+public abstract class ChemicalTDGRDSTest extends DatabaseTest {
 
-	protected ChemicalTableDataGateway gateway;
+	protected ChemicalTDG gateway;
 	
 
-	protected abstract ChemicalTableDataGateway getSingletonInstance();
+	protected abstract ChemicalTDG getSingletonInstance();
 	
 	/**
 	 * Fills the database with entries to test on.
@@ -23,44 +23,44 @@ public abstract class ChemicalTableDataGatewayRDSTest extends DatabaseTest {
 	@BeforeEach
 	void fillDatabase() throws DatabaseException {
 		@SuppressWarnings("unused")
-		ChemicalRowDataGatewayRDS rowGateway = new ChemicalRowDataGatewayRDS();
+		ChemicalRDGRDS rowGateway = new ChemicalRDGRDS();
 		gateway = getSingletonInstance();
 		
 		// Inserts 4 Chemicals.
-		rowGateway = new ChemicalRowDataGatewayRDS(0, "FunkyChemical", "Mars", -1, -1, -1, -1);
-		rowGateway = new ChemicalRowDataGatewayRDS(0, "UnknownChemical", "Jupiter", -1, -1, -1, -1);
-		rowGateway = new ChemicalRowDataGatewayRDS(0, "SpicyChemical", "Mercury", -1, -1, -1, -1);
-		rowGateway = new ChemicalRowDataGatewayRDS(0, "SmellyChemical", "Venus", -1, -1, -1, -1);
+		rowGateway = new ChemicalRDGRDS(0, "FunkyChemical", "Mars", -1, -1, -1, -1);
+		rowGateway = new ChemicalRDGRDS(0, "UnknownChemical", "Jupiter", -1, -1, -1, -1);
+		rowGateway = new ChemicalRDGRDS(0, "SpicyChemical", "Mercury", -1, -1, -1, -1);
+		rowGateway = new ChemicalRDGRDS(0, "SmellyChemical", "Venus", -1, -1, -1, -1);
 		
 		//Inserts 4 Elements.
-		rowGateway = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);
-		rowGateway = new ChemicalRowDataGatewayRDS(1, "Hydrogen", "Earth", 1, 1.008, -1, -1);
-		rowGateway = new ChemicalRowDataGatewayRDS(1, "Oxygen", "Earth", 8, 15.999, -1, -1);
-		rowGateway = new ChemicalRowDataGatewayRDS(1, "Nitrogen", "Earth", 7, 14.006, -1, -1);
+		rowGateway = new ChemicalRDGRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);
+		rowGateway = new ChemicalRDGRDS(1, "Hydrogen", "Earth", 1, 1.008, -1, -1);
+		rowGateway = new ChemicalRDGRDS(1, "Oxygen", "Earth", 8, 15.999, -1, -1);
+		rowGateway = new ChemicalRDGRDS(1, "Nitrogen", "Earth", 7, 14.006, -1, -1);
 		
 		//Inserts 4 Metals.
-		rowGateway = new ChemicalRowDataGatewayRDS(2, "Copper", "Earth", 29, 63.546, 10, -1);
-		rowGateway = new ChemicalRowDataGatewayRDS(2, "Chromium", "Earth", 24, 51.996, 20, -1);
-		rowGateway = new ChemicalRowDataGatewayRDS(2, "Zinc", "Earth", 30, 65.380, 30, -1);
-		rowGateway = new ChemicalRowDataGatewayRDS(2, "Gold", "Earth", 79, 196.966, 40, -1);
+		rowGateway = new ChemicalRDGRDS(2, "Copper", "Earth", 29, 63.546, 10, -1);
+		rowGateway = new ChemicalRDGRDS(2, "Chromium", "Earth", 24, 51.996, 20, -1);
+		rowGateway = new ChemicalRDGRDS(2, "Zinc", "Earth", 30, 65.380, 30, -1);
+		rowGateway = new ChemicalRDGRDS(2, "Gold", "Earth", 79, 196.966, 40, -1);
 		
 		//Inserts 4 Compounds
-		rowGateway = new ChemicalRowDataGatewayRDS(3, "Glucose", "Earth", -1, -1, -1, -1);
-		rowGateway = new ChemicalRowDataGatewayRDS(3, "Water", "Earth", -1, -1, -1, -1);
-		rowGateway = new ChemicalRowDataGatewayRDS(3, "Carbon Dioxide", "Earth", -1, -1, -1, -1);
-		rowGateway = new ChemicalRowDataGatewayRDS(3, "Methane", "Earth", -1, -1, -1, -1);
+		rowGateway = new ChemicalRDGRDS(3, "Glucose", "Earth", -1, -1, -1, -1);
+		rowGateway = new ChemicalRDGRDS(3, "Water", "Earth", -1, -1, -1, -1);
+		rowGateway = new ChemicalRDGRDS(3, "Carbon Dioxide", "Earth", -1, -1, -1, -1);
+		rowGateway = new ChemicalRDGRDS(3, "Methane", "Earth", -1, -1, -1, -1);
 		
 		//Inserts 4 Bases
-		rowGateway = new ChemicalRowDataGatewayRDS(4, "Potassium hydroxide", "Earth", -1, -1, -1, 50);
-		rowGateway = new ChemicalRowDataGatewayRDS(4, "Lithium hydroxide", "Jupiter", -1, -1, -1, 60);
-		rowGateway = new ChemicalRowDataGatewayRDS(4, "Calcium hydroxide", "Mercury", -1, -1, -1, 70);
-		rowGateway = new ChemicalRowDataGatewayRDS(4, "Strontium hydroxide", "Venus", -1, -1, -1, 20);
+		rowGateway = new ChemicalRDGRDS(4, "Potassium hydroxide", "Earth", -1, -1, -1, 50);
+		rowGateway = new ChemicalRDGRDS(4, "Lithium hydroxide", "Jupiter", -1, -1, -1, 60);
+		rowGateway = new ChemicalRDGRDS(4, "Calcium hydroxide", "Mercury", -1, -1, -1, 70);
+		rowGateway = new ChemicalRDGRDS(4, "Strontium hydroxide", "Venus", -1, -1, -1, 20);
 		
 		//Inserts 4 Acids
-		rowGateway = new ChemicalRowDataGatewayRDS(5, "Hydrochloric acid", "Earth", -1, -1, -1, 50);
-		rowGateway = new ChemicalRowDataGatewayRDS(5, "Sulfuric acid", "Jupiter", -1, -1, -1, 60);
-		rowGateway = new ChemicalRowDataGatewayRDS(5, "Acetic acid", "Mercury", -1, -1, -1, 70);
-		rowGateway = new ChemicalRowDataGatewayRDS(5, "Oxalic Acid", "Venus", -1, -1, -1, 20);
+		rowGateway = new ChemicalRDGRDS(5, "Hydrochloric acid", "Earth", -1, -1, -1, 50);
+		rowGateway = new ChemicalRDGRDS(5, "Sulfuric acid", "Jupiter", -1, -1, -1, 60);
+		rowGateway = new ChemicalRDGRDS(5, "Acetic acid", "Mercury", -1, -1, -1, 70);
+		rowGateway = new ChemicalRDGRDS(5, "Oxalic Acid", "Venus", -1, -1, -1, 20);
 	}
 
 	/**

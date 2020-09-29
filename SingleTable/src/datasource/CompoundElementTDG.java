@@ -1,13 +1,13 @@
 package datasource;
 
 import dataDTO.CompoundDTO;
-import dataDTO.ElementInCompoundsDTO;
+import dataDTO.ElementDTO;
 
 /**
  * A table data gateway.
  * @author andrewjanuszko
  */
-public interface CompoundMadeFromElementTableDataGateway {
+public interface CompoundElementTDG {
 	
 	/**
 	 * Updates a row in a table.
@@ -45,7 +45,7 @@ public interface CompoundMadeFromElementTableDataGateway {
 	 * @return
 	 * @throws DatabaseException
 	 */
-	public ElementInCompoundsDTO findCompoundsByElementID(int elementID) throws DatabaseException;
+	public ElementDTO findCompoundsByElementID(int elementID) throws DatabaseException;
 	
 	/**
 	 * 
