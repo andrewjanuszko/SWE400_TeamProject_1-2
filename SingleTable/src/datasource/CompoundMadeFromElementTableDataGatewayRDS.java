@@ -94,7 +94,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	}
 	
 	/**
-	 * 
+	 * converts a query to a compoundDTO.
 	 * @param statement
 	 * @return
 	 * @throws DatabaseException
@@ -115,6 +115,9 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 		return new CompoundDTO(compoundID, elementIDs);
 	}
 	
+	/**
+	 * @see datasource.findElementsByCompoundID(int compoundID).
+	 */
 	@Override
 	public CompoundDTO findElementsByCompoundID(int compoundID) throws DatabaseException {
 		try {
@@ -128,7 +131,7 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	}
 
 	/**
-	 * 
+	 *  converts a query to a elementInCompoundDTO
 	 * @param statement
 	 * @return
 	 * @throws DatabaseException
@@ -149,6 +152,9 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 		return new ElementInCompoundsDTO(elementID, compoundIDs);
 	}
 	
+	/**
+	* @see datasource.findCompoundsByElementID(int elementID).
+	*/
 	@Override
 	public ElementInCompoundsDTO findCompoundsByElementID(int elementID) throws DatabaseException {
 		try {
