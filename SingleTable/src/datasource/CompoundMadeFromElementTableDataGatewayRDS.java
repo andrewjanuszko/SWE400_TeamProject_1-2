@@ -18,20 +18,19 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	/**
 	 * Get the singleton instance of the RDS gateway.
 	 * @return the singleton instance.
-	 * @throws DatabaseException 
 	 */
-	public static synchronized CompoundMadeFromElementTableDataGateway getSingletonInstance() throws DatabaseException {
+	public static synchronized CompoundMadeFromElementTableDataGateway getSingletonInstance() {
 		if (singletonInstance == null) {
 			singletonInstance = new CompoundMadeFromElementTableDataGatewayRDS();
 		}
 		return singletonInstance;
 	}
 	
-	private CompoundMadeFromElementTableDataGatewayRDS() throws DatabaseException {
+	private CompoundMadeFromElementTableDataGatewayRDS() {
 		try {
 			createTable();
 		} catch (DatabaseException e) {
-			throw new DatabaseException("Failed to create.", e);
+			e.printStackTrace();
 		}
 	}
 
