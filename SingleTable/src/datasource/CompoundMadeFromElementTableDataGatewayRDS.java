@@ -5,7 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import dataDTO.CompoundMadeFromElementDTO;
+import dataDTO.CompoundDTO;
+import dataDTO.ElementInCompoundsDTO;
 
 /**
  * The RDS version of the gateway for CompoundMadeFromElement.
@@ -78,65 +79,88 @@ public class CompoundMadeFromElementTableDataGatewayRDS implements CompoundMadeF
 	 * @see datasource.CompoundMadeFromElementTableDataGateway#updateRow(long, long).
 	 */
 	@Override
-	public void updateRow(int oldCID, int oldEID, int compoundID, int elementID) throws DatabaseException {
+	public void updateRow(int oldCompoundID, int oldElementID, int newCompoundID, int newElementID) throws DatabaseException {
 		String updateSQL = "UPDATE CompoundMadeFromElement SET compoundID = ?, elementID = ? WHERE compoundID = ? and elementID = ?;";		
 		try {
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateSQL);
-			statement.setInt(1, compoundID);
-			statement.setInt(2, elementID);
-			statement.setInt(3, oldCID);
-			statement.setInt(4, oldEID);
-			int count = statement.executeUpdate();
-			
-			if (count == 0) {
-				this.createRow(compoundID, elementID);
-			}
+			statement.setInt(1, newCompoundID);
+			statement.setInt(2, newElementID);
+			statement.setInt(3, oldCompoundID);
+			statement.setInt(4, oldElementID);
+			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new DatabaseException("Failed to update row in CompoundMadeFromElement table.", e);
 		}
 	}
 	
 	/**
-	 * @see datasource.CompoundMadeFromElementTableDataGateway#findElementsByCompoundID(int).
+	 * 
+	 * @param statement
+	 * @return
+	 * @throws DatabaseException
 	 */
-	@Override
-	public ArrayList<CompoundMadeFromElementDTO> findElementsByCompoundID(int compoundID) throws DatabaseException {
-		ArrayList<CompoundMadeFromElementDTO> resultSet = new ArrayList<CompoundMadeFromElementDTO>();
-		String selectSQL = "SELECT * FROM CompoundMadeFromElement WHERE compoundID = ?;";	
+	private CompoundDTO convertToCDTO(PreparedStatement statement) throws DatabaseException {
+		ArrayList<Integer> elementIDs = new ArrayList<Integer>();
+		int compoundID = 0;
 		try {
+			ResultSet results = statement.executeQuery();
+			while (results.next()) {
+				compoundID = results.getInt("compoundID");
+				int elementID = results.getInt("elementID");
+				elementIDs.add(elementID);
+			}
+		} catch(SQLException e) {
+			throw new DatabaseException("Failed to convert query to DTO.", e);
+		}
+		return new CompoundDTO(compoundID, elementIDs);
+	}
+	
+	@Override
+	public CompoundDTO findElementsByCompoundID(int compoundID) throws DatabaseException {
+		try {
+			String selectSQL = "SELECT * FROM CompoundMadeFromElement WHERE compoundID = ? ORDER BY elementID ASC;";
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
 			statement.setInt(1, compoundID);
-			ResultSet r = statement.executeQuery();
-			while (r.next()) {
-				resultSet.add(new CompoundMadeFromElementDTO(r.getInt("compoundID"), r.getInt("elementID")));
-			}
-			
-		} catch (SQLException e) {
-			throw new DatabaseException("Compound with compoundID = " + compoundID + " cannot be found.", e);
+			return convertToCDTO(statement);
+		} catch(SQLException e) {
+			throw new DatabaseException("Failed to convert query to DTO.", e);
 		}
-		return resultSet;
 	}
 
 	/**
-	 * @see datasource.CompoundMadeFromElementTableDataGateway#findCompoundsByElementID(int).
+	 * 
+	 * @param statement
+	 * @return
+	 * @throws DatabaseException
 	 */
-	@Override
-	public ArrayList<CompoundMadeFromElementDTO> findCompoundsByElementID(int elementID) throws DatabaseException {
-		ArrayList<CompoundMadeFromElementDTO> resultSet = new ArrayList<CompoundMadeFromElementDTO>();
-		String selectSQL = "SELECT * FROM CompoundMadeFromElement WHERE elementID = ?;";	
+	private ElementInCompoundsDTO convertToEICDTO(PreparedStatement statement) throws DatabaseException {
+		ArrayList<Integer> compoundIDs = new ArrayList<Integer>();
+		int elementID = 0;
 		try {
+			ResultSet results = statement.executeQuery();
+			while (results.next()) {
+				elementID = results.getInt("elementID");
+				int compoundID = results.getInt("compoundID");
+				compoundIDs.add(compoundID);
+			}
+		} catch(SQLException e) {
+			throw new DatabaseException("Failed to convert query to DTO.", e);
+		}
+		return new ElementInCompoundsDTO(elementID, compoundIDs);
+	}
+	
+	@Override
+	public ElementInCompoundsDTO findCompoundsByElementID(int elementID) throws DatabaseException {
+		try {
+			String selectSQL = "SELECT * FROM CompoundMadeFromElement WHERE elementID = ? ORDER BY compoundID ASC;";
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
 			statement.setInt(1, elementID);
-			ResultSet r = statement.executeQuery();
-			while (r.next()) {
-				resultSet.add(new CompoundMadeFromElementDTO(r.getInt("compoundID"), r.getInt("elementID")));
-			}
-			
-		} catch (SQLException e) {
-			throw new DatabaseException("Compound made with elementID = " + elementID + " cannot be found.", e);
+			return convertToEICDTO(statement);
+		} catch(SQLException e) {
+			throw new DatabaseException("Failed to convert query to DTO.", e);
 		}
-		return resultSet;
 	}
+	
 	/**
 	 * Delete a row from the table.
 	 */
