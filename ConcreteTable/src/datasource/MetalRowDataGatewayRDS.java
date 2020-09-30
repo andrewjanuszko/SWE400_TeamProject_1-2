@@ -191,5 +191,13 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 			new DatabaseException("couldn't delete metal");
 	  }
   }
-	  
+	
+  private void insert() {
+		try {
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Metal(metalID, name, inhabits, atomicNumber, atomicMass, dissolvedBy) VALUES (" + metalID + ", " + name + ", " + inhabits + ", " + atomicNumber + ", " + atomicMass + ", " + dissolvedBy +");");
+			stmt.execute();
+		} catch(SQLException e) {
+			new DatabaseException("could not insert into Metal table");
+		}
+	}
 }

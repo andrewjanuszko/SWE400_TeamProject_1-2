@@ -84,7 +84,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 		compoundID = id;
 		this.name = name;
 		this.inhabits = inhabits;
-		this.persist();
+		insert();
 	}
 
   @Override
@@ -128,5 +128,12 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
   		return false;
   	}
   }
-  
+  private void insert() {
+		try {
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Acid(acidID, name, inhabits) VALUES (" + compoundID + ", " + name + ", " + inhabits + ");");
+			stmt.execute();
+		} catch(SQLException e) {
+			new DatabaseException("could not insert into compound table");
+		}
+	}
 }

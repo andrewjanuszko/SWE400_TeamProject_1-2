@@ -91,7 +91,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 		this.inhabits = inhabits;
 		this.atomicNumber = atomicNumber;
 		this.atomicMass = atomicMass;
-		this.persist();                //may be an issue
+		insert();
 	}
 	
   @Override
@@ -167,4 +167,12 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 			new DatabaseException("could not delete Element");
 		}
   }
+  private void insert() {
+		try {
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Element(elementID, name, inhabits, atomicNumber, atomicMass) VALUES (" + elementID + ", " + name + ", " + inhabits + ", " + atomicNumber + ", " + atomicMass + ");");
+			stmt.execute();
+		} catch(SQLException e) {
+			new DatabaseException("could not insert into Element table");
+		}
+	}
 }

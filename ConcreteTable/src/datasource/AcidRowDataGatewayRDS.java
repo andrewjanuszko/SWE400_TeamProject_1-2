@@ -93,7 +93,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 		this.name = name;
 		this.inhabits = inhabits;
 		this.solute = solute;
-		//this.persist();
+		insert();
 	}
 
 	@Override
@@ -159,5 +159,14 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 			return false;
 		}
 		
+	}
+	
+	private void insert() {
+		try {
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Acid(acidID, name, inhabits, solute) VALUES (" + acidID + ", " + name + ", " + inhabits + ", " + solute + ");");
+			stmt.execute();
+		} catch(SQLException e) {
+			new DatabaseException("could not insert into acid table");
+		}
 	}
 }

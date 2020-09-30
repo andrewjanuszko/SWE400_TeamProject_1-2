@@ -87,7 +87,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 		this.name = name;
 		this.inhabits = inhabits;
 		this.solute = solute;
-		//this.persist();
+		insert();
 	}
 
   @Override
@@ -151,6 +151,15 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
       return false;
     }
   }
+  
+  private void insert() {
+		try {
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Base(baseID, name, inhabits, solute) VALUES (" + baseID + ", " + name + ", " + inhabits + ", " + solute + ");");
+			stmt.execute();
+		} catch(SQLException e) {
+			new DatabaseException("could not insert into base table");
+		}
+	}
 }
 
   
