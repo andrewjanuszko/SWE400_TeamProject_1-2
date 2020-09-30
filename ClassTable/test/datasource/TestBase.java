@@ -10,6 +10,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * 
+ * @author Isabella Boone
+ *
+ */
 class TestBase extends DatabaseTest {
 
   @Test

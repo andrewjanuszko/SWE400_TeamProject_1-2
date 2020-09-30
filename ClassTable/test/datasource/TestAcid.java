@@ -11,7 +11,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 /**
- * @author Isabella
+ * 
+ * @author Isabella Boone
+ * 
  */
 class TestAcid extends DatabaseTest {
   

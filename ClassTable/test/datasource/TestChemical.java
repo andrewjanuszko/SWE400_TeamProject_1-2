@@ -10,6 +10,11 @@ import org.junit.jupiter.api.Test;
 
 import datasource.ChemicalRowDataGateway;
 
+/**
+ * 
+ * @author Isabella Boone
+ *
+ */
 class TestChemical extends DatabaseTest {
   
   /**
