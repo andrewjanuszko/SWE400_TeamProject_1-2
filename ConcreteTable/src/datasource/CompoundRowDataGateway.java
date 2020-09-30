@@ -16,5 +16,5 @@ public interface CompoundRowDataGateway {
 	
 	public void persist();
 	
-	public void delete();
+	public boolean delete();
 }

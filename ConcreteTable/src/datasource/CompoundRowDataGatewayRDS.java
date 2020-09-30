@@ -116,15 +116,17 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 	  
   }
   
-  public void delete() {
-	try {
-		PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM CompoundMadeOf WHERE compoundID = " + compoundID);
-		stmt1.execute();
-		PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Compound WHERE compoundID = " + compoundID);
-		stmt2.execute();
-	} catch (SQLException e) {
-		new DatabaseException("could not delete Compound");
-	}
+  public boolean delete() {
+  	try {
+  		PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM CompoundMadeOf WHERE compoundID = " + compoundID);
+  		stmt1.execute();
+  		PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Compound WHERE compoundID = " + compoundID);
+  		stmt2.execute();
+  		return true;
+  	} catch (SQLException e) {
+  		new DatabaseException("could not delete Compound");
+  		return false;
+  	}
   }
   
 }
