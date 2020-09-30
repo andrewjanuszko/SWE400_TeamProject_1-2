@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ChemicalRowDataGatewayRDS
+ * ChemicalRowDataGatewayRDS 
  * @author Isabella Boone, Kim O'Neill
  *
  */
