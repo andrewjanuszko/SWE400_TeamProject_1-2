@@ -2,6 +2,10 @@ package datasource;
 
 import java.sql.SQLException;
 
+/**
+ * ChemicalRowDataGateway
+ * @author Isabella Boone, Kim O'Neill
+ */
 public interface ChemicalRowDataGateway {
 
   public void createTable(); 
@@ -9,8 +13,6 @@ public interface ChemicalRowDataGateway {
   public void dropTable();
   
   public void delete();
-  
-  public void fetch(int newId) throws SQLException, DatabaseException;
   
   public void update(); 
   
@@ -21,7 +23,5 @@ public interface ChemicalRowDataGateway {
   public String getInhabits();
   
   public void setInhabits(String newInhabits);
-  
-  public void insert(int id, String name, String inhabits);
   
 }

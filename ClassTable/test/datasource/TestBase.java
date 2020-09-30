@@ -6,14 +6,15 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-class TestBase {
+class TestBase extends DatabaseTest {
 
   @Test
   void testGetName() throws SQLException, DatabaseException {
-    BaseRowDataGateway initialize = new BaseRowDataGatewayRDS(),
+    BaseRowDataGateway base = new BaseRowDataGatewayRDS(),
         base1 = new BaseRowDataGatewayRDS(1, 2, "basename1", "baseinhabits1"),
         base2 = new BaseRowDataGatewayRDS(2, 4, "basename2", "baseinhabits2"),
         base3 = new BaseRowDataGatewayRDS(3, 6, "basename3", "baseinhabits3"),
@@ -30,26 +31,17 @@ class TestBase {
     assertEquals("basename2", base2_fetch.getName());
     assertEquals("basename3", base3_fetch.getName());
 
-    // Testing to see if we can change existing gateway to a new id
-    base1.fetch(2);
-    assertEquals("basename2", base1.getName());
-    base2.fetch(3);
-    assertEquals("basename3", base2.getName());
-    base3.fetch(1);
-    assertEquals("basename1", base3.getName());
-
-    initialize.dropAllTables();
-    
+    base.dropAllTables();
   }
   
   @Test
   void testGetInhabits() throws SQLException, DatabaseException {
-    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
-        base1 = new AcidRowDataGatewayRDS(1, 2, "basename1", "baseihabits1"),
-        base2 = new AcidRowDataGatewayRDS(2, 4, "basename2", "baseihabits2"),
-        base3 = new AcidRowDataGatewayRDS(3, 6, "basename3", "baseihabits3"),
-        base1_fetch = new AcidRowDataGatewayRDS(1), base2_fetch = new AcidRowDataGatewayRDS(2),
-        base3_fetch = new AcidRowDataGatewayRDS(3);
+    BaseRowDataGateway initialize = new BaseRowDataGatewayRDS(),
+        base1 = new BaseRowDataGatewayRDS(1, 2, "basename1", "baseihabits1"),
+        base2 = new BaseRowDataGatewayRDS(2, 4, "basename2", "baseihabits2"),
+        base3 = new BaseRowDataGatewayRDS(3, 6, "basename3", "baseihabits3"),
+        base1_fetch = new BaseRowDataGatewayRDS(1), base2_fetch = new BaseRowDataGatewayRDS(2),
+        base3_fetch = new BaseRowDataGatewayRDS(3);
 
     // Testing to see if they still hold values after adding
     assertEquals("baseihabits1", base1.getInhabits());
@@ -61,25 +53,17 @@ class TestBase {
     assertEquals("baseihabits2", base2_fetch.getInhabits());
     assertEquals("baseihabits3", base3_fetch.getInhabits());
 
-    // Testing to see if we can change existing gateway to a new id
-    base1.fetch(2);
-    assertEquals("baseihabits2", base1.getInhabits());
-    base2.fetch(3);
-    assertEquals("baseihabits3", base2.getInhabits());
-    base3.fetch(1);
-    assertEquals("baseihabits1", base3.getInhabits());
-
     initialize.dropAllTables();
   }
   
   @Test
   void testGetSolute() throws SQLException, DatabaseException {
-    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
-        base1 = new AcidRowDataGatewayRDS(1, 2, "basename1", "baseihabits1"),
-        base2 = new AcidRowDataGatewayRDS(2, 4, "basename2", "baseihabits2"),
-        base3 = new AcidRowDataGatewayRDS(3, 6, "basename3", "baseihabits3"),
-        base1_fetch = new AcidRowDataGatewayRDS(1), base2_fetch = new AcidRowDataGatewayRDS(2),
-        base3_fetch = new AcidRowDataGatewayRDS(3);
+    BaseRowDataGateway initialize = new BaseRowDataGatewayRDS(),
+        base1 = new BaseRowDataGatewayRDS(1, 2, "basename1", "baseihabits1"),
+        base2 = new BaseRowDataGatewayRDS(2, 4, "basename2", "baseihabits2"),
+        base3 = new BaseRowDataGatewayRDS(3, 6, "basename3", "baseihabits3"),
+        base1_fetch = new BaseRowDataGatewayRDS(1), base2_fetch = new BaseRowDataGatewayRDS(2),
+        base3_fetch = new BaseRowDataGatewayRDS(3);
 
     // Testing to see if they still hold values after adding
     assertEquals(2, base1.getSolute());
@@ -91,21 +75,16 @@ class TestBase {
     assertEquals(4, base2_fetch.getSolute());
     assertEquals(6, base3_fetch.getSolute());
 
-    // Testing to see if we can change existing gateway to a new id
-    base1.fetch(2);
-    assertEquals(4, base1.getSolute());
-    base2.fetch(3);
-    assertEquals(6, base2.getSolute());
-    base3.fetch(1);
-    assertEquals(2, base3.getSolute());
-
     initialize.dropAllTables();
   }
   
   @Test
   void testUpdate() {
-    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
-        base = new AcidRowDataGatewayRDS(1, 2, "basename1", "baseinhabits1");
+    BaseRowDataGateway initialize = new BaseRowDataGatewayRDS();
+    initialize.dropAllTables();
+    
+    BaseRowDataGateway
+        base = new BaseRowDataGatewayRDS(1, 2, "basename1", "baseinhabits1");
     
     // Test solute
     assertEquals(2, base.getSolute());
@@ -130,21 +109,47 @@ class TestBase {
   
   @Test
   void testDelete() {
-    BaseRowDataGateway initialize = new BaseRowDataGatewayRDS(),
+    BaseRowDataGateway createBase = new BaseRowDataGatewayRDS(),
         base = new BaseRowDataGatewayRDS(1, 2, "chemname1", "cheminhabits1");
     
-    // Ensure it has been added
+    // Ensure it has been added 
     assertEquals("chemname1", base.getName());
     assertEquals("cheminhabits1", base.getInhabits());
     
     base.delete();
     
     try { 
-      base.fetch(1);
+      base = new BaseRowDataGatewayRDS(1);
       fail("");
     } catch(DatabaseException | SQLException e) {
       assertTrue(true); 
     }
+    
+    createBase.dropAllTables();
   }
   
+  @Test
+  void testGetSet() {
+    BaseRowDataGateway createBase = new BaseRowDataGatewayRDS();
+    createBase.dropAllTables();
+    ChemicalRowDataGateway createChemical = new ChemicalRowDataGatewayRDS();
+    BaseRowDataGateway acid1 = new BaseRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
+    BaseRowDataGateway acid2 = new BaseRowDataGatewayRDS(2, 15, "chemicalname2", "inhabits2");
+    
+    BaseRowDataGateway getter = new BaseRowDataGatewayRDS();
+    List<BaseRowDataGatewayRDS> acidGet = getter.findSet(15);
+    
+    assertEquals("chemicalname1", acidGet.get(0).getName());
+    assertEquals("chemicalname2", acidGet.get(1).getName());
+    
+    BaseRowDataGateway acid4 = new BaseRowDataGatewayRDS(4, 32, "chemicalname4", "inhabits4");
+    BaseRowDataGateway acid6 = new BaseRowDataGatewayRDS(6, 32, "chemicalname6", "inhabits6");
+    
+    acidGet = getter.findSet(32);
+    
+    assertEquals("chemicalname4", acidGet.get(0).getName());
+    assertEquals("chemicalname6", acidGet.get(1).getName());
+
+    createBase.dropAllTables();
+  }
 }

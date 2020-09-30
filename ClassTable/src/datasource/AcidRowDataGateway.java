@@ -1,7 +1,12 @@
 package datasource;
 
 import java.sql.SQLException;
+import java.util.List;
 
+/**
+ * AcidRowDataGateway
+ * @author Isabella Boone, Kim O'Neill
+ */
 public interface AcidRowDataGateway {
 
   public int getSolute();
@@ -25,7 +30,9 @@ public interface AcidRowDataGateway {
   public void dropTableChemical();
   
   public void dropAllTables();
-  
-  public void fetch(int newId) throws SQLException, DatabaseException;
+
+  public List<AcidRowDataGatewayRDS> findSet(int i);
+
+  public void createTable();
   
 }
