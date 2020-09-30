@@ -107,7 +107,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 		this.atomicNumber = atomicNumber;
 		this.atomicMass = atomicMass;
 		this.dissolvedBy = dissolvedBy;
-		this.persist();
+		insert();
 	}
 
   @Override
