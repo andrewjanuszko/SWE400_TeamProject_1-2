@@ -93,7 +93,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 		this.name = name;
 		this.inhabits = inhabits;
 		this.solute = solute;
-		this.persist();
+		//this.persist();
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	}
 	
 	
-	public void persist() {
+	public boolean persist() {
 		try {
 			PreparedStatement stmt = conn.prepareStatement("UPDATE Acid SET"
 					+ " name = " + name
@@ -140,19 +140,24 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 					+ ", solute = " + solute 
 					+ " WHERE acidID = " + acidID);
 			stmt.executeUpdate();
+			return true;
 		} catch (SQLException e) {
 			new DatabaseException("could not update acid table");
+			return false;
 		}
 	}
 	
-	public void delete() {
+	public boolean delete() {
 		try {
 			PreparedStatement stmt1 = conn.prepareStatement("UPDATE Metal SET dissolvedBy = NULL WHERE dissovledBy = " + acidID);
 			stmt1.execute();
 			PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Acid WHERE acidID = " + acidID);
 			stmt2.execute();
+			return true;
 		} catch (SQLException e) {
 			new DatabaseException("could not delete acid");
+			return false;
 		}
+		
 	}
 }

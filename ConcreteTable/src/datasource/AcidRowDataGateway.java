@@ -18,7 +18,7 @@ public interface AcidRowDataGateway {
 	
 	public void setSolute(String s);
 	
-	public void persist();
+	public boolean persist();
 	
-	public void delete();
+	public boolean delete();
 }
