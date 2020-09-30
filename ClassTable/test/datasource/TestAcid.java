@@ -11,11 +11,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 /**
- * TODO: Test update to nonexistant id
- * TODO: Test delete
- * TODO: Test changing to invalid ids
- * @author Isabella
- *
+ * 
+ * @author Isabella Boone
+ * 
  */
 class TestAcid extends DatabaseTest {
   
