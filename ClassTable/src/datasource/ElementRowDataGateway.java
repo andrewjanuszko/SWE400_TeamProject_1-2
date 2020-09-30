@@ -20,6 +20,10 @@ public interface ElementRowDataGateway {
   public void delete();
 
   public void update(int id, int atomicNum, int atomicMass, String name, String inhabits);
+  
+  public void findByAtomicNumber(int atomicNum);
+  
+  public void findByAtomicMass(double atomicMass);
 
   public List<ElementRowDataGatewayRDS> findSetAtomicMass(double lowerLimit, double upperLimit);
   

@@ -113,7 +113,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
 
   @Override
   public void dropTableCompoundMadeFromElement() {
-    String dropTable = "DROP TABLE IF EXISTS CompoundMadeFromElement";
+    String dropTable = "DROP TABLE IF EXISTS CompoundMadeFromElement;";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");

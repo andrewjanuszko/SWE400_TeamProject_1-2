@@ -108,7 +108,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
    */
   @Override
   public void dropTableMetal() {
-    String dropTable = "DROP TABLE IF EXISTS Metal";
+    String dropTable = "DROP TABLE IF EXISTS Metal;";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
@@ -125,7 +125,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
 
   @Override
   public void dropTableChemical() {
-    String dropTable = "DROP TABLE IF EXISTS Chemical";
+    String dropTable = "DROP TABLE IF EXISTS Chemical;";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");

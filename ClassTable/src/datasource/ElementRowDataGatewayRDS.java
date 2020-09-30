@@ -39,7 +39,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
     this.elementId = id;
 
     String sqlChem = "SELECT * FROM Chemical INNER JOIN Element ON Chemical.chemicalId = " + id + ";";
-    String sqlElement = "SELECT * FROM Element where elementId = " + id + ";";
+    String sqlElement = "SELECT * FROM Element WHERE elementId = " + id + ";";
     try {
 
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -118,7 +118,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
 
   @Override
   public void dropTableElement() {
-    String dropTable = "DROP TABLE IF EXISTS Element";
+    String dropTable = "DROP TABLE IF EXISTS Element;";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
@@ -135,7 +135,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
 
   @Override
   public void dropTableChemical() {
-    String dropTable = "DROP TABLE IF EXISTS Chemical";
+    String dropTable = "DROP TABLE IF EXISTS Chemical;";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
@@ -201,6 +201,57 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       System.out.println("Failed to update");
     }
 
+  }
+  /**
+   * finds entry by atomic number
+   */
+  @Override
+  public void findByAtomicNumber(int atomicNum) {
+    this.atomicNumber = atomicNum;
+    String sqlElement = "SELECT * FROM Element WHERE atomicNumber = " + atomicNum + ";";
+    try {
+
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sqlElement);
+      rs.next();
+      this.elementId = rs.getInt("elementId");
+      this.atomicMass = rs.getDouble("atomicMass");
+
+      String sqlChem = "SELECT * FROM Chemical INNER JOIN Element ON Chemical.chemicalId = " + this.elementId + ";";
+      rs = statement.executeQuery(sqlChem);
+      rs.next();
+      this.name = rs.getString("name");
+      this.inhabits = rs.getString("inhabits");
+
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * finds entry by atomic Mass
+   */
+  @Override
+  public void findByAtomicMass(double atomicMass) {
+    this.atomicMass = atomicMass;
+    String sqlElement = "SELECT * FROM Element WHERE atomicMass = " + atomicMass + ";";
+    try {
+
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sqlElement);
+      rs.next();
+      this.elementId = rs.getInt("elementId");
+      this.atomicNumber = rs.getInt("atomicNumber");
+
+      String sqlChem = "SELECT * FROM Chemical INNER JOIN Element ON Chemical.chemicalId = " + this.elementId + ";";
+      rs = statement.executeQuery(sqlChem);
+      rs.next();
+      this.name = rs.getString("name");
+      this.inhabits = rs.getString("inhabits");
+
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
