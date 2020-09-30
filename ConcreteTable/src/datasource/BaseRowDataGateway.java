@@ -16,7 +16,7 @@ public interface BaseRowDataGateway {
 	
 	public void setSolute(String solute);
 	
-	public void persist();
+	public boolean persist();
 	
-	public void delete();
+	public boolean delete();
 }

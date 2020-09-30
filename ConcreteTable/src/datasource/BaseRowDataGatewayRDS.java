@@ -87,7 +87,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 		this.name = name;
 		this.inhabits = inhabits;
 		this.solute = solute;
-		this.persist();
+		//this.persist();
 	}
 
   @Override
@@ -125,7 +125,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
     this.solute = solute;
   }
   
-  public void persist() {
+  public boolean persist() {
 	  try {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE Base SET"
 				+ " baseID = " + baseID
@@ -134,13 +134,22 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 				+ ", solute = " + solute
 				+ " WHERE baseID = " + baseID);
 		stmt.executeUpdate();
+		return true;
 	} catch (SQLException e) {
 		new DatabaseException("Couldn't update Base table");
+		return false;
 	}
   }
   
-  public void delete() {
-	  
+  public boolean delete() {
+    try {
+      PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM Base WHERE baseID = " + baseID);
+      stmt1.execute();
+      return true;
+    } catch (SQLException e) {
+      new DatabaseException("could not delete acid");
+      return false;
+    }
   }
 }
 
