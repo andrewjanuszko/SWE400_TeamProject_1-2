@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,9 +14,8 @@ import dataDTO.ChemicalDTO;
 
 public abstract class ChemicalTDGRDSTest extends DatabaseTest {
 
-	protected ChemicalTDG gateway;
+	protected ChemicalTDG gateway = getSingletonInstance();
 	
-
 	protected abstract ChemicalTDG getSingletonInstance();
 	
 	/**
@@ -21,46 +23,45 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
 	 * @throws DatabaseException when things go wrong.
 	 */
 	@BeforeEach
-	void fillDatabase() throws DatabaseException {
-		@SuppressWarnings("unused")
-		ChemicalRDGRDS rowGateway = new ChemicalRDGRDS();
-		gateway = getSingletonInstance();
-		
-		// Inserts 4 Chemicals.
-		rowGateway = new ChemicalRDGRDS(0, "FunkyChemical", "Mars", -1, -1, -1, -1);
-		rowGateway = new ChemicalRDGRDS(0, "UnknownChemical", "Jupiter", -1, -1, -1, -1);
-		rowGateway = new ChemicalRDGRDS(0, "SpicyChemical", "Mercury", -1, -1, -1, -1);
-		rowGateway = new ChemicalRDGRDS(0, "SmellyChemical", "Venus", -1, -1, -1, -1);
-		
-		//Inserts 4 Elements.
-		rowGateway = new ChemicalRDGRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);
-		rowGateway = new ChemicalRDGRDS(1, "Hydrogen", "Earth", 1, 1.008, -1, -1);
-		rowGateway = new ChemicalRDGRDS(1, "Oxygen", "Earth", 8, 15.999, -1, -1);
-		rowGateway = new ChemicalRDGRDS(1, "Nitrogen", "Earth", 7, 14.006, -1, -1);
-		
-		//Inserts 4 Metals.
-		rowGateway = new ChemicalRDGRDS(2, "Copper", "Earth", 29, 63.546, 10, -1);
-		rowGateway = new ChemicalRDGRDS(2, "Chromium", "Earth", 24, 51.996, 20, -1);
-		rowGateway = new ChemicalRDGRDS(2, "Zinc", "Earth", 30, 65.380, 30, -1);
-		rowGateway = new ChemicalRDGRDS(2, "Gold", "Earth", 79, 196.966, 40, -1);
-		
-		//Inserts 4 Compounds
-		rowGateway = new ChemicalRDGRDS(3, "Glucose", "Earth", -1, -1, -1, -1);
-		rowGateway = new ChemicalRDGRDS(3, "Water", "Earth", -1, -1, -1, -1);
-		rowGateway = new ChemicalRDGRDS(3, "Carbon Dioxide", "Earth", -1, -1, -1, -1);
-		rowGateway = new ChemicalRDGRDS(3, "Methane", "Earth", -1, -1, -1, -1);
-		
-		//Inserts 4 Bases
-		rowGateway = new ChemicalRDGRDS(4, "Potassium hydroxide", "Earth", -1, -1, -1, 50);
-		rowGateway = new ChemicalRDGRDS(4, "Lithium hydroxide", "Jupiter", -1, -1, -1, 60);
-		rowGateway = new ChemicalRDGRDS(4, "Calcium hydroxide", "Mercury", -1, -1, -1, 70);
-		rowGateway = new ChemicalRDGRDS(4, "Strontium hydroxide", "Venus", -1, -1, -1, 20);
-		
-		//Inserts 4 Acids
-		rowGateway = new ChemicalRDGRDS(5, "Hydrochloric acid", "Earth", -1, -1, -1, 50);
-		rowGateway = new ChemicalRDGRDS(5, "Sulfuric acid", "Jupiter", -1, -1, -1, 60);
-		rowGateway = new ChemicalRDGRDS(5, "Acetic acid", "Mercury", -1, -1, -1, 70);
-		rowGateway = new ChemicalRDGRDS(5, "Oxalic Acid", "Venus", -1, -1, -1, 20);
+	public void fillDatabase() throws DatabaseException {
+		System.out.println("@BeforeClass");
+		ChemicalRDGRDS chemicalGateway = new ChemicalRDGRDS();
+		chemicalGateway.createTable();
+		chemicalGateway = new ChemicalRDGRDS(0, "FunkyChemical", "Mars", -1, -1, -1, -1);
+		chemicalGateway = new ChemicalRDGRDS(0, "UnknownChemical", "Jupiter", -1, -1, -1, -1);
+		chemicalGateway = new ChemicalRDGRDS(0, "SpicyChemical", "Mercury", -1, -1, -1, -1);
+		chemicalGateway = new ChemicalRDGRDS(0, "SmellyChemical", "Venus", -1, -1, -1, -1);
+		chemicalGateway = new ChemicalRDGRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);
+		chemicalGateway = new ChemicalRDGRDS(1, "Hydrogen", "Earth", 1, 1.008, -1, -1);
+		chemicalGateway = new ChemicalRDGRDS(1, "Oxygen", "Earth", 8, 15.999, -1, -1);
+		chemicalGateway = new ChemicalRDGRDS(1, "Nitrogen", "Earth", 7, 14.006, -1, -1);
+		chemicalGateway = new ChemicalRDGRDS(2, "Copper", "Earth", 29, 63.546, 10, -1);
+		chemicalGateway = new ChemicalRDGRDS(2, "Chromium", "Earth", 24, 51.996, 20, -1);
+		chemicalGateway = new ChemicalRDGRDS(2, "Zinc", "Earth", 30, 65.380, 30, -1);
+		chemicalGateway = new ChemicalRDGRDS(2, "Gold", "Earth", 79, 196.966, 40, -1);
+		chemicalGateway = new ChemicalRDGRDS(3, "Glucose", "Earth", -1, -1, -1, -1);
+		chemicalGateway = new ChemicalRDGRDS(3, "Water", "Earth", -1, -1, -1, -1);
+		chemicalGateway = new ChemicalRDGRDS(3, "Carbon Dioxide", "Earth", -1, -1, -1, -1);
+		chemicalGateway = new ChemicalRDGRDS(3, "Methane", "Earth", -1, -1, -1, -1);
+		chemicalGateway = new ChemicalRDGRDS(4, "Potassium hydroxide", "Earth", -1, -1, -1, 50);
+		chemicalGateway = new ChemicalRDGRDS(4, "Lithium hydroxide", "Jupiter", -1, -1, -1, 60);
+		chemicalGateway = new ChemicalRDGRDS(4, "Calcium hydroxide", "Mercury", -1, -1, -1, 70);
+		chemicalGateway = new ChemicalRDGRDS(4, "Strontium hydroxide", "Venus", -1, -1, -1, 20);
+		chemicalGateway = new ChemicalRDGRDS(5, "Hydrochloric acid", "Earth", -1, -1, -1, 50);
+		chemicalGateway = new ChemicalRDGRDS(5, "Sulfuric acid", "Jupiter", -1, -1, -1, 60);
+		chemicalGateway = new ChemicalRDGRDS(5, "Acetic acid", "Mercury", -1, -1, -1, 70);
+		chemicalGateway = new ChemicalRDGRDS(5, "Oxalic Acid", "Venus", -1, -1, -1, 20);
+	}
+	
+	/**
+	 * 
+	 * @throws DatabaseException
+	 */
+	@AfterEach
+	public void dropDatabase() throws DatabaseException {
+		System.out.println("@AfterClass");
+		ChemicalRDGRDS chemicalGateway = new ChemicalRDGRDS();
+		chemicalGateway.dropTable();
 	}
 
 	/**
