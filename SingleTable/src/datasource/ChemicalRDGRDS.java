@@ -28,9 +28,7 @@ public class ChemicalRDGRDS implements ChemicalRDG {
 	 * Constructor for creating the table in the database.
 	 * @throws DatabaseException when things go wrong.
 	 */
-	public ChemicalRDGRDS() throws DatabaseException{
-		createTable();
-	}
+	public ChemicalRDGRDS() {}
 	
 	/**
 	 * Constructor for finding Chemicals by ID.
@@ -38,22 +36,26 @@ public class ChemicalRDGRDS implements ChemicalRDG {
 	 * @throws DatabaseException when things go wrong.
 	 */
 	public ChemicalRDGRDS(int chemicalID) throws DatabaseException {
-		String findChemicalSQL = "SELECT * FROM Chemical WHERE chemicalID = ?;";
-		try {
-			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(findChemicalSQL);
-			statement.setInt(1, chemicalID);
-			ResultSet result = statement.executeQuery();
-			result.next();
-			this.chemicalID = result.getInt("chemicalID");
-			this.type = result.getInt("type");
-			this.name = result.getString("name");
-			this.inhabits = result.getString("inhabits");
-			this.atomicNumber = result.getInt("atomicNumber");
-			this.atomicMass = result.getDouble("atomicMass");
-			this.dissolvedBy = result.getInt("dissolvedBy");
-			this.solute = result.getInt("solute");
-		} catch(SQLException e) {
-			throw new DatabaseException("Could not find Chemical with ID " + chemicalID + ".", e);
+		if(tableExists()) {
+			try {
+				String findChemicalSQL = "SELECT * FROM Chemical WHERE chemicalID = ?;";
+				PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(findChemicalSQL);
+				statement.setInt(1, chemicalID);
+				ResultSet result = statement.executeQuery();
+				result.next();
+				this.chemicalID = result.getInt("chemicalID");
+				this.type = result.getInt("type");
+				this.name = result.getString("name");
+				this.inhabits = result.getString("inhabits");
+				this.atomicNumber = result.getInt("atomicNumber");
+				this.atomicMass = result.getDouble("atomicMass");
+				this.dissolvedBy = result.getInt("dissolvedBy");
+				this.solute = result.getInt("solute");
+			} catch(SQLException e) {
+				throw new DatabaseException("Could not find Chemical with ID " + chemicalID + ".", e);
+			}
+		} else {
+			throw new DatabaseException("The tables 'Chemical', 'CompoundMadeFromElement' do not exist.");
 		}
 	}
 	
@@ -69,47 +71,51 @@ public class ChemicalRDGRDS implements ChemicalRDG {
 	 * @throws DatabaseException when things go wrong.
 	 */
 	public ChemicalRDGRDS(int type, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy, int solute) throws DatabaseException {
-		String insertChemicalSQL = "INSERT INTO Chemical SET chemicalID = ?, type = ?, name = ?, inhabits = ?, atomicNumber = ?, atomicMass = ?, dissolvedBy = ?, solute = ?;";
-		try {
-			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertChemicalSQL);
-			statement.setInt(1, key);
-			statement.setInt(2, type);
-			statement.setString(3, name);
-			
-			if (inhabits.isEmpty()) {
-				statement.setNull(5, Types.VARCHAR);
-			} else {
-				statement.setString(4, inhabits);
+		if(tableExists()) {
+			try {
+				String insertChemicalSQL = "INSERT INTO Chemical SET chemicalID = ?, type = ?, name = ?, inhabits = ?, atomicNumber = ?, atomicMass = ?, dissolvedBy = ?, solute = ?;";
+				PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertChemicalSQL);
+				statement.setInt(1, key);
+				statement.setInt(2, type);
+				statement.setString(3, name);
+				
+				if (inhabits.isEmpty()) {
+					statement.setNull(5, Types.VARCHAR);
+				} else {
+					statement.setString(4, inhabits);
+				}
+				
+				if (atomicNumber == -1) {  
+					statement.setNull(5, Types.INTEGER);
+				} else {
+					statement.setInt(5, atomicNumber);
+				}
+				
+				if (atomicMass == -1.0) {  
+					statement.setNull(6, Types.DOUBLE);
+				} else {
+					statement.setDouble(6, atomicMass);
+				}
+				
+				if (dissolvedBy == -1) {  
+					statement.setNull(7, Types.INTEGER);
+				} else {
+					statement.setInt(7, dissolvedBy);
+				}
+				
+				if (solute == -1) {  
+					statement.setNull(8, Types.INTEGER);
+				} else {
+					statement.setInt(8, solute);
+				}
+				
+				statement.execute();
+				key = key + 1;
+			} catch(SQLException e) {
+				throw new DatabaseException("Failed to insert Chemical into database.", e);
 			}
-			
-			if (atomicNumber == -1) {  
-				statement.setNull(5, Types.INTEGER);
-			} else {
-				statement.setInt(5, atomicNumber);
-			}
-			
-			if (atomicMass == -1.0) {  
-				statement.setNull(6, Types.DOUBLE);
-			} else {
-				statement.setDouble(6, atomicMass);
-			}
-			
-			if (dissolvedBy == -1) {  
-				statement.setNull(7, Types.INTEGER);
-			} else {
-				statement.setInt(7, dissolvedBy);
-			}
-			
-			if (solute == -1) {  
-				statement.setNull(8, Types.INTEGER);
-			} else {
-				statement.setInt(8, solute);
-			}
-			
-			statement.execute();
-			key = key + 1;
-		} catch(SQLException e) {
-			throw new DatabaseException("Failed to insert Chemical into database.", e);
+		} else {
+			throw new DatabaseException("The tables 'Chemical', 'CompoundMadeFromElement' do not exist.");
 		}
 	}
 	
@@ -118,9 +124,10 @@ public class ChemicalRDGRDS implements ChemicalRDG {
 	 * Only called by ChemicalRowDataGatewayRDS(int).
 	 * @throws DatabaseException when things go wrong.
 	 */
-	private void createTable() throws DatabaseException {
-		String dropTableSQL = "DROP TABLE IF EXISTS Chemical, CompoundMadeFromElement;";
-		String createTableSQL = "CREATE TABLE Chemical(" +
+	public void createTable() throws DatabaseException {
+		if(!tableExists()) {
+			try {
+				String createTableSQL = "CREATE TABLE Chemical(" +
 						   "chemicalID INTEGER NOT NULL," +
 						   "type INTEGER NOT NULL, " +
 						   "name VARCHAR(20) NOT NULL UNIQUE," +
@@ -130,16 +137,50 @@ public class ChemicalRDGRDS implements ChemicalRDG {
 						   "dissolvedBy INTEGER, " +
 						   "solute INTEGER, " +
 						   "PRIMARY KEY (chemicalID));";
+				Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+				statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
+				statement.executeUpdate(createTableSQL);
+				key = 1;
+			} catch(SQLException e) {
+				throw new DatabaseException("Failed to drop/create table. ", e);
+			}
+		} else {
+			throw new DatabaseException("The table 'Chemical' already exists.");
+		}
+	}
+	
+	/**
+	 * Drop the table if it exists.
+	 * @throws DatabaseException
+	 */
+	public void dropTable() throws DatabaseException {
+		if(tableExists()) {
+			try {
+				String dropTableSQL = "DROP TABLE IF EXISTS Chemical, CompoundMadeFromElement;";
+				Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+				statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+				statement.executeUpdate(dropTableSQL);
+			} catch(SQLException e) {
+				throw new DatabaseException("Failed to drop tables 'Chemical', 'CompoundMadeFromElement'.", e);
+			}
+		} else {
+			throw new DatabaseException("The tables 'Chemical', 'CompoundMadeFromElement' do not exist.");
+		}
+	}
+	
+	/**
+	 * Check to see if 'Chemical' exists.
+	 * @return true / false.
+	 * @throws DatabaseException when things go wrong.
+	 */
+	private boolean tableExists() throws DatabaseException {
 		try {
+			String tableExistsSQL = "SHOW TABLES LIKE 'Chemical';";
 			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-			statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-			statement.executeUpdate(dropTableSQL);
-			
-			statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
-			statement.executeUpdate(createTableSQL);
-			key = 1;
+			ResultSet resultSet = statement.executeQuery(tableExistsSQL);
+			return resultSet.next() ? true : false;
 		} catch(SQLException e) {
-			throw new DatabaseException("Failed to drop/create table. ", e);
+			throw new DatabaseException("Failed to connect to database.", e);
 		}
 	}
 	
