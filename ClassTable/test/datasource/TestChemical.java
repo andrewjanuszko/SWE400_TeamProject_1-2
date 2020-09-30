@@ -12,6 +12,11 @@ import datasource.ChemicalRowDataGateway;
 
 class TestChemical extends DatabaseTest {
   
+  /**
+   * Test getName method of ChemicalRowDataGateway
+   * @throws SQLException
+   * @throws DatabaseException
+   */
   @Test
   void testGetName() throws SQLException, DatabaseException {
     ChemicalRowDataGateway initialize = new ChemicalRowDataGatewayRDS(),
@@ -31,17 +36,14 @@ class TestChemical extends DatabaseTest {
     assertEquals("chemname2", chem2_fetch.getName());
     assertEquals("chemname3", chem3_fetch.getName());
 
-    // Testing to see if we can change existing gateway to a new id
-    chem1.fetch(2);
-    assertEquals("chemname2", chem1.getName());
-    chem2.fetch(3);
-    assertEquals("chemname3", chem2.getName());
-    chem3.fetch(1);
-    assertEquals("chemname1", chem3.getName());
-
     initialize.dropTable();
   }
   
+  /**
+   * Test getInhabits of ChemicalRowDataGateway
+   * @throws SQLException
+   * @throws DatabaseException
+   */
   @Test
   void testGetInhabits() throws SQLException, DatabaseException {
     ChemicalRowDataGateway initialize = new ChemicalRowDataGatewayRDS(),
@@ -61,17 +63,12 @@ class TestChemical extends DatabaseTest {
     assertEquals("cheminhabits2", chem2_fetch.getInhabits());
     assertEquals("cheminhabits3", chem3_fetch.getInhabits());
 
-    // Testing to see if we can change existing gateway to a new id
-    chem1.fetch(2);
-    assertEquals("cheminhabits2", chem1.getInhabits());
-    chem2.fetch(3);
-    assertEquals("cheminhabits3", chem2.getInhabits());
-    chem3.fetch(1);
-    assertEquals("cheminhabits1", chem3.getInhabits());
-
     initialize.dropTable();
   }
   
+  /**
+   * Test the update function of ChemicalRowDataGateway
+   */
   @Test
   void testUpdate() {
     ChemicalRowDataGateway initialize = new ChemicalRowDataGatewayRDS(),
@@ -92,6 +89,9 @@ class TestChemical extends DatabaseTest {
     initialize.dropTable();
   }
   
+  /**
+   * Test the delete method of ChemicalRowDataGateway
+   */
   @Test
   void testDelete() {
     ChemicalRowDataGateway initialize = new ChemicalRowDataGatewayRDS(),
@@ -104,7 +104,7 @@ class TestChemical extends DatabaseTest {
     chem.delete();
     
     try { 
-      chem.fetch(1);
+      chem = new ChemicalRowDataGatewayRDS(1);
       fail("");
     } catch(DatabaseException | SQLException e) {
       assertTrue(true); 

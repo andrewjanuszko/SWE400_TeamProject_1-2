@@ -5,14 +5,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * 
+ * @author kimberlyoneill
+ *
+ */
 class TestElement {
 
   
   @Test
   void testGetAtomicNumber() {
+    //create table
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
+    
+    //initialize element
     ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 55, 123, "chemicalname1", "inhabits1");
     
+    //element getter
     ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
     
     assertEquals(55, elementGet.getAtomicNumber());

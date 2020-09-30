@@ -7,6 +7,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * 
+ * @author kimberlyoneill
+ *
+ */
 class TestMetal {
 
   @Test
@@ -49,7 +54,7 @@ class TestMetal {
     AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
     MetalRowDataGateway emptyMetal = new MetalRowDataGatewayRDS();
     MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
-    MetalRowDataGatewayRDS metal2 = new MetalRowDataGatewayRDS(2, 15, "chemicalname2", "inhabits2");
+    MetalRowDataGateway metal2 = new MetalRowDataGatewayRDS(2, 15, "chemicalname2", "inhabits2");
     
     List<MetalRowDataGatewayRDS> metalGet = metal2.findSet(15);
     

@@ -1,23 +1,24 @@
 package datasource;
 
 import java.util.List;
-
+/**
+ * 
+ * @author kimberlyoneill
+ *
+ */
 public interface CompoundsMadeOfTableDataGateway {
-  
-  void insert(int compoundId, int elementId);
-  
-  void createTableCompoundMadeFrom(); 
-  
-  String getCompoundName();
-  
-  public String getInhabits();
+
+  void createTableCompoundMadeFrom();
+
+  public void dropTableCompoundMadeFromElement();
+
+  public void delete();
+
+  List<Integer> findSetCompoundId(int elementId);
 
   List<Integer> findSetElementId(int compoundId);
 
-  List<Integer> findSetCompoundId(int elementId);
+  String getCompoundName();
   
-  public void delete(int id);
-  
-  public void dropTableCompoundMadeFromElement();
-  
+  public String getInhabits();
 }

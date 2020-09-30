@@ -4,16 +4,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * ChemicalRowDataGatewayRDS 
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
   int id;
   String name, inhabits;
   
   /**
-   * Constructor for resetting chemical, drop & recreate the chemical tables.
+   * Create table
    */
   public ChemicalRowDataGatewayRDS() {
-    dropTable(); // Should not be here, maybe
     createTable();
   }
   
@@ -21,25 +27,19 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * Constructor ChemicalRowDataGatewayRDS, search for existing chemical.
    * @param id to search for
    */
-  public ChemicalRowDataGatewayRDS(int id) {
+  public ChemicalRowDataGatewayRDS(int id) throws SQLException, DatabaseException {
     createTable();
     // Select statement
     String getChem = new String("SELECT * FROM Chemical WHERE chemicalId = " + id + ";");
-    
-    try {
-      // Get chemical information
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement(); 
-      ResultSet rs = statement.executeQuery(getChem); 
-      rs.next(); 
-      
-      this.name = rs.getString("name"); 
-      this.inhabits = rs.getString("inhabits"); 
-      this.id = id; 
-      
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to fetch ID");
-    }
+
+    // Get chemical information
+    Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+    ResultSet rs = statement.executeQuery(getChem);
+    rs.next();
+
+    this.name = rs.getString("name");
+    this.inhabits = rs.getString("inhabits");
+    this.id = id;
 
   }
   
@@ -94,7 +94,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * Drop the chemical table if it exists.
    */
   public void dropTable() {
-    String dropTable = "DROP TABLE IF EXISTS Chemical";
+    String dropTable = "DROP TABLE IF EXISTS Chemical;";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
@@ -119,54 +119,6 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Error deleting chemical " + id);
-    }
-  }
-
-  /**
-   * Fetch a new chemical.
-   * @param newId to fetch
-   * @throws DatabaseException 
-   * @throws SQLException 
-   */
-  public void fetch(int newId) throws SQLException, DatabaseException {
-    String getChem = new String("SELECT * FROM Chemical WHERE Chemical.chemicalId = " + newId + ";");
-    
-    // Temporary variables
-    String tmpName, tmpInh;
-    
-    // Get chemical information
-    Statement statement = DatabaseManager.getSingleton().getConnection().createStatement(); 
-    ResultSet rs = statement.executeQuery(getChem); 
-    rs.next(); // Get result 
-    
-    tmpName = rs.getString("name"); 
-    tmpInh = rs.getString("inhabits"); 
-    
-    // If we get to this point without errors, then it is safe to update our variables
-    this.id = newId;
-    this.name = tmpName;
-    this.inhabits = tmpInh;
-      
-  }  
-  
-  /**
-   * Insert a chemical.
-   * @param id
-   * @param name
-   * @param inhabits
-   */
-  @Override
-  public void insert(int id, String name, String inhabits) {
-    try {
-    // Insert chemical
-    PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-        .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
-    insertChemical.setInt(1, id);
-    insertChemical.setString(2, name);
-    insertChemical.setString(3, inhabits);
-    insertChemical.execute(); // Insert chemical
-    } catch(SQLException | DatabaseException e) {
-      e.printStackTrace();
     }
   }
   
