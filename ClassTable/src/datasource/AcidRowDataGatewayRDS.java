@@ -77,7 +77,6 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       this.name = name;
       this.inhabits = inhabits;
       
-      System.out.println("Inserted new Acid (" + id + ", " + name + ", " + inhabits + ", " + solute + ")");
     } catch(SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert acid through constructor");
@@ -155,8 +154,10 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
       statement.executeUpdate(deleteAcid);
       statement.executeUpdate(deleteChemical);
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
       
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
