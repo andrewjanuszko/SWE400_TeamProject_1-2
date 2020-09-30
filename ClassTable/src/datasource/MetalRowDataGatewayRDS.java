@@ -7,6 +7,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author kimberlyoneill
+ *
+ */
 public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
 
   private int metalId;
@@ -14,11 +19,18 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
   private String name;
   private String inhabits;
 
+  /**
+   * empty constructor drops the table and recreates it
+   */
   public MetalRowDataGatewayRDS() {
-    this.dropTableMetal();
     createTableMetal();
   }
 
+  /**
+   * finds a metal
+   * 
+   * @param id
+   */
   public MetalRowDataGatewayRDS(int id) {
     this.createTableMetal();
     this.metalId = id;
@@ -44,6 +56,14 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
 
   }
 
+  /**
+   * constructor to create a metal
+   * 
+   * @param id
+   * @param dissolvedById
+   * @param name
+   * @param inhabits
+   */
   public MetalRowDataGatewayRDS(int id, int dissolvedById, String name, String inhabits) {
     this.createTableMetal();
     try {
@@ -82,22 +102,10 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
       e.printStackTrace();
     }
   }
-
-  @Override
-  public String getName() {
-    return this.name;
-  }
-
-  @Override
-  public String getInhabits() {
-    return this.inhabits;
-  }
-
-  @Override
-  public int getDissolvedBy() {
-    return this.dissolvedById;
-  }
-
+  
+  /**
+   * drop metal table if it exists
+   */
   @Override
   public void dropTableMetal() {
     String dropTable = "DROP TABLE IF EXISTS Metal";
@@ -129,7 +137,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
   }
 
   /**
-   * Drop acid and all tables connected (acid & chemical)
+   * Drop metal and all tables connected (metal & chemical)
    */
   @Override
   public void dropAllTables() {
@@ -137,11 +145,14 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
     dropTableChemical();
   }
 
+  /**
+   * Deletes the metal
+   */
   @Override
-  public void delete(int id) {
+  public void delete() {
 
-    String sqlMetal = "DELETE FROM Metal WHERE metalId = " + id + ";";
-    String sqlChem = "DELETE FROM Chemical WHERE chemicalId = " + id + ";";
+    String sqlMetal = "DELETE FROM Metal WHERE metalId = " + this.metalId + ";";
+    String sqlChem = "DELETE FROM Chemical WHERE chemicalId = " + this.metalId + ";";
     try {
 
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -150,10 +161,13 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("No entry with id " + id);
+      System.out.println("Problem deleting Metal with id " + this.metalId);
     }
   }
 
+  /**
+   * updates metal with given values
+   */
   @Override
   public void update(int id, int dissolvedById, String name, String inhabits) {
     try {
@@ -176,20 +190,53 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
     }
 
   }
-  //SELECT * FROM Chemical INNER JOIN Metal ON Chemical.chemicalId = (
-  public static List<MetalRowDataGatewayRDS> findSet(int dissolvedById) {
+
+  /**
+   * finds all the metals dissolved by an Acid
+   * 
+   * @param dissolvedById
+   *          an Acid
+   * @return list of MetalRowDataGatewayRDS that contain the metals dissolved by
+   *         the given acid
+   */
+  public List<MetalRowDataGatewayRDS> findSet(int dissolvedById) {
     List<MetalRowDataGatewayRDS> results = new ArrayList<>();
     try {
-      String sql = "SELECT * FROM Metal WHERE dissolvedBy = "+ dissolvedById + ";";
+      String sql = "SELECT * FROM Metal WHERE dissolvedBy = " + dissolvedById + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
-      while(rs.next()) {
-          MetalRowDataGatewayRDS dumb = new MetalRowDataGatewayRDS(rs.getInt("metalId"));
-          results.add(dumb);
+      while (rs.next()) {
+        MetalRowDataGatewayRDS metalRDS = new MetalRowDataGatewayRDS(rs.getInt("metalId"));
+        results.add(metalRDS);
       }
     } catch (SQLException | DatabaseException e) {
 
     }
     return results;
   }
+  
+  /**
+   * getter for name
+   */
+  @Override
+  public String getName() {
+    return this.name;
+  }
+
+  /**
+   * getter for inhabits
+   */
+  @Override
+  public String getInhabits() {
+    return this.inhabits;
+  }
+
+  /**
+   * getter for name
+   */
+  @Override
+  public int getDissolvedBy() {
+    return this.dissolvedById;
+  }
+
 }

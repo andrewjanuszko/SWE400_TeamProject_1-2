@@ -7,66 +7,87 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * RDS For Compounds table many-to-many relationship
+ * 
+ * @author kimberlyoneill
+ *
+ */
 public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableDataGateway {
 
   private int compoundId;
   private List<Integer> madeOf; // Element ids
   private String name;
   private String inhabits;
-  
+
+  /**
+   * Empty constructor drops and re-creates the table
+   */
+  public CompoundsMadeOfTableDataGatewayRDS() {
+    this.createTableCompoundMadeFrom();
+  }
+
+  /**
+   * Constructor to find a compound
+   * 
+   * @param compoundId
+   *          to search for
+   */
+  public CompoundsMadeOfTableDataGatewayRDS(int compoundId) {
+    this.createTableCompoundMadeFrom();
+    String sql = "SELECT * FROM Chemical WHERE chemicalId = " + compoundId + ";";
+
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sql);
+
+      rs.next();
+
+      this.name = rs.getString("name");
+      this.inhabits = rs.getString("inhabits");
+      this.compoundId = compoundId;
+
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Constructor to insert a Compound
+   * 
+   * @param compoundId
+   * @param madeOf
+   * @param name
+   * @param inhabits
+   */
   public CompoundsMadeOfTableDataGatewayRDS(int compoundId, List<Integer> madeOf, String name, String inhabits) {
     createTableCompoundMadeFrom();
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-        .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
       insertChemical.setInt(1, compoundId);
       insertChemical.setString(2, name);
       insertChemical.setString(3, inhabits);
-      
+
       insertChemical.execute();
-      
-      for(int i = 0; i < madeOf.size(); i++) {
+
+      for (int i = 0; i < madeOf.size(); i++) {
         PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
             .prepareStatement("INSERT INTO CompoundMadeFromElement (compoundId, elementId)" + "VALUES (?, ?);");
-        
+
         insert.setInt(1, compoundId);
         insert.setInt(2, madeOf.get(i));
         insert.execute();
       }
-      
+
       this.compoundId = compoundId;
       this.madeOf = madeOf;
       this.name = name;
-      this.inhabits = inhabits; 
-      
+      this.inhabits = inhabits;
+
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Problem inserting CompoundsMadeOfTableDataGatewayRDS");
-    }
-  }
-
-  public CompoundsMadeOfTableDataGatewayRDS() {
-    this.dropTableCompoundMadeFromElement();
-    this.createTableCompoundMadeFrom();
-  }
-  
-  public CompoundsMadeOfTableDataGatewayRDS(int compoundId) {
-    this.createTableCompoundMadeFrom();
-    String sql = "SELECT * FROM Chemical WHERE chemicalId = "
-        + compoundId + ";"; 
-    
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-      
-      rs.next();
-      
-      this.name = rs.getString("name");
-      this.inhabits = rs.getString("inhabits");
-      this.compoundId = compoundId;
-      
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
     }
   }
 
@@ -153,28 +174,16 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   }
 
   /**
-   * Insert a given compoundId and elementId into the CompoundsMadeOfElement
-   * table.
-   * 
-   * @param compoundId
-   *          to insert
-   * @param elementId
-   *          to insert
+   * Deletes entry already held by instance of this object
    */
   @Override
-  public void insert(int compoundId, int elementId) {
+  public void delete() {
     try {
-
-      PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO CompoundMadeFromElement (compoundId, elementId)" + "VALUES (?, ?);");
-      insert.setInt(1, compoundId); // Set compoundId
-      insert.setInt(2, elementId); // Set elementId
-
-      insert.execute(); // Insert into table
-
+      PreparedStatement sql = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("DELETE FROM CompoundMadeFromElement WHERE compoundId = " + this.compoundId + ";");
+      sql.execute();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Failed to insert compoundmadeof");
     }
   }
 
@@ -199,16 +208,4 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   public String getInhabits() {
     return this.inhabits;
   }
-
-  @Override
-  public void delete(int id) {
-    try {
-      PreparedStatement sql = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("DELETE FROM CompoundMadeFromElement WHERE compoundId = " + id + ";");
-      sql.execute();
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-    }
-  }
-
 }
