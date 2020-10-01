@@ -6,6 +6,8 @@ import datadto.CompoundMadeOfDTO;
 
 public interface CompoundMadeOfTableDataGateway {
 	
-	public List<CompoundMadeOfDTO> getCompoundMadeOf(int compoundID) throws DatabaseException;
+	public List<CompoundMadeOfDTO> getCompoundMadeOf() throws DatabaseException;
+	
+	public void addElementToCompound(int id);
 
 }

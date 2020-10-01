@@ -141,7 +141,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
     
   }
   
-  public void persist() {
+  public boolean persist() {
 	  try {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE Element SET"
 				+ " name = " + name
@@ -151,20 +151,24 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 				+ " WHERE elementID = " + elementID);
 		
 		stmt.executeUpdate();
+		return true;
 	} catch (SQLException e) {
 		new DatabaseException("could't update element table");
+		return false;
 	}
   }
 
   @Override
-  public void delete() {
+  public boolean delete() {
 	  try {
 			PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM CompoundMadeOf WHERE elementID = " + elementID);
 			stmt1.execute();
 			PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Element WHERE elementID = " + elementID);
 			stmt2.execute();
+			return true;
 		} catch (SQLException e) {
 			new DatabaseException("could not delete Element");
+			return false;
 		}
   }
   private void insert() {

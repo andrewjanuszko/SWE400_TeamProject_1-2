@@ -166,7 +166,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
   }
   
 
-  public void persist() {
+  public boolean persist() {
 	  try {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE Metal SET"
 				+ " name = " + name
@@ -177,18 +177,22 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 				+ " WHERE metalID = " + metalID);
 		
 		stmt.executeUpdate();
+		return true;
 	} catch (SQLException e) {
 		new DatabaseException("could't update metal table");
+		return false;
 	}
   }
 
   @Override
-  public void delete() {
+  public boolean delete() {
 	  try {
 		  PreparedStatement stmt = conn.prepareStatement("DELETE FROM Metal WHERE metalID = " + metalID);  
 		  stmt.execute();
+		  return true;
 	  } catch (SQLException e) {
 			new DatabaseException("couldn't delete metal");
+			return false;
 	  }
   }
 	

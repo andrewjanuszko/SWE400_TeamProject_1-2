@@ -20,7 +20,7 @@ public interface ElementRowDataGateway {
 	
 	public void setAtomicMass(double d);
 	
-	public void persist();
+	public boolean persist();
 	
-	public void delete();
+	public boolean delete();
 }

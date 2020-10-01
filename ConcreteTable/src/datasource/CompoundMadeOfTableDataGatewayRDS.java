@@ -41,12 +41,14 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
 	}
 
 	List<CompoundMadeOfDTO> dtoList = new ArrayList<CompoundMadeOfDTO>();
+	private int compoundID;
 	
-	private CompoundMadeOfTableDataGatewayRDS() {
+	public CompoundMadeOfTableDataGatewayRDS(int id) throws DatabaseException {
+		compoundID = id;
+		findCompounds();
 	}
 	
-	@Override
-	public List<CompoundMadeOfDTO> getCompoundMadeOf(int compoundID) throws DatabaseException {
+	private void findCompounds() throws DatabaseException {
 		conn = DatabaseManager.getSingleton().getConnection();
 		try {
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM CompoundMadeOf WHERE compoundID = " + compoundID);
@@ -58,11 +60,14 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
 		} catch (SQLException e) {
 			new DatabaseException("could not get CompoundMadeOf");
 		}
-		
+	}
+	
+	@Override
+	public List<CompoundMadeOfDTO> getCompoundMadeOf(){
 		return dtoList;
 	}
 	
-	public synchronized void addElementToCompound(int elementID, int compoundID) {
+	public synchronized void addElementToCompound(int elementID) {
 		dtoList.add(new CompoundMadeOfDTO(compoundID, elementID));
 		try {
 			PreparedStatement stmt = conn.prepareStatement("INSERT INTO CompoundMadeOf Values (" + compoundID + ", " + elementID + ");");
@@ -70,6 +75,10 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
 		}catch(SQLException e) {
 			new DatabaseException("couldn't insert into CompoundMadeOf");
 		}
+	}
+	
+	public int getCompoundID(){
+		return compoundID;
 	}
 
 }

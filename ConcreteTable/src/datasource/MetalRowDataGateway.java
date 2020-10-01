@@ -26,7 +26,7 @@ public interface MetalRowDataGateway {
 	
 	public void setDissolvedBy(int i);
 	
-	public void persist();
+	public boolean persist();
 	
-	public void delete();
+	public boolean delete();
 }
