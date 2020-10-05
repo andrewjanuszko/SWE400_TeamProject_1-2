@@ -3,7 +3,7 @@ package datasource;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-class CompoundRowDataGatewayRDSTest {
+class CompoundRowDataGatewayRDSTest extends DatabaseTest{
 
   /**
    * Tests constructors.

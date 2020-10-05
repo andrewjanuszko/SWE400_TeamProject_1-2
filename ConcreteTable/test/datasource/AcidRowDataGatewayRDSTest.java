@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
  * @author You - the viewer :)
  *
  */
-class AcidRowDataGatewayRDSTest {
+class AcidRowDataGatewayRDSTest extends DatabaseTest {
   /**
    * Tests constructors.
    * @throws DatabaseException

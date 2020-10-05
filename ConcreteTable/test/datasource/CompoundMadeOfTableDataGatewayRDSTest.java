@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class CompoundMadeOfTableDataGatewayRDSTest {
+class CompoundMadeOfTableDataGatewayRDSTest extends DatabaseTest{
 
 	@Test
 	void testAddRelation() throws DatabaseException {

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
  * @author JOJO
  *
  */
-class BaseRowDataGatewayRDSTest {
+class BaseRowDataGatewayRDSTest extends DatabaseTest{
 
   /**
    * Tests constructors.
