@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
+import model.OptionsManager;
+
 
 /**
  * Defines set up and tear down methods that set up the DB for testing and roll

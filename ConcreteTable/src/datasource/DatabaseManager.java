@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
+import model.OptionsManager;
+
 /**
  * @author Merlin
  *
@@ -51,7 +53,7 @@ public class DatabaseManager
 				throw new DatabaseException("No config file found");
 			}
 			return openConnectionTo("jdbc:mysql://db.cs.ship.edu:3306/swe400_2"+ patternNumber + "?autoReconnect=true",
-					"swe400_2", "pwd4swe400_2F20");
+					"swe400_6", "pwd4swe400_6F20");
 		
 	}
 
