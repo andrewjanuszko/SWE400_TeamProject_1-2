@@ -18,11 +18,12 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	public static void createTable() throws DatabaseException{
 		String drop = "DROP TABLE IF EXISTS Acid";
 		String create = "CREATE TABLE Acid (" + 
-				"acidID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
+				"acidID INT NOT NULL, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
 				"inhabits VARCHAR(30), " +
 				"solute VARCHAR(30), " +
-				"UNIQUE(name);";
+				"UNIQUE(name), "
+				+ "PRIMARY KEY(acidID) );";
 	
 		Connection conn = DatabaseManager.getSingleton().getConnection();
 
@@ -205,7 +206,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	 */
 	private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Acid(acidID, name, inhabits, solute) VALUES (" + acidID + ", " + name + ", " + inhabits + ", " + solute + ");");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Acid (acidID, name, inhabits, solute) VALUES (" + acidID + ", '" + name + "', '" + inhabits + "', '" + solute + "');");
 			stmt.execute();
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into acid table");
