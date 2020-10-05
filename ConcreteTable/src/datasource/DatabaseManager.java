@@ -52,7 +52,7 @@ public class DatabaseManager
 				System.err.println("Need a config file that specifies a db number");
 				throw new DatabaseException("No config file found");
 			}
-			return openConnectionTo("jdbc:mysql://db.cs.ship.edu:3306/swe400_2"+ patternNumber + "?autoReconnect=true",
+			return openConnectionTo("jdbc:mysql://db.cs.ship.edu:3306/swe400_6"+ patternNumber + "?autoReconnect=true",
 					"swe400_6", "pwd4swe400_6F20");
 		
 	}
