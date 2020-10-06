@@ -2,12 +2,25 @@ package datasource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class MetalRowDataGatewayRDSTest extends DatabaseTest{
-
+  
+  /**
+   * Setup.
+   * @throws DatabaseException
+   */
+  @BeforeEach
+  void setup() throws DatabaseException{
+    MetalRowDataGatewayRDS.dropTable();
+    AcidRowDataGatewayRDS.dropTable();
+    AcidRowDataGatewayRDS.createTable();
+    MetalRowDataGatewayRDS.createTable();
+  }
+  
 	@Test
-	void testGetters() {
+	void testGetters() throws DatabaseException {
 		MetalRowDataGateway Metal = new MetalRowDataGatewayRDS(1, "Metal", "inhabit", 5, 10.0, 10000);
 		
 		assertEquals(1, Metal.getMetalID());
@@ -19,7 +32,7 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest{
 	}
 	
 	@Test
-	void testSetters() {
+	void testSetters() throws DatabaseException {
 		MetalRowDataGateway Metal = new MetalRowDataGatewayRDS(1, "Metal", "inhabit", 5, 10.0, 10000);
 		
 		Metal.setName("name");
@@ -45,6 +58,7 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest{
 	
 	@Test
 	void testConstructors() throws DatabaseException{
+	  AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(10000, "acid", "inhabit", "solute");
 	    MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS(1, "metal", "inhabit", 5, 10.0, 10000);
 	    MetalRowDataGateway metal1FindByID = new MetalRowDataGatewayRDS(1);
 	    MetalRowDataGateway metal1FindByName = new MetalRowDataGatewayRDS("metal");
@@ -66,6 +80,7 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest{
 	
 	@Test
 	void testPersist() throws DatabaseException {
+	  AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(10000, "acid", "inhabit", "solute");
 		MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS(1, "metal", "inhabit", 5, 10.0, 10000);
 	    metal1.setName("newName");
 		assertTrue(metal1.persist());

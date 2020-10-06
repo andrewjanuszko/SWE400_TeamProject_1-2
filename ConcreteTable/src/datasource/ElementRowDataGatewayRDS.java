@@ -13,7 +13,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 				"elementID INT NOT NULL, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
 				"inhabits VARCHAR(30), " +
-				"atomicNumer INT NOT NULL, " +
+				"atomicNumber INT NOT NULL, " +
 				"atomicMass DOUBLE NOT NULL," + 
 				"UNIQUE(name)," +
 			  "PRIMARY KEY(elementID));";

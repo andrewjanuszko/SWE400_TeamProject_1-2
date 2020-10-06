@@ -13,10 +13,10 @@ class CompoundMadeOfTableDataGatewayRDSTest extends DatabaseTest{
 		
 		CompoundMadeOfTableDataGateway cmf = new CompoundMadeOfTableDataGatewayRDS(12);
 
-		
-		
 		cmf.addElementToCompound(10);
+		cmf = null;
 		
+		cmf = new CompoundMadeOfTableDataGatewayRDS(12);
 		cmf.getCompoundMadeOf().forEach(x -> assertEquals(10, x.getElementID()));
 	}
 

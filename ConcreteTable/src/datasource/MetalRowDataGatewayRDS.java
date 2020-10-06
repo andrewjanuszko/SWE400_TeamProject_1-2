@@ -22,12 +22,12 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 				"metalID INT NOT NULL, " + 
 				"name VARCHAR(30) NOT NULL, " +                      //maybe Unique
 				"inhabits VARCHAR(30), " +
-				"atomicNumer INT NOT NULL, " +
+				"atomicNumber INT NOT NULL, " +
 				"atomicMass DOUBLE NOT NULL, " +
 				"dissolvedBy INT, " + 
 				"UNIQUE(name), " +
 				"PRIMARY KEY(metalID), " +
-				"FOREIGN KEY(metalID) REFERENCES Acid(acidID)); ";
+				"FOREIGN KEY(dissolvedBy) REFERENCES Acid(acidID)); ";
 		
 		Connection conn = DatabaseManager.getSingleton().getConnection();
 
@@ -88,7 +88,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 			atomicMass = rs.getDouble("atomicMass");
 			dissolvedBy = rs.getInt("dissolvedBy");
 		} catch (SQLException e) {
-			throw new DatabaseException("Couldn't find metal with that name", e);
+			throw new DatabaseException("Couldn't find metal with that ID", e);
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 	
 	private void findByName(String name) throws DatabaseException{
 		try {
-			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Metal WHERE name = " + name);
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Metal WHERE name = '" + name + "'");
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			metalID = rs.getInt("metalID");
@@ -113,8 +113,9 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 		}
 	}
 	
-	public MetalRowDataGatewayRDS(int id, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy) {
-		metalID = id;
+	public MetalRowDataGatewayRDS(int id, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy) throws DatabaseException {
+	  conn = DatabaseManager.getSingleton().getConnection();
+	  metalID = id;
 		this.name = name;
 		this.inhabits = inhabits;
 		this.atomicNumber = atomicNumber;
@@ -125,7 +126,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 
   @Override
   public int getMetalID() {
-    return this.getMetalID();
+    return this.metalID;
   }
 
   @Override
@@ -182,9 +183,9 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
   public boolean persist() {
 	  try {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE Metal SET"
-				+ " name = " + name
-				+ ", inhabits = " + inhabits
-				+ ", atomicNumber = " + atomicNumber
+				+ " name = '" + name
+				+ "', inhabits = '" + inhabits
+				+ "', atomicNumber = " + atomicNumber
 				+ ", atomicMass = " + atomicMass
 				+ ", dissolvedBy = " + dissolvedBy
 				+ " WHERE metalID = " + metalID);
@@ -200,7 +201,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
   @Override
   public boolean delete() {
 	  try {
-		  PreparedStatement stmt = conn.prepareStatement("DELETE FROM Metal WHERE metalID = " + metalID);  
+		  PreparedStatement stmt = conn.prepareStatement("DELETE FROM Metal WHERE metalID = " + metalID + ";");  
 		  stmt.execute();
 		  return true;
 	  } catch (SQLException e) {
@@ -211,7 +212,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 	
   private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Metal(metalID, name, inhabits, atomicNumber, atomicMass, dissolvedBy) VALUES (" + metalID + ", " + name + ", " + inhabits + ", " + atomicNumber + ", " + atomicMass + ", " + dissolvedBy +");");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Metal (metalID, name, inhabits, atomicNumber, atomicMass, dissolvedBy) VALUES (" + metalID + ", '" + name + "', '" + inhabits + "', " + atomicNumber + ", " + atomicMass + ", " + dissolvedBy +");");
 			stmt.execute();
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into Metal table");
