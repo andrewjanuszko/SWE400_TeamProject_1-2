@@ -6,8 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Row Data Gateway for Compound.
+ * @author Chase and Joel.
+ *
+ */
 public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
-
+  
+  /**
+   * Creates the table in the database. Drops the table if it already exists.
+   * @throws DatabaseException
+   */
 	public static void createTable() throws DatabaseException{
 		
 		String drop = "DROP TABLE IF EXISTS Compound";
@@ -44,12 +53,22 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 	private String name;
 	private String inhabits;
 	
+	/**
+   * Constructs Compound Row Data Gateway based off of existing row by ID.
+   * @param id
+   * @throws DatabaseException
+   */
 	public CompoundRowDataGatewayRDS(int id) throws DatabaseException {
 		conn = DatabaseManager.getSingleton().getConnection();
 		this.compoundID = id;
 		findByID(id);
 	}
 	
+	/**
+   * Finds existing row by ID.
+   * @param id
+   * @throws DatabaseException
+   */
 	private void findByID(int id) throws DatabaseException {
 		try {
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Compound WHERE compoundID = " + id);
@@ -63,12 +82,22 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 		
 	}
 	
+	/**
+   * Constructs Compound Row Data Gateway based off of existing row by name.
+   * @param name
+   * @throws DatabaseException
+   */
 	public CompoundRowDataGatewayRDS(String name) throws DatabaseException{
 		conn = DatabaseManager.getSingleton().getConnection();
 		this.name = name;
 		findByName(name);
 	}
 	
+	/**
+   * Finds existing row by Name.
+   * @param name
+   * @throws DatabaseException
+   */
 	private void findByName(String name) throws DatabaseException{
 		try {
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Compound WHERE name = '" + name + "'");
@@ -81,6 +110,13 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 		}
 	}
 	
+	/**
+	 * Constructs new Base Row Data Gateway from given parameters.
+	 * @param id
+	 * @param name
+	 * @param inhabits
+	 * @throws DatabaseException
+	 */
 	public CompoundRowDataGatewayRDS(int id, String name, String inhabits) throws DatabaseException {
 		compoundID = id;
 		this.name = name;
@@ -113,7 +149,11 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
   public void setInhabits(String i) {
     this.inhabits = i;
   }
-
+  
+  /**
+   * Updates the information in the database to reflect changes made.
+   * @return boolean
+   */
   public boolean persist() {
     try {
       PreparedStatement stmt = conn.prepareStatement("UPDATE Compound SET"
@@ -128,6 +168,10 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
     }
   }
   
+  /**
+   * Deletes row from database.
+   * @return boolean
+   */
   public boolean delete() {
   	try {
   		PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM CompoundMadeOf WHERE compoundID = " + compoundID);
@@ -140,6 +184,10 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
   		return false;
   	}
   }
+  
+  /**
+   * Inserts new row into database.
+   */
   private void insert() {
 		try {
 			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Compound(compoundID, name, inhabits) VALUES (" + compoundID + ", '" + name + "', '" + inhabits + "');");

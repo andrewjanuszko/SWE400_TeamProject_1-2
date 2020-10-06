@@ -5,8 +5,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Row Data Gateway for Element.
+ * @author 
+ *
+ */
 public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 	
+  /**
+   * Creates the table in the database. Drops the table if it already exists.
+   * @throws DatabaseException
+   */
 	public static void createTable() throws DatabaseException{
 		String drop = "DROP TABLE IF EXISTS Element";
 		String create = "CREATE TABLE Element (" + 
@@ -46,12 +55,22 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 	private int atomicNumber;
 	private double atomicMass;
 	
+	/**
+   * Constructs Element Row Data Gateway based off of existing row by ID.
+   * @param id
+   * @throws DatabaseException
+   */
 	public ElementRowDataGatewayRDS(int id) throws DatabaseException {
 		conn = DatabaseManager.getSingleton().getConnection();
 		this.elementID = id;
 		findByID(id);
 	}
 	
+	/**
+   * Finds existing row by ID.
+   * @param id
+   * @throws DatabaseException
+   */
 	private void findByID(int id) throws DatabaseException {
 		try {
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Element WHERE elementID = " + id);
@@ -71,12 +90,22 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 		}
 	}
 	
+	/**
+   * Constructs Element Row Data Gateway based off of existing row by name.
+   * @param name
+   * @throws DatabaseException
+   */
 	public ElementRowDataGatewayRDS(String name) throws DatabaseException{
 		conn = DatabaseManager.getSingleton().getConnection();
 		this.name = name;
 		findByName(name);
 	}
 	
+	/**
+   * Finds existing row by Name.
+   * @param name
+   * @throws DatabaseException
+   */
 	private void findByName(String name) throws DatabaseException{
 		try {
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Element WHERE name = '" + name + "'");
@@ -90,7 +119,16 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 			throw new DatabaseException("Couldn't find element with that name", e);
 		}
 	}
-
+	
+	/**
+	 * Constructs new Element Row Data Gateway from given parameters.
+	 * @param id
+	 * @param name
+	 * @param inhabits
+	 * @param atomicNumber
+	 * @param atomicMass
+	 * @throws DatabaseException
+	 */
 	public ElementRowDataGatewayRDS(int id, String name, String inhabits, int atomicNumber, double atomicMass) throws DatabaseException {
 		elementID = id;
 		this.name = name;
@@ -148,6 +186,10 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
     
   }
   
+  /**
+   * Updates the information in the database to reflect changes made.
+   * @return boolean
+   */
   public boolean persist() {
 	  try {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE Element SET"
@@ -165,7 +207,10 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 	}
   }
 
-  @Override
+  /**
+   * Deletes row from database.
+   * @return boolean
+   */
   public boolean delete() {
 	  try {
 			PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM CompoundMadeOf WHERE elementID = " + elementID);
@@ -178,6 +223,10 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 			return false;
 		}
   }
+  
+  /**
+   * Inserts new row into database.
+   */
   private void insert() {
 		try {
 			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Element(elementID, name, inhabits, atomicNumber, atomicMass) VALUES (" + elementID + ", '" + name + "', '" + inhabits + "', " + atomicNumber + ", " + atomicMass + ");");

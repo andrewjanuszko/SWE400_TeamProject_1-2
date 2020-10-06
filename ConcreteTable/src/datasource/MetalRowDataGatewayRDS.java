@@ -9,8 +9,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Row Data Gateway for Metal.
+ * @author Chase
+ *
+ */
 public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
-	/*
+	
+  /*
 	 * Creates Table
 	 * 
 	 * @throws DatabaseException if it can't create or drop table.
@@ -20,7 +26,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 		String drop = "DROP TABLE IF EXISTS Metal";
 		String create = "CREATE TABLE Metal (" + 
 				"metalID INT NOT NULL, " + 
-				"name VARCHAR(30) NOT NULL, " +                      //maybe Unique
+				"name VARCHAR(30) NOT NULL, " +                     
 				"inhabits VARCHAR(30), " +
 				"atomicNumber INT NOT NULL, " +
 				"atomicMass DOUBLE NOT NULL, " +
@@ -48,6 +54,11 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 			throw new DatabaseException("Unable to create Metal table", e);
 		}
 	}
+	
+	/**
+   * Only drop the table.
+   * @throws DatabaseException
+   */
 	 public static void dropTable() throws DatabaseException {
 	   String drop = "DROP TABLE IF EXISTS Metal";
 	   try {
@@ -71,12 +82,22 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 	private double atomicMass;
 	private int dissolvedBy;
 	
+	/**
+   * Constructs Metal Row Data Gateway based off of existing row by ID.
+   * @param id
+   * @throws DatabaseException
+   */
 	public MetalRowDataGatewayRDS(int id) throws DatabaseException {
 		conn = DatabaseManager.getSingleton().getConnection();
 		this.metalID = id;
 		findByID(id);
 	}
 	
+	/**
+   * Finds existing row by ID.
+   * @param id
+   * @throws DatabaseException
+   */
 	private void findByID(int id) throws DatabaseException{
 		try {
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Metal WHERE metalID = " + id);
@@ -92,12 +113,22 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 		}
 	}
 	
+	/**
+   * Constructs Metal Row Data Gateway based off of existing row by name.
+   * @param name
+   * @throws DatabaseException
+   */
 	public MetalRowDataGatewayRDS(String name) throws DatabaseException{
 		conn = DatabaseManager.getSingleton().getConnection();
 		this.name = name;
 		findByName(name);
 	}
 	
+	/**
+   * Finds existing row by Name.
+   * @param name
+   * @throws DatabaseException
+   */
 	private void findByName(String name) throws DatabaseException{
 		try {
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Metal WHERE name = '" + name + "'");
@@ -113,6 +144,16 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 		}
 	}
 	
+	/**
+	 * Constructs new Metal Row Data Gateway from given parameters.
+	 * @param id
+	 * @param name
+	 * @param inhabits
+	 * @param atomicNumber
+	 * @param atomicMass
+	 * @param dissolvedBy
+	 * @throws DatabaseException
+	 */
 	public MetalRowDataGatewayRDS(int id, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy) throws DatabaseException {
 	  conn = DatabaseManager.getSingleton().getConnection();
 	  metalID = id;
@@ -179,7 +220,10 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
     this.dissolvedBy = i;
   }
   
-
+  /**
+   * Updates the information in the database to reflect changes made.
+   * @return boolean
+   */
   public boolean persist() {
 	  try {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE Metal SET"
@@ -198,7 +242,10 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 	}
   }
 
-  @Override
+  /**
+   * Deletes row from database.
+   * @return boolean
+   */
   public boolean delete() {
 	  try {
 		  PreparedStatement stmt = conn.prepareStatement("DELETE FROM Metal WHERE metalID = " + metalID + ";");  
@@ -209,7 +256,10 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 			return false;
 	  }
   }
-	
+  
+  /**
+   * Inserts new row into database.
+   */
   private void insert() {
 		try {
 			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Metal (metalID, name, inhabits, atomicNumber, atomicMass, dissolvedBy) VALUES (" + metalID + ", '" + name + "', '" + inhabits + "', " + atomicNumber + ", " + atomicMass + ", " + dissolvedBy +");");
