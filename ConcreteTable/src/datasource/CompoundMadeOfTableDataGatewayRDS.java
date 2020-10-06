@@ -18,8 +18,8 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
 		String create = "CREATE TABLE CompoundMadeOf (" + 
 				"compoundID INT NOT NULL," + 
 				"elementID INT NOT NULL," + 
-				"FOREIGN KEY(compoundID) REFERENCES Compound(compoundID) " +
-				"FOREIGN KEY(elementID) REFERENCES Element(elementID) ";
+				"FOREIGN KEY(compoundID) REFERENCES Compound(compoundID), " +
+				"FOREIGN KEY(elementID) REFERENCES Element(elementID)); ";
 				
 	
 
@@ -39,6 +39,18 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
 			throw new DatabaseException("Unable to create the CompoundMadeOf table", e);
 		}
 	}
+	public static void dropTable() throws DatabaseException {
+	  try
+    {
+  	  String drop = "DROP TABLE IF EXISTS CompoundMadeOf";
+  	  PreparedStatement stmt;
+      stmt = DatabaseManager.getSingleton().getConnection().prepareStatement(drop);
+      stmt.execute();
+      stmt.close();
+    }catch (SQLException e) {
+      throw new DatabaseException("Unable to drop the CompoundMadeOf table", e);
+    }
+	}
 
 	List<CompoundMadeOfDTO> dtoList = new ArrayList<CompoundMadeOfDTO>();
 	private int compoundID;
@@ -47,7 +59,7 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
 		compoundID = id;
 		findCompounds();
 	}
-	
+	 
 	private void findCompounds() throws DatabaseException {
 		conn = DatabaseManager.getSingleton().getConnection();
 		try {

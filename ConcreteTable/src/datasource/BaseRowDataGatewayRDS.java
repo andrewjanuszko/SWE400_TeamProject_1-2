@@ -11,11 +11,12 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	public static void createTable() throws DatabaseException{
 		String drop = "DROP TABLE IF EXISTS Base";
 		String create = "CREATE TABLE Base (" + 
-				"baseID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
+				"baseID INT NOT NULL, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
 				"inhabits VARCHAR(30), " +
 				"solute VARCHAR(30), " + 
-				"UNIQUE(name);";
+				"UNIQUE(name), " +
+				"PRIMARY KEY(baseID)) ;";
 		
 		Connection conn = DatabaseManager.getSingleton().getConnection();
 
@@ -71,7 +72,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	
 	private void findByName(String name) throws DatabaseException{
 		try {
-			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Base WHERE name = " + name);
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Base WHERE name = '" + name + "'");
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			baseID = rs.getInt("baseID");
@@ -82,11 +83,12 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 		}
 	}
 	
-	public BaseRowDataGatewayRDS(int id, String name, String inhabits, String solute) {
+	public BaseRowDataGatewayRDS(int id, String name, String inhabits, String solute) throws DatabaseException {
 		baseID = id;
 		this.name = name;
 		this.inhabits = inhabits;
 		this.solute = solute;
+		conn = DatabaseManager.getSingleton().getConnection();
 		insert();
 	}
 
@@ -128,11 +130,10 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
   public boolean persist() {
 	  try {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE Base SET"
-				+ " baseID = " + baseID
-				+ ", name = " + name
-				+ ", inhabits = " + inhabits
-				+ ", solute = " + solute
-				+ " WHERE baseID = " + baseID);
+				+ " name = '" + name
+				+ "', inhabits = '" + inhabits
+				+ "', solute = '" + solute
+				+ "' WHERE baseID = " + baseID);
 		stmt.executeUpdate();
 		return true;
 	} catch (SQLException e) {
@@ -154,7 +155,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
   
   private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Base(baseID, name, inhabits, solute) VALUES (" + baseID + ", " + name + ", " + inhabits + ", " + solute + ");");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Base(baseID, name, inhabits, solute) VALUES (" + baseID + ", '" + name + "', '" + inhabits + "', '" + solute + "');");
 			stmt.execute();
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into base table");

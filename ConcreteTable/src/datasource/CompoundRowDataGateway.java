@@ -14,7 +14,7 @@ public interface CompoundRowDataGateway {
 	
 	public void setInhabits(String i);
 	
-	public void persist();
+	public boolean persist();
 	
 	public boolean delete();
 }

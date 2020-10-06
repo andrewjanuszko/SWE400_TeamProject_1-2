@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 class AcidRowDataGatewayRDSTest extends DatabaseTest {
   @BeforeEach
   void setup() throws DatabaseException{
+    MetalRowDataGatewayRDS.dropTable();
     AcidRowDataGatewayRDS.createTable();
   }
   
@@ -90,7 +91,7 @@ class AcidRowDataGatewayRDSTest extends DatabaseTest {
   @Test
   void testDelete() throws DatabaseException {
     AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", "inhabit", "solute");
-    
+    MetalRowDataGatewayRDS.createTable();
     assertTrue(acid1.delete());
   }
 }

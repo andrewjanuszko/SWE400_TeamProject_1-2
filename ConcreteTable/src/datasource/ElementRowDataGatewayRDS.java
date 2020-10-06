@@ -10,12 +10,13 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 	public static void createTable() throws DatabaseException{
 		String drop = "DROP TABLE IF EXISTS Element";
 		String create = "CREATE TABLE Element (" + 
-				"elementID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + //check later
+				"elementID INT NOT NULL, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
 				"inhabits VARCHAR(30), " +
 				"atomicNumer INT NOT NULL, " +
 				"atomicMass DOUBLE NOT NULL," + 
-				"UNIQUE(name);";
+				"UNIQUE(name)," +
+			  "PRIMARY KEY(elementID));";
 		
 		Connection conn = DatabaseManager.getSingleton().getConnection();
 
@@ -56,12 +57,17 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Element WHERE elementID = " + id);
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
+			System.out.println("testsu?");
 			name = rs.getString("name");
+			System.out.println("testsu");
 			inhabits = rs.getString("inhabits");
+			System.out.println("testsu1");
 			atomicNumber = rs.getInt("atomicNumber");
+			System.out.println("testsu2");
 			atomicMass = rs.getDouble("atomicMass");
+			System.out.println("testsu3");
 		} catch (SQLException e) {
-			throw new DatabaseException("Couldn't find element with that name", e);
+			throw new DatabaseException("Couldn't find element with that ID", e);
 		}
 	}
 	
@@ -73,7 +79,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 	
 	private void findByName(String name) throws DatabaseException{
 		try {
-			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Element WHERE name = " + name);
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Element WHERE name = '" + name + "'");
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			elementID = rs.getInt("elementID");
@@ -85,12 +91,13 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 		}
 	}
 
-	public ElementRowDataGatewayRDS(int id, String name, String inhabits, int atomicNumber, double atomicMass) {
+	public ElementRowDataGatewayRDS(int id, String name, String inhabits, int atomicNumber, double atomicMass) throws DatabaseException {
 		elementID = id;
 		this.name = name;
 		this.inhabits = inhabits;
 		this.atomicNumber = atomicNumber;
 		this.atomicMass = atomicMass;
+		conn = DatabaseManager.getSingleton().getConnection();
 		insert();
 	}
 	
@@ -144,9 +151,9 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
   public boolean persist() {
 	  try {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE Element SET"
-				+ " name = " + name
-				+ ", inhabits = " + inhabits
-				+ ", atomicNumber = " + atomicNumber
+				+ " name = '" + name
+				+ "', inhabits = '" + inhabits
+				+ "', atomicNumber = " + atomicNumber
 				+ ", atomicMass = " + atomicMass
 				+ " WHERE elementID = " + elementID);
 		
@@ -173,7 +180,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
   }
   private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Element(elementID, name, inhabits, atomicNumber, atomicMass) VALUES (" + elementID + ", " + name + ", " + inhabits + ", " + atomicNumber + ", " + atomicMass + ");");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Element(elementID, name, inhabits, atomicNumber, atomicMass) VALUES (" + elementID + ", '" + name + "', '" + inhabits + "', " + atomicNumber + ", " + atomicMass + ");");
 			stmt.execute();
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into Element table");

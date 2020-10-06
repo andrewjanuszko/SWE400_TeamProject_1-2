@@ -1,10 +1,22 @@
 package datasource;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class CompoundRowDataGatewayRDSTest extends DatabaseTest{
-
+  /**
+   * Setup.
+   * @throws DatabaseException
+   */
+  @BeforeEach
+  void setup() throws DatabaseException{
+    CompoundMadeOfTableDataGatewayRDS.dropTable();
+    CompoundRowDataGatewayRDS.createTable();
+    ElementRowDataGatewayRDS.createTable();
+    CompoundMadeOfTableDataGatewayRDS.createTable();
+  }
   /**
    * Tests constructors.
    * @throws DatacompoundException
@@ -51,20 +63,20 @@ class CompoundRowDataGatewayRDSTest extends DatabaseTest{
     assertEquals("new", compound1.getInhabits());
   }
   
-//  /**
-//   * Tests persist.
-//   * @throws DatacompoundException
-//   */
-//  @Test
-//  void testPersist() throws DatabaseException {
-//    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", "inhabit");
-//    compound1.setName("newName");
-//    //assertTrue(compound1.persist());
-//    compound1 = null;
-//    
-//    CompoundRowDataGateway compound1Copy = new CompoundRowDataGatewayRDS(1);
-//    assertEquals("newName", compound1Copy.getName());
-//  }
+  /**
+   * Tests persist.
+   * @throws DatacompoundException
+   */
+  @Test
+  void testPersist() throws DatabaseException {
+    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", "inhabit");
+    compound1.setName("newName");
+    compound1.persist();
+    compound1 = null;
+    
+    CompoundRowDataGateway compound1Copy = new CompoundRowDataGatewayRDS(1);
+    assertEquals("newName", compound1Copy.getName());
+  }
   
   /**
    * Tests delete.

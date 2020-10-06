@@ -2,6 +2,7 @@ package datasource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 /**
  * JUnit tests for Base Gateway
@@ -9,7 +10,15 @@ import org.junit.jupiter.api.Test;
  *
  */
 class BaseRowDataGatewayRDSTest extends DatabaseTest{
-
+  /**
+   * Setup.
+   * @throws DatabaseException
+   */
+  @BeforeEach
+  void setup() throws DatabaseException{
+    BaseRowDataGatewayRDS.createTable();
+  }
+  
   /**
    * Tests constructors.
    * @throws DatabaseException

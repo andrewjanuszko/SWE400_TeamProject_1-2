@@ -99,7 +99,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	 */
 	private void findByName(String name) throws DatabaseException{
 		try {
-			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Acid WHERE name = " + name);
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Acid WHERE name = '" + name + "'");
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			acidID = rs.getInt("acidID");
@@ -122,8 +122,10 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	 * @param name
 	 * @param inhabits
 	 * @param solute
+	 * @throws DatabaseException 
 	 */
-	public AcidRowDataGatewayRDS(int id, String name, String inhabits, String solute) {
+	public AcidRowDataGatewayRDS(int id, String name, String inhabits, String solute) throws DatabaseException {
+	  conn = DatabaseManager.getSingleton().getConnection();
 		acidID = id;
 		this.name = name;
 		this.inhabits = inhabits;
@@ -172,10 +174,10 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	public boolean persist() {
 		try {
 			PreparedStatement stmt = conn.prepareStatement("UPDATE Acid SET"
-					+ " name = " + name
-					+ ", inhabits = " + inhabits
-					+ ", solute = " + solute 
-					+ " WHERE acidID = " + acidID);
+					+ " name = '" + name
+					+ "', inhabits = '" + inhabits
+					+ "', solute = '" + solute 
+					+ "' WHERE acidID = " + acidID);
 			stmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -189,9 +191,9 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	 */
 	public boolean delete() {
 		try {
-			PreparedStatement stmt1 = conn.prepareStatement("UPDATE Metal SET dissolvedBy = NULL WHERE dissovledBy = " + acidID);
+			PreparedStatement stmt1 = conn.prepareStatement("UPDATE Metal SET dissolvedBy = NULL WHERE dissolvedBy = " + acidID + ";");
 			stmt1.execute();
-			PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Acid WHERE acidID = " + acidID);
+			PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Acid WHERE acidID = " + acidID + ";");
 			stmt2.execute();
 			return true;
 		} catch (SQLException e) {

@@ -15,18 +15,19 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 	 * 
 	 * @throws DatabaseException if it can't create or drop table.
 	 */
-	
 	public static void createTable() throws DatabaseException
 	{
 		String drop = "DROP TABLE IF EXISTS Metal";
 		String create = "CREATE TABLE Metal (" + 
-				"metalID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
+				"metalID INT NOT NULL, " + 
 				"name VARCHAR(30) NOT NULL, " +                      //maybe Unique
 				"inhabits VARCHAR(30), " +
 				"atomicNumer INT NOT NULL, " +
 				"atomicMass DOUBLE NOT NULL, " +
-				"disslovedBy INT REFERENCES Acid(acidID)," + 
-				"UNIQUE(name);";
+				"dissolvedBy INT, " + 
+				"UNIQUE(name), " +
+				"PRIMARY KEY(metalID), " +
+				"FOREIGN KEY(metalID) REFERENCES Acid(acidID)); ";
 		
 		Connection conn = DatabaseManager.getSingleton().getConnection();
 
@@ -47,7 +48,19 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 			throw new DatabaseException("Unable to create Metal table", e);
 		}
 	}
-	
+	 public static void dropTable() throws DatabaseException {
+	   String drop = "DROP TABLE IF EXISTS Metal";
+	   try {
+	      // drop table
+	      PreparedStatement stmt;
+	      stmt = DatabaseManager.getSingleton().getConnection().prepareStatement(drop);
+	      stmt.execute();
+	      stmt.close();
+	    } catch (SQLException e)
+      {
+        throw new DatabaseException("Unable to drop Metal table", e);
+      }
+	 }
 
 	private Connection conn;
 	

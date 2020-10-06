@@ -12,10 +12,11 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 		
 		String drop = "DROP TABLE IF EXISTS Compound";
 		String create = "CREATE TABLE Compound (" + 
-				"compoundID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + 
+				"compoundID INT NOT NULL, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
 				"inhabits VARCHAR(30), " + 
-				"UNIQUE(name);";
+				"UNIQUE(name), " +
+				"PRIMARY KEY(compoundID)) ;";
 		
 		Connection conn = DatabaseManager.getSingleton().getConnection();
 
@@ -54,10 +55,10 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Compound WHERE compoundID = " + id);
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
-			compoundID = rs.getInt("compoundID");
+			name = rs.getString("name");
 			inhabits = rs.getString("inhabits");
 		} catch (SQLException e) {
-			throw new DatabaseException("Couldn't find Compound with that name", e);
+			throw new DatabaseException("Couldn't find Compound with that Id", e);
 		}
 		
 	}
@@ -70,7 +71,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 	
 	private void findByName(String name) throws DatabaseException{
 		try {
-			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Compound WHERE name = " + name);
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Compound WHERE name = '" + name + "'");
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			compoundID = rs.getInt("compoundID");
@@ -80,10 +81,11 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 		}
 	}
 	
-	public CompoundRowDataGatewayRDS(int id, String name, String inhabits) {
+	public CompoundRowDataGatewayRDS(int id, String name, String inhabits) throws DatabaseException {
 		compoundID = id;
 		this.name = name;
 		this.inhabits = inhabits;
+		conn = DatabaseManager.getSingleton().getConnection();
 		insert();
 	}
 
@@ -112,8 +114,18 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
     this.inhabits = i;
   }
 
-  public void persist() {
-	  
+  public boolean persist() {
+    try {
+      PreparedStatement stmt = conn.prepareStatement("UPDATE Compound SET"
+          + " name = '" + name
+          + "', inhabits = '" + inhabits
+          + "' WHERE compoundID = " + compoundID);
+      stmt.executeUpdate();
+      return true;
+    } catch (SQLException e) {
+      new DatabaseException("Couldn't update Compound table");
+      return false;
+    }
   }
   
   public boolean delete() {
@@ -130,7 +142,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
   }
   private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Acid(acidID, name, inhabits) VALUES (" + compoundID + ", " + name + ", " + inhabits + ");");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Compound(compoundID, name, inhabits) VALUES (" + compoundID + ", '" + name + "', '" + inhabits + "');");
 			stmt.execute();
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into compound table");

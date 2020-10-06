@@ -2,12 +2,25 @@ package datasource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ElementRowDataGatewayRDSTest extends DatabaseTest{
-
+  
+  /**
+   * Setup.
+   * @throws DatabaseException
+   */
+  @BeforeEach
+  void setup() throws DatabaseException{
+    CompoundMadeOfTableDataGatewayRDS.dropTable();
+    CompoundRowDataGatewayRDS.createTable();
+    ElementRowDataGatewayRDS.createTable();
+    CompoundMadeOfTableDataGatewayRDS.createTable();
+  }
+  
 	@Test
-	void testGetters() {
+	void testGetters() throws DatabaseException {
 		ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, "element", "inhabit", 5, 10.0);
 		
 		assertEquals(1, element.getElementID());
@@ -18,7 +31,7 @@ class ElementRowDataGatewayRDSTest extends DatabaseTest{
 	}
 	
 	@Test
-	void testSetters() {
+	void testSetters() throws DatabaseException {
 		ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, "element", "inhabit", 5, 10.0);
 		
 		element.setName("name");
@@ -63,7 +76,7 @@ class ElementRowDataGatewayRDSTest extends DatabaseTest{
 	void testPersist() throws DatabaseException {
 		ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(1, "element", "inhabit", 5, 10.0);
 	    element1.setName("newName");
-		assertTrue(element1.persist());
+	    assertTrue(element1.persist());
 	    element1 = null;
 	    
 	    ElementRowDataGateway element1Copy = new ElementRowDataGatewayRDS(1);
