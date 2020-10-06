@@ -44,6 +44,10 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 		}
 	}
 	
+	/**
+	 * Only drop the table.
+	 * @throws DatabaseException
+	 */
 	public static void dropTable() throws DatabaseException{
 	  String drop = "DROP TABLE IF EXISTS Acid";
 	  try {

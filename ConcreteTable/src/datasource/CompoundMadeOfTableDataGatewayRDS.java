@@ -9,10 +9,19 @@ import java.util.List;
 
 import datadto.CompoundMadeOfDTO;
 
+/**
+ * Table Data Gateway for CompoundMadeOf Table.
+ * @author Joel
+ *
+ */
 public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDataGateway{
 	
 	Connection conn;
 	
+	/**
+	 * Creates the table in the database. Drops the table if it already exists.
+	 * @throws DatabaseException
+	 */
 	public static void createTable() throws DatabaseException {
 		String drop = "DROP TABLE IF EXISTS CompoundMadeOf";
 		String create = "CREATE TABLE CompoundMadeOf (" + 
@@ -21,8 +30,6 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
 				"FOREIGN KEY(compoundID) REFERENCES Compound(compoundID), " +
 				"FOREIGN KEY(elementID) REFERENCES Element(elementID)); ";
 				
-	
-
 		try
 		{
 			// drop table
@@ -39,6 +46,11 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
 			throw new DatabaseException("Unable to create the CompoundMadeOf table", e);
 		}
 	}
+	
+	/**
+	 * Only drops the table.
+	 * @throws DatabaseException
+	 */
 	public static void dropTable() throws DatabaseException {
 	  try
     {
@@ -55,11 +67,20 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
 	List<CompoundMadeOfDTO> dtoList = new ArrayList<CompoundMadeOfDTO>();
 	private int compoundID;
 	
+	/**
+	 * Constructs CompoundMadeOf Gateway view based off of matches with given ID.
+	 * @param id
+	 * @throws DatabaseException
+	 */
 	public CompoundMadeOfTableDataGatewayRDS(int id) throws DatabaseException {
 		compoundID = id;
 		findCompounds();
 	}
-	 
+	
+	/**
+	 * Finds compounds and adds to dtoList.
+	 * @throws DatabaseException
+	 */
 	private void findCompounds() throws DatabaseException {
 		conn = DatabaseManager.getSingleton().getConnection();
 		try {
@@ -79,6 +100,9 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
 		return dtoList;
 	}
 	
+	/**
+	 * Links element to current compound.
+	 */
 	public synchronized void addElementToCompound(int elementID) {
 		dtoList.add(new CompoundMadeOfDTO(compoundID, elementID));
 		try {
