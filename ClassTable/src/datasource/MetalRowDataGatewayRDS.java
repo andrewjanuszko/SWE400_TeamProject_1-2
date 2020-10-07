@@ -172,7 +172,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
   public void update(int id, int dissolvedById, String name, String inhabits) {
     try {
       PreparedStatement updateMetal = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("UPDATE Element SET atomicNumber = ?, atomicMass = ? WHERE elementId = ?;");
+          .prepareStatement("UPDATE Metal SET dissolvedById = ? WHERE elementId = ?;");
       updateMetal.setInt(1, dissolvedById);
       updateMetal.setInt(2, id);
 
