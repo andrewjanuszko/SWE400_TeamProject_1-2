@@ -169,18 +169,18 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
    * updates metal with given values
    */
   @Override
-  public void update(int id, int dissolvedById, String name, String inhabits) {
+  public void update() {
     try {
       PreparedStatement updateMetal = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Metal SET dissolvedById = ? WHERE elementId = ?;");
-      updateMetal.setInt(1, dissolvedById);
-      updateMetal.setInt(2, id);
+      updateMetal.setInt(1, this.dissolvedById);
+      updateMetal.setInt(2, this.metalId);
 
       PreparedStatement updateChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Chemical SET name = ?, inhabits = ? WHERE chemicalId = ?;");
-      updateChemical.setString(1, name);
-      updateChemical.setString(2, inhabits);
-      updateChemical.setInt(3, id);
+      updateChemical.setString(1, this.name);
+      updateChemical.setString(2, this.inhabits);
+      updateChemical.setInt(3, this.metalId);
 
       updateMetal.execute();
       updateChemical.execute();
@@ -231,6 +231,10 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
     return this.inhabits;
   }
 
+  @Override
+  public int getMetalId() {
+    return metalId;
+  }
   /**
    * getter for name
    */
@@ -239,4 +243,26 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
     return this.dissolvedById;
   }
 
+  @Override
+  public void setMetalId(int metalId) {
+    this.metalId = metalId;
+  }
+
+  @Override
+  public void setDissolvedById(int dissolvedById) {
+    this.dissolvedById = dissolvedById;
+  }
+
+  @Override
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public void setInhabits(String inhabits) {
+    this.inhabits = inhabits;
+  }
+
+
+  
 }
