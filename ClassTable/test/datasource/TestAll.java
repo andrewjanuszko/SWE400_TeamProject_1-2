@@ -8,6 +8,6 @@ public class TestAll {
     TestChemical.testAll();
     TestElement.testAll();
     TestMetal.testAll();
-//    TestCompoundsMadeOf.testAll();
+    TestCompoundsMadeOf.testAll();
   }
 }

@@ -10,9 +10,9 @@ public interface CompoundsMadeOfTableDataGateway {
 
   public void delete();
 
-  List<Integer> findSetCompoundId(int elementId);
+  List<Integer> findMakes(int elementId);
 
-  List<Integer> findSetElementId(int compoundId);
+  List<Integer> findMadeOf(int compoundId);
 
   String getCompoundName();
   

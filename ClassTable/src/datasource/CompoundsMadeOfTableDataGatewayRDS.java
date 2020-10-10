@@ -21,7 +21,6 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   private String inhabits;
 
   /**
-   * Empty constructor drops and re-creates the table
    */
   public CompoundsMadeOfTableDataGatewayRDS() {
   }
@@ -96,7 +95,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    *          to search for
    */
   @Override
-  public List<Integer> findSetCompoundId(int elementId) {
+  public List<Integer> findMakes(int elementId) {
     String sql = "SELECT * FROM CompoundMadeFromElement WHERE elementId = " + elementId + ";";
     List<Integer> compounds = new ArrayList<>();
     try {
@@ -120,7 +119,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    *          to search for
    */
   @Override
-  public List<Integer> findSetElementId(int compoundId) {
+  public List<Integer> findMadeOf(int compoundId) {
     String sql = "SELECT * FROM CompoundMadeFromElement WHERE compoundId = " + compoundId + ";";
     List<Integer> compounds = new ArrayList<>();
 
