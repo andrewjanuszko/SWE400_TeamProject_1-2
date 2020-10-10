@@ -136,6 +136,7 @@ class TestAcid extends DatabaseTest {
     AcidRowDataGateway createAcid = new AcidRowDataGatewayRDS();
     createAcid.dropAllTables();
     ChemicalRowDataGateway createChemical = new ChemicalRowDataGatewayRDS();
+    createAcid.createTable();
     AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
     AcidRowDataGateway acid2 = new AcidRowDataGatewayRDS(2, 15, "chemicalname2", "inhabits2");
     
