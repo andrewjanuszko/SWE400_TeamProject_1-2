@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import org.junit.jupiter.api.Test;
 
-import datasource.ChemicalRowDataGateway;
+import datasource.ChemicalRDG;
 
 /**
  * 
@@ -24,11 +24,11 @@ class TestChemical extends DatabaseTest {
    */
   @Test
   static void testGetName() throws SQLException, DatabaseException {
-    ChemicalRowDataGateway 
-        chem1 = new ChemicalRowDataGatewayRDS(1), 
-        chem2 = new ChemicalRowDataGatewayRDS(2),
-        chem3 = new ChemicalRowDataGatewayRDS(11),
-        chem4 = new ChemicalRowDataGatewayRDS(12);
+    ChemicalRDG 
+        chem1 = new ChemicalRDGRDS(1), 
+        chem2 = new ChemicalRDGRDS(2),
+        chem3 = new ChemicalRDGRDS(11),
+        chem4 = new ChemicalRDGRDS(12);
 
     assertEquals("acidname1", chem1.getName());
     assertEquals("acidname2", chem2.getName());
@@ -43,11 +43,11 @@ class TestChemical extends DatabaseTest {
    */
   @Test
   static void testGetInhabits() throws SQLException, DatabaseException {
-    ChemicalRowDataGateway 
-        chem1 = new ChemicalRowDataGatewayRDS(1), 
-        chem2 = new ChemicalRowDataGatewayRDS(2),
-        chem3 = new ChemicalRowDataGatewayRDS(11),
-        chem4 = new ChemicalRowDataGatewayRDS(12);
+    ChemicalRDG 
+        chem1 = new ChemicalRDGRDS(1), 
+        chem2 = new ChemicalRDGRDS(2),
+        chem3 = new ChemicalRDGRDS(11),
+        chem4 = new ChemicalRDGRDS(12);
 
     assertEquals("acidinhabits1", chem1.getInhabits());
     assertEquals("acidinhabits2", chem2.getInhabits());
@@ -62,8 +62,8 @@ class TestChemical extends DatabaseTest {
    */
   @Test
   static void testUpdate() throws SQLException, DatabaseException {
-    ChemicalRowDataGateway chem_setter = new ChemicalRowDataGatewayRDS(9, "chemname9", "cheminhabits9"),
-        chem_getter = new ChemicalRowDataGatewayRDS(9);
+    ChemicalRDG chem_setter = new ChemicalRDGRDS(9, "chemname9", "cheminhabits9"),
+        chem_getter = new ChemicalRDGRDS(9);
 
     assertEquals("chemname9", chem_getter.getName());
     assertEquals("cheminhabits9", chem_getter.getInhabits());
@@ -72,12 +72,12 @@ class TestChemical extends DatabaseTest {
     chem_setter.setInhabits("cheminhabits6");
     
     chem_setter.update();
-    chem_getter = new ChemicalRowDataGatewayRDS(9);
+    chem_getter = new ChemicalRDGRDS(9);
     
     assertEquals("chemname6", chem_getter.getName());
     assertEquals("cheminhabits6", chem_getter.getInhabits());
     
-    chem_getter = new ChemicalRowDataGatewayRDS(9);
+    chem_getter = new ChemicalRDGRDS(9);
     chem_getter.delete();
   }
   
@@ -86,7 +86,7 @@ class TestChemical extends DatabaseTest {
    */
   @Test
   static void testDelete() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(9, "chemname9", "cheminhabits9");
+    ChemicalRDG chem = new ChemicalRDGRDS(9, "chemname9", "cheminhabits9");
     
     // Ensure it has been added
     assertEquals("chemname9", chem.getName());
@@ -95,7 +95,7 @@ class TestChemical extends DatabaseTest {
     chem.delete();
     
     try { 
-      chem = new ChemicalRowDataGatewayRDS(9);
+      chem = new ChemicalRDGRDS(9);
       fail("");
     } catch(DatabaseException | SQLException e) {
       assertTrue(true); 

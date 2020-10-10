@@ -1,17 +1,18 @@
 package datasource;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
- * ChemicalRowDataGateway
+ * BaseRowDataGateway
  * @author Isabella Boone, Kim O'Neill
  */
-public interface ChemicalRowDataGateway {
+public interface BaseRDG {
   
-  public void delete();
+  public int getSolute();
   
-  public void update(); 
-  
+  public void setSolute(int newSolute);
+
   public String getName();
   
   public void setName(String newName);
@@ -19,5 +20,10 @@ public interface ChemicalRowDataGateway {
   public String getInhabits();
   
   public void setInhabits(String newInhabits);
-  
+
+  public void update();
+
+  public void delete();
+
+  public List<BaseRDGRDS> findSet(int solute);
 }

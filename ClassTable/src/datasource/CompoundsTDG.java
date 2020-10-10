@@ -6,7 +6,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public interface CompoundsMadeOfTableDataGateway {
+public interface CompoundsTDG {
 
   public void delete();
 

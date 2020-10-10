@@ -16,10 +16,10 @@ class TestMetal {
 
   @Test
   static void testGetName() {    
-    MetalRowDataGateway metalGet1 = new MetalRowDataGatewayRDS(31);
-    MetalRowDataGateway metalGet2 = new MetalRowDataGatewayRDS(32);
-    MetalRowDataGateway metalGet3 = new MetalRowDataGatewayRDS(33);
-    MetalRowDataGateway metalGet4 = new MetalRowDataGatewayRDS(34);
+    MetalRDG metalGet1 = new MetalRDGRDS(31);
+    MetalRDG metalGet2 = new MetalRDGRDS(32);
+    MetalRDG metalGet3 = new MetalRDGRDS(33);
+    MetalRDG metalGet4 = new MetalRDGRDS(34);
     
     assertEquals("metalname1", metalGet1.getName());
     assertEquals("metalname2", metalGet2.getName());
@@ -29,10 +29,10 @@ class TestMetal {
 
   @Test
   static void testGetInhabits() {    
-    MetalRowDataGateway metalGet1 = new MetalRowDataGatewayRDS(31);
-    MetalRowDataGateway metalGet2 = new MetalRowDataGatewayRDS(32);
-    MetalRowDataGateway metalGet3 = new MetalRowDataGatewayRDS(33);
-    MetalRowDataGateway metalGet4 = new MetalRowDataGatewayRDS(34);
+    MetalRDG metalGet1 = new MetalRDGRDS(31);
+    MetalRDG metalGet2 = new MetalRDGRDS(32);
+    MetalRDG metalGet3 = new MetalRDGRDS(33);
+    MetalRDG metalGet4 = new MetalRDGRDS(34);
     
     assertEquals("metalinhabits1", metalGet1.getInhabits());
     assertEquals("metalinhabits2", metalGet2.getInhabits());
@@ -42,10 +42,10 @@ class TestMetal {
 
   @Test
   static void testGetDissolvedBy() {    
-    MetalRowDataGateway metalGet1 = new MetalRowDataGatewayRDS(31);
-    MetalRowDataGateway metalGet2 = new MetalRowDataGatewayRDS(32);
-    MetalRowDataGateway metalGet3 = new MetalRowDataGatewayRDS(33);
-    MetalRowDataGateway metalGet4 = new MetalRowDataGatewayRDS(34);
+    MetalRDG metalGet1 = new MetalRDGRDS(31);
+    MetalRDG metalGet2 = new MetalRDGRDS(32);
+    MetalRDG metalGet3 = new MetalRDGRDS(33);
+    MetalRDG metalGet4 = new MetalRDGRDS(34);
     
     assertEquals(1, metalGet1.getDissolvedBy());
     assertEquals(2, metalGet2.getDissolvedBy());
@@ -55,8 +55,8 @@ class TestMetal {
 
   @Test
   static void testGetSet() {    
-    MetalRowDataGateway metal = new MetalRowDataGatewayRDS(); 
-    List<MetalRowDataGatewayRDS> metalGet = metal.findSet(5);
+    MetalRDG metal = new MetalRDGRDS(); 
+    List<MetalRDGRDS> metalGet = metal.findSet(5);
     
     assertEquals("metalname5", metalGet.get(0).getName());
     assertEquals("metalname6", metalGet.get(1).getName());
@@ -71,12 +71,12 @@ class TestMetal {
   }
   
   private static void insertMetals() {
-    MetalRowDataGateway 
-    metal = new MetalRowDataGatewayRDS(31, 1, "metalname1", "metalinhabits1");
-    metal = new MetalRowDataGatewayRDS(32, 2, "metalname2", "metalinhabits2");
-    metal = new MetalRowDataGatewayRDS(33, 3, "metalname3", "metalinhabits3");
-    metal = new MetalRowDataGatewayRDS(34, 4, "metalname4", "metalinhabits4");
-    metal = new MetalRowDataGatewayRDS(35, 5, "metalname5", "metalinhabits5");
-    metal = new MetalRowDataGatewayRDS(36, 5, "metalname6", "metalinhabits6");
+    MetalRDG 
+    metal = new MetalRDGRDS(31, 1, "metalname1", "metalinhabits1");
+    metal = new MetalRDGRDS(32, 2, "metalname2", "metalinhabits2");
+    metal = new MetalRDGRDS(33, 3, "metalname3", "metalinhabits3");
+    metal = new MetalRDGRDS(34, 4, "metalname4", "metalinhabits4");
+    metal = new MetalRDGRDS(35, 5, "metalname5", "metalinhabits5");
+    metal = new MetalRDGRDS(36, 5, "metalname6", "metalinhabits6");
   }
 }

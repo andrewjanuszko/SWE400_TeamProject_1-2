@@ -11,21 +11,21 @@ import java.util.List;
  * BaseRowDataGatewayRDS
  * @author Isabella Boone, Kim O'Neill
  */
-public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
+public class BaseRDGRDS implements BaseRDG {
   int baseId, solute;
   String name, inhabits; 
   
   /**
    * Create table
    */
-  public BaseRowDataGatewayRDS() {
+  public BaseRDGRDS() {
   }
   
   /**
    * Constructor BaseRowDataGateway, search for existing Base via id 
    * @param id
    */
-  public BaseRowDataGatewayRDS(int id) throws SQLException, DatabaseException {
+  public BaseRDGRDS(int id) throws SQLException, DatabaseException {
     // Select statements
     String getBase = new String("SELECT * FROM Base WHERE baseId = " + id + ";"),
         getChem = new String("SELECT * FROM Chemical INNER JOIN Base ON Chemical.chemicalId = " + id + ";");
@@ -52,7 +52,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    * @param name
    * @param inhabits
    */
-  public BaseRowDataGatewayRDS(int id, int solute, String name, String inhabits) {   
+  public BaseRDGRDS(int id, int solute, String name, String inhabits) {   
     
     try {
       // Insert chemical
@@ -135,8 +135,8 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
   /**
    * 
    */
-  public List<BaseRowDataGatewayRDS> findSet(int solute) {
-    List<BaseRowDataGatewayRDS> results = new ArrayList<>(); 
+  public List<BaseRDGRDS> findSet(int solute) {
+    List<BaseRDGRDS> results = new ArrayList<>(); 
     
     try {
       String sql = "SELECT * FROM Base WHERE solute = " + solute + ";";
@@ -145,7 +145,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
       
       while(rs.next()) {
         int sol = rs.getInt("baseId");
-        BaseRowDataGatewayRDS id = new BaseRowDataGatewayRDS(sol); 
+        BaseRDGRDS id = new BaseRDGRDS(sol); 
         results.add(id);
       }
       

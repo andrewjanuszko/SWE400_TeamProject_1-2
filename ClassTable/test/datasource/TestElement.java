@@ -14,10 +14,10 @@ class TestElement extends DatabaseTest {
 
   @Test
   static void testGetAtomicNumber() {    
-    ElementRowDataGateway elementGet1 = new ElementRowDataGatewayRDS(21);
-    ElementRowDataGateway elementGet2 = new ElementRowDataGatewayRDS(22);
-    ElementRowDataGateway elementGet3 = new ElementRowDataGatewayRDS(23);
-    ElementRowDataGateway elementGet4 = new ElementRowDataGatewayRDS(24);
+    ElementRDG elementGet1 = new ElementRDGRDS(21);
+    ElementRDG elementGet2 = new ElementRDGRDS(22);
+    ElementRDG elementGet3 = new ElementRDGRDS(23);
+    ElementRDG elementGet4 = new ElementRDGRDS(24);
 
     assertEquals(1, elementGet1.getAtomicNumber());
     assertEquals(2, elementGet2.getAtomicNumber());
@@ -27,10 +27,10 @@ class TestElement extends DatabaseTest {
   
   @Test
   static void testGetAtomicMass() {    
-    ElementRowDataGateway elementGet1 = new ElementRowDataGatewayRDS(21);
-    ElementRowDataGateway elementGet2 = new ElementRowDataGatewayRDS(22);
-    ElementRowDataGateway elementGet3 = new ElementRowDataGatewayRDS(23);
-    ElementRowDataGateway elementGet4 = new ElementRowDataGatewayRDS(24);
+    ElementRDG elementGet1 = new ElementRDGRDS(21);
+    ElementRDG elementGet2 = new ElementRDGRDS(22);
+    ElementRDG elementGet3 = new ElementRDGRDS(23);
+    ElementRDG elementGet4 = new ElementRDGRDS(24);
 
     assertEquals(9, elementGet1.getAtomicMass(), 0.1);
     assertEquals(8, elementGet2.getAtomicMass(), 0.1);
@@ -40,10 +40,10 @@ class TestElement extends DatabaseTest {
   
   @Test
   static void testGetName() {    
-    ElementRowDataGateway elementGet1 = new ElementRowDataGatewayRDS(21);
-    ElementRowDataGateway elementGet2 = new ElementRowDataGatewayRDS(22);
-    ElementRowDataGateway elementGet3 = new ElementRowDataGatewayRDS(23);
-    ElementRowDataGateway elementGet4 = new ElementRowDataGatewayRDS(24);
+    ElementRDG elementGet1 = new ElementRDGRDS(21);
+    ElementRDG elementGet2 = new ElementRDGRDS(22);
+    ElementRDG elementGet3 = new ElementRDGRDS(23);
+    ElementRDG elementGet4 = new ElementRDGRDS(24);
 
     assertEquals("elementname1", elementGet1.getName());
     assertEquals("elementname2", elementGet2.getName());
@@ -53,10 +53,10 @@ class TestElement extends DatabaseTest {
   
   @Test
   static void testGetInhabits() {    
-    ElementRowDataGateway elementGet1 = new ElementRowDataGatewayRDS(21);
-    ElementRowDataGateway elementGet2 = new ElementRowDataGatewayRDS(22);
-    ElementRowDataGateway elementGet3 = new ElementRowDataGatewayRDS(23);
-    ElementRowDataGateway elementGet4 = new ElementRowDataGatewayRDS(24);
+    ElementRDG elementGet1 = new ElementRDGRDS(21);
+    ElementRDG elementGet2 = new ElementRDGRDS(22);
+    ElementRDG elementGet3 = new ElementRDGRDS(23);
+    ElementRDG elementGet4 = new ElementRDGRDS(24);
 
     assertEquals("elementinhabits1", elementGet1.getInhabits());
     assertEquals("elementinhabits2", elementGet2.getInhabits());
@@ -73,10 +73,10 @@ class TestElement extends DatabaseTest {
   }
   
   private static void insertElements() {
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS(21, 1, 9, "elementname1", "elementinhabits1");
-    ele = new ElementRowDataGatewayRDS(22, 2, 8, "elementname2", "elementinhabits2");
-    ele = new ElementRowDataGatewayRDS(23, 3, 7, "elementname3", "elementinhabits3");
-    ele = new ElementRowDataGatewayRDS(24, 4, 6, "elementname4", "elementinhabits4");
+    ElementRDG ele = new ElementRDGRDS(21, 1, 9, "elementname1", "elementinhabits1");
+    ele = new ElementRDGRDS(22, 2, 8, "elementname2", "elementinhabits2");
+    ele = new ElementRDGRDS(23, 3, 7, "elementname3", "elementinhabits3");
+    ele = new ElementRDGRDS(24, 4, 6, "elementname4", "elementinhabits4");
   }
 
 }

@@ -11,21 +11,21 @@ import java.util.List;
  * AcidRowDataGatewayRDS 
  * @author Isabella Boone, Kim O'Neill
  */
-public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
+public class AcidRDGRDS implements AcidRDG {
   private int acidId, solute;
   private String name, inhabits;
   
   /**
    * Create tables
    */
-  public AcidRowDataGatewayRDS() {
+  public AcidRDGRDS() {
   }
   
   /**
    * Constructor used to find an existing Acid.
    * @param id of the acid to find
    */
-  public AcidRowDataGatewayRDS(int id) throws SQLException, DatabaseException {
+  public AcidRDGRDS(int id) throws SQLException, DatabaseException {
     // Statements to find existing acid/chemical and collect their information.
     String getAcid = new String("SELECT * FROM Acid WHERE acidId = " + id + ";"),
         getChem = new String("SELECT * FROM Chemical WHERE chemicalId = " + id + ";");
@@ -52,7 +52,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * @param name of acid to insert
    * @param inhabits of acid to insert
    */
-  public AcidRowDataGatewayRDS(int id, int solute, String name, String inhabits) {
+  public AcidRDGRDS(int id, int solute, String name, String inhabits) {
     try {
       // Insert chemical 
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -140,8 +140,8 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * @param solute
    * @return
    */
-  public List<AcidRowDataGatewayRDS> findSet(int solute) {
-    List<AcidRowDataGatewayRDS> results = new ArrayList<>();
+  public List<AcidRDGRDS> findSet(int solute) {
+    List<AcidRDGRDS> results = new ArrayList<>();
     try {
       String sql = "SELECT * FROM Acid WHERE solute = "+ solute + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -149,7 +149,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       
       while(rs.next()) {
         int sol = rs.getInt("acidId");
-        AcidRowDataGatewayRDS id = new AcidRowDataGatewayRDS(sol);
+        AcidRDGRDS id = new AcidRDGRDS(sol);
         results.add(id);
       }
     } catch (SQLException | DatabaseException e) {

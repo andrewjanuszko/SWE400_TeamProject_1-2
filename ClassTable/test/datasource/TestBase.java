@@ -19,11 +19,11 @@ class TestBase extends DatabaseTest {
 
   @Test
   static void testGetName() throws SQLException, DatabaseException {    
-    BaseRowDataGateway
-        base1 = new BaseRowDataGatewayRDS(11), 
-        base2 = new BaseRowDataGatewayRDS(12),
-        base3 = new BaseRowDataGatewayRDS(13),
-        base4 = new BaseRowDataGatewayRDS(14);
+    BaseRDG
+        base1 = new BaseRDGRDS(11), 
+        base2 = new BaseRDGRDS(12),
+        base3 = new BaseRDGRDS(13),
+        base4 = new BaseRDGRDS(14);
     
     assertEquals("basename1", base1.getName());
     assertEquals("basename2", base2.getName());
@@ -33,11 +33,11 @@ class TestBase extends DatabaseTest {
   
   @Test
   static void testGetInhabits() throws SQLException, DatabaseException {
-    BaseRowDataGateway 
-        base1 = new BaseRowDataGatewayRDS(11), 
-        base2 = new BaseRowDataGatewayRDS(12),
-        base3 = new BaseRowDataGatewayRDS(13),
-        base4 = new BaseRowDataGatewayRDS(14);
+    BaseRDG 
+        base1 = new BaseRDGRDS(11), 
+        base2 = new BaseRDGRDS(12),
+        base3 = new BaseRDGRDS(13),
+        base4 = new BaseRDGRDS(14);
 
     assertEquals("baseinhabits1", base1.getInhabits());
     assertEquals("baseinhabits2", base2.getInhabits());
@@ -47,11 +47,11 @@ class TestBase extends DatabaseTest {
   
   @Test
   static void testGetSolute() throws SQLException, DatabaseException {
-    BaseRowDataGateway 
-        base1 = new BaseRowDataGatewayRDS(11), 
-        base2 = new BaseRowDataGatewayRDS(12),
-        base3 = new BaseRowDataGatewayRDS(13),
-        base4 = new BaseRowDataGatewayRDS(14);
+    BaseRDG 
+        base1 = new BaseRDGRDS(11), 
+        base2 = new BaseRDGRDS(12),
+        base3 = new BaseRDGRDS(13),
+        base4 = new BaseRDGRDS(14);
 
     assertEquals(51, base1.getSolute());
     assertEquals(52, base2.getSolute());
@@ -61,8 +61,8 @@ class TestBase extends DatabaseTest {
   
   @Test
   static void testUpdate() throws SQLException, DatabaseException {
-    BaseRowDataGateway base_setter = new BaseRowDataGatewayRDS(19, 59, "basename9", "baseinhabits9"),
-        base_getter = new BaseRowDataGatewayRDS(19);
+    BaseRDG base_setter = new BaseRDGRDS(19, 59, "basename9", "baseinhabits9"),
+        base_getter = new BaseRDGRDS(19);
     
     assertEquals("basename9", base_getter.getName());
     assertEquals("baseinhabits9", base_getter.getInhabits());
@@ -73,7 +73,7 @@ class TestBase extends DatabaseTest {
     base_setter.setSolute(56);
     base_setter.update();
     
-    base_getter = new BaseRowDataGatewayRDS(19); 
+    base_getter = new BaseRDGRDS(19); 
     
     assertEquals("basename6", base_getter.getName());
     assertEquals("baseinhabits6", base_getter.getInhabits());
@@ -84,7 +84,7 @@ class TestBase extends DatabaseTest {
   
   @Test
   static void testDelete() {
-    BaseRowDataGateway base = new BaseRowDataGatewayRDS(19, 59, "basename9", "baseinhabits9");
+    BaseRDG base = new BaseRDGRDS(19, 59, "basename9", "baseinhabits9");
     
     assertEquals("basename9", base.getName());
     assertEquals("baseinhabits9", base.getInhabits());
@@ -92,7 +92,7 @@ class TestBase extends DatabaseTest {
     base.delete();
     
     try { 
-      base = new BaseRowDataGatewayRDS(1);
+      base = new BaseRDGRDS(1);
       fail("");
     } catch(DatabaseException | SQLException e) {
       assertTrue(true); 
@@ -101,8 +101,8 @@ class TestBase extends DatabaseTest {
   
   @Test
   static void testGetSet() {
-    BaseRowDataGateway getter = new BaseRowDataGatewayRDS();
-    List<BaseRowDataGatewayRDS> baseGet = getter.findSet(55);
+    BaseRDG getter = new BaseRDGRDS();
+    List<BaseRDGRDS> baseGet = getter.findSet(55);
     
     assertEquals("basename5", baseGet.get(0).getName());
     assertEquals("basename6", baseGet.get(1).getName());    
@@ -123,12 +123,12 @@ class TestBase extends DatabaseTest {
   }
   
   private static void insertBases() {
-    BaseRowDataGateway base = new BaseRowDataGatewayRDS(11, 51, "basename1", "baseinhabits1");
-    base = new BaseRowDataGatewayRDS(12, 52, "basename2", "baseinhabits2");
-    base = new BaseRowDataGatewayRDS(13, 53, "basename3", "baseinhabits3");
-    base = new BaseRowDataGatewayRDS(14, 54, "basename4", "baseinhabits4");
-    base = new BaseRowDataGatewayRDS(15, 55, "basename5", "baseinhabits5");
-    base = new BaseRowDataGatewayRDS(16, 55, "basename6", "baseinhabits6");
+    BaseRDG base = new BaseRDGRDS(11, 51, "basename1", "baseinhabits1");
+    base = new BaseRDGRDS(12, 52, "basename2", "baseinhabits2");
+    base = new BaseRDGRDS(13, 53, "basename3", "baseinhabits3");
+    base = new BaseRDGRDS(14, 54, "basename4", "baseinhabits4");
+    base = new BaseRDGRDS(15, 55, "basename5", "baseinhabits5");
+    base = new BaseRDGRDS(16, 55, "basename6", "baseinhabits6");
     
   }
 }

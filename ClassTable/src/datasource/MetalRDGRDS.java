@@ -12,7 +12,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
+public class MetalRDGRDS implements MetalRDG {
 
   private int metalId;
   private int dissolvedById;
@@ -22,7 +22,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
   /**
    * empty constructor drops the table and recreates it
    */
-  public MetalRowDataGatewayRDS() {
+  public MetalRDGRDS() {
   }
 
   /**
@@ -30,7 +30,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
    * 
    * @param id
    */
-  public MetalRowDataGatewayRDS(int id) {
+  public MetalRDGRDS(int id) {
     this.metalId = id;
 
     String sqlChem = "SELECT * FROM Chemical WHERE chemicalId = " + id + ";";
@@ -62,7 +62,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
    * @param name
    * @param inhabits
    */
-  public MetalRowDataGatewayRDS(int id, int dissolvedById, String name, String inhabits) {
+  public MetalRDGRDS(int id, int dissolvedById, String name, String inhabits) {
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
@@ -137,14 +137,14 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
    * @return list of MetalRowDataGatewayRDS that contain the metals dissolved by
    *         the given acid
    */
-  public List<MetalRowDataGatewayRDS> findSet(int dissolvedById) {
-    List<MetalRowDataGatewayRDS> results = new ArrayList<>();
+  public List<MetalRDGRDS> findSet(int dissolvedById) {
+    List<MetalRDGRDS> results = new ArrayList<>();
     try {
       String sql = "SELECT * FROM Metal WHERE dissolvedBy = " + dissolvedById + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       while (rs.next()) {
-        MetalRowDataGatewayRDS metalRDS = new MetalRowDataGatewayRDS(rs.getInt("metalId"));
+        MetalRDGRDS metalRDS = new MetalRDGRDS(rs.getInt("metalId"));
         results.add(metalRDS);
       }
     } catch (SQLException | DatabaseException e) {
