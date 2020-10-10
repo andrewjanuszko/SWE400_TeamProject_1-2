@@ -19,17 +19,19 @@ class TestBase extends DatabaseTest {
 
   @Test
   void testGetName() throws SQLException, DatabaseException {
-    BaseRowDataGateway base = new BaseRowDataGatewayRDS(),
+    BaseRowDataGateway base = new BaseRowDataGatewayRDS();
+    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
+    
+    base.dropAllTables();
+    chem.createTable();
+    base.createTable();
+    
+    BaseRowDataGateway
         base1 = new BaseRowDataGatewayRDS(1, 2, "basename1", "baseinhabits1"),
         base2 = new BaseRowDataGatewayRDS(2, 4, "basename2", "baseinhabits2"),
         base3 = new BaseRowDataGatewayRDS(3, 6, "basename3", "baseinhabits3"),
         base1_fetch = new BaseRowDataGatewayRDS(1), base2_fetch = new BaseRowDataGatewayRDS(2),
         base3_fetch = new BaseRowDataGatewayRDS(3);
-
-    // Testing to see if they still hold values after adding
-    assertEquals("basename1", base1.getName());
-    assertEquals("basename2", base2.getName());
-    assertEquals("basename3", base3.getName());
 
     // Testing to see if new gateways can properly fetch
     assertEquals("basename1", base1_fetch.getName());
@@ -48,11 +50,6 @@ class TestBase extends DatabaseTest {
         base1_fetch = new BaseRowDataGatewayRDS(1), base2_fetch = new BaseRowDataGatewayRDS(2),
         base3_fetch = new BaseRowDataGatewayRDS(3);
 
-    // Testing to see if they still hold values after adding
-    assertEquals("baseihabits1", base1.getInhabits());
-    assertEquals("baseihabits2", base2.getInhabits());
-    assertEquals("baseihabits3", base3.getInhabits());
-
     // Testing to see if new gateways can properly fetch
     assertEquals("baseihabits1", base1_fetch.getInhabits());
     assertEquals("baseihabits2", base2_fetch.getInhabits());
@@ -70,11 +67,6 @@ class TestBase extends DatabaseTest {
         base1_fetch = new BaseRowDataGatewayRDS(1), base2_fetch = new BaseRowDataGatewayRDS(2),
         base3_fetch = new BaseRowDataGatewayRDS(3);
 
-    // Testing to see if they still hold values after adding
-    assertEquals(2, base1.getSolute());
-    assertEquals(4, base2.getSolute());
-    assertEquals(6, base3.getSolute());
-
     // Testing to see if new gateways can properly fetch
     assertEquals(2, base1_fetch.getSolute());
     assertEquals(4, base2_fetch.getSolute());
@@ -84,30 +76,34 @@ class TestBase extends DatabaseTest {
   }
   
   @Test
-  void testUpdate() {
+  void testUpdate() throws SQLException, DatabaseException {
     BaseRowDataGateway initialize = new BaseRowDataGatewayRDS();
     initialize.dropAllTables();
     
     BaseRowDataGateway
-        base = new BaseRowDataGatewayRDS(1, 2, "basename1", "baseinhabits1");
+        base_setter = new BaseRowDataGatewayRDS(1, 2, "basename1", "baseinhabits1"),
+        base_getter = new BaseRowDataGatewayRDS(1);
     
     // Test solute
-    assertEquals(2, base.getSolute());
-    base.setSolute(3);
-    base.update();
-    assertEquals(3, base.getSolute());
+    assertEquals(2, base_getter.getSolute());
+    base_setter.setSolute(3);
+    base_setter.update();
+    base_getter = new BaseRowDataGatewayRDS(1);
+    assertEquals(3, base_getter.getSolute());
     
     // Test name
-    assertEquals("basename1", base.getName());
-    base.setName("basename2");
-    base.update();
-    assertEquals("basename2", base.getName());
+    assertEquals("basename1", base_getter.getName());
+    base_setter.setName("basename2");
+    base_setter.update();
+    base_getter = new BaseRowDataGatewayRDS(1);
+    assertEquals("basename2", base_getter.getName());
     
     // Test inhabits
-    assertEquals("baseinhabits1", base.getInhabits());
-    base.setInhabits("baseinhabits2");
-    base.update();
-    assertEquals("baseinhabits2", base.getInhabits());
+    assertEquals("baseinhabits1", base_getter.getInhabits());
+    base_setter.setInhabits("baseinhabits2");
+    base_setter.update();
+    base_getter = new BaseRowDataGatewayRDS(1);
+    assertEquals("baseinhabits2", base_getter.getInhabits());
     
     initialize.dropAllTables();
   }

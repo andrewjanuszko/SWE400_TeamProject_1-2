@@ -10,13 +10,16 @@ import org.junit.jupiter.api.Test;
  * @author kimberlyoneill
  *
  */
-class TestElement {
+class TestElement extends DatabaseTest {
 
   
   @Test
   void testGetAtomicNumber() {
-    //create table
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
+    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
+    ele.dropAllTables();
+    chem.createTable();
+    ele.createTableElement();
     
     //initialize element
     ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 55, 123, "chemicalname1", "inhabits1");
@@ -30,6 +33,11 @@ class TestElement {
   @Test
   void testGetAtomicMass() {
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
+    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
+    ele.dropAllTables();
+    chem.createTable();
+    ele.createTableElement();
+    
     ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 55, 123, "chemicalname1", "inhabits1");
     
     ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
@@ -40,6 +48,11 @@ class TestElement {
   @Test
   void testGetName() {
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
+    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
+    ele.dropAllTables();
+    chem.createTable();
+    ele.createTableElement();
+    
     ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 55, 123, "chemicalname1", "inhabits1");
     
     ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
@@ -49,8 +62,12 @@ class TestElement {
   
   @Test
   void testGetInhabits() {
-    // Create row data gateways
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
+    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
+    ele.dropAllTables();
+    chem.createTable();
+    ele.createTableElement();
+    
     ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 15, 18, "chemicalname1", "inhabits1");
     
     ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);

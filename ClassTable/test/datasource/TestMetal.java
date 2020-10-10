@@ -17,6 +17,11 @@ class TestMetal {
   @Test
   void testGetName() {
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
+    MetalRowDataGateway met = new MetalRowDataGatewayRDS(); 
+    met.dropAllTables();
+    chem.createTable();
+    met.createTableMetal();
+    
     MetalRowDataGateway metal = new MetalRowDataGatewayRDS(1, 55, "chemicalname1", "inhabits1");
     
     MetalRowDataGateway metalGet = new MetalRowDataGatewayRDS(1);
@@ -28,7 +33,11 @@ class TestMetal {
   void testGetInhabits() {
     // Create row data gateways
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
-    AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
+    MetalRowDataGateway met = new MetalRowDataGatewayRDS(); 
+    met.dropAllTables();
+    chem.createTable();
+    met.createTableMetal();
+    
     MetalRowDataGateway metal = new MetalRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
     
     MetalRowDataGateway metalGet = new MetalRowDataGatewayRDS(1);
@@ -40,7 +49,11 @@ class TestMetal {
   @Test
   void testGetDissolvedBy() {
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
-    AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
+    MetalRowDataGateway met = new MetalRowDataGatewayRDS(); 
+    met.dropAllTables();
+    chem.createTable();
+    met.createTableMetal();
+    
     MetalRowDataGateway metal = new MetalRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
 
     MetalRowDataGateway metalGet = new MetalRowDataGatewayRDS(1);
@@ -52,7 +65,13 @@ class TestMetal {
   void testGetSet() {
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
     AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
-    MetalRowDataGateway emptyMetal = new MetalRowDataGatewayRDS();
+    MetalRowDataGateway met = new MetalRowDataGatewayRDS();
+    acid.dropAllTables();
+    met.dropTableMetal();
+    chem.createTable();
+    acid.createTable();
+    met.createTableMetal();
+    
     MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
     MetalRowDataGateway metal2 = new MetalRowDataGatewayRDS(2, 15, "chemicalname2", "inhabits2");
     
