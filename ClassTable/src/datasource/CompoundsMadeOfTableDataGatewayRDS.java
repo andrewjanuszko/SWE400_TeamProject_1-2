@@ -208,4 +208,25 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   public String getInhabits() {
     return this.inhabits;
   }
+
+  @Override
+  public void setCompoundId(int compoundId) {
+    this.compoundId = compoundId;
+  }
+
+  @Override
+  public void setMadeOf(List<Integer> madeOf) {
+    this.madeOf = madeOf;
+  }
+
+  @Override
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public void setInhabits(String inhabits) {
+    this.inhabits = inhabits;
+  }
+
 }
