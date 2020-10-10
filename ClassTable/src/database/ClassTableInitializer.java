@@ -65,4 +65,5 @@ public class ClassTableInitializer {
       e.printStackTrace();
     }
   }
+  
 }

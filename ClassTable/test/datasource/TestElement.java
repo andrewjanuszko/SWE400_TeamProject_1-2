@@ -57,5 +57,9 @@ class TestElement extends DatabaseTest {
     testGetName();
     testGetInhabits();
   }
+  
+  private static void insertElements() {
+    
+  }
 
 }

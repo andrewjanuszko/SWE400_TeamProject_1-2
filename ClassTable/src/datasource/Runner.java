@@ -6,7 +6,12 @@ public class Runner {
     database.ClassTableInitializer.dropTables();
     database.ClassTableInitializer.createTables();
     
-    TestAll.testAllTests();
+    try {
+      TestAll.testAllTests();
+      System.out.println("Tests ran successfully");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
 }

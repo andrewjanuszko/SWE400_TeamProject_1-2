@@ -6,8 +6,9 @@ public class TestAll {
     TestAcid.testAll(); 
     TestBase.testAll();
     TestChemical.testAll();
-    TestCompoundsMadeOf.testAll();
     TestElement.testAll();
-    TestMetal.testAll();
+//    TestCompoundsMadeOf.testAll();
+//    TestElement.testAll();
+//    TestMetal.testAll();
   }
 }
