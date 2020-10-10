@@ -1,10 +1,8 @@
 package datasource;
-/*
- * The Interface for MetalRowDataGateway
- */
-public interface MetalRowDataGateway {
 
-	public int getMetalID();
+public interface ElementRowDataGateway {
+	
+	public int getElementID();
 	
 	public String getName();
 	
@@ -14,8 +12,6 @@ public interface MetalRowDataGateway {
 	
 	public double getAtomicMass();
 	
-	public int getDissolvedBy();
-	
 	public void setName(String s);
 	
 	public void setInhabits(String s);
@@ -23,8 +19,6 @@ public interface MetalRowDataGateway {
 	public void setAtomicNumber(int i);
 	
 	public void setAtomicMass(double d);
-	
-	public void setDissolvedBy(int i);
 	
 	public boolean persist();
 	
