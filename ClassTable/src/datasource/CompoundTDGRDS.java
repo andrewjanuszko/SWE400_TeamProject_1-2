@@ -69,7 +69,7 @@ public class CompoundTDGRDS implements CompoundTDG {
 
       for (int i = 0; i < madeOf.size(); i++) {
         PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
-            .prepareStatement("INSERT INTO CompoundMadeFromElement (compoundId, elementId)" + "VALUES (?, ?);");
+            .prepareStatement("INSERT INTO Compound (compoundId, elementId)" + "VALUES (?, ?);");
 
         insert.setInt(1, compoundId);
         insert.setInt(2, madeOf.get(i));
@@ -83,7 +83,7 @@ public class CompoundTDGRDS implements CompoundTDG {
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Problem inserting CompoundsMadeOfTableDataGatewayRDS");
+      System.out.println("Problem inserting Compound");
     }
   }
 
@@ -96,7 +96,7 @@ public class CompoundTDGRDS implements CompoundTDG {
    */
   @Override
   public List<Integer> findMakes(int elementId) {
-    String sql = "SELECT * FROM CompoundMadeFromElement WHERE elementId = " + elementId + ";";
+    String sql = "SELECT * FROM Compound WHERE elementId = " + elementId + ";";
     List<Integer> compounds = new ArrayList<>();
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -120,7 +120,7 @@ public class CompoundTDGRDS implements CompoundTDG {
    */
   @Override
   public List<Integer> findMadeOf(int compoundId) {
-    String sql = "SELECT * FROM CompoundMadeFromElement WHERE compoundId = " + compoundId + ";";
+    String sql = "SELECT * FROM Compound WHERE compoundId = " + compoundId + ";";
     List<Integer> compounds = new ArrayList<>();
 
     try {
@@ -144,7 +144,7 @@ public class CompoundTDGRDS implements CompoundTDG {
   public void delete() {
     try {
       PreparedStatement sql = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("DELETE FROM CompoundMadeFromElement WHERE compoundId = " + this.compoundId + ";");
+          .prepareStatement("DELETE FROM Compound WHERE compoundId = " + this.compoundId + ";");
       sql.execute();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();

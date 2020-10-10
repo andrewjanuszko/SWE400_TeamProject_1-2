@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * AcidRowDataGatewayRDS 
+ * Acid Row Data Gateway RDS 
  * @author Isabella Boone, Kim O'Neill
  */
 public class AcidRDGRDS implements AcidRDG {

@@ -4,10 +4,16 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * AcidRowDataGateway
+ * Acid Row Data Gateway
  * @author Isabella Boone, Kim O'Neill
  */
 public interface AcidRDG {
+  
+  public void update(); 
+  
+  public void delete();
+
+  public List<AcidRDGRDS> findSet(int i);
 
   public int getSolute();
   
@@ -20,11 +26,5 @@ public interface AcidRDG {
   public String getInhabits();
   
   void setInhabits(String newInhabits); 
-  
-  public void update(); 
-  
-  public void delete();
-
-  public List<AcidRDGRDS> findSet(int i);
   
 }

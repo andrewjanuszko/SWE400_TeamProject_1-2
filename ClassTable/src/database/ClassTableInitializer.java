@@ -29,7 +29,7 @@ public class ClassTableInitializer {
               + "FOREIGN KEY(dissolvedBy) REFERENCES Acid(acidId), "
               + "FOREIGN KEY(metalId) REFERENCES Chemical(chemicalId));",
               
-          "CREATE TABLE IF NOT EXISTS CompoundMadeFromElement(compoundId INT NOT NULL, "
+          "CREATE TABLE IF NOT EXISTS Compound(compoundId INT NOT NULL, "
               + "elementId INT NOT NULL, FOREIGN KEY (compoundId) REFERENCES Chemical(chemicalId), "
               + "FOREIGN KEY (elementId) REFERENCES Element(elementId));"    
       };
@@ -52,7 +52,7 @@ public class ClassTableInitializer {
           "DROP TABLE IF EXISTS Chemical;",
           "DROP TABLE IF EXISTS Acid;",
           "DROP TABLE IF EXISTS Base;",
-          "DROP TABLE IF EXISTS CompoundMadeFromElement;",
+          "DROP TABLE IF EXISTS Compound;",
           "DROP TABLE IF EXISTS Element;",
           "DROP TABLE IF EXISTS Metal;",
           "SET FOREIGN_KEY_CHECKS = 0;"
