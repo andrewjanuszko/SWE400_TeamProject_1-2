@@ -131,16 +131,16 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    *          to search for
    */
   @Override
-  public List<Integer> findSetCompoundId(int elementId) {
+  public List<CompoundDTO> findSetCompoundId(int elementId) {
     String sql = "SELECT * FROM CompoundMadeFromElement WHERE elementId = " + elementId + ";";
-    List<Integer> compounds = new ArrayList<>();
+    List<CompoundDTO> compounds = new ArrayList<>();
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       // While there are still results to search through
       while (rs.next()) {
         // Add each result to compound list
-        compounds.add(rs.getInt("compoundId"));
+        compounds.add(new CompoundDTO(rs.getInt("compoundId"), elementId));
       }
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -155,9 +155,9 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    *          to search for
    */
   @Override
-  public List<Integer> findSetElementId(int compoundId) {
+  public List<CompoundDTO> findSetElementId(int compoundId) {
     String sql = "SELECT * FROM CompoundMadeFromElement WHERE compoundId = " + compoundId + ";";
-    List<Integer> compounds = new ArrayList<>();
+    List<CompoundDTO> compounds = new ArrayList<>();
 
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -165,7 +165,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
       // While there are still results to search through
       while (rs.next()) {
         // Add each result to compound list
-        compounds.add(rs.getInt("elementId"));
+        compounds.add(new CompoundDTO(compoundId,rs.getInt("elementId")));
       }
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
