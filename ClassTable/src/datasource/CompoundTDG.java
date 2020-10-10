@@ -6,7 +6,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public interface CompoundsTDG {
+public interface CompoundTDG {
 
   public void delete();
 

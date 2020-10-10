@@ -13,7 +13,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public class CompoundsTDGRDS implements CompoundsTDG {
+public class CompoundTDGRDS implements CompoundTDG {
 
   private int compoundId;
   private List<Integer> madeOf; // Element ids
@@ -22,7 +22,7 @@ public class CompoundsTDGRDS implements CompoundsTDG {
 
   /**
    */
-  public CompoundsTDGRDS() {
+  public CompoundTDGRDS() {
   }
 
   /**
@@ -31,7 +31,7 @@ public class CompoundsTDGRDS implements CompoundsTDG {
    * @param compoundId
    *          to search for
    */
-  public CompoundsTDGRDS(int compoundId) {
+  public CompoundTDGRDS(int compoundId) {
     String sql = "SELECT * FROM Chemical WHERE chemicalId = " + compoundId + ";";
 
     try {
@@ -57,7 +57,7 @@ public class CompoundsTDGRDS implements CompoundsTDG {
    * @param name
    * @param inhabits
    */
-  public CompoundsTDGRDS(int compoundId, List<Integer> madeOf, String name, String inhabits) {
+  public CompoundTDGRDS(int compoundId, List<Integer> madeOf, String name, String inhabits) {
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");

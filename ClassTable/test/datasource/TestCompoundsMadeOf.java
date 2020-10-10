@@ -18,8 +18,8 @@ class TestCompoundsMadeOf extends DatabaseTest {
 
   @Test
   static void testGetName() {
-    CompoundsTDG compound1 = new CompoundsTDGRDS(41);
-    CompoundsTDG compound2 = new CompoundsTDGRDS(42);
+    CompoundTDG compound1 = new CompoundTDGRDS(41);
+    CompoundTDG compound2 = new CompoundTDGRDS(42);
 
     assertEquals("compoundname1", compound1.getCompoundName());
     assertEquals("compoundname2", compound2.getCompoundName());
@@ -27,8 +27,8 @@ class TestCompoundsMadeOf extends DatabaseTest {
   
   @Test
   static void testGetInhabits() {
-    CompoundsTDG compound1 = new CompoundsTDGRDS(41);
-    CompoundsTDG compound2 = new CompoundsTDGRDS(42);
+    CompoundTDG compound1 = new CompoundTDGRDS(41);
+    CompoundTDG compound2 = new CompoundTDGRDS(42);
 
     assertEquals("compoundinhabits1", compound1.getInhabits());
     assertEquals("compoundinhabits2", compound2.getInhabits());
@@ -36,7 +36,7 @@ class TestCompoundsMadeOf extends DatabaseTest {
 
   @Test
   static void testFindMadeOf() {   
-    CompoundsTDG compounds = new CompoundsTDGRDS();
+    CompoundTDG compounds = new CompoundTDGRDS();
 
     List<Integer> list1 = compounds.findMadeOf(41);
     List<Integer> expected1 = new ArrayList<>();
@@ -53,7 +53,7 @@ class TestCompoundsMadeOf extends DatabaseTest {
 
   @Test
   static void testFindMakes() {    
-    CompoundsTDG compounds = new CompoundsTDGRDS();
+    CompoundTDG compounds = new CompoundTDGRDS();
     
     List<Integer> list1 = compounds.findMakes(21);
     List<Integer> expected1 = new ArrayList<>();
@@ -91,8 +91,8 @@ class TestCompoundsMadeOf extends DatabaseTest {
     madeOf2.add(23);
     madeOf2.add(24);
     
-    CompoundsTDG compounds1 = new CompoundsTDGRDS(41, madeOf1, "compoundname1", "compoundinhabits1"); 
-    CompoundsTDG compounds2 = new CompoundsTDGRDS(42, madeOf2, "compoundname2", "compoundinhabits2"); 
+    CompoundTDG compounds1 = new CompoundTDGRDS(41, madeOf1, "compoundname1", "compoundinhabits1"); 
+    CompoundTDG compounds2 = new CompoundTDGRDS(42, madeOf2, "compoundname2", "compoundinhabits2"); 
 
   }
 }
