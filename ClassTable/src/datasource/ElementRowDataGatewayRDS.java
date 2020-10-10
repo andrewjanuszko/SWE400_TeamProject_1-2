@@ -180,19 +180,19 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
    * updates an element with the new values given
    */
   @Override
-  public void update(int id, int atomicNum, int atomicMass, String name, String inhabits) {
+  public void update() {
     try {
       PreparedStatement updateElement = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Element SET atomicNumber = ?, atomicMass = ? WHERE elementId = ?;");
-      updateElement.setInt(1, atomicNum);
-      updateElement.setDouble(2, atomicMass);
-      updateElement.setInt(3, id);
+      updateElement.setInt(1, this.atomicNumber);
+      updateElement.setDouble(2, this.atomicMass);
+      updateElement.setInt(3, this.elementId);
 
       PreparedStatement updateChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Chemical SET name = ?, inhabits = ? WHERE chemicalId = ?;");
-      updateChemical.setString(1, name);
-      updateChemical.setString(2, inhabits);
-      updateChemical.setInt(3, id);
+      updateChemical.setString(1, this.name);
+      updateChemical.setString(2, this.inhabits);
+      updateChemical.setInt(3, this.elementId);
 
       updateElement.execute();
       updateChemical.execute();
@@ -314,4 +314,31 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   public String getInhabits() {
     return this.inhabits;
   }
+
+  @Override
+  public void setElementId(int elementId) {
+    this.elementId = elementId;
+  }
+
+  @Override
+  public void setAtomicNumber(int atomicNumber) {
+    this.atomicNumber = atomicNumber;
+  }
+
+  @Override
+  public void setAtomicMass(double atomicMass) {
+    this.atomicMass = atomicMass;
+  }
+
+  @Override
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public void setInhabits(String inhabits) {
+    this.inhabits = inhabits;
+  }
+  
+  
 }

@@ -19,7 +19,7 @@ public interface ElementRowDataGateway {
   
   public void delete();
 
-  public void update(int id, int atomicNum, int atomicMass, String name, String inhabits);
+  public void update();
   
   public void findByAtomicNumber(int atomicNum);
   
@@ -34,5 +34,15 @@ public interface ElementRowDataGateway {
   public String getName();
 
   public String getInhabits();
+
+  public void setElementId(int elementId);
+
+  public void setAtomicNumber(int atomicNumber);
+
+  public void setAtomicMass(double atomicMass);
+  
+  public void setName(String name);
+  
+  public void setInhabits(String inhabits);
 
 }
