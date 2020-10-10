@@ -20,7 +20,6 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * Create table
    */
   public ChemicalRowDataGatewayRDS() {
-    createTable();
   }
   
   /**
@@ -28,7 +27,6 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * @param id to search for
    */
   public ChemicalRowDataGatewayRDS(int id) throws SQLException, DatabaseException {
-    createTable();
     // Select statement
     String getChem = new String("SELECT * FROM Chemical WHERE chemicalId = " + id + ";");
 
@@ -50,7 +48,6 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * @param inhabits
    */
   public ChemicalRowDataGatewayRDS(int id, String name, String inhabits) {
-    createTable();
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -73,37 +70,6 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
     this.inhabits = inhabits;
   }
   
-  /**
-   * Create chemical table if it does not already exist.
-   */
-  public void createTable() {
-    String createChem = "CREATE TABLE IF NOT EXISTS Chemical" + "(" + "chemicalId INT NOT NULL, " + "name VARCHAR(20), "
-        + "inhabits VARCHAR(20), " + "PRIMARY KEY (chemicalId)" + ");";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate(createChem);
-      
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to create chemical table");
-    }
-  }
-  
-  /**
-   * Drop the chemical table if it exists.
-   */
-  public void dropTable() {
-    String dropTable = "DROP TABLE IF EXISTS Chemical;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping chemical table");
-    }
-  }
 
   /**
    * Delete the currently selected chemical from the database. 

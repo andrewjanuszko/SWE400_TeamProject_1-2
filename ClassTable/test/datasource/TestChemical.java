@@ -23,7 +23,7 @@ class TestChemical extends DatabaseTest {
    * @throws DatabaseException
    */
   @Test
-  void testGetName() throws SQLException, DatabaseException {
+  static void testGetName() throws SQLException, DatabaseException {
     ChemicalRowDataGateway initialize = new ChemicalRowDataGatewayRDS(),
         chem1 = new ChemicalRowDataGatewayRDS(1, "chemname1", "cheminhabits1"),
         chem2 = new ChemicalRowDataGatewayRDS(2, "chemname2", "cheminhabits2"),
@@ -31,17 +31,10 @@ class TestChemical extends DatabaseTest {
         chem1_fetch = new ChemicalRowDataGatewayRDS(1), chem2_fetch = new ChemicalRowDataGatewayRDS(2),
         chem3_fetch = new ChemicalRowDataGatewayRDS(3);
 
-    // Testing to see if they still hold values after adding
-    assertEquals("chemname1", chem1.getName());
-    assertEquals("chemname2", chem2.getName());
-    assertEquals("chemname3", chem3.getName());
-
     // Testing to see if new gateways can properly fetch
     assertEquals("chemname1", chem1_fetch.getName());
     assertEquals("chemname2", chem2_fetch.getName());
     assertEquals("chemname3", chem3_fetch.getName());
-
-    initialize.dropTable();
   }
   
   /**
@@ -50,7 +43,7 @@ class TestChemical extends DatabaseTest {
    * @throws DatabaseException
    */
   @Test
-  void testGetInhabits() throws SQLException, DatabaseException {
+  static void testGetInhabits() throws SQLException, DatabaseException {
     ChemicalRowDataGateway initialize = new ChemicalRowDataGatewayRDS(),
         chem1 = new ChemicalRowDataGatewayRDS(1, "chemname1", "cheminhabits1"),
         chem2 = new ChemicalRowDataGatewayRDS(2, "chemname2", "cheminhabits2"),
@@ -58,24 +51,17 @@ class TestChemical extends DatabaseTest {
         chem1_fetch = new ChemicalRowDataGatewayRDS(1), chem2_fetch = new ChemicalRowDataGatewayRDS(2),
         chem3_fetch = new ChemicalRowDataGatewayRDS(3);
 
-    // Testing to see if they still hold values after adding
-    assertEquals("cheminhabits1", chem1.getInhabits());
-    assertEquals("cheminhabits2", chem2.getInhabits());
-    assertEquals("cheminhabits3", chem3.getInhabits());
-
     // Testing to see if new gateways can properly fetch
     assertEquals("cheminhabits1", chem1_fetch.getInhabits());
     assertEquals("cheminhabits2", chem2_fetch.getInhabits());
     assertEquals("cheminhabits3", chem3_fetch.getInhabits());
-
-    initialize.dropTable();
   }
   
   /**
    * Test the update function of ChemicalRowDataGateway
    */
   @Test
-  void testUpdate() {
+  static void testUpdate() {
     ChemicalRowDataGateway initialize = new ChemicalRowDataGatewayRDS(),
         chem = new ChemicalRowDataGatewayRDS(1, "chemname1", "cheminhabits1");
     
@@ -90,15 +76,13 @@ class TestChemical extends DatabaseTest {
     chem.setInhabits("cheminhabits2");
     chem.update();
     assertEquals("cheminhabits2", chem.getInhabits());
-    
-    initialize.dropTable();
   }
   
   /**
    * Test the delete method of ChemicalRowDataGateway
    */
   @Test
-  void testDelete() {
+  static void testDelete() {
     ChemicalRowDataGateway initialize = new ChemicalRowDataGatewayRDS(),
         chem = new ChemicalRowDataGatewayRDS(1, "chemname1", "cheminhabits1");
     
@@ -113,6 +97,17 @@ class TestChemical extends DatabaseTest {
       fail("");
     } catch(DatabaseException | SQLException e) {
       assertTrue(true); 
+    }
+  }
+  
+  static void testAll() {
+    try {
+      testGetName();
+      testGetInhabits();
+      testDelete();
+      testUpdate();
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
     }
   }
   

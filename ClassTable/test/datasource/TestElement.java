@@ -14,13 +14,7 @@ class TestElement extends DatabaseTest {
 
   
   @Test
-  void testGetAtomicNumber() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    ele.dropAllTables();
-    chem.createTable();
-    ele.createTableElement();
-    
+  static void testGetAtomicNumber() {    
     //initialize element
     ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 55, 123, "chemicalname1", "inhabits1");
     
@@ -31,13 +25,7 @@ class TestElement extends DatabaseTest {
   }
   
   @Test
-  void testGetAtomicMass() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    ele.dropAllTables();
-    chem.createTable();
-    ele.createTableElement();
-    
+  static void testGetAtomicMass() {    
     ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 55, 123, "chemicalname1", "inhabits1");
     
     ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
@@ -46,13 +34,7 @@ class TestElement extends DatabaseTest {
   }
   
   @Test
-  void testGetName() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    ele.dropAllTables();
-    chem.createTable();
-    ele.createTableElement();
-    
+  static void testGetName() {    
     ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 55, 123, "chemicalname1", "inhabits1");
     
     ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
@@ -61,19 +43,19 @@ class TestElement extends DatabaseTest {
   }
   
   @Test
-  void testGetInhabits() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    ele.dropAllTables();
-    chem.createTable();
-    ele.createTableElement();
-    
+  static void testGetInhabits() {    
     ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 15, 18, "chemicalname1", "inhabits1");
     
     ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
     
-    // Test
     assertEquals("inhabits1", elementGet.getInhabits());
+  }
+  
+  static void testAll() {
+    testGetAtomicNumber();
+    testGetAtomicMass();
+    testGetName();
+    testGetInhabits();
   }
 
 }

@@ -19,7 +19,6 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    * Create table
    */
   public BaseRowDataGatewayRDS() {
-    createTable();
   }
   
   /**
@@ -27,7 +26,6 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    * @param id
    */
   public BaseRowDataGatewayRDS(int id) throws SQLException, DatabaseException {
-    createTable();
     // Select statements
     String getBase = new String("SELECT * FROM Base WHERE baseId = " + id + ";"),
         getChem = new String("SELECT * FROM Chemical INNER JOIN Base ON Chemical.chemicalId = " + id + ";");
@@ -55,7 +53,6 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    * @param inhabits
    */
   public BaseRowDataGatewayRDS(int id, int solute, String name, String inhabits) {   
-    createTable();
     
     try {
       // Insert chemical
@@ -84,65 +81,6 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
     this.solute = solute;
     this.name = name;
     this.inhabits = inhabits;
-  }
-  
-  /**
-   * Create base and chemical table if they do not already exist.
-   */
-  public void createTable() {
-    String createChem = "CREATE TABLE IF NOT EXISTS Chemical" + "(" + "chemicalId INT NOT NULL, " + "name VARCHAR(20), "
-        + "inhabits VARCHAR(20), " + "PRIMARY KEY (chemicalId)" + ");",
-        createBase = "CREATE TABLE IF NOT EXISTS Base" + "(" + "baseId INT NOT NULL, "
-            + "solute VARCHAR(20), " 
-            + "FOREIGN KEY(baseId) REFERENCES Chemical(chemicalId)" + ");";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate(createChem);
-      statement.executeUpdate(createBase);
-      
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to create base and/or chemical table");
-    }
-  }
-  
-  /**
-   * Drop the base table if it exists.
-   */
-  public void dropTableBase() {
-    String dropTable = "DROP TABLE IF EXISTS Base;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping base table");
-    }
-  }
-  
-  /**
-   * Drop the chemical table if it exists.
-   */
-  public void dropTableChemical() {
-    String dropTable = "DROP TABLE IF EXISTS Chemical;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping chemical table");
-    }
-  }
-  
-  /**
-   * Drop base and all tables connected (base & chemical)
-   */
-  public void dropAllTables() {
-    dropTableBase();
-    dropTableChemical();
   }
   
   /**

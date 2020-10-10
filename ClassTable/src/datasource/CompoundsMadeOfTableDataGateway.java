@@ -8,10 +8,6 @@ import java.util.List;
  */
 public interface CompoundsMadeOfTableDataGateway {
 
-  void createTableCompoundMadeFrom();
-
-  public void dropTableCompoundMadeFromElement();
-
   public void delete();
 
   List<Integer> findSetCompoundId(int elementId);

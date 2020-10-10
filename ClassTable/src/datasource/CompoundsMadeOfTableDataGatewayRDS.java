@@ -24,7 +24,6 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    * Empty constructor drops and re-creates the table
    */
   public CompoundsMadeOfTableDataGatewayRDS() {
-    this.createTableCompoundMadeFrom();
   }
 
   /**
@@ -34,7 +33,6 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    *          to search for
    */
   public CompoundsMadeOfTableDataGatewayRDS(int compoundId) {
-    this.createTableCompoundMadeFrom();
     String sql = "SELECT * FROM Chemical WHERE chemicalId = " + compoundId + ";";
 
     try {
@@ -61,7 +59,6 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    * @param inhabits
    */
   public CompoundsMadeOfTableDataGatewayRDS(int compoundId, List<Integer> madeOf, String name, String inhabits) {
-    createTableCompoundMadeFrom();
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
@@ -91,38 +88,6 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
     }
   }
 
-  @Override
-  public void createTableCompoundMadeFrom() {
-    String createTable = "CREATE TABLE IF NOT EXISTS CompoundMadeFromElement(" + "compoundId INT NOT NULL, "
-        + "elementId INT NOT NULL, " + "FOREIGN KEY (compoundId) REFERENCES Chemical(chemicalId), "
-        + "FOREIGN KEY (elementId) REFERENCES Element(elementId));";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-
-      // Drop the table if exists first
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      //
-      statement.executeUpdate(createTable);
-
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to create/drop CompoundMadeFromElement");
-    }
-  }
-
-  @Override
-  public void dropTableCompoundMadeFromElement() {
-    String dropTable = "DROP TABLE IF EXISTS CompoundMadeFromElement;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping Compound table");
-    }
-  }
 
   /**
    * Get all compoundId's of elementId

@@ -24,14 +24,6 @@ public interface BaseRowDataGateway {
   public void update();
 
   public void delete();
-  
-  public void dropTableBase();
-  
-  public void dropTableChemical();
-  
-  public void dropAllTables(); 
-  
-  public void createTable();
 
   public List<BaseRowDataGatewayRDS> findSet(int solute);
 }

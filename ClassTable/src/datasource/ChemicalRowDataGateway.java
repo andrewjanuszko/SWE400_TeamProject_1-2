@@ -7,10 +7,6 @@ import java.sql.SQLException;
  * @author Isabella Boone, Kim O'Neill
  */
 public interface ChemicalRowDataGateway {
-
-  public void createTable(); 
-  
-  public void dropTable();
   
   public void delete();
   

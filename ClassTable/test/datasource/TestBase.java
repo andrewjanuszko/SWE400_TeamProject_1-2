@@ -18,13 +18,9 @@ import org.junit.jupiter.api.Test;
 class TestBase extends DatabaseTest {
 
   @Test
-  void testGetName() throws SQLException, DatabaseException {
+  static void testGetName() throws SQLException, DatabaseException {
     BaseRowDataGateway base = new BaseRowDataGatewayRDS();
     ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
-    
-    base.dropAllTables();
-    chem.createTable();
-    base.createTable();
     
     BaseRowDataGateway
         base1 = new BaseRowDataGatewayRDS(1, 2, "basename1", "baseinhabits1"),
@@ -37,12 +33,10 @@ class TestBase extends DatabaseTest {
     assertEquals("basename1", base1_fetch.getName());
     assertEquals("basename2", base2_fetch.getName());
     assertEquals("basename3", base3_fetch.getName());
-
-    base.dropAllTables();
   }
   
   @Test
-  void testGetInhabits() throws SQLException, DatabaseException {
+  static void testGetInhabits() throws SQLException, DatabaseException {
     BaseRowDataGateway initialize = new BaseRowDataGatewayRDS(),
         base1 = new BaseRowDataGatewayRDS(1, 2, "basename1", "baseihabits1"),
         base2 = new BaseRowDataGatewayRDS(2, 4, "basename2", "baseihabits2"),
@@ -54,12 +48,10 @@ class TestBase extends DatabaseTest {
     assertEquals("baseihabits1", base1_fetch.getInhabits());
     assertEquals("baseihabits2", base2_fetch.getInhabits());
     assertEquals("baseihabits3", base3_fetch.getInhabits());
-
-    initialize.dropAllTables();
   }
   
   @Test
-  void testGetSolute() throws SQLException, DatabaseException {
+  static void testGetSolute() throws SQLException, DatabaseException {
     BaseRowDataGateway initialize = new BaseRowDataGatewayRDS(),
         base1 = new BaseRowDataGatewayRDS(1, 2, "basename1", "baseihabits1"),
         base2 = new BaseRowDataGatewayRDS(2, 4, "basename2", "baseihabits2"),
@@ -71,14 +63,11 @@ class TestBase extends DatabaseTest {
     assertEquals(2, base1_fetch.getSolute());
     assertEquals(4, base2_fetch.getSolute());
     assertEquals(6, base3_fetch.getSolute());
-
-    initialize.dropAllTables();
   }
   
   @Test
-  void testUpdate() throws SQLException, DatabaseException {
+  static void testUpdate() throws SQLException, DatabaseException {
     BaseRowDataGateway initialize = new BaseRowDataGatewayRDS();
-    initialize.dropAllTables();
     
     BaseRowDataGateway
         base_setter = new BaseRowDataGatewayRDS(1, 2, "basename1", "baseinhabits1"),
@@ -104,12 +93,10 @@ class TestBase extends DatabaseTest {
     base_setter.update();
     base_getter = new BaseRowDataGatewayRDS(1);
     assertEquals("baseinhabits2", base_getter.getInhabits());
-    
-    initialize.dropAllTables();
   }
   
   @Test
-  void testDelete() {
+  static void testDelete() {
     BaseRowDataGateway createBase = new BaseRowDataGatewayRDS(),
         base = new BaseRowDataGatewayRDS(1, 2, "chemname1", "cheminhabits1");
     
@@ -125,14 +112,11 @@ class TestBase extends DatabaseTest {
     } catch(DatabaseException | SQLException e) {
       assertTrue(true); 
     }
-    
-    createBase.dropAllTables();
   }
   
   @Test
-  void testGetSet() {
+  static void testGetSet() {
     BaseRowDataGateway createBase = new BaseRowDataGatewayRDS();
-    createBase.dropAllTables();
     ChemicalRowDataGateway createChemical = new ChemicalRowDataGatewayRDS();
     BaseRowDataGateway acid1 = new BaseRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
     BaseRowDataGateway acid2 = new BaseRowDataGatewayRDS(2, 15, "chemicalname2", "inhabits2");
@@ -150,7 +134,18 @@ class TestBase extends DatabaseTest {
     
     assertEquals("chemicalname4", acidGet.get(0).getName());
     assertEquals("chemicalname6", acidGet.get(1).getName());
-
-    createBase.dropAllTables();
+  }
+  
+  static void testAll() {
+    try {
+      testGetName();
+      testGetInhabits();
+      testGetSolute();
+      testDelete();
+      testUpdate();
+      testGetSet(); 
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
   }
 }

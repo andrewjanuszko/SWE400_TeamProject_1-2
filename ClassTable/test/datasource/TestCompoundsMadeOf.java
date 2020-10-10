@@ -3,6 +3,7 @@ package datasource;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,20 +17,7 @@ import org.junit.jupiter.api.Test;
 class TestCompoundsMadeOf extends DatabaseTest {
 
   @Test
-  void testGetName() {
-    // create tables
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    CompoundsMadeOfTableDataGateway com = new CompoundsMadeOfTableDataGatewayRDS();
-    
-    chem.dropTable();
-    ele.dropTableElement();
-    com.dropTableCompoundMadeFromElement();
-    
-    chem.createTable();
-    ele.createTableElement();
-    com.createTableCompoundMadeFrom();
-
+  static void testGetName() {
     // initialize elements
     ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(55, 12, 5, "element1", "inhabits");
     ElementRowDataGateway element2 = new ElementRowDataGatewayRDS(23, 44, 6, "element2", "inhabits");
@@ -67,20 +55,7 @@ class TestCompoundsMadeOf extends DatabaseTest {
   }
 
   @Test
-  void testGetInhabits() {
-    // create tables
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    CompoundsMadeOfTableDataGateway com = new CompoundsMadeOfTableDataGatewayRDS();
-    
-    chem.dropTable();
-    ele.dropTableElement();
-    com.dropTableCompoundMadeFromElement();
-    
-    chem.createTable();
-    ele.createTableElement();
-    com.createTableCompoundMadeFrom();
-
+  static void testGetInhabits() {
     // initialize elements
     ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(55, 12, 5, "element1", "inhabits");
     ElementRowDataGateway element2 = new ElementRowDataGatewayRDS(23, 44, 6, "element2", "inhabits");
@@ -119,20 +94,7 @@ class TestCompoundsMadeOf extends DatabaseTest {
   }
 
   @Test
-  void testFindSetElementid() {
-    // Drop / Create tables
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    CompoundsMadeOfTableDataGateway com = new CompoundsMadeOfTableDataGatewayRDS();
-    
-    chem.dropTable();
-    ele.dropTableElement();
-    com.dropTableCompoundMadeFromElement();
-    
-    chem.createTable();
-    ele.createTableElement();
-    com.createTableCompoundMadeFrom();
-    
+  static void testFindSetElementid() {    
     // initialize elements
     ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(55, 12, 5, "element1", "inhabits");
     ElementRowDataGateway element2 = new ElementRowDataGatewayRDS(23, 44, 6, "element2", "inhabits");
@@ -153,20 +115,7 @@ class TestCompoundsMadeOf extends DatabaseTest {
   }
 
   @Test
-  void TestFindCompoundId() {
-    //create tables
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    CompoundsMadeOfTableDataGateway com = new CompoundsMadeOfTableDataGatewayRDS();
-    
-    chem.dropTable();
-    ele.dropTableElement();
-    com.dropTableCompoundMadeFromElement();
-    
-    chem.createTable();
-    ele.createTableElement();
-    com.createTableCompoundMadeFrom();
-    
+  static void testFindSetCompoundId() {    
     //initialize elements
     ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(55, 12, 5, "element1", "inhabits");
     ElementRowDataGateway element2 = new ElementRowDataGatewayRDS(23, 44, 6, "element2", "inhabits");
@@ -192,5 +141,12 @@ class TestCompoundsMadeOf extends DatabaseTest {
     expected2.add(23);
     assertEquals(expected2, list2);
 
+  }
+  
+  static void testAll() {
+    testGetName();
+    testGetInhabits();
+    testFindSetElementid();
+    testFindSetCompoundId();
   }
 }
