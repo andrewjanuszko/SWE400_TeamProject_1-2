@@ -14,9 +14,9 @@ public interface CompoundsMadeOfTableDataGateway {
 
   public void delete();
 
-  List<Integer> findSetCompoundId(int elementId);
+  List<CompoundDTO> findSetCompoundId(int elementId);
 
-  List<Integer> findSetElementId(int compoundId);
+  List<CompoundDTO> findSetElementId(int compoundId);
 
   String getCompoundName();
   
