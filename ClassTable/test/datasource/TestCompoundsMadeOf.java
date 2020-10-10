@@ -18,9 +18,17 @@ class TestCompoundsMadeOf extends DatabaseTest {
   @Test
   void testGetName() {
     // create tables
-    ChemicalRowDataGateway resetChem = new ChemicalRowDataGatewayRDS();
-    ElementRowDataGateway resetElement = new ElementRowDataGatewayRDS();
-    CompoundsMadeOfTableDataGatewayRDS resetCompounds = new CompoundsMadeOfTableDataGatewayRDS();
+    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
+    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
+    CompoundsMadeOfTableDataGateway com = new CompoundsMadeOfTableDataGatewayRDS();
+    
+    chem.dropTable();
+    ele.dropTableElement();
+    com.dropTableCompoundMadeFromElement();
+    
+    chem.createTable();
+    ele.createTableElement();
+    com.createTableCompoundMadeFrom();
 
     // initialize elements
     ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(55, 12, 5, "element1", "inhabits");
@@ -61,9 +69,17 @@ class TestCompoundsMadeOf extends DatabaseTest {
   @Test
   void testGetInhabits() {
     // create tables
-    ChemicalRowDataGateway resetChem = new ChemicalRowDataGatewayRDS();
-    ElementRowDataGateway resetElement = new ElementRowDataGatewayRDS();
-    CompoundsMadeOfTableDataGatewayRDS resetCompounds = new CompoundsMadeOfTableDataGatewayRDS();
+    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
+    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
+    CompoundsMadeOfTableDataGateway com = new CompoundsMadeOfTableDataGatewayRDS();
+    
+    chem.dropTable();
+    ele.dropTableElement();
+    com.dropTableCompoundMadeFromElement();
+    
+    chem.createTable();
+    ele.createTableElement();
+    com.createTableCompoundMadeFrom();
 
     // initialize elements
     ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(55, 12, 5, "element1", "inhabits");
