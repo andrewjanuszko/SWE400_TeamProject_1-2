@@ -5,42 +5,68 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
-class ChemicalRDGRDSTest extends DatabaseTest {
+public class ChemicalRDGRDSTest extends DatabaseTest {
 	
 	/**
 	 * Test the creation of a table and inserting into it.
 	 * @throws DatabaseException when things go wrong.
 	 */
 	@Test
-	void testCreateAndInsert() throws DatabaseException {
-		ChemicalRDGRDS chemicalGateway = new ChemicalRDGRDS();
-		chemicalGateway.createTable();
+	public void testCreateAndInsert() throws DatabaseException {
+		ChemicalRowDataGatewayRDS.createTable();
 		
-		chemicalGateway = new ChemicalRDGRDS(0, "UnknownChemical", "The Moon", -1, -1.0, -1, -1);
-		chemicalGateway = new ChemicalRDGRDS(1);
+		ChemicalRowDataGatewayRDS unknownChemical = new ChemicalRowDataGatewayRDS(0, "UnknownChemical", "The Moon", 0, 0, 0, 0);
 		
-		assertEquals(1, chemicalGateway.getChemicalID());
-		assertEquals(0, chemicalGateway.getType());
-		assertEquals("UnknownChemical", chemicalGateway.getName());
-		assertEquals("The Moon", chemicalGateway.getInhabits());
-		assertEquals(0, chemicalGateway.getAtomicNumber());
-		assertEquals(0, chemicalGateway.getAtomicMass(), 0.001);
-		assertEquals(0, chemicalGateway.getDissolvedBy());
-		assertEquals(0, chemicalGateway.getSolute());
+		assertEquals(1, unknownChemical.getChemicalID());
+		assertEquals(0, unknownChemical.getType());
+		assertEquals("UnknownChemical", unknownChemical.getName());
+		assertEquals("The Moon", unknownChemical.getInhabits());
+		assertEquals(0, unknownChemical.getAtomicNumber());
+		assertEquals(0, unknownChemical.getAtomicMass(), 0.001);
+		assertEquals(0, unknownChemical.getDissolvedBy());
+		assertEquals(0, unknownChemical.getSolute());
 		
-		chemicalGateway = new ChemicalRDGRDS(1, "FunkyChemical", "Mars", 17, 9.810, -1, -1);
-		chemicalGateway = new ChemicalRDGRDS(2);
+		ChemicalRowDataGatewayRDS funkyChemical = new ChemicalRowDataGatewayRDS(1, "FunkyChemical", "Mars", 17, 9.810, 0, 0);
 		
-		assertEquals(2, chemicalGateway.getChemicalID());
-		assertEquals(1, chemicalGateway.getType());
-		assertEquals("FunkyChemical", chemicalGateway.getName());
-		assertEquals("Mars", chemicalGateway.getInhabits());
-		assertEquals(17, chemicalGateway.getAtomicNumber());
-		assertEquals(9.810, chemicalGateway.getAtomicMass(), 0.001);
-		assertEquals(0, chemicalGateway.getDissolvedBy());
-		assertEquals(0, chemicalGateway.getSolute());
+		assertEquals(2, funkyChemical.getChemicalID());
+		assertEquals(1, funkyChemical.getType());
+		assertEquals("FunkyChemical", funkyChemical.getName());
+		assertEquals("Mars", funkyChemical.getInhabits());
+		assertEquals(17, funkyChemical.getAtomicNumber());
+		assertEquals(9.810, funkyChemical.getAtomicMass(), 0.001);
+		assertEquals(0, funkyChemical.getDissolvedBy());
+		assertEquals(0, funkyChemical.getSolute());
 		
-		chemicalGateway.dropTable();
+		ChemicalRowDataGatewayRDS.dropTable();
+	}
+	
+	/**
+	 * Test the insertion of duplicate entries.
+	 * @throws DatabaseException when things go wrong.
+	 */
+	@Test
+	public void testDuplicateEntry() throws DatabaseException {
+		ChemicalRowDataGatewayRDS.createTable();
+		
+		ChemicalRowDataGatewayRDS unknownChemical = new ChemicalRowDataGatewayRDS(0, "UnknownChemical", "The Moon", 0, 0, 0, 0);
+		
+		assertEquals(1, unknownChemical.getChemicalID());
+		assertEquals(0, unknownChemical.getType());
+		assertEquals("UnknownChemical", unknownChemical.getName());
+		assertEquals("The Moon", unknownChemical.getInhabits());
+		assertEquals(0, unknownChemical.getAtomicNumber());
+		assertEquals(0, unknownChemical.getAtomicMass(), 0.001);
+		assertEquals(0, unknownChemical.getDissolvedBy());
+		assertEquals(0, unknownChemical.getSolute());
+		
+		try {
+			ChemicalRowDataGatewayRDS unknownChemical2 = new ChemicalRowDataGatewayRDS(0, "UnknownChemical", "The Moon", 0, 0, 0, 0);
+			assertEquals("UnknownChemical", unknownChemical2.getName());
+			fail();
+		} catch(DatabaseException e) {
+			assertTrue(true);
+			ChemicalRowDataGatewayRDS.dropTable();
+		}	
 	}
 	
 	/**
@@ -48,25 +74,24 @@ class ChemicalRDGRDSTest extends DatabaseTest {
 	 * @throws DatabaseException when things go wrong.
 	 */
 	@Test
-	void testDropTable() throws DatabaseException {
-		ChemicalRDGRDS chemicalGateway = new ChemicalRDGRDS();
-		chemicalGateway.createTable();
+	public void testDropTable() throws DatabaseException {
+		ChemicalRowDataGatewayRDS.createTable();
 		
-		chemicalGateway = new ChemicalRDGRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);
-		chemicalGateway = new ChemicalRDGRDS(1);
+		ChemicalRowDataGatewayRDS carbon = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011, 0, 0);
 		
-		assertEquals(1, chemicalGateway.getChemicalID());
-		assertEquals(1, chemicalGateway.getType());
-		assertEquals("Carbon", chemicalGateway.getName());
-		assertEquals(6, chemicalGateway.getAtomicNumber());
-		assertEquals(12.011, chemicalGateway.getAtomicMass(), 0.001);
-		assertEquals(0, chemicalGateway.getDissolvedBy());
-		assertEquals(0, chemicalGateway.getSolute());
+		assertEquals(1, carbon.getChemicalID());
+		assertEquals(1, carbon.getType());
+		assertEquals("Carbon", carbon.getName());
+		assertEquals(6, carbon.getAtomicNumber());
+		assertEquals(12.011, carbon.getAtomicMass(), 0.001);
+		assertEquals(0, carbon.getDissolvedBy());
+		assertEquals(0, carbon.getSolute());
 		
-		chemicalGateway.dropTable();
+		ChemicalRowDataGatewayRDS.dropTable();
 
 		try {
-			chemicalGateway = new ChemicalRDGRDS(1);
+			ChemicalRowDataGatewayRDS funkyChemical = new ChemicalRowDataGatewayRDS(1, "FunkyChemical", "Mars", 17, 9.810, 0, 0);
+			assertEquals("FunkyChemical", funkyChemical.getName());
 			fail();
 		} catch(DatabaseException e) {
 			assertTrue(true);
@@ -78,24 +103,29 @@ class ChemicalRDGRDSTest extends DatabaseTest {
 	 * @throws DatabaseException when things go wrong.
 	 */
 	@Test
-	void testDeleteChemical() throws DatabaseException {
+	public void testDeleteChemical() throws DatabaseException {
+		ChemicalRowDataGatewayRDS.createTable();
 		
-		ChemicalRDGRDS chemicalGateway = new ChemicalRDGRDS();
-		chemicalGateway.createTable();
+		ChemicalRowDataGatewayRDS unknownChemical = new ChemicalRowDataGatewayRDS(0, "UnknownChemical", "The Moon", 0, 0, 0, 0);
 		
-		chemicalGateway = new ChemicalRDGRDS(0, "UnknownChemical", "The Moon", -1, -1.0, -1, -1);
-		chemicalGateway = new ChemicalRDGRDS(1);
+		assertEquals(1, unknownChemical.getChemicalID());
+		assertEquals(0, unknownChemical.getType());
+		assertEquals("UnknownChemical", unknownChemical.getName());
+		assertEquals("The Moon", unknownChemical.getInhabits());
+		assertEquals(0, unknownChemical.getAtomicNumber());
+		assertEquals(0, unknownChemical.getAtomicMass(), 0.001);
+		assertEquals(0, unknownChemical.getDissolvedBy());
+		assertEquals(0, unknownChemical.getSolute());
 		
-		chemicalGateway.delete();
+		unknownChemical.delete();
 		
 		try {
-			chemicalGateway = new ChemicalRDGRDS(1);
-			chemicalGateway.dropTable();
+			ChemicalRowDataGatewayRDS unknownChemicalSecond = new ChemicalRowDataGatewayRDS(1);
+			assertEquals("UnknownChemical", unknownChemicalSecond.getName());
 			fail();
 		} catch(DatabaseException e) {
 			assertTrue(true);
-			chemicalGateway.dropTable();
-
+			ChemicalRowDataGatewayRDS.dropTable();
 		}
 	}
 	
@@ -104,35 +134,33 @@ class ChemicalRDGRDSTest extends DatabaseTest {
 	 * @throws DatabaseException when things go wrong.
 	 */
 	@Test
-	void testUpdate() throws DatabaseException {
-		ChemicalRDGRDS chemicalGateway = new ChemicalRDGRDS();
-		chemicalGateway.createTable();
+	public void testUpdate() throws DatabaseException {
+		ChemicalRowDataGatewayRDS.createTable();
 		
-		chemicalGateway = new ChemicalRDGRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);		
-		chemicalGateway = new ChemicalRDGRDS(1);
+		ChemicalRowDataGatewayRDS carbon = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011, 0, 0);
 		
-		assertEquals(1, chemicalGateway.getChemicalID());
-		assertEquals(1, chemicalGateway.getType());
-		assertEquals("Carbon", chemicalGateway.getName());
-		assertEquals(6, chemicalGateway.getAtomicNumber());
-		assertEquals(12.011, chemicalGateway.getAtomicMass(), 0.001);
-		assertEquals(0, chemicalGateway.getDissolvedBy());
-		assertEquals(0, chemicalGateway.getSolute());
+		assertEquals(1, carbon.getChemicalID());
+		assertEquals(1, carbon.getType());
+		assertEquals("Carbon", carbon.getName());
+		assertEquals(6, carbon.getAtomicNumber());
+		assertEquals(12.011, carbon.getAtomicMass(), 0.001);
+		assertEquals(0, carbon.getDissolvedBy());
+		assertEquals(0, carbon.getSolute());
 		
-		chemicalGateway.setName("Carbon-13");
-		chemicalGateway.setAtomicMass(13.003);
-		chemicalGateway.update();
+		carbon.setName("Carbon-13");
+		carbon.setAtomicMass(13.003);
+		carbon.update();
 		
-		chemicalGateway = new ChemicalRDGRDS(1);
+		ChemicalRowDataGatewayRDS carbon13 = new ChemicalRowDataGatewayRDS(1);
 		
-		assertEquals(1, chemicalGateway.getChemicalID());
-		assertEquals(1, chemicalGateway.getType());
-		assertEquals("Carbon-13", chemicalGateway.getName());
-		assertEquals(13.003, chemicalGateway.getAtomicMass(), 0.001);
-		assertEquals(0, chemicalGateway.getDissolvedBy());
-		assertEquals(0, chemicalGateway.getSolute());
+		assertEquals(1, carbon13.getChemicalID());
+		assertEquals(1, carbon13.getType());
+		assertEquals("Carbon-13", carbon13.getName());
+		assertEquals(13.003, carbon13.getAtomicMass(), 0.001);
+		assertEquals(0, carbon13.getDissolvedBy());
+		assertEquals(0, carbon13.getSolute());
 		
-		chemicalGateway.dropTable();
+		ChemicalRowDataGatewayRDS.dropTable();
 	}
 
 }
