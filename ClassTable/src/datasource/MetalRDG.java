@@ -22,6 +22,10 @@ public interface MetalRDG {
    public int getMetalId();
    
    public int getDissolvedBy();
+   
+   public int getAtomicNumber();
+   
+   public double getAtomicMass();
 
    public void setMetalId(int metalId);
 
@@ -30,6 +34,10 @@ public interface MetalRDG {
    public void setName(String name);
 
    public void setInhabits(String inhabits);
+   
+   public void setAtomicNumber(int atomicNumber);
+   
+   public void setAtomicMass(int atomicMass);
 
 
 
