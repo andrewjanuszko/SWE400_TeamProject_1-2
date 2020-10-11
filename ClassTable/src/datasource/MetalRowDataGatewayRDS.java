@@ -12,7 +12,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public class MetalRDGRDS implements MetalRDG {
+public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
 
   private int metalId;
   private int dissolvedById;
@@ -22,7 +22,8 @@ public class MetalRDGRDS implements MetalRDG {
   /**
    * empty constructor drops the table and recreates it
    */
-  public MetalRDGRDS() {
+  public MetalRowDataGatewayRDS() {
+    createTableMetal();
   }
 
   /**
@@ -30,7 +31,8 @@ public class MetalRDGRDS implements MetalRDG {
    * 
    * @param id
    */
-  public MetalRDGRDS(int id) {
+  public MetalRowDataGatewayRDS(int id) {
+    this.createTableMetal();
     this.metalId = id;
 
     String sqlChem = "SELECT * FROM Chemical WHERE chemicalId = " + id + ";";
@@ -62,7 +64,8 @@ public class MetalRDGRDS implements MetalRDG {
    * @param name
    * @param inhabits
    */
-  public MetalRDGRDS(int id, int dissolvedById, String name, String inhabits) {
+  public MetalRowDataGatewayRDS(int id, int dissolvedById, String name, String inhabits) {
+    this.createTableMetal();
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
@@ -81,6 +84,65 @@ public class MetalRDGRDS implements MetalRDG {
       e.printStackTrace();
       System.out.println("Failed to insert");
     }
+  }
+
+  @Override
+  public void createTableMetal() {
+    String createTable = "CREATE TABLE IF NOT EXISTS Metal" + "(" + "metalId INT NOT NULL, " + "dissolvedBy INT,"
+        + "FOREIGN KEY(dissolvedBy) REFERENCES Acid(acidId)," + "FOREIGN KEY(metalId) REFERENCES Chemical(chemicalId)"
+        + ");";
+
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      // Drop the table if exists first
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      // Create new Monitorings Table
+      statement.executeUpdate(createTable);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * drop metal table if it exists
+   */
+  @Override
+  public void dropTableMetal() {
+    String dropTable = "DROP TABLE IF EXISTS Metal;";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping metal table");
+    }
+  }
+
+  /**
+   * Drop the chemical table if it exists.
+   */
+
+  @Override
+  public void dropTableChemical() {
+    String dropTable = "DROP TABLE IF EXISTS Chemical;";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping chemical table");
+    }
+  }
+
+  /**
+   * Drop metal and all tables connected (metal & chemical)
+   */
+  @Override
+  public void dropAllTables() {
+    dropTableMetal();
+    dropTableChemical();
   }
 
   /**
@@ -137,14 +199,14 @@ public class MetalRDGRDS implements MetalRDG {
    * @return list of MetalRowDataGatewayRDS that contain the metals dissolved by
    *         the given acid
    */
-  public List<MetalRDGRDS> findSet(int dissolvedById) {
-    List<MetalRDGRDS> results = new ArrayList<>();
+  public List<MetalRowDataGatewayRDS> findSet(int dissolvedById) {
+    List<MetalRowDataGatewayRDS> results = new ArrayList<>();
     try {
       String sql = "SELECT * FROM Metal WHERE dissolvedBy = " + dissolvedById + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       while (rs.next()) {
-        MetalRDGRDS metalRDS = new MetalRDGRDS(rs.getInt("metalId"));
+        MetalRowDataGatewayRDS metalRDS = new MetalRowDataGatewayRDS(rs.getInt("metalId"));
         results.add(metalRDS);
       }
     } catch (SQLException | DatabaseException e) {

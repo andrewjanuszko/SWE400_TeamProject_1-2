@@ -11,21 +11,23 @@ import java.util.List;
  * BaseRowDataGatewayRDS
  * @author Isabella Boone, Kim O'Neill
  */
-public class BaseRDGRDS implements BaseRDG {
+public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
   int baseId, solute;
   String name, inhabits; 
   
   /**
    * Create table
    */
-  public BaseRDGRDS() {
+  public BaseRowDataGatewayRDS() {
+    createTable();
   }
   
   /**
    * Constructor BaseRowDataGateway, search for existing Base via id 
    * @param id
    */
-  public BaseRDGRDS(int id) throws SQLException, DatabaseException {
+  public BaseRowDataGatewayRDS(int id) throws SQLException, DatabaseException {
+    createTable();
     // Select statements
     String getBase = new String("SELECT * FROM Base WHERE baseId = " + id + ";"),
         getChem = new String("SELECT * FROM Chemical INNER JOIN Base ON Chemical.chemicalId = " + id + ";");
@@ -52,7 +54,8 @@ public class BaseRDGRDS implements BaseRDG {
    * @param name
    * @param inhabits
    */
-  public BaseRDGRDS(int id, int solute, String name, String inhabits) {   
+  public BaseRowDataGatewayRDS(int id, int solute, String name, String inhabits) {   
+    createTable();
     
     try {
       // Insert chemical
@@ -81,6 +84,65 @@ public class BaseRDGRDS implements BaseRDG {
     this.solute = solute;
     this.name = name;
     this.inhabits = inhabits;
+  }
+  
+  /**
+   * Create base and chemical table if they do not already exist.
+   */
+  public void createTable() {
+    String createChem = "CREATE TABLE IF NOT EXISTS Chemical" + "(" + "chemicalId INT NOT NULL, " + "name VARCHAR(20), "
+        + "inhabits VARCHAR(20), " + "PRIMARY KEY (chemicalId)" + ");",
+        createBase = "CREATE TABLE IF NOT EXISTS Base" + "(" + "baseId INT NOT NULL, "
+            + "solute VARCHAR(20), " 
+            + "FOREIGN KEY(baseId) REFERENCES Chemical(chemicalId)" + ");";
+
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate(createChem);
+      statement.executeUpdate(createBase);
+      
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Failed to create base and/or chemical table");
+    }
+  }
+  
+  /**
+   * Drop the base table if it exists.
+   */
+  public void dropTableBase() {
+    String dropTable = "DROP TABLE IF EXISTS Base;";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping base table");
+    }
+  }
+  
+  /**
+   * Drop the chemical table if it exists.
+   */
+  public void dropTableChemical() {
+    String dropTable = "DROP TABLE IF EXISTS Chemical;";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping chemical table");
+    }
+  }
+  
+  /**
+   * Drop base and all tables connected (base & chemical)
+   */
+  public void dropAllTables() {
+    dropTableBase();
+    dropTableChemical();
   }
   
   /**
@@ -135,8 +197,8 @@ public class BaseRDGRDS implements BaseRDG {
   /**
    * 
    */
-  public List<BaseRDGRDS> findSet(int solute) {
-    List<BaseRDGRDS> results = new ArrayList<>(); 
+  public List<BaseRowDataGatewayRDS> findSet(int solute) {
+    List<BaseRowDataGatewayRDS> results = new ArrayList<>(); 
     
     try {
       String sql = "SELECT * FROM Base WHERE solute = " + solute + ";";
@@ -145,7 +207,7 @@ public class BaseRDGRDS implements BaseRDG {
       
       while(rs.next()) {
         int sol = rs.getInt("baseId");
-        BaseRDGRDS id = new BaseRDGRDS(sol); 
+        BaseRowDataGatewayRDS id = new BaseRowDataGatewayRDS(sol); 
         results.add(id);
       }
       

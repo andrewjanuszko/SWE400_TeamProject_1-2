@@ -7,7 +7,15 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public interface ElementRDG {
+public interface ElementRowDataGateway {
+
+  public void createTableElement();
+
+  public void dropTableElement();
+
+  public void dropTableChemical();
+
+  public void dropAllTables();
   
   public void delete();
 
@@ -17,7 +25,7 @@ public interface ElementRDG {
   
   public void findByAtomicMass(double atomicMass);
 
-  public List<ElementRDGRDS> findSetAtomicMass(double lowerLimit, double upperLimit);
+  public List<ElementRowDataGatewayRDS> findSetAtomicMass(double lowerLimit, double upperLimit);
   
   public int getAtomicNumber();
 

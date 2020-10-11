@@ -7,13 +7,21 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public interface MetalRDG {
+public interface MetalRowDataGateway {
+
+  public void createTableMetal();
+
+  public void dropTableMetal();
+
+  public void dropTableChemical();
+
+  public void dropAllTables();
   
   public void delete();
 
   public void update();
 
-   public List<MetalRDGRDS> findSet(int dissolvedById);
+   public List<MetalRowDataGatewayRDS> findSet(int dissolvedById);
    
    public String getName();
    

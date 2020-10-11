@@ -12,21 +12,23 @@ import java.util.List;
  * @author Isabella Boone, Kim O'Neill
  *
  */
-public class ChemicalRDGRDS implements ChemicalRDG {
+public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
   int id;
   String name, inhabits;
   
   /**
    * Create table
    */
-  public ChemicalRDGRDS() {
+  public ChemicalRowDataGatewayRDS() {
+    createTable();
   }
   
   /**
    * Constructor ChemicalRowDataGatewayRDS, search for existing chemical.
    * @param id to search for
    */
-  public ChemicalRDGRDS(int id) throws SQLException, DatabaseException {
+  public ChemicalRowDataGatewayRDS(int id) throws SQLException, DatabaseException {
+    createTable();
     // Select statement
     String getChem = new String("SELECT * FROM Chemical WHERE chemicalId = " + id + ";");
 
@@ -47,7 +49,8 @@ public class ChemicalRDGRDS implements ChemicalRDG {
    * @param name
    * @param inhabits
    */
-  public ChemicalRDGRDS(int id, String name, String inhabits) {
+  public ChemicalRowDataGatewayRDS(int id, String name, String inhabits) {
+    createTable();
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -70,6 +73,37 @@ public class ChemicalRDGRDS implements ChemicalRDG {
     this.inhabits = inhabits;
   }
   
+  /**
+   * Create chemical table if it does not already exist.
+   */
+  public void createTable() {
+    String createChem = "CREATE TABLE IF NOT EXISTS Chemical" + "(" + "chemicalId INT NOT NULL, " + "name VARCHAR(20), "
+        + "inhabits VARCHAR(20), " + "PRIMARY KEY (chemicalId)" + ");";
+
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate(createChem);
+      
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Failed to create chemical table");
+    }
+  }
+  
+  /**
+   * Drop the chemical table if it exists.
+   */
+  public void dropTable() {
+    String dropTable = "DROP TABLE IF EXISTS Chemical;";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping chemical table");
+    }
+  }
 
   /**
    * Delete the currently selected chemical from the database. 
