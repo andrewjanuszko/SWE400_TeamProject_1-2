@@ -61,5 +61,66 @@ public interface ChemicalTableDataGateway {
    * @throws DatabaseException when things go wrong.
    */
   public ArrayList<ChemicalDTO> filterAllByLowInventory() throws DatabaseException;
+  
+  /**
+   * List all elements with a like name the given partialName
+   * @param partialName a segment of a name to search by
+   * @return
+   * @throws DatabaseException
+   */
+  public ArrayList<ChemicalDTO> filterElementByPartialName(String partialName) throws DatabaseException;
+  
+  /**
+   * List all elements with the given inventory value
+   * @param inventory
+   * @return
+   * @throws DatabaseException
+   */
+  public ArrayList<ChemicalDTO> filterElementByInventory(double inventory) throws DatabaseException;
+  
+  /**
+   * List all elements in a given inventory range
+   * @param min
+   * @param max
+   * @return
+   * @throws DatabaseException
+   */
+  public ArrayList<ChemicalDTO> filterElementByInvetoryRange(double min, double max) throws DatabaseException;
+  
+  /**
+   * List all elements with the given atomic mass value
+   * @param atomicMass
+   * @return
+   * @throws DatabaseException
+   */
+  public ArrayList<ChemicalDTO> filterElementByAtomicMass(double atomicMass) throws DatabaseException;
+
+  /**
+   * List all elements in the given atomic mass range 
+   * @param min
+   * @param max
+   * @return
+   * @throws DatabaseException
+   */
+  public ArrayList<ChemicalDTO> filterElementByAtomicMassRange(double min, double max) throws DatabaseException;
+  
+  /**
+   * List all elements with a given atomic number
+   * @param atomicNumber
+   * @return
+   * @throws DatabaseException
+   */
+  public ArrayList<ChemicalDTO> filterElementByAtomicNumber(int atomicNumber) throws DatabaseException;
+  
+  /**
+   * List all elements in a given atomic number range
+   * @param min
+   * @param max
+   * @return
+   * @throws DatabaseException
+   */
+  public ArrayList<ChemicalDTO> filterElementByAtomicNumberRange(int min, int max) throws DatabaseException;
+  
+  
 
 }

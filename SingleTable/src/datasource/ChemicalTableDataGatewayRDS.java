@@ -88,7 +88,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
   @Override
   public ArrayList<ChemicalDTO> filterAllByPartialName(String partialName) throws DatabaseException {
     try {
-      String selectSQL = "SELECT * FROM Chemical WHERE Chemical.name LIKE ?;";
+      String selectSQL = "SELECT * FROM Chemical WHERE Chemical.name LIKE '%?%';";
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
       statement.setString(1, partialName);
       return convertToDTO(statement);
@@ -141,5 +141,47 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
       throw new DatabaseException("Failed to fetch all Chemicals with inventory in range.", e);
     }
   }
+
+@Override
+public ArrayList<ChemicalDTO> filterElementByPartialName(String partialName) throws DatabaseException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public ArrayList<ChemicalDTO> filterElementByInventory(double inventory) throws DatabaseException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public ArrayList<ChemicalDTO> filterElementByInvetoryRange(double min, double max) throws DatabaseException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public ArrayList<ChemicalDTO> filterElementByAtomicMass(double atomicMass) throws DatabaseException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public ArrayList<ChemicalDTO> filterElementByAtomicMassRange(double min, double max) throws DatabaseException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public ArrayList<ChemicalDTO> filterElementByAtomicNumber(int atomicNumber) throws DatabaseException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public ArrayList<ChemicalDTO> filterElementByAtomicNumberRange(int min, int max) throws DatabaseException {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }
