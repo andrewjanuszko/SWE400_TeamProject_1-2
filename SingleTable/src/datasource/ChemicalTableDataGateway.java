@@ -5,99 +5,61 @@ import java.util.ArrayList;
 
 /**
  * Table Data Gateway for Chemical.
+ * 
  * @author andrewjanuszko
  */
-public interface ChemicalTDG {
+public interface ChemicalTableDataGateway {
 
-	/**
-	 * Fetch all Chemicals.
-	 * @return an ArrayList of ChemicalDTOs.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	public ArrayList<ChemicalDTO> fetchAll() throws DatabaseException;
-	
-	/**
-	 * Fetch all Elements.
-	 * @return an ArrayList of ChemicalDTOs.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	public ArrayList<ChemicalDTO> fetchElements() throws DatabaseException;
-	
-	/**
-	 * Fetch all Metals.
-	 * @return an ArrayList of ChemicalDTOs.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	public ArrayList<ChemicalDTO> fetchMetals() throws DatabaseException;
-	
-	/**
-	 * Fetch all Compounds.
-	 * @return an ArrayList of ChemicalDTOs.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	public ArrayList<ChemicalDTO> fetchCompounds() throws DatabaseException;
-	
-	/**
-	 * Fetch all Bases.
-	 * @return an ArrayList of ChemicalDTOs.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	public ArrayList<ChemicalDTO> fetchBases() throws DatabaseException;
-	
-	/**
-	 * Fetch all Acids.
-	 * @return an ArrayList of ChemicalDTOs.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	public ArrayList<ChemicalDTO> fetchAcids() throws DatabaseException;
-	
-	/**
-	 * Fetch Chemicals by name.
-	 * @param name of the Chemical.
-	 * @return an ArrayList of ChemicalDTOs.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	public ArrayList<ChemicalDTO> fetchByName(String name) throws DatabaseException;
-	
-	/**
-	 * Fetch Chemicals by habitat.
-	 * @param habitat of the Chemical.
-	 * @return an ArrayList of ChemicalDTOs.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	public ArrayList<ChemicalDTO> fetchByHabitat(String habitat) throws DatabaseException;
-	
-	/**
-	 * Fetch Elements by atomic number.
-	 * @param atomicNumber of the Element.
-	 * @return an ArrayList of ChemicalDTOs.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	public ArrayList<ChemicalDTO> fetchByAtomicNumber(int atomicNumber) throws DatabaseException;
-	
-	/**
-	 * Fetch Elements in a given mass range.
-	 * @param min mass of the Element.
-	 * @param max mass of the Element.
-	 * @return an ArrayList of ChemicalDTOs.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	public ArrayList<ChemicalDTO> fetchByAtomicMassRange(double min, double max) throws DatabaseException;
-	
-	/**
-	 * Fetch all Metals dissolved by an Acid
-	 * @param acidID of the Acid.
-	 * @return an ArrayList of ChemicalDTOs.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	public ArrayList<ChemicalDTO> fetchByDissolvedBy(int acidID) throws DatabaseException;
-	
-	/**
-	 * Fetch all Bases and Acids by solute.
-	 * @param chemicalID of the Chemical. 
-	 * @return an ArrayList of ChemicalDTOs.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	public ArrayList<ChemicalDTO> fetchBySolute(int chemicalID) throws DatabaseException;
+  public ArrayList<ChemicalDTO> fetchAll() throws DatabaseException;
+
+  /**
+   * List all Chemicals that have a given name.
+   * 
+   * @param name the name.
+   * @return a list of Chemicals.
+   * 
+   * @throws DatabaseException when things go wrong.
+   */
+  public ArrayList<ChemicalDTO> filterAllByName(String name) throws DatabaseException;
+
+  /**
+   * List all Chemicals that have a name similar to the one provided.
+   * 
+   * @param partialName the wild card.
+   * @return a list of Chemicals.
+   * 
+   * @throws DatabaseException when things go wrong.
+   */
+  public ArrayList<ChemicalDTO> filterAllByPartialName(String partialName) throws DatabaseException;
+
+  /**
+   * List all Chemicals that have a specific inventory value.
+   * 
+   * @param inventory the specific inventory value
+   * @return a list of Chemicals.
+   * 
+   * @throws DatabaseException when things go wrong.
+   */
+  public ArrayList<ChemicalDTO> filterAllByInventory(double inventory) throws DatabaseException;
+
+  /**
+   * List all Chemicals that have an inventory value in the provided range.
+   * 
+   * @param min the minimum inventory
+   * @param max the maximum inventory
+   * @return a list of Chemicals.
+   * 
+   * @throws DatabaseException when things go wrong.
+   */
+  public ArrayList<ChemicalDTO> filterAllByInventoryRange(double min, double max) throws DatabaseException;
+
+  /**
+   * List all Chemicals that have low inventory.
+   * 
+   * @return a list of Chemicals.
+   * 
+   * @throws DatabaseException when things go wrong.
+   */
+  public ArrayList<ChemicalDTO> filterAllByLowInventory() throws DatabaseException;
 
 }
