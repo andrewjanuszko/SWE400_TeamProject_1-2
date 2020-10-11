@@ -141,47 +141,116 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
       throw new DatabaseException("Failed to fetch all Chemicals with inventory in range.", e);
     }
   }
+  
+// Filters for elements start here  
 
+  
+/**
+ * @see datasource.ChemicalTableDataGateway#filterElementByNameLike(String partialName)
+ */
 @Override
-public ArrayList<ChemicalDTO> filterElementByPartialName(String partialName) throws DatabaseException {
-	// TODO Auto-generated method stub
-	return null;
+public ArrayList<ChemicalDTO> filterElementByNameLike(String partialName) throws DatabaseException {
+	 try {
+	      String selectSQL = "SELECT * FROM Chemical WHERE Chemical.name LIKE '%?%';";
+	      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
+	      statement.setString(1, partialName);
+	      return convertToDTO(statement);
+	    } catch (SQLException e) {
+	      throw new DatabaseException("Failed to fetch all Element with name like '" + partialName + "'.", e);
+	    }
 }
 
+/**
+ * @see datasource.ChemicalTableDataGateway#filterElementByInventory(double inventory)
+ */
 @Override
 public ArrayList<ChemicalDTO> filterElementByInventory(double inventory) throws DatabaseException {
-	// TODO Auto-generated method stub
-	return null;
+	try {
+		String selectSQL = "SELECT * FROM Chemical WHERE Chemical.inventory = ?;";
+		PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
+		statement.setDouble(1, inventory);
+		return convertToDTO(statement);
+	}catch (SQLException e) {
+	      throw new DatabaseException("Failed to fetch all Element with inventory '" + inventory + "'.", e);
+	}
 }
 
+/**
+ * @see datasource.ChemicalTableDataGateway#filterElementByInvetoryRange(double min, double max)
+ */
 @Override
 public ArrayList<ChemicalDTO> filterElementByInvetoryRange(double min, double max) throws DatabaseException {
-	// TODO Auto-generated method stub
-	return null;
+	try {
+		String selectSQL = "SELECT * FROM Chemical WHERE Chemical.inventory BETWEEN ? AND ?;";
+		PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
+		statement.setDouble(1, min);
+		statement.setDouble(2, max);
+		return convertToDTO(statement);
+	}catch (SQLException e) {
+	      throw new DatabaseException("Failed to fetch all Element with inventory between '" + max + " and "+ min + "'.", e);
+	}
 }
 
+/**
+ * @see datasource.ChemicalTableDataGateway#filterElementByAtomicMass(double atomicMass)
+ */
 @Override
 public ArrayList<ChemicalDTO> filterElementByAtomicMass(double atomicMass) throws DatabaseException {
-	// TODO Auto-generated method stub
-	return null;
+	try {
+		String selectSQL = "SELECT * FROM Chemical WHERE Chemical.atomicMass = ?;";
+		PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
+		statement.setDouble(1, atomicMass);
+		return convertToDTO(statement);
+	}catch (SQLException e) {
+	      throw new DatabaseException("Failed to fetch all Element with atomicMass '" + atomicMass + "'.", e);
+	}
 }
 
+/*
+ * @see datasource.ChemicalTableDataGateway#filterElementByAtomicMassRange(double min, double max)
+ */
 @Override
 public ArrayList<ChemicalDTO> filterElementByAtomicMassRange(double min, double max) throws DatabaseException {
-	// TODO Auto-generated method stub
-	return null;
+	try {
+		String selectSQL = "SELECT * FROM Chemical WHERE Chemical.atomicMass BETWEEN ? AND ?;";
+		PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
+		statement.setDouble(1, min);
+		statement.setDouble(2, max);
+		return convertToDTO(statement);
+	}catch (SQLException e) {
+	      throw new DatabaseException("Failed to fetch all Element with atomicMass between '" + max + " and "+ min + "'.", e);
+	}
 }
 
+/**
+ * @see datasource.ChemicalTableDataGateway#filterElementByAtomicNumber(int atomicNumber)
+ */
 @Override
 public ArrayList<ChemicalDTO> filterElementByAtomicNumber(int atomicNumber) throws DatabaseException {
-	// TODO Auto-generated method stub
-	return null;
+	try {
+		String selectSQL = "SELECT * FROM Chemical WHERE Chemical.atomicNumber = ?;";
+		PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
+		statement.setDouble(1, atomicNumber);
+		return convertToDTO(statement);
+	}catch (SQLException e) {
+	      throw new DatabaseException("Failed to fetch all Element with atomicNumber '" + atomicNumber + "'.", e);
+	}
 }
 
+/**
+ * @see datasource.ChemicalTableDataGateway#filterElementByAtomicNumberRange(int min, int max)
+ */
 @Override
 public ArrayList<ChemicalDTO> filterElementByAtomicNumberRange(int min, int max) throws DatabaseException {
-	// TODO Auto-generated method stub
-	return null;
+	try {
+		String selectSQL = "SELECT * FROM Chemical WHERE Chemical.atomicNumber BETWEEN ? AND ?;";
+		PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
+		statement.setDouble(1, min);
+		statement.setDouble(2, max);
+		return convertToDTO(statement);
+	}catch (SQLException e) {
+	      throw new DatabaseException("Failed to fetch all Element with atomicNumber between '" + max + " and "+ min + "'.", e);
+	}
 }
 
 }

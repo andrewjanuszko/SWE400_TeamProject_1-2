@@ -68,7 +68,7 @@ public interface ChemicalTableDataGateway {
    * @return
    * @throws DatabaseException
    */
-  public ArrayList<ChemicalDTO> filterElementByPartialName(String partialName) throws DatabaseException;
+  public ArrayList<ChemicalDTO> filterElementByNameLike(String partialName) throws DatabaseException;
   
   /**
    * List all elements with the given inventory value
