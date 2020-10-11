@@ -59,7 +59,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
   public ChemicalRowDataGatewayRDS(int type, String name, double inventory, int atomicNumber, double atomicMass,
       int dissolvedBy, double moles, int solute) throws DatabaseException {
     try {
-      String createSQL = "INSERT INTO Chemical (type, name, inventory, atomicNumber, atomicMass, dissolvedBy, moles, solute)"
+      final String createSQL = "INSERT INTO Chemical (type, name, inventory, atomicNumber, atomicMass, dissolvedBy, moles, solute)"
           + " VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(createSQL,
           PreparedStatement.RETURN_GENERATED_KEYS);
