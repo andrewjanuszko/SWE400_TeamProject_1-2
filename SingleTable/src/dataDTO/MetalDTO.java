@@ -1,13 +1,20 @@
 package dataDTO;
 
-public final class ElementDTO {
+/**
+ * Creates a Metal DTO.
+ * 
+ * @author andrewjanuszko
+ *
+ */
+public final class MetalDTO {
 
   private final int chemicalID;
-  private final int type;
   private final String name;
   private final double inventory;
   private final int atomicNumber;
   private final double atomicMass;
+  private final int dissolvedBy;
+  private final double moles;
 
   /**
    * Create a chemical DTO
@@ -18,14 +25,18 @@ public final class ElementDTO {
    * @param inventory    the inventory of the Chemical.
    * @param atomicNumber the atomicNumber of the Chemical.
    * @param atomicMass   the atomicMass of the Chemical.
+   * @param dissolvedBy  the dissolvedBy of the Chemical.
+   * @param solute       the solute of the Chemical.
    */
-  public ElementDTO(int chemicalID, int type, String name, double inventory, int atomicNumber, double atomicMass) {
+  public MetalDTO(int chemicalID, String name, double inventory, int atomicNumber, double atomicMass, int dissolvedBy,
+      double moles) {
     this.chemicalID = chemicalID;
-    this.type = type;
     this.name = name;
     this.inventory = inventory;
     this.atomicNumber = atomicNumber;
     this.atomicMass = atomicMass;
+    this.dissolvedBy = dissolvedBy;
+    this.moles = moles;
   }
 
   /**
@@ -33,13 +44,6 @@ public final class ElementDTO {
    */
   public int getChemicalID() {
     return chemicalID;
-  }
-
-  /**
-   * @return the type
-   */
-  public int getType() {
-    return type;
   }
 
   /**
@@ -68,6 +72,20 @@ public final class ElementDTO {
    */
   public double getAtomicMass() {
     return atomicMass;
+  }
+
+  /**
+   * @return the dissolvedBy
+   */
+  public int getDissolvedBy() {
+    return dissolvedBy;
+  }
+
+  /**
+   * @return the moles.
+   */
+  public double getMoles() {
+    return moles;
   }
 
 }
