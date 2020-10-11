@@ -1,10 +1,25 @@
 package interfaces;
 
-public interface AcidDataMapperInterface {
+import java.util.List;
+
+import model.Acid;
+
+public interface AcidDataMapperInterface extends ChemicalDataMapperInterface {
 
   //add using constructor (all instance variables)
   
-  //find using constructor (id)
+  //add using constructor(id)
+  
+  public void addAcid();
+  
+  public void deleteAcid();
+  
+  public void updateAcid();
+  
+  public Acid fetchAcid();
+  
+  public List<Acid> getAllAcids();
+  
   
   
 }
