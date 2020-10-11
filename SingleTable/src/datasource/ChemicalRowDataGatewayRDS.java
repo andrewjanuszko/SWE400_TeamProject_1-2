@@ -88,25 +88,21 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @throws DatabaseException when things go wrong.
 	 */
 	public static void createTable() throws DatabaseException {
-		if(!exists()) {
-			try {
-				String createTableSQL = "CREATE TABLE Chemical(" +
-							   			"chemicalID INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY," +
-							   			"type INTEGER NOT NULL, " +
-							   			"name VARCHAR(20) NOT NULL UNIQUE," +
-							   			"inhabits VARCHAR(20) NOT NULL, " +
-							   			"atomicNumber INTEGER, " +
-							   			"atomicMass DOUBLE, " +
-							   			"dissolvedBy INTEGER, " +
-							   			"solute INTEGER);";
-				Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-				statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
-				statement.executeUpdate(createTableSQL);
-			} catch(SQLException e) {
-				throw new DatabaseException("Failed to create 'Chemical' table.", e);
-			}
-		} else {
-			throw new DatabaseException("The table 'Chemical' already exists.");
+		try {
+			String createTableSQL = "CREATE TABLE IF NOT EXISTS Chemical(" +
+							   		"chemicalID INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+							   		"type INTEGER NOT NULL, " +
+							   		"name VARCHAR(20) NOT NULL UNIQUE," +
+							   		"inhabits VARCHAR(20) NOT NULL, " +
+							   		"atomicNumber INTEGER, " +
+							   		"atomicMass DOUBLE, " +
+							   		"dissolvedBy INTEGER, " +
+							   		"solute INTEGER);";
+			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+			statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
+			statement.executeUpdate(createTableSQL);
+		} catch(SQLException e) {
+			throw new DatabaseException("Failed to create 'Chemical' table.", e);
 		}
 	}
 	
@@ -115,33 +111,13 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 	 * @throws DatabaseException when things go wrong.
 	 */
 	public static void dropTable() throws DatabaseException {
-		if(exists()) {
-			try {
-				String dropTableSQL = "DROP TABLE IF EXISTS Chemical, CompoundMadeFromElement;";
-				Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-				statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-				statement.executeUpdate(dropTableSQL);
-			} catch(SQLException e) {
-				throw new DatabaseException("Failed to drop 'Chemical', 'CompoundMadeFromElement' table.", e);
-			}
-		} else {
-			throw new DatabaseException("There are no tables to drop.");
-		}
-	}
-	
-	/**
-	 * Checks if the table already exists.
-	 * @return true : false.
-	 * @throws DatabaseException when things go wrong.
-	 */
-	private static boolean exists() throws DatabaseException {
 		try {
-			String existsSQL = "SHOW TABLES LIKE 'Chemical';";
+			String dropTableSQL = "DROP TABLE IF EXISTS Chemical, CompoundMadeFromElement;";
 			Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-			ResultSet result = statement.executeQuery(existsSQL);
-			return result.next() ? true : false;
+			statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+			statement.executeUpdate(dropTableSQL);
 		} catch(SQLException e) {
-			throw new DatabaseException("Failed to show tables like 'Chemical'.", e);
+			throw new DatabaseException("Failed to drop 'Chemical', 'CompoundMadeFromElement' table.", e);
 		}
 	}
 	
