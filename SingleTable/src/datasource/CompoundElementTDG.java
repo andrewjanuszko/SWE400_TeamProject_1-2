@@ -7,7 +7,7 @@ import dataDTO.ElementDTO;
  * A table data gateway.
  * @author andrewjanuszko
  */
-public interface ElementCompoundTableDataGateway {
+public interface CompoundElementTDG {
 	
 	/**
 	 * Updates a row in a table.

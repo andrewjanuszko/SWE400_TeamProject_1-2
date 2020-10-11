@@ -15,17 +15,6 @@ public final class ChemicalDTO {
 	private final int dissolvedBy;
 	private final int solute;
 	
-	/**
-	 * Create a chemical DTO
-	 * @param chemicalID the ID of the Chemical.
-	 * @param type the type of the Chemical.
-	 * @param name the name of the Chemical.
-	 * @param inhabits the inhabits of the Chemical.
-	 * @param atomicNumber the atomicNumber of the Chemical.
-	 * @param atomicMass the atomicMass of the Chemical.
-	 * @param dissolvedBy the dissolvedBy of the Chemical.
-	 * @param solute the solute of the Chemical.
-	 */
 	public ChemicalDTO(int chemicalID, int type, String name, String inhabits, int atomicNumber, 
 			double atomicMass, int dissolvedBy,int solute) {
 		

@@ -12,22 +12,22 @@ import dataDTO.ElementDTO;
  * The RDS version of the gateway for CompoundMadeFromElement.
  * @author andrewjanuszko
  */
-public class ElementCompoundTableDataGatewayRDS implements ElementCompoundTableDataGateway {
+public class CompoundElementTDGRDS implements CompoundElementTDG {
 	
-	private static ElementCompoundTableDataGateway singletonInstance;
+	private static CompoundElementTDG singletonInstance;
 	
 	/**
 	 * Get the singleton instance of the RDS gateway.
 	 * @return the singleton instance.
 	 */
-	public static synchronized ElementCompoundTableDataGateway getSingletonInstance() {
+	public static synchronized CompoundElementTDG getSingletonInstance() {
 		if (singletonInstance == null) {
-			singletonInstance = new ElementCompoundTableDataGatewayRDS();
+			singletonInstance = new CompoundElementTDGRDS();
 		}
 		return singletonInstance;
 	}
 	
-	private ElementCompoundTableDataGatewayRDS() {
+	private CompoundElementTDGRDS() {
 		try {
 			createTable();
 		} catch (DatabaseException e) {

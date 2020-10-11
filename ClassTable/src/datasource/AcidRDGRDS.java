@@ -8,25 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * AcidRowDataGatewayRDS 
+ * Acid Row Data Gateway RDS 
  * @author Isabella Boone, Kim O'Neill
  */
-public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
+public class AcidRDGRDS implements AcidRDG {
   private int acidId, solute;
   private String name, inhabits;
   
   /**
    * Create tables
    */
-  public AcidRowDataGatewayRDS() {
-    createTable(); 
+  public AcidRDGRDS() {
   }
   
   /**
    * Constructor used to find an existing Acid.
    * @param id of the acid to find
    */
-  public AcidRowDataGatewayRDS(int id) throws SQLException, DatabaseException {
+  public AcidRDGRDS(int id) throws SQLException, DatabaseException {
     // Statements to find existing acid/chemical and collect their information.
     String getAcid = new String("SELECT * FROM Acid WHERE acidId = " + id + ";"),
         getChem = new String("SELECT * FROM Chemical WHERE chemicalId = " + id + ";");
@@ -53,8 +52,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * @param name of acid to insert
    * @param inhabits of acid to insert
    */
-  public AcidRowDataGatewayRDS(int id, int solute, String name, String inhabits) {
-    createTable(); 
+  public AcidRDGRDS(int id, int solute, String name, String inhabits) {
     try {
       // Insert chemical 
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -82,67 +80,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       System.out.println("Failed to insert acid through constructor");
     }
   }
-
-  /**
-   * Create acid and chemical table if they do not already exist. 
-   */
-  public void createTable() {
-    String createChem = "CREATE TABLE IF NOT EXISTS Chemical" + "(" + "chemicalId INT NOT NULL, " + "name VARCHAR(20), "
-        + "inhabits VARCHAR(20), " + "PRIMARY KEY (chemicalId)" + ");",
-        createAcid = "CREATE TABLE IF NOT EXISTS Acid" + "(acidId INT NOT NULL, " + 
-        "solute INT, " + "FOREIGN KEY(acidId) REFERENCES Chemical(chemicalId)" + ");";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate(createChem);
-      statement.executeUpdate(createAcid);
-      
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to create acid and/or chemical table");
-    }
-  }
   
-	/**
-	 * Drop the acid table if it exists.
-	 */
-	public void dropTableAcid() {
-	  String dropTable = "DROP TABLE IF EXISTS Acid;";
-	  try {
-	    Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-	    statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-	    statement.executeUpdate(dropTable);
-	    statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
-	  } catch (SQLException | DatabaseException e) {
-	    e.printStackTrace();
-	    System.out.println("Error dropping acid table");
-	  }
-	}
-	
-	/**
-	 * Drop the chemical table if it exists.
-	 */
-	public void dropTableChemical() {
-	  String dropTable = "DROP TABLE IF EXISTS Chemical;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping chemical table");
-    }
-	}
-	
-	/**
-	 * Drop acid and all tables connected (acid & chemical)
-	 */
-	public void dropAllTables() {
-	  dropTableAcid();
-	  dropTableChemical();
-	}
-	
 	/**
 	 * Delete an acid from both acid and chemical tables
 	 */
@@ -202,8 +140,8 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * @param solute
    * @return
    */
-  public List<AcidRowDataGatewayRDS> findSet(int solute) {
-    List<AcidRowDataGatewayRDS> results = new ArrayList<>();
+  public List<AcidRDGRDS> findSet(int solute) {
+    List<AcidRDGRDS> results = new ArrayList<>();
     try {
       String sql = "SELECT * FROM Acid WHERE solute = "+ solute + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -211,7 +149,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       
       while(rs.next()) {
         int sol = rs.getInt("acidId");
-        AcidRowDataGatewayRDS id = new AcidRowDataGatewayRDS(sol);
+        AcidRDGRDS id = new AcidRDGRDS(sol);
         results.add(id);
       }
     } catch (SQLException | DatabaseException e) {

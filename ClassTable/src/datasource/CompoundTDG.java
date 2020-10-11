@@ -6,17 +6,13 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public interface CompoundsMadeOfTableDataGateway {
-
-  void createTableCompoundMadeFrom();
-
-  public void dropTableCompoundMadeFromElement();
+public interface CompoundTDG {
 
   public void delete();
 
-  List<CompoundDTO> findSetCompoundId(int elementId);
+  List<Integer> findMakes(int elementId);
 
-  List<CompoundDTO> findSetElementId(int compoundId);
+  List<Integer> findMadeOf(int compoundId);
 
   String getCompoundName();
   

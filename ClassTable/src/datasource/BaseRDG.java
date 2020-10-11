@@ -7,7 +7,7 @@ import java.util.List;
  * BaseRowDataGateway
  * @author Isabella Boone, Kim O'Neill
  */
-public interface BaseRowDataGateway {
+public interface BaseRDG {
   
   public int getSolute();
   
@@ -24,14 +24,6 @@ public interface BaseRowDataGateway {
   public void update();
 
   public void delete();
-  
-  public void dropTableBase();
-  
-  public void dropTableChemical();
-  
-  public void dropAllTables(); 
-  
-  public void createTable();
 
-  public List<BaseRowDataGatewayRDS> findSet(int solute);
+  public List<BaseRDGRDS> findSet(int solute);
 }

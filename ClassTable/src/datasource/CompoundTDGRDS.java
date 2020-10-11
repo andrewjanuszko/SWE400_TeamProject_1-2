@@ -13,7 +13,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableDataGateway {
+public class CompoundTDGRDS implements CompoundTDG {
 
   private int compoundId;
   private List<Integer> madeOf; // Element ids
@@ -21,10 +21,8 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   private String inhabits;
 
   /**
-   * Empty constructor drops and re-creates the table
    */
-  public CompoundsMadeOfTableDataGatewayRDS() {
-    this.createTableCompoundMadeFrom();
+  public CompoundTDGRDS() {
   }
 
   /**
@@ -33,8 +31,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    * @param compoundId
    *          to search for
    */
-  public CompoundsMadeOfTableDataGatewayRDS(int compoundId) {
-    this.createTableCompoundMadeFrom();
+  public CompoundTDGRDS(int compoundId) {
     String sql = "SELECT * FROM Chemical WHERE chemicalId = " + compoundId + ";";
 
     try {
@@ -60,8 +57,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    * @param name
    * @param inhabits
    */
-  public CompoundsMadeOfTableDataGatewayRDS(int compoundId, List<Integer> madeOf, String name, String inhabits) {
-    createTableCompoundMadeFrom();
+  public CompoundTDGRDS(int compoundId, List<Integer> madeOf, String name, String inhabits) {
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
@@ -73,7 +69,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
 
       for (int i = 0; i < madeOf.size(); i++) {
         PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
-            .prepareStatement("INSERT INTO CompoundMadeFromElement (compoundId, elementId)" + "VALUES (?, ?);");
+            .prepareStatement("INSERT INTO Compound (compoundId, elementId)" + "VALUES (?, ?);");
 
         insert.setInt(1, compoundId);
         insert.setInt(2, madeOf.get(i));
@@ -87,42 +83,10 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Problem inserting CompoundsMadeOfTableDataGatewayRDS");
+      System.out.println("Problem inserting Compound");
     }
   }
 
-  @Override
-  public void createTableCompoundMadeFrom() {
-    String createTable = "CREATE TABLE IF NOT EXISTS CompoundMadeFromElement(" + "compoundId INT NOT NULL, "
-        + "elementId INT NOT NULL, " + "FOREIGN KEY (compoundId) REFERENCES Chemical(chemicalId), "
-        + "FOREIGN KEY (elementId) REFERENCES Element(elementId));";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-
-      // Drop the table if exists first
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      //
-      statement.executeUpdate(createTable);
-
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to create/drop CompoundMadeFromElement");
-    }
-  }
-
-  @Override
-  public void dropTableCompoundMadeFromElement() {
-    String dropTable = "DROP TABLE IF EXISTS CompoundMadeFromElement;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping Compound table");
-    }
-  }
 
   /**
    * Get all compoundId's of elementId
@@ -131,16 +95,16 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    *          to search for
    */
   @Override
-  public List<CompoundDTO> findSetCompoundId(int elementId) {
-    String sql = "SELECT * FROM CompoundMadeFromElement WHERE elementId = " + elementId + ";";
-    List<CompoundDTO> compounds = new ArrayList<>();
+  public List<Integer> findMakes(int elementId) {
+    String sql = "SELECT * FROM Compound WHERE elementId = " + elementId + ";";
+    List<Integer> compounds = new ArrayList<>();
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       // While there are still results to search through
       while (rs.next()) {
         // Add each result to compound list
-        compounds.add(new CompoundDTO(rs.getInt("compoundId"), elementId));
+        compounds.add(rs.getInt("compoundId"));
       }
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -155,9 +119,9 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    *          to search for
    */
   @Override
-  public List<CompoundDTO> findSetElementId(int compoundId) {
-    String sql = "SELECT * FROM CompoundMadeFromElement WHERE compoundId = " + compoundId + ";";
-    List<CompoundDTO> compounds = new ArrayList<>();
+  public List<Integer> findMadeOf(int compoundId) {
+    String sql = "SELECT * FROM Compound WHERE compoundId = " + compoundId + ";";
+    List<Integer> compounds = new ArrayList<>();
 
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -165,7 +129,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
       // While there are still results to search through
       while (rs.next()) {
         // Add each result to compound list
-        compounds.add(new CompoundDTO(compoundId,rs.getInt("elementId")));
+        compounds.add(rs.getInt("elementId"));
       }
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -180,7 +144,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   public void delete() {
     try {
       PreparedStatement sql = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("DELETE FROM CompoundMadeFromElement WHERE compoundId = " + this.compoundId + ";");
+          .prepareStatement("DELETE FROM Compound WHERE compoundId = " + this.compoundId + ";");
       sql.execute();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();

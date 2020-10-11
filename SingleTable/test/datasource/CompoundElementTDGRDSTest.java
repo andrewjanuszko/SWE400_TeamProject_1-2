@@ -9,30 +9,30 @@ import dataDTO.ElementDTO;
 
 public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
 	
-	protected ElementCompoundTableDataGateway gateway;
+	protected CompoundElementTDG gateway;
 	
 	/**
 	 * Gets a singleton.
 	 */
-	protected abstract ElementCompoundTableDataGateway getSingletonInstance();
+	protected abstract CompoundElementTDG getSingletonInstance();
 	
 
 	/**
 	 * Fills the database with entries to test on.
 	 * @throws DatabaseException when things go wrong.
 	 */
-	@SuppressWarnings("unused")
 	@BeforeEach
 	void fillDatabase() throws DatabaseException {
-		ChemicalRowDataGatewayRDS.createTable();
+		@SuppressWarnings("unused")
+		ChemicalRDGRDS chemicalTable = new ChemicalRDGRDS();
 		gateway = getSingletonInstance();
 		//Inserting 3 elements to make up the compounds
-		ChemicalRowDataGatewayRDS carbon = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);
-		ChemicalRowDataGatewayRDS oxygen = new ChemicalRowDataGatewayRDS(1, "Oxygen", "Earth", 8, 15.999, -1, -1);
-		ChemicalRowDataGatewayRDS hydrogen = new ChemicalRowDataGatewayRDS(1, "Hydrogen", "Earth", 1, 1.007, -1, -1);
+		chemicalTable = new ChemicalRDGRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);
+		chemicalTable = new ChemicalRDGRDS(1, "Oxygen", "Earth", 8, 15.999, -1, -1);
+		chemicalTable = new ChemicalRDGRDS(1, "Hydrogen", "Earth", 1, 1.007, -1, -1);
 		//Inserting 2 compounds
-		ChemicalRowDataGatewayRDS water = new ChemicalRowDataGatewayRDS(3, "Water", "Earth", -1, -1, -1, -1);
-		ChemicalRowDataGatewayRDS carbonMonoxide = new ChemicalRowDataGatewayRDS(3, "Carbon Monoxide", "Earth", -1, -1, -1, -1);
+		chemicalTable = new ChemicalRDGRDS(3, "Water", "Earth", -1, -1, -1, -1);
+		chemicalTable = new ChemicalRDGRDS(3, "Carbon Monoxide", "Earth", -1, -1, -1, -1);
 		// water is made of hydrogen and oxygen
 		gateway.createRow(4, 2);
 		gateway.createRow(4, 3);
@@ -48,7 +48,6 @@ public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
 	 */
 	@AfterEach
 	void resetTable() throws DatabaseException {
-		ChemicalRowDataGatewayRDS.dropTable();
 		gateway.resetData();
 	}
 	
@@ -58,8 +57,8 @@ public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
 	@Test
 	public void isASingleton()
 	{
-		ElementCompoundTableDataGateway x = getSingletonInstance();
-		ElementCompoundTableDataGateway y = getSingletonInstance();
+		CompoundElementTDG x = getSingletonInstance();
+		CompoundElementTDG y = getSingletonInstance();
 		assertSame(x, y);
 		assertNotNull(x);
 	}

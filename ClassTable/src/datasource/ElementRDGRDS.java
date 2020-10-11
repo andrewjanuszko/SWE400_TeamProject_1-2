@@ -13,7 +13,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
+public class ElementRDGRDS implements ElementRDG {
   /**
    * Create element table
    */
@@ -26,16 +26,14 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   /**
    * Empty constructor drops and recreates table
    */
-  public ElementRowDataGatewayRDS() {
-    createTableElement();
+  public ElementRDGRDS() {
   }
 
   /**
    * constructor to search for an element
    * @param id
    */
-  public ElementRowDataGatewayRDS(int id) {
-    this.createTableElement();
+  public ElementRDGRDS(int id) {
     this.elementId = id;
 
     String sqlChem = "SELECT * FROM Chemical INNER JOIN Element ON Chemical.chemicalId = " + id + ";";
@@ -68,8 +66,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
    * @param name
    * @param inhabits
    */
-  public ElementRowDataGatewayRDS(int id, int atomicNum, int atomicMass, String name, String inhabits) {
-    this.createTableElement();
+  public ElementRDGRDS(int id, int atomicNum, int atomicMass, String name, String inhabits) {
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
@@ -89,71 +86,6 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       e.printStackTrace();
       System.out.println("Failed to insert");
     }
-  }
-
-  /**
-   * Create table
-   * Checking if the table exists already is included
-   */
-  @Override
-  public void createTableElement() {
-    String createTable = "CREATE TABLE IF NOT EXISTS Element" + "(" + "elementId INT NOT NULL, " + "atomicNumber INT, "
-        + "atomicMass DOUBLE, " + "FOREIGN KEY(elementId) REFERENCES Chemical(chemicalId)" + ");";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-
-      // Drop the table if exists first
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-
-      // Create tables
-      statement.executeUpdate(createTable);
-
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to create/drop element table");
-    }
-  }
-
-
-  @Override
-  public void dropTableElement() {
-    String dropTable = "DROP TABLE IF EXISTS Element;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping element table");
-    }
-  }
-
-  /**
-   * Drop the chemical table if it exists.
-   */
-
-  @Override
-  public void dropTableChemical() {
-    String dropTable = "DROP TABLE IF EXISTS Chemical;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping chemical table");
-    }
-  }
-
-  /**
-   * Drop Element and all tables connected (element & chemical)
-   */
-
-  @Override
-  public void dropAllTables() {
-    dropTableElement();
-    dropTableChemical();
   }
 
   /**
@@ -255,14 +187,14 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   }
 
   @Override
-  public List<ElementRowDataGatewayRDS> findSetAtomicMass(double lowerLimit, double upperLimit) {
-    List<ElementRowDataGatewayRDS> results = new ArrayList<>();
+  public List<ElementRDGRDS> findSetAtomicMass(double lowerLimit, double upperLimit) {
+    List<ElementRDGRDS> results = new ArrayList<>();
     try {
       String sql = "SELECT * FROM Metal WHERE atomicMass BETWEEN " + lowerLimit + " AND " + upperLimit + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       while (rs.next()) {
-        ElementRowDataGatewayRDS elementRDS = new ElementRowDataGatewayRDS(rs.getInt("elementId"));
+        ElementRDGRDS elementRDS = new ElementRDGRDS(rs.getInt("elementId"));
         results.add(elementRDS);
       }
     } catch (SQLException | DatabaseException e) {
