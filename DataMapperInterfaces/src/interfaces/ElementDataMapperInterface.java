@@ -28,5 +28,4 @@ public interface ElementDataMapperInterface extends ChemicalDataMapperInterface 
   
   public Element getByAtomicNumber();
   
-  
 }

@@ -22,7 +22,5 @@ public interface MetalDataMapperInterface extends ChemicalDataMapperInterface{
   
   public double getMolesRequiredToDissolve();
   
-  
-  
 
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import model.Base;
 
 public interface BaseDataMapperInterface extends ChemicalDataMapperInterface{
-
   // add using constructor (all instance variables)
 
   // add using constructor(id)

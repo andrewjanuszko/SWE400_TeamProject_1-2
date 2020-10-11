@@ -20,6 +20,4 @@ public interface AcidDataMapperInterface extends ChemicalDataMapperInterface {
   
   public List<Acid> getAllAcids();
   
-  
-  
 }

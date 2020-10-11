@@ -25,5 +25,4 @@ public interface CompoundDataMapperInterface extends ChemicalDataMapperInterface
   
   public List<Compound> getElementsMake();
   
-  
 }
