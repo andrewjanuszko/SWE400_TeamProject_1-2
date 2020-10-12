@@ -7,7 +7,7 @@ import java.util.List;
  * AcidRowDataGateway
  * @author Isabella Boone, Kim O'Neill
  */
-public interface AcidRowDataGateway {
+public interface AcidRDG {
 
   public int getSolute();
   
@@ -17,7 +17,7 @@ public interface AcidRowDataGateway {
   
   public void setName(String newName);
   
-  public String getInventory();
+  public double getInventory();
   
   void setInventory(double inventory); 
   
@@ -31,7 +31,7 @@ public interface AcidRowDataGateway {
   
   public void dropAllTables();
 
-  public List<AcidRowDataGatewayRDS> findSet(int i);
+  public List<AcidRDGRDS> findSet(int i);
 
   public void createTable();
   

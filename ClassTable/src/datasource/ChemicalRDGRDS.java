@@ -12,7 +12,7 @@ import java.util.List;
  * @author Isabella Boone, Kim O'Neill
  *
  */
-public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
+public class ChemicalRDGRDS implements ChemicalRDG {
   int id;
   String name;
   double inventory;
@@ -20,7 +20,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
   /**
    * Create table
    */
-  public ChemicalRowDataGatewayRDS() {
+  public ChemicalRDGRDS() {
     createTable();
   }
   
@@ -28,7 +28,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * Constructor ChemicalRowDataGatewayRDS, search for existing chemical.
    * @param id to search for
    */
-  public ChemicalRowDataGatewayRDS(int id) throws SQLException, DatabaseException {
+  public ChemicalRDGRDS(int id) throws SQLException, DatabaseException {
     createTable();
     // Select statement
     String getChem = new String("SELECT * FROM Chemical WHERE chemicalId = " + id + ";");
@@ -50,7 +50,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * @param name
    * @param inhabits
    */
-  public ChemicalRowDataGatewayRDS(int id, String name, double inventory) {
+  public ChemicalRDGRDS(int id, String name, double inventory) {
     createTable();
     try {
       // Insert chemical

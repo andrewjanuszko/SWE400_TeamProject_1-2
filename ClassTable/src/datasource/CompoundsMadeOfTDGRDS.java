@@ -13,7 +13,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableDataGateway {
+public class CompoundsMadeOfTDGRDS implements CompoundsMadeOfTDG {
 
   private int compoundId;
   private List<Integer> madeOf; // Element ids
@@ -23,7 +23,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   /**
    * Empty constructor drops and re-creates the table
    */
-  public CompoundsMadeOfTableDataGatewayRDS() {
+  public CompoundsMadeOfTDGRDS() {
     this.createTableCompoundMadeFrom();
   }
 
@@ -33,7 +33,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    * @param compoundId
    *          to search for
    */
-  public CompoundsMadeOfTableDataGatewayRDS(int compoundId) {
+  public CompoundsMadeOfTDGRDS(int compoundId) {
     this.createTableCompoundMadeFrom();
     String sql = "SELECT * FROM Chemical WHERE chemicalId = " + compoundId + ";";
 
@@ -60,7 +60,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    * @param name
    * @param inhabits
    */
-  public CompoundsMadeOfTableDataGatewayRDS(int compoundId, List<Integer> madeOf, String name, double inventory) {
+  public CompoundsMadeOfTDGRDS(int compoundId, List<Integer> madeOf, String name, double inventory) {
     createTableCompoundMadeFrom();
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()

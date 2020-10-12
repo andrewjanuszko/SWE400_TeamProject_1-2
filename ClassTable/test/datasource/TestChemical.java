@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import org.junit.jupiter.api.Test;
 
-import datasource.ChemicalRowDataGateway;
+import datasource.ChemicalRDG;
 
 /**
  * 
@@ -24,12 +24,12 @@ class TestChemical extends DatabaseTest {
    */
   @Test
   void testGetName() throws SQLException, DatabaseException {
-    ChemicalRowDataGateway initialize = new ChemicalRowDataGatewayRDS(),
-        chem1 = new ChemicalRowDataGatewayRDS(1, "chemname1", "cheminhabits1"),
-        chem2 = new ChemicalRowDataGatewayRDS(2, "chemname2", "cheminhabits2"),
-        chem3 = new ChemicalRowDataGatewayRDS(3, "chemname3", "cheminhabits3"),
-        chem1_fetch = new ChemicalRowDataGatewayRDS(1), chem2_fetch = new ChemicalRowDataGatewayRDS(2),
-        chem3_fetch = new ChemicalRowDataGatewayRDS(3);
+    ChemicalRDG initialize = new ChemicalRDGRDS(),
+        chem1 = new ChemicalRDGRDS(1, "chemname1", "cheminhabits1"),
+        chem2 = new ChemicalRDGRDS(2, "chemname2", "cheminhabits2"),
+        chem3 = new ChemicalRDGRDS(3, "chemname3", "cheminhabits3"),
+        chem1_fetch = new ChemicalRDGRDS(1), chem2_fetch = new ChemicalRDGRDS(2),
+        chem3_fetch = new ChemicalRDGRDS(3);
 
     // Testing to see if they still hold values after adding
     assertEquals("chemname1", chem1.getName());
@@ -51,12 +51,12 @@ class TestChemical extends DatabaseTest {
    */
   @Test
   void testGetInhabits() throws SQLException, DatabaseException {
-    ChemicalRowDataGateway initialize = new ChemicalRowDataGatewayRDS(),
-        chem1 = new ChemicalRowDataGatewayRDS(1, "chemname1", "cheminhabits1"),
-        chem2 = new ChemicalRowDataGatewayRDS(2, "chemname2", "cheminhabits2"),
-        chem3 = new ChemicalRowDataGatewayRDS(3, "chemname3", "cheminhabits3"),
-        chem1_fetch = new ChemicalRowDataGatewayRDS(1), chem2_fetch = new ChemicalRowDataGatewayRDS(2),
-        chem3_fetch = new ChemicalRowDataGatewayRDS(3);
+    ChemicalRDG initialize = new ChemicalRDGRDS(),
+        chem1 = new ChemicalRDGRDS(1, "chemname1", "cheminhabits1"),
+        chem2 = new ChemicalRDGRDS(2, "chemname2", "cheminhabits2"),
+        chem3 = new ChemicalRDGRDS(3, "chemname3", "cheminhabits3"),
+        chem1_fetch = new ChemicalRDGRDS(1), chem2_fetch = new ChemicalRDGRDS(2),
+        chem3_fetch = new ChemicalRDGRDS(3);
 
     // Testing to see if they still hold values after adding
     assertEquals("cheminhabits1", chem1.getInhabits());
@@ -76,8 +76,8 @@ class TestChemical extends DatabaseTest {
    */
   @Test
   void testUpdate() {
-    ChemicalRowDataGateway initialize = new ChemicalRowDataGatewayRDS(),
-        chem = new ChemicalRowDataGatewayRDS(1, "chemname1", "cheminhabits1");
+    ChemicalRDG initialize = new ChemicalRDGRDS(),
+        chem = new ChemicalRDGRDS(1, "chemname1", "cheminhabits1");
     
     // Test name
     assertEquals("chemname1", chem.getName());
@@ -99,8 +99,8 @@ class TestChemical extends DatabaseTest {
    */
   @Test
   void testDelete() {
-    ChemicalRowDataGateway initialize = new ChemicalRowDataGatewayRDS(),
-        chem = new ChemicalRowDataGatewayRDS(1, "chemname1", "cheminhabits1");
+    ChemicalRDG initialize = new ChemicalRDGRDS(),
+        chem = new ChemicalRDGRDS(1, "chemname1", "cheminhabits1");
     
     // Ensure it has been added
     assertEquals("chemname1", chem.getName());
@@ -109,7 +109,7 @@ class TestChemical extends DatabaseTest {
     chem.delete();
     
     try { 
-      chem = new ChemicalRowDataGatewayRDS(1);
+      chem = new ChemicalRDGRDS(1);
       fail("");
     } catch(DatabaseException | SQLException e) {
       assertTrue(true); 

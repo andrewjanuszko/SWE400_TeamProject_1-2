@@ -13,7 +13,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
+public class ElementRDGRDS implements ElementRDG {
   /**
    * Create element table
    */
@@ -26,7 +26,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   /**
    * Empty constructor drops and recreates table
    */
-  public ElementRowDataGatewayRDS() {
+  public ElementRDGRDS() {
     createTableElement();
   }
 
@@ -34,7 +34,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
    * constructor to search for an element
    * @param id
    */
-  public ElementRowDataGatewayRDS(int id) {
+  public ElementRDGRDS(int id) {
     this.createTableElement();
     this.elementId = id;
 
@@ -68,7 +68,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
    * @param name
    * @param inhabits
    */
-  public ElementRowDataGatewayRDS(int id, int atomicNum, int atomicMass, String name, double inventory) {
+  public ElementRDGRDS(int id, int atomicNum, int atomicMass, String name, double inventory) {
     this.createTableElement();
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -255,14 +255,14 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   }
 
   @Override
-  public List<ElementRowDataGatewayRDS> findSetAtomicMass(double lowerLimit, double upperLimit) {
-    List<ElementRowDataGatewayRDS> results = new ArrayList<>();
+  public List<ElementRDGRDS> findSetAtomicMass(double lowerLimit, double upperLimit) {
+    List<ElementRDGRDS> results = new ArrayList<>();
     try {
       String sql = "SELECT * FROM Metal WHERE atomicMass BETWEEN " + lowerLimit + " AND " + upperLimit + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       while (rs.next()) {
-        ElementRowDataGatewayRDS elementRDS = new ElementRowDataGatewayRDS(rs.getInt("elementId"));
+        ElementRDGRDS elementRDS = new ElementRDGRDS(rs.getInt("elementId"));
         results.add(elementRDS);
       }
     } catch (SQLException | DatabaseException e) {

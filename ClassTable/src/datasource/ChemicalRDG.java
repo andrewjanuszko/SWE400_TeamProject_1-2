@@ -6,7 +6,7 @@ import java.sql.SQLException;
  * ChemicalRowDataGateway
  * @author Isabella Boone, Kim O'Neill
  */
-public interface ChemicalRowDataGateway {
+public interface ChemicalRDG {
 
   public void createTable(); 
   

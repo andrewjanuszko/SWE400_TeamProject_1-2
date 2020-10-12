@@ -6,7 +6,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public interface CompoundsMadeOfTableDataGateway {
+public interface CompoundsMadeOfTDG {
 
   void createTableCompoundMadeFrom();
 

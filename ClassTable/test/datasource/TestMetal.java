@@ -16,15 +16,15 @@ class TestMetal {
 
   @Test
   void testGetName() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
-    MetalRowDataGateway met = new MetalRowDataGatewayRDS(); 
+    ChemicalRDG chem = new ChemicalRDGRDS();
+    MetalRDG met = new MetalRDGRDS(); 
     met.dropAllTables();
     chem.createTable();
     met.createTableMetal();
     
-    MetalRowDataGateway metal = new MetalRowDataGatewayRDS(1, 55, "chemicalname1", "inhabits1");
+    MetalRDG metal = new MetalRDGRDS(1, 55, "chemicalname1", "inhabits1");
     
-    MetalRowDataGateway metalGet = new MetalRowDataGatewayRDS(1);
+    MetalRDG metalGet = new MetalRDGRDS(1);
 
     assertEquals("chemicalname1", metalGet.getName());
   }
@@ -32,15 +32,15 @@ class TestMetal {
   @Test
   void testGetInhabits() {
     // Create row data gateways
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
-    MetalRowDataGateway met = new MetalRowDataGatewayRDS(); 
+    ChemicalRDG chem = new ChemicalRDGRDS();
+    MetalRDG met = new MetalRDGRDS(); 
     met.dropAllTables();
     chem.createTable();
     met.createTableMetal();
     
-    MetalRowDataGateway metal = new MetalRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
+    MetalRDG metal = new MetalRDGRDS(1, 15, "chemicalname1", "inhabits1");
     
-    MetalRowDataGateway metalGet = new MetalRowDataGatewayRDS(1);
+    MetalRDG metalGet = new MetalRDGRDS(1);
 
     // Test
     assertEquals("inhabits1", metalGet.getInhabits());
@@ -48,34 +48,34 @@ class TestMetal {
 
   @Test
   void testGetDissolvedBy() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
-    MetalRowDataGateway met = new MetalRowDataGatewayRDS(); 
+    ChemicalRDG chem = new ChemicalRDGRDS();
+    MetalRDG met = new MetalRDGRDS(); 
     met.dropAllTables();
     chem.createTable();
     met.createTableMetal();
     
-    MetalRowDataGateway metal = new MetalRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
+    MetalRDG metal = new MetalRDGRDS(1, 15, "chemicalname1", "inhabits1");
 
-    MetalRowDataGateway metalGet = new MetalRowDataGatewayRDS(1);
+    MetalRDG metalGet = new MetalRDGRDS(1);
     // Test
     assertEquals(15, metalGet.getDissolvedBy());
   }
 
   @Test
   void testGetSet() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS();
-    AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
-    MetalRowDataGateway met = new MetalRowDataGatewayRDS();
+    ChemicalRDG chem = new ChemicalRDGRDS();
+    AcidRDG acid = new AcidRDGRDS();
+    MetalRDG met = new MetalRDGRDS();
     acid.dropAllTables();
     met.dropTableMetal();
     chem.createTable();
     acid.createTable();
     met.createTableMetal();
     
-    MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
-    MetalRowDataGateway metal2 = new MetalRowDataGatewayRDS(2, 15, "chemicalname2", "inhabits2");
+    MetalRDG metal1 = new MetalRDGRDS(1, 15, "chemicalname1", "inhabits1");
+    MetalRDG metal2 = new MetalRDGRDS(2, 15, "chemicalname2", "inhabits2");
     
-    List<MetalRowDataGatewayRDS> metalGet = metal2.findSet(15);
+    List<MetalRDGRDS> metalGet = metal2.findSet(15);
     
     assertEquals("chemicalname1", metalGet.get(0).getName());
     assertEquals("chemicalname2", metalGet.get(1).getName());
