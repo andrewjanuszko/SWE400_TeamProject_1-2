@@ -44,13 +44,13 @@ public interface ChemicalTableDataGateway {
   
   public ChemicalTableDataGatewayRDS filterBySolute(int soluteID);
   
-  public ArrayList<ChemicalDTO> filterAllWithLowInventory() throws DatabaseException;
+  public ArrayList<ChemicalDTO> executeFindAllWithLowInventory() throws DatabaseException;
   
-  public ArrayList<ChemicalDTO> filterElementsWithLowInventory() throws DatabaseException;
+  public ArrayList<ChemicalDTO> executeFindElementsWithLowInventory() throws DatabaseException;
   
-  public ArrayList<ChemicalDTO> filterBasesWithLowInventory() throws DatabaseException;
+  public ArrayList<ChemicalDTO> executeFindBasesWithLowInventory() throws DatabaseException;
   
-  public ArrayList<ChemicalDTO> filterAcidsWithLowInventory() throws DatabaseException;
+  public ArrayList<ChemicalDTO> executeFindAcidsWithLowInventory() throws DatabaseException;
   
   public ArrayList<ChemicalDTO> executeQuery() throws DatabaseException;
 
