@@ -23,7 +23,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 		String create = "CREATE TABLE Compound (" + 
 				"compoundID INT NOT NULL, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
-				"inhabits VARCHAR(30), " + 
+				"inventory Double, " + 
 				"UNIQUE(name), " +
 				"PRIMARY KEY(compoundID)) ;";
 		
@@ -51,7 +51,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 	
 	private int compoundID;
 	private String name;
-	private String inhabits;
+	private double inventory;
 	
 	/**
    * Constructs Compound Row Data Gateway based off of existing row by ID.
@@ -75,7 +75,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			name = rs.getString("name");
-			inhabits = rs.getString("inhabits");
+			inventory = rs.getDouble("inventory");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find Compound with that Id", e);
 		}
@@ -104,7 +104,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			compoundID = rs.getInt("compoundID");
-			inhabits = rs.getString("inhabits");
+			inventory = rs.getDouble("inventory");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find Compound with that name", e);
 		}
@@ -114,13 +114,13 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 	 * Constructs new Base Row Data Gateway from given parameters.
 	 * @param id
 	 * @param name
-	 * @param inhabits
+	 * @param inventory
 	 * @throws DatabaseException
 	 */
-	public CompoundRowDataGatewayRDS(int id, String name, String inhabits) throws DatabaseException {
+	public CompoundRowDataGatewayRDS(int id, String name, double inventory) throws DatabaseException {
 		compoundID = id;
 		this.name = name;
-		this.inhabits = inhabits;
+		this.inventory = inventory;
 		conn = DatabaseManager.getSingleton().getConnection();
 		insert();
 	}
@@ -136,8 +136,8 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
   }
 
   @Override
-  public String getInhabits() {
-    return this.inhabits;
+  public double getInventory() {
+    return this.inventory;
   }
   
   @Override
@@ -146,8 +146,8 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
   }
 
   @Override
-  public void setInhabits(String i) {
-    this.inhabits = i;
+  public void setInventory(double i) {
+    this.inventory = i;
   }
   
   /**
@@ -158,7 +158,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
     try {
       PreparedStatement stmt = conn.prepareStatement("UPDATE Compound SET"
           + " name = '" + name
-          + "', inhabits = '" + inhabits
+          + "', inventory = '" + inventory
           + "' WHERE compoundID = " + compoundID);
       stmt.executeUpdate();
       return true;
@@ -190,7 +190,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
    */
   private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Compound(compoundID, name, inhabits) VALUES (" + compoundID + ", '" + name + "', '" + inhabits + "');");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Compound(compoundID, name, inventory) VALUES (" + compoundID + ", '" + name + "', '" + inventory + "');");
 			stmt.execute();
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into compound table");

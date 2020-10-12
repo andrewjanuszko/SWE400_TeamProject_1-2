@@ -8,8 +8,8 @@ class CompoundMadeOfTableDataGatewayRDSTest extends DatabaseTest{
 
 	@Test
 	void testAddRelation() throws DatabaseException {
-		CompoundRowDataGateway c1 = new CompoundRowDataGatewayRDS(12, "compound", "inhabit");
-		ElementRowDataGateway e1 = new ElementRowDataGatewayRDS(10, "element", "inhabit", 5, 10.0);
+		CompoundRowDataGateway c1 = new CompoundRowDataGatewayRDS(12, "compound", 1.0);
+		ElementRowDataGateway e1 = new ElementRowDataGatewayRDS(10, "element", 1.0, 5, 10.0);
 		
 		CompoundMadeOfTableDataGateway cmf = new CompoundMadeOfTableDataGatewayRDS(12);
 

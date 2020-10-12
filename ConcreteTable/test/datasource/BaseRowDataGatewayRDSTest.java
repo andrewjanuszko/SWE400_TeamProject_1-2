@@ -25,18 +25,18 @@ class BaseRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testConstructors() throws DatabaseException{
-    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS(1, "base", "inhabit", "solute");
+    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS(1, "base", 1.0, "solute");
     BaseRowDataGateway base1FindByID = new BaseRowDataGatewayRDS(1);
     BaseRowDataGateway base1FindByName = new BaseRowDataGatewayRDS("base");
     
     assertEquals(base1.getBaseID(), base1FindByID.getBaseID());
     assertEquals(base1.getName(), base1FindByID.getName());
-    assertEquals(base1.getInhabits(), base1FindByID.getInhabits());
+    assertEquals(base1.getInventory(), base1FindByID.getInventory());
     assertEquals(base1.getSolute(), base1FindByID.getSolute());
     
     assertEquals(base1.getBaseID(), base1FindByName.getBaseID());
     assertEquals(base1.getName(), base1FindByName.getName());
-    assertEquals(base1.getInhabits(), base1FindByName.getInhabits());
+    assertEquals(base1.getInventory(), base1FindByName.getInventory());
     assertEquals(base1.getSolute(), base1FindByName.getSolute());
   }
 
@@ -46,11 +46,11 @@ class BaseRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testGetters() throws DatabaseException{
-   BaseRowDataGateway base1 = new BaseRowDataGatewayRDS(1, "base", "inhabit", "solute");
+   BaseRowDataGateway base1 = new BaseRowDataGatewayRDS(1, "base", 1.0, "solute");
    
    assertEquals(1, base1.getBaseID());
    assertEquals("base", base1.getName());
-   assertEquals("inhabit", base1.getInhabits());
+   assertEquals(1.0, base1.getInventory());
    assertEquals("solute", base1.getSolute());
   }
   
@@ -60,13 +60,13 @@ class BaseRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testSetters() throws DatabaseException{
-    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS(1, "base", "inhabit", "solute");
-    base1.setInhabits("new");
+    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS(1, "base", 1.0, "solute");
+    base1.setInventory(2.0);
     base1.setName("new");
     base1.setSolute("new");
     
     assertEquals("new", base1.getName());
-    assertEquals("new", base1.getInhabits());
+    assertEquals(2.0, base1.getInventory());
     assertEquals("new", base1.getSolute());
   }
   
@@ -76,7 +76,7 @@ class BaseRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testPersist() throws DatabaseException {
-    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS(1, "base", "inhabit", "solute");
+    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS(1, "base", 1.0, "solute");
     base1.setName("newName");
     assertTrue(base1.persist());
     base1 = null;
@@ -91,7 +91,7 @@ class BaseRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testDelete() throws DatabaseException {
-    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS(1, "base", "inhabit", "solute");
+    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS(1, "base", 1.0, "solute");
     
     assertTrue(base1.delete());
   }

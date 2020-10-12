@@ -8,11 +8,11 @@ public interface CompoundRowDataGateway {
 	
 	public String getName();
 	
-	public String getInhabits();
+	public double getInventory();
 	
 	public void setName(String n);
 	
-	public void setInhabits(String i);
+	public void setInventory(double i);
 	
 	public boolean persist();
 	

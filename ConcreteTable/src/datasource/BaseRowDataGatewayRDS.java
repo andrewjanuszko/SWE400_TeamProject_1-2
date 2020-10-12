@@ -21,7 +21,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 		String create = "CREATE TABLE Base (" + 
 				"baseID INT NOT NULL, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
-				"inhabits VARCHAR(30), " +
+				"inventory DOUBLE, " +
 				"solute VARCHAR(30), " + 
 				"UNIQUE(name), " +
 				"PRIMARY KEY(baseID)) ;";
@@ -50,7 +50,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	
 	private int baseID;
 	private String name;
-	private String inhabits;
+	private Double inventory;
 	private String solute;
 	
 	/**
@@ -75,7 +75,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			name = rs.getString("name");
-			inhabits = rs.getString("inhabits");
+			inventory = rs.getDouble("inventory");
 			solute = rs.getString("solute");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find Base with that name", e);
@@ -104,7 +104,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			baseID = rs.getInt("baseID");
-			inhabits = rs.getString("inhabits");
+			inventory = rs.getDouble("inventory");
 			solute = rs.getString("solute");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find Base with that name", e);
@@ -115,14 +115,14 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	 * Constructs new Base Row Data Gateway from given parameters.
 	 * @param id
 	 * @param name
-	 * @param inhabits
+	 * @param inventory
 	 * @param solute
 	 * @throws DatabaseException
 	 */
-	public BaseRowDataGatewayRDS(int id, String name, String inhabits, String solute) throws DatabaseException {
+	public BaseRowDataGatewayRDS(int id, String name, double inventory, String solute) throws DatabaseException {
 		baseID = id;
 		this.name = name;
-		this.inhabits = inhabits;
+		this.inventory = inventory;
 		this.solute = solute;
 		conn = DatabaseManager.getSingleton().getConnection();
 		insert();
@@ -139,8 +139,8 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
   }
 
   @Override
-  public String getInhabits() {
-    return this.inhabits;
+  public double getInventory() {
+    return this.inventory;
   }
 
   @Override
@@ -154,8 +154,8 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
   }
 
   @Override
-  public void setInhabits(String inhabits) {
-    this.inhabits = inhabits;
+  public void setInventory(double inventory) {
+    this.inventory = inventory;
   }
 
   @Override
@@ -171,7 +171,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	  try {
   		PreparedStatement stmt = conn.prepareStatement("UPDATE Base SET"
   				+ " name = '" + name
-  				+ "', inhabits = '" + inhabits
+  				+ "', inventory = '" + inventory
   				+ "', solute = '" + solute
   				+ "' WHERE baseID = " + baseID);
   		stmt.executeUpdate();
@@ -202,7 +202,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
    */
   private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Base(baseID, name, inhabits, solute) VALUES (" + baseID + ", '" + name + "', '" + inhabits + "', '" + solute + "');");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Base(baseID, name, inventory, solute) VALUES (" + baseID + ", '" + name + "', '" + inventory + "', '" + solute + "');");
 			stmt.execute();
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into base table");

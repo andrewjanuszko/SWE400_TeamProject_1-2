@@ -23,17 +23,17 @@ class CompoundRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testConstructors() throws DatabaseException{
-    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", "inhabit");
+    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", 1.0);
     CompoundRowDataGateway compound1FindByID = new CompoundRowDataGatewayRDS(1);
     CompoundRowDataGateway compound1FindByName = new CompoundRowDataGatewayRDS("compound");
     
     assertEquals(compound1.getCompoundID(), compound1FindByID.getCompoundID());
     assertEquals(compound1.getName(), compound1FindByID.getName());
-    assertEquals(compound1.getInhabits(), compound1FindByID.getInhabits());
+    assertEquals(compound1.getInventory(), compound1FindByID.getInventory());
         
     assertEquals(compound1.getCompoundID(), compound1FindByName.getCompoundID());
     assertEquals(compound1.getName(), compound1FindByName.getName());
-    assertEquals(compound1.getInhabits(), compound1FindByName.getInhabits());
+    assertEquals(compound1.getInventory(), compound1FindByName.getInventory());
   }
 
   /**
@@ -42,11 +42,11 @@ class CompoundRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testGetters() throws DatabaseException{
-   CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", "inhabit");
+   CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", 1.0);
    
    assertEquals(1, compound1.getCompoundID());
    assertEquals("compound", compound1.getName());
-   assertEquals("inhabit", compound1.getInhabits());
+   assertEquals(1.0, compound1.getInventory());
   }
   
   /**
@@ -55,12 +55,12 @@ class CompoundRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testSetters() throws DatabaseException{
-    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", "inhabit");
-    compound1.setInhabits("new");
+    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", 1.0);
+    compound1.setInventory(2.0);
     compound1.setName("new");
     
     assertEquals("new", compound1.getName());
-    assertEquals("new", compound1.getInhabits());
+    assertEquals(2.0, compound1.getInventory());
   }
   
   /**
@@ -69,7 +69,7 @@ class CompoundRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testPersist() throws DatabaseException {
-    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", "inhabit");
+    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", 1.0);
     compound1.setName("newName");
     compound1.persist();
     compound1 = null;
@@ -84,7 +84,7 @@ class CompoundRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testDelete() throws DatabaseException {
-    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", "inhabit");
+    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", 1.0);
     
     assertTrue(compound1.delete());
   }
