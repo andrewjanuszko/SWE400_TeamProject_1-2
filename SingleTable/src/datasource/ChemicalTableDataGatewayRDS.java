@@ -191,12 +191,10 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
       ArrayList<ChemicalDTO> resultSet = new ArrayList<ChemicalDTO>();
       ArrayList<ChemicalDTO> acids = getSingletonInstance().getAcids().executeQuery();
       for (ChemicalDTO acid : acids) {
-        System.out.println(acid.getName() + " " + acid.getInventory());
         ArrayList<ChemicalDTO> metals = getSingletonInstance().getMetals().filterByDissolvedBy(acid.getChemicalID())
             .executeQuery();
         double totalMolesNeeded = 0.0;
         for (ChemicalDTO metal : metals) {
-          System.out.println(metal.getName() + " " + metal.getMoles());
           totalMolesNeeded += metal.getMoles();
         }
         if (acid.getInventory() < totalMolesNeeded) {
@@ -212,7 +210,6 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
   @Override
   public ArrayList<ChemicalDTO> executeQuery() throws DatabaseException {
     try {
-      System.out.println(querySQL);
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(querySQL + ";");
       return convertToDTO(statement);
     } catch (SQLException e) {
