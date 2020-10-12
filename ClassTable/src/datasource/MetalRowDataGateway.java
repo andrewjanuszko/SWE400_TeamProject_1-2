@@ -25,7 +25,7 @@ public interface MetalRowDataGateway {
    
    public String getName();
    
-   public String getInhabits();
+   public double getInventory();
    
    public int getMetalId();
    
@@ -37,7 +37,7 @@ public interface MetalRowDataGateway {
 
    public void setName(String name);
 
-   public void setInhabits(String inhabits);
+   public void setInventory(double inventory);
 
 
 

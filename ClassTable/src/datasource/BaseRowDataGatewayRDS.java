@@ -13,7 +13,8 @@ import java.util.List;
  */
 public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
   int baseId, solute;
-  String name, inhabits; 
+  String name; 
+  double inventory;
   
   /**
    * Create table
@@ -42,7 +43,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
     rs = statement.executeQuery(getChem);
     rs.next();
     this.name = rs.getString("name");
-    this.inhabits = rs.getString("inhabits");
+    this.inventory = rs.getDouble("inventory");
     this.baseId = id;
 
   }
@@ -54,16 +55,16 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    * @param name
    * @param inhabits
    */
-  public BaseRowDataGatewayRDS(int id, int solute, String name, String inhabits) {   
+  public BaseRowDataGatewayRDS(int id, int solute, String name, double inventory) {   
     createTable();
     
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + "VALUES (?, ?, ?);");
       insertChemical.setInt(1, id);
       insertChemical.setString(2, name);
-      insertChemical.setString(3, inhabits);
+      insertChemical.setDouble(3, inventory);
       
       // Insert Base
       PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
@@ -83,7 +84,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
     this.baseId = id;
     this.solute = solute;
     this.name = name;
-    this.inhabits = inhabits;
+    this.inventory = inventory;
   }
   
   /**
@@ -91,7 +92,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    */
   public void createTable() {
     String createChem = "CREATE TABLE IF NOT EXISTS Chemical" + "(" + "chemicalId INT NOT NULL, " + "name VARCHAR(20), "
-        + "inhabits VARCHAR(20), " + "PRIMARY KEY (chemicalId)" + ");",
+        + "inventory DOUBLE, " + "PRIMARY KEY (chemicalId)" + ");",
         createBase = "CREATE TABLE IF NOT EXISTS Base" + "(" + "baseId INT NOT NULL, "
             + "solute VARCHAR(20), " 
             + "FOREIGN KEY(baseId) REFERENCES Chemical(chemicalId)" + ");";
@@ -168,7 +169,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    * Update the database.
    */
   public void update() {
-    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inhabits = ? WHERE chemicalID = " + baseId
+    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inventory = ? WHERE chemicalID = " + baseId
         + ";", updateBaseSQL = "UPDATE Base SET baseId = ?, solute = ? WHERE baseId = " + baseId + ";";
 
     try {
@@ -176,7 +177,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
       PreparedStatement chem = DatabaseManager.getSingleton().getConnection().prepareStatement(updateChemicalSQL);
       chem.setInt(1, baseId);
       chem.setString(2, name);
-      chem.setString(3, inhabits);
+      chem.setDouble(3, inventory);
 
       chem.execute();
       
@@ -253,16 +254,16 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway {
    * Get inhabits.
    */
   @Override
-  public String getInhabits() {
-    return inhabits;
+  public double getInventory() {
+    return inventory;
   }
 
   /**
    * Set inhabits.
    */
   @Override
-  public void setInhabits(String newInhabits) {
-    this.inhabits = newInhabits;
+  public void setInventory(double inventory) {
+    this.inventory = inventory;
   }
 
 }

@@ -17,7 +17,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
   private int metalId;
   private int dissolvedById;
   private String name;
-  private String inhabits;
+  private double inventory;
 
   /**
    * empty constructor drops the table and recreates it
@@ -47,7 +47,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
       rs = statement.executeQuery(sqlChem);
       rs.next();
       this.name = rs.getString("name");
-      this.inhabits = rs.getString("inhabits");
+      this.inventory = rs.getDouble("inventory");
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -177,9 +177,9 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
       updateMetal.setInt(2, this.metalId);
 
       PreparedStatement updateChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("UPDATE Chemical SET name = ?, inhabits = ? WHERE chemicalId = ?;");
+          .prepareStatement("UPDATE Chemical SET name = ?, inventory = ? WHERE chemicalId = ?;");
       updateChemical.setString(1, this.name);
-      updateChemical.setString(2, this.inhabits);
+      updateChemical.setDouble(2, this.inventory);
       updateChemical.setInt(3, this.metalId);
 
       updateMetal.execute();
@@ -227,8 +227,8 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
    * getter for inhabits
    */
   @Override
-  public String getInhabits() {
-    return this.inhabits;
+  public double getInventory() {
+    return this.inventory;
   }
 
   @Override
@@ -259,8 +259,8 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway {
   }
 
   @Override
-  public void setInhabits(String inhabits) {
-    this.inhabits = inhabits;
+  public void setInventory(double inventory) {
+    this.inventory = inventory;
   }
 
 

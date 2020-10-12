@@ -13,7 +13,8 @@ import java.util.List;
  */
 public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
   private int acidId, solute;
-  private String name, inhabits;
+  private String name;
+  private double inventory;
   
   /**
    * Create tables
@@ -257,16 +258,16 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * Return inhabits of acid
    */
   @Override
-  public String getInhabits() {
-    return inhabits;
+  public String getInventory() {
+    return inventory;
   }
 
   /**
    * Set inhabits
    */
   @Override
-  public void setInhabits(String newInhabits) {
-    this.inhabits = newInhabits;
+  public void setInventory(double inventory) {
+    this.inventory = inventory;
   }
 	
 }

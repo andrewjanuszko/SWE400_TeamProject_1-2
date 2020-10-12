@@ -33,7 +33,7 @@ public interface ElementRowDataGateway {
 
   public String getName();
 
-  public String getInhabits();
+  public double getInventory();
 
   public void setElementId(int elementId);
 
@@ -43,6 +43,6 @@ public interface ElementRowDataGateway {
   
   public void setName(String name);
   
-  public void setInhabits(String inhabits);
+  public void setInventory(double inventory);
 
 }

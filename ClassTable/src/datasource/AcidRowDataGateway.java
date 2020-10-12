@@ -17,9 +17,9 @@ public interface AcidRowDataGateway {
   
   public void setName(String newName);
   
-  public String getInhabits();
+  public String getInventory();
   
-  void setInhabits(String newInhabits); 
+  void setInventory(double inventory); 
   
   public void update(); 
   

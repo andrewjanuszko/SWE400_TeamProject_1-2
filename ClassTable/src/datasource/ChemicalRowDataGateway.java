@@ -20,8 +20,8 @@ public interface ChemicalRowDataGateway {
   
   public void setName(String newName);
 
-  public String getInhabits();
+  public double getInventory();
   
-  public void setInhabits(String newInhabits);
+  public void setInventory(double newInhabits);
   
 }

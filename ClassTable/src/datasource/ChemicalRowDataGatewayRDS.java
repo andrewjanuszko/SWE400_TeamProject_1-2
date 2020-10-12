@@ -14,7 +14,8 @@ import java.util.List;
  */
 public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
   int id;
-  String name, inhabits;
+  String name;
+  double inventory;
   
   /**
    * Create table
@@ -38,7 +39,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
     rs.next();
 
     this.name = rs.getString("name");
-    this.inhabits = rs.getString("inhabits");
+    this.inventory = rs.getDouble("inventory");
     this.id = id;
 
   }
@@ -49,15 +50,15 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * @param name
    * @param inhabits
    */
-  public ChemicalRowDataGatewayRDS(int id, String name, String inhabits) {
+  public ChemicalRowDataGatewayRDS(int id, String name, double inventory) {
     createTable();
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + "VALUES (?, ?, ?);");
       insertChemical.setInt(1, id);
       insertChemical.setString(2, name);
-      insertChemical.setString(3, inhabits);
+      insertChemical.setDouble(3, inventory);
       
       
       insertChemical.execute(); // Insert chemical
@@ -70,7 +71,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
     // Set instance variables
     this.id = id;
     this.name = name;
-    this.inhabits = inhabits;
+    this.inventory = inventory;
   }
   
   /**
@@ -78,7 +79,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    */
   public void createTable() {
     String createChem = "CREATE TABLE IF NOT EXISTS Chemical" + "(" + "chemicalId INT NOT NULL, " + "name VARCHAR(20), "
-        + "inhabits VARCHAR(20), " + "PRIMARY KEY (chemicalId)" + ");";
+        + "inventory DOUBLE, " + "PRIMARY KEY (chemicalId)" + ");";
 
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -134,7 +135,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
       PreparedStatement chem = DatabaseManager.getSingleton().getConnection().prepareStatement(updateChemicalSQL);
       chem.setInt(1, id);
       chem.setString(2, name);
-      chem.setString(3, inhabits);
+      chem.setDouble(3, inventory);
 
       chem.execute();
       
@@ -164,8 +165,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
   /**
    * Get inhabits.
    */
-  public String getInhabits() {
-    return inhabits;
+  public double getInventory() {
+    return inventory;
   }
 
   /**
@@ -173,8 +174,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * @param newInhabits new inhabits to set
    */
   @Override
-  public void setInhabits(String newInhabits) {
-    this.inhabits = newInhabits;
+  public void setInventory(double inventory) {
+    this.inventory = inventory;
   }
 
 }

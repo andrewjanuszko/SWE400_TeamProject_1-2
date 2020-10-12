@@ -21,7 +21,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   private int atomicNumber;
   private double atomicMass;
   private String name;
-  private String inhabits;
+  private double inventory;
 
   /**
    * Empty constructor drops and recreates table
@@ -51,7 +51,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       rs = statement.executeQuery(sqlChem);
       rs.next();
       this.name = rs.getString("name");
-      this.inhabits = rs.getString("inhabits");
+      this.inventory = rs.getDouble("inventory");
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -68,14 +68,14 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
    * @param name
    * @param inhabits
    */
-  public ElementRowDataGatewayRDS(int id, int atomicNum, int atomicMass, String name, String inhabits) {
+  public ElementRowDataGatewayRDS(int id, int atomicNum, int atomicMass, String name, double inventory) {
     this.createTableElement();
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + "VALUES (?, ?, ?);");
       insertChemical.setInt(1, id);
       insertChemical.setString(2, name);
-      insertChemical.setString(3, inhabits);
+      insertChemical.setString(3, inventory);
       PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Element (elementId, atomicNumber, atomicMass)" + "VALUES (?, ?, ?);");
 
@@ -189,9 +189,9 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       updateElement.setInt(3, this.elementId);
 
       PreparedStatement updateChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("UPDATE Chemical SET name = ?, inhabits = ? WHERE chemicalId = ?;");
+          .prepareStatement("UPDATE Chemical SET name = ?, inventory = ? WHERE chemicalId = ?;");
       updateChemical.setString(1, this.name);
-      updateChemical.setString(2, this.inhabits);
+      updateChemical.setDouble(2, this.inventory);
       updateChemical.setInt(3, this.elementId);
 
       updateElement.execute();
@@ -221,7 +221,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       rs = statement.executeQuery(sqlChem);
       rs.next();
       this.name = rs.getString("name");
-      this.inhabits = rs.getString("inhabits");
+      this.inventory = rs.getDouble("inventory");
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -247,7 +247,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
       rs = statement.executeQuery(sqlChem);
       rs.next();
       this.name = rs.getString("name");
-      this.inhabits = rs.getString("inhabits");
+      this.inventory = rs.getDouble("inventory");
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -311,8 +311,8 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
    *          to search for inhabits of
    */
   @Override
-  public String getInhabits() {
-    return this.inhabits;
+  public double getInventory() {
+    return this.inventory;
   }
 
   @Override
@@ -336,8 +336,8 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway {
   }
 
   @Override
-  public void setInhabits(String inhabits) {
-    this.inhabits = inhabits;
+  public void setInventory(double inventory) {
+    this.inventory = inventory;
   }
   
   
