@@ -5,27 +5,23 @@ import java.util.List;
 import model.Element;
 
 public interface ElementDataMapperInterface extends ChemicalDataMapperInterface {
-
-  //add using constructor (all instance variables)
   
-  //add using constructor(id)
+  public void addElement(Element element);
   
-  public void addElement();
+  public void deleteElement(Element element);
   
-  public void deleteElement();
+  public void updateElement(int id, Element newElement);
   
-  public void updateElement();
-  
-  public Element fetchElement();
+  public Element fetchElement(int id);
   
   public List<Element> getAllElements();
   
-  public List<Element> getElementsAtomicMassRange();
+  public List<Element> getElementsAtomicMassRange(double high, double low);
   
-  public List<Element> getElementsAtomicNumberRange();
+  public List<Element> getElementsAtomicNumberRange(double high, double low);
   
-  public Element getByAtomicMass();
+  public Element getByAtomicMass(double mass);
   
-  public Element getByAtomicNumber();
+  public Element getByAtomicNumber(double num);
   
 }

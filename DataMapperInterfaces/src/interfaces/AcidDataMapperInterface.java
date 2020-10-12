@@ -5,19 +5,16 @@ import java.util.List;
 import model.Acid;
 
 public interface AcidDataMapperInterface extends ChemicalDataMapperInterface {
-
-  //add using constructor (all instance variables)
   
-  //add using constructor(id)
+  public void addAcid(int acidId, int soluteId, String name, double inventory);
   
-  public void addAcid();
+  public void deleteAcid(int acidId);
   
-  public void deleteAcid();
+  public void updateAcid(int id, int newId, int newSoluteId, String newName, double newInventory);
   
-  public void updateAcid();
-  
-  public Acid fetchAcid();
+  public Acid fetchAcid(int id);
   
   public List<Acid> getAllAcids();
+  
   
 }
