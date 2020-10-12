@@ -1,73 +1,40 @@
 package dataDTO;
 
+import java.util.ArrayList;
+
+/**
+ * A DTO for Elements and their Compounds.
+ * @author andrewjanuszko
+ */
 public final class ElementDTO {
-
-  private final int chemicalID;
-  private final int type;
-  private final String name;
-  private final double inventory;
-  private final int atomicNumber;
-  private final double atomicMass;
-
-  /**
-   * Create a chemical DTO
-   * 
-   * @param chemicalID   the ID of the Chemical.
-   * @param type         the type of the Chemical.
-   * @param name         the name of the Chemical.
-   * @param inventory    the inventory of the Chemical.
-   * @param atomicNumber the atomicNumber of the Chemical.
-   * @param atomicMass   the atomicMass of the Chemical.
-   */
-  public ElementDTO(int chemicalID, int type, String name, double inventory, int atomicNumber, double atomicMass) {
-    this.chemicalID = chemicalID;
-    this.type = type;
-    this.name = name;
-    this.inventory = inventory;
-    this.atomicNumber = atomicNumber;
-    this.atomicMass = atomicMass;
-  }
-
-  /**
-   * @return the chemicalID
-   */
-  public int getChemicalID() {
-    return chemicalID;
-  }
-
-  /**
-   * @return the type
-   */
-  public int getType() {
-    return type;
-  }
-
-  /**
-   * @return the name
-   */
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * @return the inventory
-   */
-  public double getInventory() {
-    return inventory;
-  }
-
-  /**
-   * @return the atomicNumber
-   */
-  public int getAtomicNumber() {
-    return atomicNumber;
-  }
-
-  /**
-   * @return the atomicMass
-   */
-  public double getAtomicMass() {
-    return atomicMass;
-  }
+	
+	private final int elementID;
+	private final ArrayList<Integer> compounds;
+	
+	/**
+	 * Constructor for a ElementInCompoundsDTO.
+	 * @param elementID is the ID of the Element.
+	 * @param compounds is the Compounds that contain the Element.
+	 */
+	public ElementDTO(int elementID, ArrayList<Integer> compounds) {
+		this.elementID = elementID;
+		this.compounds = compounds;
+	}
+	
+	/**
+	 * Return the ID of the Element.
+	 * @return the ID of the Element.
+	 */
+	public int getElementID() {
+		return this.elementID;
+	}
+	
+	/**
+	 * Return the Compounds that contain the Element.
+	 * @return the Compounds that contain the Element.
+	 */
+	public ArrayList<Integer> partOf() {
+		return this.compounds;
+	}
 
 }

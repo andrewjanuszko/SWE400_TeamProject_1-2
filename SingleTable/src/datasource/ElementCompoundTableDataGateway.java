@@ -1,7 +1,7 @@
 package datasource;
 
 import dataDTO.CompoundDTO;
-import dataDTO.ElementPartOfDTO;
+import dataDTO.ElementDTO;
 
 /**
  * A table data gateway.
@@ -45,7 +45,7 @@ public interface ElementCompoundTableDataGateway {
 	 * @return
 	 * @throws DatabaseException
 	 */
-	public ElementPartOfDTO findCompoundsByElementID(int elementID) throws DatabaseException;
+	public ElementDTO findCompoundsByElementID(int elementID) throws DatabaseException;
 	
 	/**
 	 * 

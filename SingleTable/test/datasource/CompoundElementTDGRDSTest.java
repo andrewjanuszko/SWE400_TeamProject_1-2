@@ -5,7 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import dataDTO.CompoundDTO;
-import dataDTO.ElementPartOfDTO;
+import dataDTO.ElementDTO;
 
 public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
 	
@@ -72,7 +72,7 @@ public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
 	@Test
 	void testGetCompoundsFromElementID() throws DatabaseException {
 		// finds compounds the are oxygen in them
-		ElementPartOfDTO element = gateway.findCompoundsByElementID(2);
+		ElementDTO element = gateway.findCompoundsByElementID(2);
 		// checks to make sure that both are gotten and that they are correct
 		assertEquals(2, element.partOf().size());
 		assertEquals(4, element.partOf().get(0).intValue());
@@ -122,7 +122,7 @@ public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
 	 */
 	@Test
 	void testUpdateCompoundElementInCompoundsDTO() throws DatabaseException {
-		ElementPartOfDTO element = gateway.findCompoundsByElementID(2);
+		ElementDTO element = gateway.findCompoundsByElementID(2);
 		
 		assertEquals(2, element.getElementID());
 		assertEquals(2, element.partOf().size());
@@ -143,7 +143,7 @@ public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
 	 */
 	@Test
 	void testDelete() throws DatabaseException {
-		ElementPartOfDTO element = gateway.findCompoundsByElementID(2);
+		ElementDTO element = gateway.findCompoundsByElementID(2);
 		
 		assertEquals(2, element.getElementID());
 		assertEquals(2, element.partOf().size());
