@@ -22,7 +22,7 @@ class TestMetal {
     chem.createTable();
     met.createTableMetal();
     
-    MetalRDG metal = new MetalRDGRDS(1, 55, "chemicalname1", "inhabits1");
+    MetalRDG metal = new MetalRDGRDS(1, 55, "chemicalname1", 1.0);
     
     MetalRDG metalGet = new MetalRDGRDS(1);
 
@@ -38,12 +38,12 @@ class TestMetal {
     chem.createTable();
     met.createTableMetal();
     
-    MetalRDG metal = new MetalRDGRDS(1, 15, "chemicalname1", "inhabits1");
+    MetalRDG metal = new MetalRDGRDS(1, 15, "chemicalname1", 1.0);
     
     MetalRDG metalGet = new MetalRDGRDS(1);
 
     // Test
-    assertEquals("inhabits1", metalGet.getInhabits());
+    assertEquals(1.0, metalGet.getInventory());
   }
 
   @Test
@@ -54,7 +54,7 @@ class TestMetal {
     chem.createTable();
     met.createTableMetal();
     
-    MetalRDG metal = new MetalRDGRDS(1, 15, "chemicalname1", "inhabits1");
+    MetalRDG metal = new MetalRDGRDS(1, 15, "chemicalname1", 1.0);
 
     MetalRDG metalGet = new MetalRDGRDS(1);
     // Test
@@ -72,8 +72,8 @@ class TestMetal {
     acid.createTable();
     met.createTableMetal();
     
-    MetalRDG metal1 = new MetalRDGRDS(1, 15, "chemicalname1", "inhabits1");
-    MetalRDG metal2 = new MetalRDGRDS(2, 15, "chemicalname2", "inhabits2");
+    MetalRDG metal1 = new MetalRDGRDS(1, 15, "chemicalname1", 1.0);
+    MetalRDG metal2 = new MetalRDGRDS(2, 15, "chemicalname2", 1.0);
     
     List<MetalRDGRDS> metalGet = metal2.findSet(15);
     

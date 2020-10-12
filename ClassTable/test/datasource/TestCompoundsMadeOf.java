@@ -31,12 +31,12 @@ class TestCompoundsMadeOf extends DatabaseTest {
     com.createTableCompoundMadeFrom();
 
     // initialize elements
-    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", "inhabits");
-    ElementRDG element2 = new ElementRDGRDS(23, 44, 6, "element2", "inhabits");
-    ElementRDG element3 = new ElementRDGRDS(61, 22, 2, "element3", "inhabits");
-    ElementRDG element4 = new ElementRDGRDS(11, 5, 1, "element4", "inhabits");
-    ElementRDG element5 = new ElementRDGRDS(14, 12, 2, "element5", "inhabits");
-    ElementRDG element6 = new ElementRDGRDS(16, 15, 3, "element6", "inhabits");
+    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", 1.0);
+    ElementRDG element2 = new ElementRDGRDS(23, 44, 6, "element2", 1.0);
+    ElementRDG element3 = new ElementRDGRDS(61, 22, 2, "element3", 1.0);
+    ElementRDG element4 = new ElementRDGRDS(11, 5, 1, "element4", 1.0);
+    ElementRDG element5 = new ElementRDGRDS(14, 12, 2, "element5", 1.0);
+    ElementRDG element6 = new ElementRDGRDS(16, 15, 3, "element6", 1.0);
 
     List<Integer> madeOf1 = new ArrayList<Integer>();
     madeOf1.add(55);
@@ -50,11 +50,11 @@ class TestCompoundsMadeOf extends DatabaseTest {
 
     // initialize compounds
     CompoundsMadeOfTDG compound1 = new CompoundsMadeOfTDGRDS(1, madeOf1, "chemicalname1",
-        "inhabits1");
+        1.0);
     CompoundsMadeOfTDG compound2 = new CompoundsMadeOfTDGRDS(2, madeOf2, "chemicalname2",
-        "inhabits2");
+        1.0);
     CompoundsMadeOfTDG compound3 = new CompoundsMadeOfTDGRDS(3, madeOf3, "chemicalname3",
-        "inhabits2");
+        1.0);
 
     // compound getters
     CompoundsMadeOfTDG compoundsGet1 = new CompoundsMadeOfTDGRDS(1);
@@ -82,12 +82,12 @@ class TestCompoundsMadeOf extends DatabaseTest {
     com.createTableCompoundMadeFrom();
 
     // initialize elements
-    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", "inhabits");
-    ElementRDG element2 = new ElementRDGRDS(23, 44, 6, "element2", "inhabits");
-    ElementRDG element3 = new ElementRDGRDS(61, 22, 2, "element3", "inhabits");
-    ElementRDG element4 = new ElementRDGRDS(11, 5, 1, "element4", "inhabits");
-    ElementRDG element5 = new ElementRDGRDS(14, 12, 2, "element5", "inhabits");
-    ElementRDG element6 = new ElementRDGRDS(16, 15, 3, "element6", "inhabits");
+    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", 1.0);
+    ElementRDG element2 = new ElementRDGRDS(23, 44, 6, "element2", 1.0);
+    ElementRDG element3 = new ElementRDGRDS(61, 22, 2, "element3", 1.0);
+    ElementRDG element4 = new ElementRDGRDS(11, 5, 1, "element4", 1.0);
+    ElementRDG element5 = new ElementRDGRDS(14, 12, 2, "element5", 1.0);
+    ElementRDG element6 = new ElementRDGRDS(16, 15, 3, "element6", 1.0);
 
     List<Integer> madeOf1 = new ArrayList<Integer>();
     madeOf1.add(55);
@@ -101,20 +101,20 @@ class TestCompoundsMadeOf extends DatabaseTest {
 
     // initialize compounds
     CompoundsMadeOfTDG compound1 = new CompoundsMadeOfTDGRDS(1, madeOf1, "chemicalname1",
-        "inhabits1");
+        1.0);
     CompoundsMadeOfTDG compound2 = new CompoundsMadeOfTDGRDS(2, madeOf2, "chemicalname2",
-        "inhabits2");
+        1.0);
     CompoundsMadeOfTDG compound3 = new CompoundsMadeOfTDGRDS(3, madeOf3, "chemicalname3",
-        "inhabits3");
+        1.0);
 
     // compound getters
     CompoundsMadeOfTDG compoundsGet1 = new CompoundsMadeOfTDGRDS(1);
     CompoundsMadeOfTDG compoundsGet2 = new CompoundsMadeOfTDGRDS(2);
     CompoundsMadeOfTDG compoundsGet3 = new CompoundsMadeOfTDGRDS(3);
 
-    assertEquals("inhabits1", compoundsGet1.getInhabits());
-    assertEquals("inhabits2", compoundsGet2.getInhabits());
-    assertEquals("inhabits3", compoundsGet3.getInhabits());
+    assertEquals(1.0, compoundsGet1.getInventory());
+    assertEquals(1.0, compoundsGet2.getInventory());
+    assertEquals(1.0, compoundsGet3.getInventory());
 
   }
 
@@ -134,8 +134,8 @@ class TestCompoundsMadeOf extends DatabaseTest {
     com.createTableCompoundMadeFrom();
     
     // initialize elements
-    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", "inhabits");
-    ElementRDG element2 = new ElementRDGRDS(23, 44, 6, "element2", "inhabits");
+    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", 1.0);
+    ElementRDG element2 = new ElementRDGRDS(23, 44, 6, "element2", 1.0);
 
     List<Integer> madeOf = new ArrayList<Integer>();
     madeOf.add(55);
@@ -143,12 +143,15 @@ class TestCompoundsMadeOf extends DatabaseTest {
 
     //initialize compounds
     CompoundsMadeOfTDG compounds = new CompoundsMadeOfTDGRDS(1, madeOf, "chemicalname1",
-        "inhabits1");
+        1.0);
 
-    List<Integer> list = compounds.findSetElementId(1);
-    List<Integer> expected = new ArrayList<>();
-    expected.add(55);
-    expected.add(23);
+    List<CompoundDTO> list = compounds.findSetElementId(1);
+    List<CompoundDTO> expected = new ArrayList<>();
+    
+    CompoundDTO c1 = new CompoundDTO(1, 55);
+    CompoundDTO c2 = new CompoundDTO(1, 23);
+    expected.add(c1);
+    expected.add(c2);
     assertEquals(expected, list);
   }
 
@@ -168,8 +171,8 @@ class TestCompoundsMadeOf extends DatabaseTest {
     com.createTableCompoundMadeFrom();
     
     //initialize elements
-    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", "inhabits");
-    ElementRDG element2 = new ElementRDGRDS(23, 44, 6, "element2", "inhabits");
+    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", 1.0);
+    ElementRDG element2 = new ElementRDGRDS(23, 44, 6, "element2", 1.0);
 
     List<Integer> madeOf1 = new ArrayList<Integer>();
     madeOf1.add(55);
@@ -178,18 +181,21 @@ class TestCompoundsMadeOf extends DatabaseTest {
 
     //initialize compounds
     CompoundsMadeOfTDG compound1 = new CompoundsMadeOfTDGRDS(1, madeOf1, "chemicalname1",
-        "inhabits1"), compound2 = new CompoundsMadeOfTDGRDS(2, madeOf2, "chemicalname2", "inhabits2");
+        1.0), compound2 = new CompoundsMadeOfTDGRDS(2, madeOf2, "chemicalname2", 1.0);
 
     // Compound1
-    List<Integer> list1 = compound1.findSetElementId(1);
-    List<Integer> expected1 = new ArrayList<>();
-    expected1.add(55);
+    CompoundDTO c1 = new CompoundDTO(1, 55);
+    CompoundDTO c2 = new CompoundDTO(1, 23);
+    
+    List<CompoundDTO> list1 = compound1.findSetElementId(1);
+    List<CompoundDTO> expected1 = new ArrayList<>();
+    expected1.add(c1);
     assertEquals(expected1, list1);
 
     // Compound2
-    List<Integer> list2 = compound1.findSetElementId(2);
-    List<Integer> expected2 = new ArrayList<>();
-    expected2.add(23);
+    List<CompoundDTO> list2 = compound1.findSetElementId(2);
+    List<CompoundDTO> expected2 = new ArrayList<>();
+    expected2.add(c2);
     assertEquals(expected2, list2);
 
   }
