@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import dataDTO.CompoundDTO;
-import dataDTO.ElementPartOfDTO;
+import dataDTO.ElementDTO;
 
 /**
  * The RDS version of the gateway for CompoundMadeFromElement.
@@ -136,7 +136,7 @@ public class ElementCompoundTableDataGatewayRDS implements ElementCompoundTableD
 	 * @return
 	 * @throws DatabaseException
 	 */
-	private ElementPartOfDTO convertToEICDTO(PreparedStatement statement) throws DatabaseException {
+	private ElementDTO convertToEICDTO(PreparedStatement statement) throws DatabaseException {
 		ArrayList<Integer> compoundIDs = new ArrayList<Integer>();
 		int elementID = 0;
 		try {
@@ -149,14 +149,14 @@ public class ElementCompoundTableDataGatewayRDS implements ElementCompoundTableD
 		} catch(SQLException e) {
 			throw new DatabaseException("Failed to convert query to DTO.", e);
 		}
-		return new ElementPartOfDTO(elementID, compoundIDs);
+		return new ElementDTO(elementID, compoundIDs);
 	}
 	
 	/**
 	* @see datasource.findCompoundsByElementID(int elementID).
 	*/
 	@Override
-	public ElementPartOfDTO findCompoundsByElementID(int elementID) throws DatabaseException {
+	public ElementDTO findCompoundsByElementID(int elementID) throws DatabaseException {
 		try {
 			String selectSQL = "SELECT * FROM CompoundMadeFromElement WHERE elementID = ? ORDER BY compoundID ASC;";
 			PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
