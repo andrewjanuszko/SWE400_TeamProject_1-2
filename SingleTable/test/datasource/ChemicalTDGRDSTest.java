@@ -21,30 +21,10 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
 	@BeforeEach
 	public void fillDatabase() throws DatabaseException {
 		ChemicalRowDataGatewayRDS.createTable();
-		ChemicalRowDataGatewayRDS funkyChemical = new ChemicalRowDataGatewayRDS(0, "FunkyChemical", "Mars", 0, 0, 0, 0);
-		ChemicalRowDataGatewayRDS unknownChemical = new ChemicalRowDataGatewayRDS(0, "UnknownChemical", "Jupiter", 0, 0, 0, 0);
-		ChemicalRowDataGatewayRDS spicyChemical = new ChemicalRowDataGatewayRDS(0, "SpicyChemical", "Mercury", 0, 0, 0, 0);
-		ChemicalRowDataGatewayRDS smellyChemical = new ChemicalRowDataGatewayRDS(0, "SmellyChemical", "Venus", 0, 0, 0, 0);
-		ChemicalRowDataGatewayRDS carbon = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011, 0, 0);
-		ChemicalRowDataGatewayRDS hydrogen = new ChemicalRowDataGatewayRDS(1, "Hydrogen", "Earth", 1, 1.008, 0, 0);
-		ChemicalRowDataGatewayRDS oxygen = new ChemicalRowDataGatewayRDS(1, "Oxygen", "Earth", 8, 15.999, 0, 0);
-		ChemicalRowDataGatewayRDS nitrogen = new ChemicalRowDataGatewayRDS(1, "Nitrogen", "Earth", 7, 14.006, 0, 0);
-		ChemicalRowDataGatewayRDS copper = new ChemicalRowDataGatewayRDS(2, "Copper", "Earth", 29, 63.546, 10, 0);
-		ChemicalRowDataGatewayRDS chromium = new ChemicalRowDataGatewayRDS(2, "Chromium", "Earth", 24, 51.996, 20, 0);
-		ChemicalRowDataGatewayRDS zinc = new ChemicalRowDataGatewayRDS(2, "Zinc", "Earth", 30, 65.380, 30, 0);
-		ChemicalRowDataGatewayRDS gold = new ChemicalRowDataGatewayRDS(2, "Gold", "Earth", 79, 196.966, 40, 0);
-		ChemicalRowDataGatewayRDS glucose = new ChemicalRowDataGatewayRDS(3, "Glucose", "Earth", 0, 0, 0, 0);
-		ChemicalRowDataGatewayRDS water = new ChemicalRowDataGatewayRDS(3, "Water", "Earth", 0, 0, 0, 0);
-		ChemicalRowDataGatewayRDS carbonDioxide = new ChemicalRowDataGatewayRDS(3, "Carbon Dioxide", "Earth", 0, 0, 0, 0);
-		ChemicalRowDataGatewayRDS methane = new ChemicalRowDataGatewayRDS(3, "Methane", "Earth", 0, 0, 0, 0);
-		ChemicalRowDataGatewayRDS potassiumHydroxide = new ChemicalRowDataGatewayRDS(4, "Potassium hydroxide", "Earth", 0, 0, 0, 50);
-		ChemicalRowDataGatewayRDS lithiumHydroxide = new ChemicalRowDataGatewayRDS(4, "Lithium hydroxide", "Jupiter", 0, 0, 0, 60);
-		ChemicalRowDataGatewayRDS calciumHydroxide = new ChemicalRowDataGatewayRDS(4, "Calcium hydroxide", "Mercury", 0, 0, 0, 70);
-		ChemicalRowDataGatewayRDS strontiumHydroxide = new ChemicalRowDataGatewayRDS(4, "Strontium hydroxide", "Venus", 0, 0, 0, 20);
-		ChemicalRowDataGatewayRDS hydrochloricAcid = new ChemicalRowDataGatewayRDS(5, "Hydrochloric acid", "Earth", 0, 0, 0, 50);
-		ChemicalRowDataGatewayRDS sulfuricAcid = new ChemicalRowDataGatewayRDS(5, "Sulfuric acid", "Jupiter", 0, 0, 0, 60);
-		ChemicalRowDataGatewayRDS aceticAcid = new ChemicalRowDataGatewayRDS(5, "Acetic acid", "Mercury", 0, 0, 0, 70);
-		ChemicalRowDataGatewayRDS oxalicAcid = new ChemicalRowDataGatewayRDS(5, "Oxalic Acid", "Venus", 0, 0, 0, 20);
+		ChemicalRowDataGatewayRDS aquaRegia = new ChemicalRowDataGatewayRDS(5, "Aqua Regia", 123.4, 0, 0, 0, 0, 0);
+		ChemicalRowDataGatewayRDS gold = new ChemicalRowDataGatewayRDS(2, "Gold", 923, 0, 0, 1, 170.0, 0);
+		ChemicalRowDataGatewayRDS platinum = new ChemicalRowDataGatewayRDS(2, "Platinum", 923, 0, 0, 1, 17.0, 0);
+		ChemicalRowDataGatewayRDS palladium = new ChemicalRowDataGatewayRDS(2, "Palladium", 923, 0, 0, 1, 17.0, 0);
 	}
 	
 	/**
@@ -62,18 +42,12 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
 	 */
 	@Test
 	void testFetchAll() throws DatabaseException {
-		ArrayList<ChemicalDTO> chemicals = gateway.fetchAll();
-		assertEquals(24, chemicals.size());
 		
-		ChemicalDTO chem1 = chemicals.get(0);
-		assertEquals(1, chem1.getChemicalID());
-		assertEquals(0, chem1.getType());
-		assertEquals("FunkyChemical", chem1.getName());
-		assertEquals("Mars", chem1.getInhabits());
-		assertEquals(0, chem1.getAtomicNumber());
-		assertEquals(0, chem1.getAtomicMass(), 0.001);
-		assertEquals(0, chem1.getDissolvedBy());
-		assertEquals(0, chem1.getSolute());
+		ArrayList<ChemicalDTO> lowAcids = gateway.filterAcidsWithLowInventory();
+		assertEquals(1, lowAcids.size());
+		for (ChemicalDTO lowAcid : lowAcids) {
+          System.out.println(lowAcid.getName());
+        }
 	}
 	
 	/**

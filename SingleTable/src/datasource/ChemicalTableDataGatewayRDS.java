@@ -14,6 +14,9 @@ import java.util.ArrayList;
 public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 
   private static ChemicalTableDataGateway singletonInstance;
+  
+  private static String querySQL = "";
+  
 
   /**
    * Retrieves a Singleton instance of ChemicalTableDataGateway. Creates a new one
@@ -39,6 +42,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
     ArrayList<ChemicalDTO> listDTO = new ArrayList<ChemicalDTO>();
     try {
       ResultSet results = statement.executeQuery();
+      querySQL = "";
       while (results.next()) {
         int chemicalID = results.getInt("chemicalID");
         int type = results.getInt("type");
@@ -59,198 +63,161 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
     return listDTO;
   }
 
-  /**
-   * @see datasource.ChemicalTableDataGateway#fetchAll();
-   */
   @Override
-  public ArrayList<ChemicalDTO> fetchAll() throws DatabaseException {
+  public ChemicalTableDataGatewayRDS getAll() {
+    querySQL += "SELECT * FROM Chemical WHERE (Chemical.type <> 0)";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS getElements() {
+    querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = 1 OR Chemical.type = 2)";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS getMetals() {
+    querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = 2)";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS getCompounds() {
+    querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = 3)";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS getBases() {
+    querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = 4)";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS getAcids() {
+    querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = 5)";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS filterByWildCardName(String wildCard) {
+    querySQL += " AND (Chemical.name LIKE '%" + wildCard + "%')";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS filterByInventoryValue(double inventoryValue) {
+    querySQL += " AND (Chemical.inventory = " + inventoryValue + ")";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS filterByInventoryRange(double min, double max) {
+    querySQL += " AND (Chemical.inventory BETWEEN " + min + " AND " + max + ")";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS filterByAtomicNumberValue(int atomicNumberValue) {
+    querySQL += " AND (Chemical.atomicNumber = " + atomicNumberValue + ")";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS filterByAtomicNumberRange(int min, int max) {
+    querySQL += " AND (Chemical.atomicNumber BETWEEN " + min + " AND " + max + ")";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS filterByAtomicMassValue(double atomicMassValue) {
+    querySQL += " AND (Chemical.atomicMass = " + atomicMassValue + ")";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS filterByAtomicMassRange(double min, double max) {
+    querySQL += " AND (Chemical.atomicMass BETWEEN " + min + " AND " + max + ")";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS filterByDissolvedBy(int dissolvedByID) {
+    querySQL += " AND (Chemical.dissolvedBy = " + dissolvedByID + ")";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS filterByMolesValue(double molesValue) {
+    querySQL += " AND (Chemical.moles = " + molesValue + ")";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS filterByMolesRange(double min, double max) {
+    querySQL += " AND (Chemical.moles BETWEEN " + min + " AND " + max + ")";
+    return this;
+  }
+
+  @Override
+  public ChemicalTableDataGatewayRDS filterBySolute(int soluteID) {
+    querySQL += " AND (Chemical.solute = " + soluteID + ")";
+    return this;
+  }
+
+  @Override
+  public ArrayList<ChemicalDTO> filterElementsWithLowInventory() throws DatabaseException {
+    querySQL = "SELECT * FROM Chemical WHERE (Chemical.type = 1 OR Chemical.type = 2) AND (Chemical.inventory < 20)";
+    return executeQuery();
+  }
+
+  @Override
+  public ArrayList<ChemicalDTO> filterBasesWithLowInventory() throws DatabaseException {
+    querySQL = "SELECT * FROM Chemical WHERE (Chemical.type = 4) AND (Chemical.inventory < 40)";
+    return executeQuery();
+  }
+
+  @Override
+  public ArrayList<ChemicalDTO> filterAcidsWithLowInventory() throws DatabaseException {
     try {
-      String selectSQL = "SELECT * FROM Chemical;";
-      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-      return convertToDTO(statement);
-    } catch (SQLException e) {
-      throw new DatabaseException("Failed to fetch all Chemicals.", e);
+      ArrayList<ChemicalDTO> resultSet = new ArrayList<ChemicalDTO>();
+      ArrayList<ChemicalDTO> acids = getSingletonInstance().getAcids().executeQuery();
+      for (ChemicalDTO acid : acids) {
+        System.out.println(acid.getName() + " " + acid.getInventory());
+        ArrayList<ChemicalDTO> metals = getSingletonInstance().getMetals().filterByDissolvedBy(acid.getChemicalID()).executeQuery();
+        double totalMolesNeeded = 0.0;
+        for (ChemicalDTO metal : metals) {
+          System.out.println(metal.getName() + " " + metal.getMoles());
+          totalMolesNeeded += metal.getMoles();
+        }
+        if (acid.getInventory() < totalMolesNeeded) {
+          resultSet.add(acid);
+        }
+      }
+      return resultSet;
+    } catch(DatabaseException e) {
+      throw new DatabaseException("Failed to fetch acids with low inventory.", e);
     }
   }
 
   @Override
-  public ArrayList<ChemicalDTO> filterAllByName(String name) throws DatabaseException {
-    try {
-      String selectSQL = "SELECT * FROM Chemical WHERE Chemical.name = ?;";
-      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-      statement.setString(1, name);
-      return convertToDTO(statement);
-    } catch (SQLException e) {
-      throw new DatabaseException("Failed to fetch all Chemicals with name '" + name + "'.", e);
-    }
+  public ArrayList<ChemicalDTO> filterAllWithLowInventory() throws DatabaseException {
+    ArrayList<ChemicalDTO> lowChemicals = new ArrayList<ChemicalDTO>();
+    lowChemicals.addAll(filterElementsWithLowInventory());
+    lowChemicals.addAll(filterBasesWithLowInventory());
+    lowChemicals.addAll(filterAcidsWithLowInventory());
+    return lowChemicals;
   }
 
   @Override
-  public ArrayList<ChemicalDTO> filterAllByPartialName(String partialName) throws DatabaseException {
+  public ArrayList<ChemicalDTO> executeQuery() throws DatabaseException {
     try {
-      String selectSQL = "SELECT * FROM Chemical WHERE Chemical.name LIKE '%?%';";
-      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-      statement.setString(1, partialName);
+      System.out.println(querySQL);
+      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(querySQL + ";");
       return convertToDTO(statement);
     } catch (SQLException e) {
-      throw new DatabaseException("Failed to fetch all Chemicals with name like '" + partialName + "'.", e);
-    }
-  }
-
-  @Override
-  public ArrayList<ChemicalDTO> filterAllByInventory(double inventory) throws DatabaseException {
-    try {
-      String selectSQL = "SELECT * FROM Chemical WHERE Chemical.inventory = ?;";
-      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-      statement.setDouble(1, inventory);
-      return convertToDTO(statement);
-    } catch (SQLException e) {
-      throw new DatabaseException("Failed to fetch all Chemicals with inventory '" + inventory + "'.", e);
-    }
-  }
-
-  @Override
-  public ArrayList<ChemicalDTO> filterAllByInventoryRange(double min, double max) throws DatabaseException {
-    try {
-      String selectSQL = "SELECT * FROM Chemical WHERE Chemical.inventory BETWEEN ? AND ?;";
-      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-      statement.setDouble(1, min);
-      statement.setDouble(2, max);
-      return convertToDTO(statement);
-    } catch (SQLException e) {
-      throw new DatabaseException("Failed to fetch all Chemicals with inventory in range.", e);
-    }
-  }
-
-  /**
-   * @see datasource.ChemicalTableDataGateway#filterAllByLowInventory().
-   */
-  @Override
-  public ArrayList<ChemicalDTO> filterAllByLowInventory() throws DatabaseException {
-    try {
-      
-      // This needs to call all other low inventory checks to work.
-      
-      @SuppressWarnings("unused")
-      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement("");
-      
-      
-      
-      return null;
-    } catch (SQLException e) {
-      throw new DatabaseException("Failed to fetch all Chemicals with inventory in range.", e);
+      throw new DatabaseException("Failed to execute query.", e);
     }
   }
   
-// Filters for elements start here  
-
-  
-/**
- * @see datasource.ChemicalTableDataGateway#filterElementByNameLike(String partialName)
- */
-@Override
-public ArrayList<ChemicalDTO> filterElementByNameLike(String partialName) throws DatabaseException {
-	 try {
-	      String selectSQL = "SELECT * FROM Chemical WHERE Chemical.name LIKE '%?%';";
-	      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-	      statement.setString(1, partialName);
-	      return convertToDTO(statement);
-	    } catch (SQLException e) {
-	      throw new DatabaseException("Failed to fetch all Element with name like '" + partialName + "'.", e);
-	    }
-}
-
-/**
- * @see datasource.ChemicalTableDataGateway#filterElementByInventory(double inventory)
- */
-@Override
-public ArrayList<ChemicalDTO> filterElementByInventory(double inventory) throws DatabaseException {
-	try {
-		String selectSQL = "SELECT * FROM Chemical WHERE Chemical.inventory = ?;";
-		PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-		statement.setDouble(1, inventory);
-		return convertToDTO(statement);
-	}catch (SQLException e) {
-	      throw new DatabaseException("Failed to fetch all Element with inventory '" + inventory + "'.", e);
-	}
-}
-
-/**
- * @see datasource.ChemicalTableDataGateway#filterElementByInvetoryRange(double min, double max)
- */
-@Override
-public ArrayList<ChemicalDTO> filterElementByInvetoryRange(double min, double max) throws DatabaseException {
-	try {
-		String selectSQL = "SELECT * FROM Chemical WHERE Chemical.inventory BETWEEN ? AND ?;";
-		PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-		statement.setDouble(1, min);
-		statement.setDouble(2, max);
-		return convertToDTO(statement);
-	}catch (SQLException e) {
-	      throw new DatabaseException("Failed to fetch all Element with inventory between '" + max + " and "+ min + "'.", e);
-	}
-}
-
-/**
- * @see datasource.ChemicalTableDataGateway#filterElementByAtomicMass(double atomicMass)
- */
-@Override
-public ArrayList<ChemicalDTO> filterElementByAtomicMass(double atomicMass) throws DatabaseException {
-	try {
-		String selectSQL = "SELECT * FROM Chemical WHERE Chemical.atomicMass = ?;";
-		PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-		statement.setDouble(1, atomicMass);
-		return convertToDTO(statement);
-	}catch (SQLException e) {
-	      throw new DatabaseException("Failed to fetch all Element with atomicMass '" + atomicMass + "'.", e);
-	}
-}
-
-/*
- * @see datasource.ChemicalTableDataGateway#filterElementByAtomicMassRange(double min, double max)
- */
-@Override
-public ArrayList<ChemicalDTO> filterElementByAtomicMassRange(double min, double max) throws DatabaseException {
-	try {
-		String selectSQL = "SELECT * FROM Chemical WHERE Chemical.atomicMass BETWEEN ? AND ?;";
-		PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-		statement.setDouble(1, min);
-		statement.setDouble(2, max);
-		return convertToDTO(statement);
-	}catch (SQLException e) {
-	      throw new DatabaseException("Failed to fetch all Element with atomicMass between '" + max + " and "+ min + "'.", e);
-	}
-}
-
-/**
- * @see datasource.ChemicalTableDataGateway#filterElementByAtomicNumber(int atomicNumber)
- */
-@Override
-public ArrayList<ChemicalDTO> filterElementByAtomicNumber(int atomicNumber) throws DatabaseException {
-	try {
-		String selectSQL = "SELECT * FROM Chemical WHERE Chemical.atomicNumber = ?;";
-		PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-		statement.setDouble(1, atomicNumber);
-		return convertToDTO(statement);
-	}catch (SQLException e) {
-	      throw new DatabaseException("Failed to fetch all Element with atomicNumber '" + atomicNumber + "'.", e);
-	}
-}
-
-/**
- * @see datasource.ChemicalTableDataGateway#filterElementByAtomicNumberRange(int min, int max)
- */
-@Override
-public ArrayList<ChemicalDTO> filterElementByAtomicNumberRange(int min, int max) throws DatabaseException {
-	try {
-		String selectSQL = "SELECT * FROM Chemical WHERE Chemical.atomicNumber BETWEEN ? AND ?;";
-		PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-		statement.setDouble(1, min);
-		statement.setDouble(2, max);
-		return convertToDTO(statement);
-	}catch (SQLException e) {
-	      throw new DatabaseException("Failed to fetch all Element with atomicNumber between '" + max + " and "+ min + "'.", e);
-	}
-}
-
 }
