@@ -8,7 +8,7 @@ public interface MetalRowDataGateway {
 	
 	public String getName();
 	
-	public String getInhabits();
+	public double getInventory();
 	
 	public int getAtomicNumber();
 	
@@ -18,7 +18,7 @@ public interface MetalRowDataGateway {
 	
 	public void setName(String s);
 	
-	public void setInhabits(String s);
+	public void setInventory(double i);
 	
 	public void setAtomicNumber(int i);
 	

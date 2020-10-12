@@ -20,7 +20,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 		String create = "CREATE TABLE Acid (" + 
 				"acidID INT NOT NULL, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
-				"inhabits VARCHAR(30), " +
+				"inventory Double, " +
 				"solute VARCHAR(30), " +
 				"UNIQUE(name), "
 				+ "PRIMARY KEY(acidID) );";
@@ -67,7 +67,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	
 	private int acidID;
 	private String name;
-	private String inhabits;
+	private double inventory;
 	private String solute;
 	
 	/**
@@ -92,7 +92,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			name = rs.getString("name");
-			inhabits = rs.getString("inhabits");
+			inventory = rs.getDouble("inventory");
 			solute = rs.getString("solute");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find Acid with that name", e);
@@ -121,7 +121,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			acidID = rs.getInt("acidID");
-			inhabits = rs.getString("inhabits");
+			inventory = rs.getDouble("inventory");
 			solute = rs.getString("solute");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find Acid with that name", e);
@@ -138,15 +138,15 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	 * Constructs Gateway and new Acid in the database.
 	 * @param id
 	 * @param name
-	 * @param inhabits
+	 * @param inventory
 	 * @param solute
 	 * @throws DatabaseException 
 	 */
-	public AcidRowDataGatewayRDS(int id, String name, String inhabits, String solute) throws DatabaseException {
+	public AcidRowDataGatewayRDS(int id, String name, Double inventory, String solute) throws DatabaseException {
 	  conn = DatabaseManager.getSingleton().getConnection();
 		acidID = id;
 		this.name = name;
-		this.inhabits = inhabits;
+		this.inventory = inventory;
 		this.solute = solute;
 		insert();
 	}
@@ -162,8 +162,8 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	}
 
 	@Override
-	public String getInhabits() {
-		return this.inhabits;
+	public double getInventory() {
+		return this.inventory;
 	}
 
 	@Override
@@ -177,8 +177,8 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	}
 
 	@Override
-	public void setInhabits(String i) {
-	  this.inhabits = i;
+	public void setInventory(double i) {
+	  this.inventory = i;
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 		try {
 			PreparedStatement stmt = conn.prepareStatement("UPDATE Acid SET"
 					+ " name = '" + name
-					+ "', inhabits = '" + inhabits
+					+ "', inventory = '" + inventory
 					+ "', solute = '" + solute 
 					+ "' WHERE acidID = " + acidID);
 			stmt.executeUpdate();
@@ -226,7 +226,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	 */
 	private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Acid (acidID, name, inhabits, solute) VALUES (" + acidID + ", '" + name + "', '" + inhabits + "', '" + solute + "');");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Acid (acidID, name, inventory, solute) VALUES (" + acidID + ", '" + name + "', '" + inventory + "', '" + solute + "');");
 			stmt.execute();
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into acid table");
