@@ -19,16 +19,16 @@ class TestAcid extends DatabaseTest {
   
   @Test
   void testGetName() throws SQLException, DatabaseException {
-    AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
+    AcidRDG acid = new AcidRDGRDS();
     acid.dropAllTables();
     acid.createTable();
     
-    AcidRowDataGateway
-        acid1 = new AcidRowDataGatewayRDS(99, 2, "acidname1", "acidihabits1"),
-        acid2 = new AcidRowDataGatewayRDS(8, 4, "acidname2", "acidihabits2"),
-        acid3 = new AcidRowDataGatewayRDS(63, 6, "acidname3", "acidihabits3"),
-        acid1_fetch = new AcidRowDataGatewayRDS(99), acid2_fetch = new AcidRowDataGatewayRDS(8),
-        acid3_fetch = new AcidRowDataGatewayRDS(63);
+    AcidRDG
+        acid1 = new AcidRDGRDS(99, 2, "acidname1", "acidihabits1"),
+        acid2 = new AcidRDGRDS(8, 4, "acidname2", "acidihabits2"),
+        acid3 = new AcidRDGRDS(63, 6, "acidname3", "acidihabits3"),
+        acid1_fetch = new AcidRDGRDS(99), acid2_fetch = new AcidRDGRDS(8),
+        acid3_fetch = new AcidRDGRDS(63);
 
     // Tests
     assertEquals("acidname1", acid1_fetch.getName());
@@ -41,13 +41,13 @@ class TestAcid extends DatabaseTest {
   
   @Test
   void testGetInhabits() throws SQLException, DatabaseException {
-    ChemicalRowDataGateway resetChem = new ChemicalRowDataGatewayRDS();
-    AcidRowDataGateway resetAcid = new AcidRowDataGatewayRDS(),
-        acid1 = new AcidRowDataGatewayRDS(56, 2, "acidname1", "acidihabits1"),
-        acid2 = new AcidRowDataGatewayRDS(22, 4, "acidname2", "acidihabits2"),
-        acid3 = new AcidRowDataGatewayRDS(38, 6, "acidname3", "acidihabits3"),
-        acid1_fetch = new AcidRowDataGatewayRDS(56), acid2_fetch = new AcidRowDataGatewayRDS(22),
-        acid3_fetch = new AcidRowDataGatewayRDS(38);
+    ChemicalRDG resetChem = new ChemicalRDGRDS();
+    AcidRDG resetAcid = new AcidRDGRDS(),
+        acid1 = new AcidRDGRDS(56, 2, "acidname1", "acidihabits1"),
+        acid2 = new AcidRDGRDS(22, 4, "acidname2", "acidihabits2"),
+        acid3 = new AcidRDGRDS(38, 6, "acidname3", "acidihabits3"),
+        acid1_fetch = new AcidRDGRDS(56), acid2_fetch = new AcidRDGRDS(22),
+        acid3_fetch = new AcidRDGRDS(38);
 
     // Tests
     assertEquals("acidihabits1", acid1_fetch.getInhabits());
@@ -60,15 +60,15 @@ class TestAcid extends DatabaseTest {
   
   @Test
   void testGetSolute() throws SQLException, DatabaseException {
-    AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
+    AcidRDG acid = new AcidRDGRDS();
     acid.dropAllTables();
     acid.createTable();
-    AcidRowDataGateway
-        acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
-        acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
-        acid3 = new AcidRowDataGatewayRDS(3, 6, "acidname3", "acidihabits3"),
-        acid1_fetch = new AcidRowDataGatewayRDS(1), acid2_fetch = new AcidRowDataGatewayRDS(2),
-        acid3_fetch = new AcidRowDataGatewayRDS(3);
+    AcidRDG
+        acid1 = new AcidRDGRDS(1, 2, "acidname1", "acidihabits1"),
+        acid2 = new AcidRDGRDS(2, 4, "acidname2", "acidihabits2"),
+        acid3 = new AcidRDGRDS(3, 6, "acidname3", "acidihabits3"),
+        acid1_fetch = new AcidRDGRDS(1), acid2_fetch = new AcidRDGRDS(2),
+        acid3_fetch = new AcidRDGRDS(3);
 
     // Test
     assertEquals(2, acid1_fetch.getSolute());
@@ -80,8 +80,8 @@ class TestAcid extends DatabaseTest {
   
   @Test
   void testDelete() {
-    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
-        acid = new AcidRowDataGatewayRDS(1, 2, "chemname1", "cheminhabits1");
+    AcidRDG initialize = new AcidRDGRDS(),
+        acid = new AcidRDGRDS(1, 2, "chemname1", "cheminhabits1");
     
     // Ensure it has been added
     assertEquals("chemname1", acid.getName());
@@ -90,7 +90,7 @@ class TestAcid extends DatabaseTest {
     acid.delete();
     
     try { 
-      acid = new AcidRowDataGatewayRDS(1);
+      acid = new AcidRDGRDS(1);
       fail("");
     } catch(DatabaseException | SQLException e) {
       assertTrue(true); 
@@ -99,33 +99,33 @@ class TestAcid extends DatabaseTest {
   
   @Test
   void testUpdate() throws SQLException, DatabaseException {
-    AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
+    AcidRDG acid = new AcidRDGRDS();
     acid.dropAllTables();
     acid.createTable();
     
-    AcidRowDataGateway
-        acid_setter = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidinhabits1"),
-        acid_getter = new AcidRowDataGatewayRDS(1);
+    AcidRDG
+        acid_setter = new AcidRDGRDS(1, 2, "acidname1", "acidinhabits1"),
+        acid_getter = new AcidRDGRDS(1);
     
     // Test solute
     assertEquals(2, acid_getter.getSolute());
     acid_setter.setSolute(3);
     acid_setter.update();
-    acid_getter = new AcidRowDataGatewayRDS(1);
+    acid_getter = new AcidRDGRDS(1);
     assertEquals(3, acid_getter.getSolute());
     
     // Test name
     assertEquals("acidname1", acid_getter.getName());
     acid_setter.setName("acidname2");
     acid_setter.update();
-    acid_getter = new AcidRowDataGatewayRDS(1);
+    acid_getter = new AcidRDGRDS(1);
     assertEquals("acidname2", acid_getter.getName());
     
     // Test inhabits
     assertEquals("acidinhabits1", acid_getter.getInhabits());
     acid_setter.setInhabits("acidinhabits2");
     acid_setter.update();
-    acid_getter = new AcidRowDataGatewayRDS(1);
+    acid_getter = new AcidRDGRDS(1);
     assertEquals("acidinhabits2", acid_getter.getInhabits());
     
     acid.dropAllTables();
@@ -133,21 +133,21 @@ class TestAcid extends DatabaseTest {
   
   @Test
   void testGetSet() {
-    AcidRowDataGateway createAcid = new AcidRowDataGatewayRDS();
+    AcidRDG createAcid = new AcidRDGRDS();
     createAcid.dropAllTables();
-    ChemicalRowDataGateway createChemical = new ChemicalRowDataGatewayRDS();
+    ChemicalRDG createChemical = new ChemicalRDGRDS();
     createAcid.createTable();
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
-    AcidRowDataGateway acid2 = new AcidRowDataGatewayRDS(2, 15, "chemicalname2", "inhabits2");
+    AcidRDG acid1 = new AcidRDGRDS(1, 15, "chemicalname1", "inhabits1");
+    AcidRDG acid2 = new AcidRDGRDS(2, 15, "chemicalname2", "inhabits2");
     
-    AcidRowDataGateway getter = new AcidRowDataGatewayRDS();
-    List<AcidRowDataGatewayRDS> acidGet = getter.findSet(15);
+    AcidRDG getter = new AcidRDGRDS();
+    List<AcidRDGRDS> acidGet = getter.findSet(15);
     
     assertEquals("chemicalname1", acidGet.get(0).getName());
     assertEquals("chemicalname2", acidGet.get(1).getName());
     
-    AcidRowDataGateway acid4 = new AcidRowDataGatewayRDS(4, 32, "chemicalname4", "inhabits4");
-    AcidRowDataGateway acid6 = new AcidRowDataGatewayRDS(6, 32, "chemicalname6", "inhabits6");
+    AcidRDG acid4 = new AcidRDGRDS(4, 32, "chemicalname4", "inhabits4");
+    AcidRDG acid6 = new AcidRDGRDS(6, 32, "chemicalname6", "inhabits6");
     
     acidGet = getter.findSet(32);
     

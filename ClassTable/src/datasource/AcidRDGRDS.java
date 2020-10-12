@@ -11,14 +11,15 @@ import java.util.List;
  * AcidRowDataGatewayRDS 
  * @author Isabella Boone, Kim O'Neill
  */
-public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
+public class AcidRDGRDS implements AcidRDG {
   private int acidId, solute;
-  private String name, inhabits;
+  private String name;
+  private double inventory;
   
   /**
    * Create tables
    */
-  public AcidRowDataGatewayRDS() {
+  public AcidRDGRDS() {
     createTable(); 
   }
   
@@ -26,7 +27,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * Constructor used to find an existing Acid.
    * @param id of the acid to find
    */
-  public AcidRowDataGatewayRDS(int id) throws SQLException, DatabaseException {
+  public AcidRDGRDS(int id) throws SQLException, DatabaseException {
     // Statements to find existing acid/chemical and collect their information.
     String getAcid = new String("SELECT * FROM Acid WHERE acidId = " + id + ";"),
         getChem = new String("SELECT * FROM Chemical WHERE chemicalId = " + id + ";");
@@ -41,7 +42,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
     rs = statement.executeQuery(getChem);
     rs.next();
     this.name = rs.getString("name");
-    this.inhabits = rs.getString("inhabits");
+    this.inventory = rs.getDouble("inventory");
     this.acidId = id;
 
   }
@@ -53,12 +54,12 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * @param name of acid to insert
    * @param inhabits of acid to insert
    */
-  public AcidRowDataGatewayRDS(int id, int solute, String name, String inhabits) {
+  public AcidRDGRDS(int id, int solute, String name, double inventory) {
     createTable(); 
     try {
       // Insert chemical 
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + " VALUES (?, ?, ?);");
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + " VALUES (?, ?, ?);");
       insertChemical.setInt(1, id);
       insertChemical.setString(2, name);
       insertChemical.setString(3, inhabits);
@@ -75,7 +76,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       this.acidId = id;
       this.solute = solute; 
       this.name = name;
-      this.inhabits = inhabits;
+      this.inventory = inventory;
       
     } catch(SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -170,7 +171,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    */
   @Override
   public void update() {
-    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inhabits = ? WHERE chemicalID = " + acidId + ";";
+    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inventory = ? WHERE chemicalID = " + acidId + ";";
     String updateAcidSQL = "UPDATE Acid SET acidId = ?, solute = ? WHERE acidId = " + acidId + ";";
     
     try {
@@ -178,7 +179,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       PreparedStatement chem = DatabaseManager.getSingleton().getConnection().prepareStatement(updateChemicalSQL);
       chem.setInt(1, acidId);
       chem.setString(2, name);
-      chem.setString(3, inhabits);
+      chem.setDouble(3, inventory);
 
       chem.execute();
       
@@ -202,8 +203,8 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * @param solute
    * @return
    */
-  public List<AcidRowDataGatewayRDS> findSet(int solute) {
-    List<AcidRowDataGatewayRDS> results = new ArrayList<>();
+  public List<AcidRDGRDS> findSet(int solute) {
+    List<AcidRDGRDS> results = new ArrayList<>();
     try {
       String sql = "SELECT * FROM Acid WHERE solute = "+ solute + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -211,7 +212,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
       
       while(rs.next()) {
         int sol = rs.getInt("acidId");
-        AcidRowDataGatewayRDS id = new AcidRowDataGatewayRDS(sol);
+        AcidRDGRDS id = new AcidRDGRDS(sol);
         results.add(id);
       }
     } catch (SQLException | DatabaseException e) {
@@ -257,16 +258,16 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway {
    * Return inhabits of acid
    */
   @Override
-  public String getInhabits() {
-    return inhabits;
+  public double getInventory() {
+    return inventory;
   }
 
   /**
    * Set inhabits
    */
   @Override
-  public void setInhabits(String newInhabits) {
-    this.inhabits = newInhabits;
+  public void setInventory(double inventory) {
+    this.inventory = inventory;
   }
 	
 }

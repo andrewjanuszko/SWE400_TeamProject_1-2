@@ -6,23 +6,19 @@ import model.Compound;
 import model.Element;
 
 public interface CompoundDataMapperInterface extends ChemicalDataMapperInterface{
-
-  //add using constructor (all instance variables)
   
-  //add using constructor(id)
+  public void addCompound(Compound compound);
   
-  public void addCompound();
+  public void deleteCompound(Compound compound);
   
-  public void deleteCompound();
+  public void updateCompound(int oldId, Compound newCompound);
   
-  public void updateCompound();
-  
-  public Compound fetchCompound();
+  public Compound fetchCompound(int compoundId);
   
   public List<Compound> getAllCompounds();
   
-  public List<Element> getCompoundsMadeOf();
+  public List<Element> getCompoundsMadeOf(int compoundId);
   
-  public List<Compound> getElementsMake();
+  public List<Compound> getElementsMake(int elementId);
   
 }

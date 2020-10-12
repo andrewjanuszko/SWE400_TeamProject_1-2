@@ -13,17 +13,17 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableDataGateway {
+public class CompoundsMadeOfTDGRDS implements CompoundsMadeOfTDG {
 
   private int compoundId;
   private List<Integer> madeOf; // Element ids
   private String name;
-  private String inhabits;
+  private double inventory;
 
   /**
    * Empty constructor drops and re-creates the table
    */
-  public CompoundsMadeOfTableDataGatewayRDS() {
+  public CompoundsMadeOfTDGRDS() {
     this.createTableCompoundMadeFrom();
   }
 
@@ -33,7 +33,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    * @param compoundId
    *          to search for
    */
-  public CompoundsMadeOfTableDataGatewayRDS(int compoundId) {
+  public CompoundsMadeOfTDGRDS(int compoundId) {
     this.createTableCompoundMadeFrom();
     String sql = "SELECT * FROM Chemical WHERE chemicalId = " + compoundId + ";";
 
@@ -44,7 +44,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
       rs.next();
 
       this.name = rs.getString("name");
-      this.inhabits = rs.getString("inhabits");
+      this.inventory = rs.getDouble("inventory");
       this.compoundId = compoundId;
 
     } catch (SQLException | DatabaseException e) {
@@ -60,14 +60,14 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    * @param name
    * @param inhabits
    */
-  public CompoundsMadeOfTableDataGatewayRDS(int compoundId, List<Integer> madeOf, String name, String inhabits) {
+  public CompoundsMadeOfTDGRDS(int compoundId, List<Integer> madeOf, String name, double inventory) {
     createTableCompoundMadeFrom();
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + "VALUES (?, ?, ?);");
       insertChemical.setInt(1, compoundId);
       insertChemical.setString(2, name);
-      insertChemical.setString(3, inhabits);
+      insertChemical.setDouble(3, inventory);
 
       insertChemical.execute();
 
@@ -83,7 +83,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
       this.compoundId = compoundId;
       this.madeOf = madeOf;
       this.name = name;
-      this.inhabits = inhabits;
+      this.inventory = inventory;
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -205,8 +205,8 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    *          to search for
    */
   @Override
-  public String getInhabits() {
-    return this.inhabits;
+  public double getInventory() {
+    return this.inventory;
   }
 
   @Override
@@ -225,8 +225,8 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   }
 
   @Override
-  public void setInhabits(String inhabits) {
-    this.inhabits = inhabits;
+  public void setInventory(double inventory) {
+    this.inventory = inventory;
   }
 
 }

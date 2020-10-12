@@ -1,4 +1,3 @@
-
 package datasource;
 
 import java.util.List;
@@ -9,6 +8,14 @@ import java.util.List;
  *
  */
 public interface MetalRDG {
+
+  public void createTableMetal();
+
+  public void dropTableMetal();
+
+  public void dropTableChemical();
+
+  public void dropAllTables();
   
   public void delete();
 
@@ -18,15 +25,11 @@ public interface MetalRDG {
    
    public String getName();
    
-   public String getInhabits();
+   public double getInventory();
    
    public int getMetalId();
    
    public int getDissolvedBy();
-   
-   public int getAtomicNumber();
-   
-   public double getAtomicMass();
 
    public void setMetalId(int metalId);
 
@@ -34,11 +37,7 @@ public interface MetalRDG {
 
    public void setName(String name);
 
-   public void setInhabits(String inhabits);
-   
-   public void setAtomicNumber(int atomicNumber);
-   
-   public void setAtomicMass(int atomicMass);
+   public void setInventory(double inventory);
 
 
 

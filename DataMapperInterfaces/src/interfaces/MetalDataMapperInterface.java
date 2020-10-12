@@ -6,21 +6,17 @@ import model.Metal;
 
 public interface MetalDataMapperInterface extends ChemicalDataMapperInterface{
   
-  //add using constructor (all instance variables)
+  public void addMetald(Metal metal);
   
-  //add using constructor(id)
+  public void deleteMetal(Metal metal);
   
-  public void addCompound();
+  public void updateMetal(int id, Metal newMetal);
   
-  public void deleteCompound();
-  
-  public void updateCompound();
-  
-  public Metal fetchMetal();
+  public Metal fetchMetal(int id);
   
   public List<Metal> getAllMetals();
   
-  public double getMolesRequiredToDissolve();
+  public double getMolesRequiredToDissolve(Metal metal);
   
 
 }
