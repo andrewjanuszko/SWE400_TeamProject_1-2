@@ -6,7 +6,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public interface CompoundsMadeOfTableDataGateway {
+public interface CompoundsMadeOfTDG {
 
   void createTableCompoundMadeFrom();
 
@@ -20,7 +20,7 @@ public interface CompoundsMadeOfTableDataGateway {
 
   String getCompoundName();
   
-  public String getInhabits();
+  public double getInventory();
   
   public void setCompoundId(int compoundId);
   
@@ -28,5 +28,5 @@ public interface CompoundsMadeOfTableDataGateway {
 
   public void setName(String name);
 
-  public void setInhabits(String inhabits);
+  public void setInventory(double inventory);
 }

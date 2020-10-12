@@ -7,7 +7,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public interface ElementRowDataGateway {
+public interface ElementRDG {
 
   public void createTableElement();
 
@@ -25,7 +25,7 @@ public interface ElementRowDataGateway {
   
   public void findByAtomicMass(double atomicMass);
 
-  public List<ElementRowDataGatewayRDS> findSetAtomicMass(double lowerLimit, double upperLimit);
+  public List<ElementRDGRDS> findSetAtomicMass(double lowerLimit, double upperLimit);
   
   public int getAtomicNumber();
 
@@ -33,7 +33,7 @@ public interface ElementRowDataGateway {
 
   public String getName();
 
-  public String getInhabits();
+  public double getInventory();
 
   public void setElementId(int elementId);
 
@@ -43,6 +43,6 @@ public interface ElementRowDataGateway {
   
   public void setName(String name);
   
-  public void setInhabits(String inhabits);
+  public void setInventory(double inventory);
 
 }

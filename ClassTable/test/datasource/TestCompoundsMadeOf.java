@@ -18,9 +18,9 @@ class TestCompoundsMadeOf extends DatabaseTest {
   @Test
   void testGetName() {
     // create tables
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    CompoundsMadeOfTableDataGateway com = new CompoundsMadeOfTableDataGatewayRDS();
+    ChemicalRDG chem = new ChemicalRDGRDS(); 
+    ElementRDG ele = new ElementRDGRDS();
+    CompoundsMadeOfTDG com = new CompoundsMadeOfTDGRDS();
     
     chem.dropTable();
     ele.dropTableElement();
@@ -31,12 +31,12 @@ class TestCompoundsMadeOf extends DatabaseTest {
     com.createTableCompoundMadeFrom();
 
     // initialize elements
-    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(55, 12, 5, "element1", "inhabits");
-    ElementRowDataGateway element2 = new ElementRowDataGatewayRDS(23, 44, 6, "element2", "inhabits");
-    ElementRowDataGateway element3 = new ElementRowDataGatewayRDS(61, 22, 2, "element3", "inhabits");
-    ElementRowDataGateway element4 = new ElementRowDataGatewayRDS(11, 5, 1, "element4", "inhabits");
-    ElementRowDataGateway element5 = new ElementRowDataGatewayRDS(14, 12, 2, "element5", "inhabits");
-    ElementRowDataGateway element6 = new ElementRowDataGatewayRDS(16, 15, 3, "element6", "inhabits");
+    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", "inhabits");
+    ElementRDG element2 = new ElementRDGRDS(23, 44, 6, "element2", "inhabits");
+    ElementRDG element3 = new ElementRDGRDS(61, 22, 2, "element3", "inhabits");
+    ElementRDG element4 = new ElementRDGRDS(11, 5, 1, "element4", "inhabits");
+    ElementRDG element5 = new ElementRDGRDS(14, 12, 2, "element5", "inhabits");
+    ElementRDG element6 = new ElementRDGRDS(16, 15, 3, "element6", "inhabits");
 
     List<Integer> madeOf1 = new ArrayList<Integer>();
     madeOf1.add(55);
@@ -49,17 +49,17 @@ class TestCompoundsMadeOf extends DatabaseTest {
     madeOf1.add(14);
 
     // initialize compounds
-    CompoundsMadeOfTableDataGateway compound1 = new CompoundsMadeOfTableDataGatewayRDS(1, madeOf1, "chemicalname1",
+    CompoundsMadeOfTDG compound1 = new CompoundsMadeOfTDGRDS(1, madeOf1, "chemicalname1",
         "inhabits1");
-    CompoundsMadeOfTableDataGateway compound2 = new CompoundsMadeOfTableDataGatewayRDS(2, madeOf2, "chemicalname2",
+    CompoundsMadeOfTDG compound2 = new CompoundsMadeOfTDGRDS(2, madeOf2, "chemicalname2",
         "inhabits2");
-    CompoundsMadeOfTableDataGateway compound3 = new CompoundsMadeOfTableDataGatewayRDS(3, madeOf3, "chemicalname3",
+    CompoundsMadeOfTDG compound3 = new CompoundsMadeOfTDGRDS(3, madeOf3, "chemicalname3",
         "inhabits2");
 
     // compound getters
-    CompoundsMadeOfTableDataGateway compoundsGet1 = new CompoundsMadeOfTableDataGatewayRDS(1);
-    CompoundsMadeOfTableDataGateway compoundsGet2 = new CompoundsMadeOfTableDataGatewayRDS(2);
-    CompoundsMadeOfTableDataGateway compoundsGet3 = new CompoundsMadeOfTableDataGatewayRDS(3);
+    CompoundsMadeOfTDG compoundsGet1 = new CompoundsMadeOfTDGRDS(1);
+    CompoundsMadeOfTDG compoundsGet2 = new CompoundsMadeOfTDGRDS(2);
+    CompoundsMadeOfTDG compoundsGet3 = new CompoundsMadeOfTDGRDS(3);
 
     assertEquals("chemicalname1", compoundsGet1.getCompoundName());
     assertEquals("chemicalname2", compoundsGet2.getCompoundName());
@@ -69,9 +69,9 @@ class TestCompoundsMadeOf extends DatabaseTest {
   @Test
   void testGetInhabits() {
     // create tables
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    CompoundsMadeOfTableDataGateway com = new CompoundsMadeOfTableDataGatewayRDS();
+    ChemicalRDG chem = new ChemicalRDGRDS(); 
+    ElementRDG ele = new ElementRDGRDS();
+    CompoundsMadeOfTDG com = new CompoundsMadeOfTDGRDS();
     
     chem.dropTable();
     ele.dropTableElement();
@@ -82,12 +82,12 @@ class TestCompoundsMadeOf extends DatabaseTest {
     com.createTableCompoundMadeFrom();
 
     // initialize elements
-    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(55, 12, 5, "element1", "inhabits");
-    ElementRowDataGateway element2 = new ElementRowDataGatewayRDS(23, 44, 6, "element2", "inhabits");
-    ElementRowDataGateway element3 = new ElementRowDataGatewayRDS(61, 22, 2, "element3", "inhabits");
-    ElementRowDataGateway element4 = new ElementRowDataGatewayRDS(11, 5, 1, "element4", "inhabits");
-    ElementRowDataGateway element5 = new ElementRowDataGatewayRDS(14, 12, 2, "element5", "inhabits");
-    ElementRowDataGateway element6 = new ElementRowDataGatewayRDS(16, 15, 3, "element6", "inhabits");
+    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", "inhabits");
+    ElementRDG element2 = new ElementRDGRDS(23, 44, 6, "element2", "inhabits");
+    ElementRDG element3 = new ElementRDGRDS(61, 22, 2, "element3", "inhabits");
+    ElementRDG element4 = new ElementRDGRDS(11, 5, 1, "element4", "inhabits");
+    ElementRDG element5 = new ElementRDGRDS(14, 12, 2, "element5", "inhabits");
+    ElementRDG element6 = new ElementRDGRDS(16, 15, 3, "element6", "inhabits");
 
     List<Integer> madeOf1 = new ArrayList<Integer>();
     madeOf1.add(55);
@@ -100,17 +100,17 @@ class TestCompoundsMadeOf extends DatabaseTest {
     madeOf1.add(14);
 
     // initialize compounds
-    CompoundsMadeOfTableDataGateway compound1 = new CompoundsMadeOfTableDataGatewayRDS(1, madeOf1, "chemicalname1",
+    CompoundsMadeOfTDG compound1 = new CompoundsMadeOfTDGRDS(1, madeOf1, "chemicalname1",
         "inhabits1");
-    CompoundsMadeOfTableDataGateway compound2 = new CompoundsMadeOfTableDataGatewayRDS(2, madeOf2, "chemicalname2",
+    CompoundsMadeOfTDG compound2 = new CompoundsMadeOfTDGRDS(2, madeOf2, "chemicalname2",
         "inhabits2");
-    CompoundsMadeOfTableDataGateway compound3 = new CompoundsMadeOfTableDataGatewayRDS(3, madeOf3, "chemicalname3",
+    CompoundsMadeOfTDG compound3 = new CompoundsMadeOfTDGRDS(3, madeOf3, "chemicalname3",
         "inhabits3");
 
     // compound getters
-    CompoundsMadeOfTableDataGateway compoundsGet1 = new CompoundsMadeOfTableDataGatewayRDS(1);
-    CompoundsMadeOfTableDataGateway compoundsGet2 = new CompoundsMadeOfTableDataGatewayRDS(2);
-    CompoundsMadeOfTableDataGateway compoundsGet3 = new CompoundsMadeOfTableDataGatewayRDS(3);
+    CompoundsMadeOfTDG compoundsGet1 = new CompoundsMadeOfTDGRDS(1);
+    CompoundsMadeOfTDG compoundsGet2 = new CompoundsMadeOfTDGRDS(2);
+    CompoundsMadeOfTDG compoundsGet3 = new CompoundsMadeOfTDGRDS(3);
 
     assertEquals("inhabits1", compoundsGet1.getInhabits());
     assertEquals("inhabits2", compoundsGet2.getInhabits());
@@ -121,9 +121,9 @@ class TestCompoundsMadeOf extends DatabaseTest {
   @Test
   void testFindSetElementid() {
     // Drop / Create tables
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    CompoundsMadeOfTableDataGateway com = new CompoundsMadeOfTableDataGatewayRDS();
+    ChemicalRDG chem = new ChemicalRDGRDS(); 
+    ElementRDG ele = new ElementRDGRDS();
+    CompoundsMadeOfTDG com = new CompoundsMadeOfTDGRDS();
     
     chem.dropTable();
     ele.dropTableElement();
@@ -134,15 +134,15 @@ class TestCompoundsMadeOf extends DatabaseTest {
     com.createTableCompoundMadeFrom();
     
     // initialize elements
-    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(55, 12, 5, "element1", "inhabits");
-    ElementRowDataGateway element2 = new ElementRowDataGatewayRDS(23, 44, 6, "element2", "inhabits");
+    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", "inhabits");
+    ElementRDG element2 = new ElementRDGRDS(23, 44, 6, "element2", "inhabits");
 
     List<Integer> madeOf = new ArrayList<Integer>();
     madeOf.add(55);
     madeOf.add(23);
 
     //initialize compounds
-    CompoundsMadeOfTableDataGateway compounds = new CompoundsMadeOfTableDataGatewayRDS(1, madeOf, "chemicalname1",
+    CompoundsMadeOfTDG compounds = new CompoundsMadeOfTDGRDS(1, madeOf, "chemicalname1",
         "inhabits1");
 
     List<Integer> list = compounds.findSetElementId(1);
@@ -155,9 +155,9 @@ class TestCompoundsMadeOf extends DatabaseTest {
   @Test
   void TestFindCompoundId() {
     //create tables
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    CompoundsMadeOfTableDataGateway com = new CompoundsMadeOfTableDataGatewayRDS();
+    ChemicalRDG chem = new ChemicalRDGRDS(); 
+    ElementRDG ele = new ElementRDGRDS();
+    CompoundsMadeOfTDG com = new CompoundsMadeOfTDGRDS();
     
     chem.dropTable();
     ele.dropTableElement();
@@ -168,8 +168,8 @@ class TestCompoundsMadeOf extends DatabaseTest {
     com.createTableCompoundMadeFrom();
     
     //initialize elements
-    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(55, 12, 5, "element1", "inhabits");
-    ElementRowDataGateway element2 = new ElementRowDataGatewayRDS(23, 44, 6, "element2", "inhabits");
+    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", "inhabits");
+    ElementRDG element2 = new ElementRDGRDS(23, 44, 6, "element2", "inhabits");
 
     List<Integer> madeOf1 = new ArrayList<Integer>();
     madeOf1.add(55);
@@ -177,8 +177,8 @@ class TestCompoundsMadeOf extends DatabaseTest {
     madeOf2.add(23);
 
     //initialize compounds
-    CompoundsMadeOfTableDataGateway compound1 = new CompoundsMadeOfTableDataGatewayRDS(1, madeOf1, "chemicalname1",
-        "inhabits1"), compound2 = new CompoundsMadeOfTableDataGatewayRDS(2, madeOf2, "chemicalname2", "inhabits2");
+    CompoundsMadeOfTDG compound1 = new CompoundsMadeOfTDGRDS(1, madeOf1, "chemicalname1",
+        "inhabits1"), compound2 = new CompoundsMadeOfTDGRDS(2, madeOf2, "chemicalname2", "inhabits2");
 
     // Compound1
     List<Integer> list1 = compound1.findSetElementId(1);

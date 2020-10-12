@@ -1,4 +1,3 @@
-
 package datasource;
 
 import java.sql.PreparedStatement;
@@ -18,14 +17,13 @@ public class MetalRDGRDS implements MetalRDG {
   private int metalId;
   private int dissolvedById;
   private String name;
-  private String inhabits;
-  private int atomicNumber;
-  private double atomicMass;
+  private double inventory;
 
   /**
    * empty constructor drops the table and recreates it
    */
   public MetalRDGRDS() {
+    createTableMetal();
   }
 
   /**
@@ -34,27 +32,22 @@ public class MetalRDGRDS implements MetalRDG {
    * @param id
    */
   public MetalRDGRDS(int id) {
+    this.createTableMetal();
     this.metalId = id;
 
     String sqlChem = "SELECT * FROM Chemical WHERE chemicalId = " + id + ";";
-    String sqlMetal = "SELECT * FROM Metal WHERE metalId = " + id + ";";
-    String sqlElement = "SELECT * FROM Element WHERE elementId = " + id + ";";
+    String sqlElement = "SELECT * FROM Metal WHERE metalId = " + id + ";";
     try {
 
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sqlMetal);
+      ResultSet rs = statement.executeQuery(sqlElement);
       rs.next();
       this.dissolvedById = rs.getInt("dissolvedBy");
 
       rs = statement.executeQuery(sqlChem);
       rs.next();
       this.name = rs.getString("name");
-      this.inhabits = rs.getString("inhabits");
-
-      rs = statement.executeQuery(sqlElement);
-      rs.next();
-      this.atomicNumber = rs.getInt("atomicNumber");
-      this.atomicMass = rs.getDouble("atomicMass");
+      this.inventory = rs.getDouble("inventory");
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -72,30 +65,84 @@ public class MetalRDGRDS implements MetalRDG {
    * @param inhabits
    */
   public MetalRDGRDS(int id, int dissolvedById, String name, String inhabits) {
+    this.createTableMetal();
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
       insertChemical.setInt(1, id);
       insertChemical.setString(2, name);
       insertChemical.setString(3, inhabits);
-
-      PreparedStatement insertMetal = DatabaseManager.getSingleton().getConnection()
+      PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Metal (metalId, dissolvedBy)" + "VALUES (?, ?);");
-      insertMetal.setInt(1, id);
-      insertMetal.setInt(2, dissolvedById);
 
-      PreparedStatement insertElement = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Element (atomicNumber, atomicMass)" + "VALUES (?, ?);");
-      insertElement.setInt(1, this.atomicNumber);
-      insertElement.setDouble(2, this.atomicMass);
+      insert.setInt(1, id);
+      insert.setInt(2, dissolvedById);
 
       insertChemical.execute();
-      insertMetal.execute();
-      insertElement.execute();
+      insert.execute();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert");
     }
+  }
+
+  @Override
+  public void createTableMetal() {
+    String createTable = "CREATE TABLE IF NOT EXISTS Metal" + "(" + "metalId INT NOT NULL, " + "dissolvedBy INT,"
+        + "FOREIGN KEY(dissolvedBy) REFERENCES Acid(acidId)," + "FOREIGN KEY(metalId) REFERENCES Chemical(chemicalId)"
+        + ");";
+
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      // Drop the table if exists first
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      // Create new Monitorings Table
+      statement.executeUpdate(createTable);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * drop metal table if it exists
+   */
+  @Override
+  public void dropTableMetal() {
+    String dropTable = "DROP TABLE IF EXISTS Metal;";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping metal table");
+    }
+  }
+
+  /**
+   * Drop the chemical table if it exists.
+   */
+
+  @Override
+  public void dropTableChemical() {
+    String dropTable = "DROP TABLE IF EXISTS Chemical;";
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(dropTable);
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error dropping chemical table");
+    }
+  }
+
+  /**
+   * Drop metal and all tables connected (metal & chemical)
+   */
+  @Override
+  public void dropAllTables() {
+    dropTableMetal();
+    dropTableChemical();
   }
 
   /**
@@ -106,7 +153,6 @@ public class MetalRDGRDS implements MetalRDG {
 
     String sqlMetal = "DELETE FROM Metal WHERE metalId = " + this.metalId + ";";
     String sqlChem = "DELETE FROM Chemical WHERE chemicalId = " + this.metalId + ";";
-    String sqlElement = "DELETE FROM Element WHERE elementId = " + this.metalId + ";";
     try {
 
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -126,24 +172,18 @@ public class MetalRDGRDS implements MetalRDG {
   public void update() {
     try {
       PreparedStatement updateMetal = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("UPDATE Metal SET dissolvedById = ? WHERE metalId = ?;");
+          .prepareStatement("UPDATE Metal SET dissolvedById = ? WHERE elementId = ?;");
       updateMetal.setInt(1, this.dissolvedById);
       updateMetal.setInt(2, this.metalId);
 
       PreparedStatement updateChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("UPDATE Chemical SET name = ?, inhabits = ? WHERE chemicalId = ?;");
+          .prepareStatement("UPDATE Chemical SET name = ?, inventory = ? WHERE chemicalId = ?;");
       updateChemical.setString(1, this.name);
-      updateChemical.setString(2, this.inhabits);
+      updateChemical.setDouble(2, this.inventory);
       updateChemical.setInt(3, this.metalId);
-
-      PreparedStatement updateElement = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("UPDATE Element SET atomicNumber = ?, atomicMass = ? WHERE elementId = ?;");
-      updateMetal.setInt(1, this.atomicNumber);
-      updateMetal.setDouble(2, this.atomicMass);
 
       updateMetal.execute();
       updateChemical.execute();
-      updateElement.execute();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to update");
@@ -174,7 +214,7 @@ public class MetalRDGRDS implements MetalRDG {
     }
     return results;
   }
-
+  
   /**
    * getter for name
    */
@@ -187,15 +227,14 @@ public class MetalRDGRDS implements MetalRDG {
    * getter for inhabits
    */
   @Override
-  public String getInhabits() {
-    return this.inhabits;
+  public double getInventory() {
+    return this.inventory;
   }
 
   @Override
   public int getMetalId() {
     return metalId;
   }
-
   /**
    * getter for name
    */
@@ -220,30 +259,10 @@ public class MetalRDGRDS implements MetalRDG {
   }
 
   @Override
-  public void setInhabits(String inhabits) {
-    this.inhabits = inhabits;
+  public void setInventory(double inventory) {
+    this.inventory = inventory;
   }
 
-  @Override
-  public int getAtomicNumber() {
-    return this.atomicNumber;
-  }
 
-  @Override
-  public double getAtomicMass() {
-    return this.atomicMass;
-  }
-
-  @Override
-  public void setAtomicNumber(int atomicNumber) {
-    this.atomicNumber = atomicNumber;
-
-  }
-
-  @Override
-  public void setAtomicMass(int atomicMass) {
-    this.atomicMass = atomicMass;
-
-  }
-
+  
 }
