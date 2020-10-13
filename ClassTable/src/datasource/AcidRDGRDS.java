@@ -176,7 +176,7 @@ public class AcidRDGRDS implements AcidRDG {
    * Get all acids in the database. 
    */
   public List<AcidDTO> getAll() {
-    String sql = "SELECT * FROM ACID INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId";
+    String sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId";
     ArrayList<AcidDTO> acids = new ArrayList<AcidDTO>();
     
     try {
@@ -192,8 +192,6 @@ public class AcidRDGRDS implements AcidRDG {
     }
     return acids;
   }
-  
-  
   
   /**
    * Return solute of acid

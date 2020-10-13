@@ -164,6 +164,26 @@ public class BaseRDGRDS implements BaseRDG {
   }
   
   /**
+   * Get all bases in the database. 
+   */
+  public List<BaseDTO> getAll() {
+    String sql = "SELECT * FROM Base INNER JOIN Chemical WHERE Base.baseId = Chemical.chemicalId";
+    ArrayList<BaseDTO> bases = new ArrayList<BaseDTO>();
+    
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sql);
+
+      while (rs.next()) {
+        bases.add(new BaseDTO(rs.getInt("baseId"), rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory")));
+      }
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+    return bases;
+  }
+  
+  /**
    * Get solute.
    */
   @Override

@@ -141,6 +141,9 @@ class TestAcid extends DatabaseTest {
     assertEquals("acidname6", acidGet.get(1).getName());
   }
   
+  /**
+   * Test the getAll function inside AcidRDGRDS
+   */
   @Test
   static void testGetAll() {
     AcidRDG getter = new AcidRDGRDS(); // Empty AcidRDGRDS

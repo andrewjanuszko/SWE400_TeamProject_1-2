@@ -143,6 +143,24 @@ class TestBase extends DatabaseTest {
     assertEquals("basename5", baseGet.get(0).getName());
     assertEquals("basename6", baseGet.get(1).getName());
   }
+  
+  /**
+   * Test the getAll function in BaseRDGRDS
+   */
+  @Test
+  static void testGetAll() {
+    BaseRDG getter = new BaseRDGRDS(); // Empty BaseRDGRDS
+    List<BaseDTO> getAll = getter.getAll(); // Get all elements
+    
+    // Assert that we have 6 bases, and that they are the right ids. 
+    assertEquals(6, getAll.size());
+    assertEquals(11, getAll.get(0).getBaseId());
+    assertEquals(12, getAll.get(1).getBaseId());
+    assertEquals(13, getAll.get(2).getBaseId());
+    assertEquals(14, getAll.get(3).getBaseId());
+    assertEquals(15, getAll.get(4).getBaseId());
+    assertEquals(16, getAll.get(5).getBaseId());
+  }
 
   /**
    * Run every test function in this class
@@ -156,6 +174,7 @@ class TestBase extends DatabaseTest {
       testDelete();
       testUpdate();
       testGetSet();
+      testGetAll();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
