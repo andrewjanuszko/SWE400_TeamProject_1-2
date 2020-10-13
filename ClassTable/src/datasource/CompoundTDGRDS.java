@@ -13,7 +13,7 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public class CompoundsMadeOfTDGRDS implements CompoundsMadeOfTDG {
+public class CompoundTDGRDS implements CompoundTDG {
 
   private int compoundId;
   private List<Integer> madeOf; // Element ids
@@ -23,8 +23,7 @@ public class CompoundsMadeOfTDGRDS implements CompoundsMadeOfTDG {
   /**
    * Empty constructor drops and re-creates the table
    */
-  public CompoundsMadeOfTDGRDS() {
-    this.createTableCompoundMadeFrom();
+  public CompoundTDGRDS() {
   }
 
   /**
@@ -33,8 +32,7 @@ public class CompoundsMadeOfTDGRDS implements CompoundsMadeOfTDG {
    * @param compoundId
    *          to search for
    */
-  public CompoundsMadeOfTDGRDS(int compoundId) {
-    this.createTableCompoundMadeFrom();
+  public CompoundTDGRDS(int compoundId) {
     String sql = "SELECT * FROM Chemical WHERE chemicalId = " + compoundId + ";";
 
     try {
@@ -60,8 +58,7 @@ public class CompoundsMadeOfTDGRDS implements CompoundsMadeOfTDG {
    * @param name
    * @param inhabits
    */
-  public CompoundsMadeOfTDGRDS(int compoundId, List<Integer> madeOf, String name, double inventory) {
-    createTableCompoundMadeFrom();
+  public CompoundTDGRDS(int compoundId, List<Integer> madeOf, String name, double inventory) {
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + "VALUES (?, ?, ?);");
@@ -91,39 +88,6 @@ public class CompoundsMadeOfTDGRDS implements CompoundsMadeOfTDG {
     }
   }
 
-  @Override
-  public void createTableCompoundMadeFrom() {
-    String createTable = "CREATE TABLE IF NOT EXISTS CompoundMadeFromElement(" + "compoundId INT NOT NULL, "
-        + "elementId INT NOT NULL, " + "FOREIGN KEY (compoundId) REFERENCES Chemical(chemicalId), "
-        + "FOREIGN KEY (elementId) REFERENCES Element(elementId));";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-
-      // Drop the table if exists first
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      //
-      statement.executeUpdate(createTable);
-
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to create/drop CompoundMadeFromElement");
-    }
-  }
-
-  @Override
-  public void dropTableCompoundMadeFromElement() {
-    String dropTable = "DROP TABLE IF EXISTS CompoundMadeFromElement;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping Compound table");
-    }
-  }
-
   /**
    * Get all compoundId's of elementId
    * 
@@ -131,7 +95,7 @@ public class CompoundsMadeOfTDGRDS implements CompoundsMadeOfTDG {
    *          to search for
    */
   @Override
-  public ArrayList<CompoundDTO> findSetCompoundId(int elementId) {
+  public ArrayList<CompoundDTO> findMakes(int elementId) {
     String sql = "SELECT * FROM CompoundMadeFromElement WHERE elementId = " + elementId + ";";
     ArrayList<CompoundDTO> compounds = new ArrayList<CompoundDTO>();
     try {
@@ -155,8 +119,8 @@ public class CompoundsMadeOfTDGRDS implements CompoundsMadeOfTDG {
    *          to search for
    */
   @Override
-  public ArrayList<CompoundDTO> findSetElementId(int compoundId) {
-    String sql = "SELECT * FROM CompoundMadeFromElement WHERE compoundId = " + compoundId + ";";
+  public ArrayList<CompoundDTO> findMadeOf(int compoundId) {
+    String sql = "SELECT * FROM Compound WHERE compoundId = " + compoundId + ";";
     ArrayList<CompoundDTO> compounds = new ArrayList<CompoundDTO>();
 
     try {

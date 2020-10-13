@@ -27,7 +27,6 @@ public class ElementRDGRDS implements ElementRDG {
    * Empty constructor drops and recreates table
    */
   public ElementRDGRDS() {
-    createTableElement();
   }
 
   /**
@@ -35,7 +34,6 @@ public class ElementRDGRDS implements ElementRDG {
    * @param id
    */
   public ElementRDGRDS(int id) {
-    this.createTableElement();
     this.elementId = id;
 
     String sqlChem = "SELECT * FROM Chemical INNER JOIN Element ON Chemical.chemicalId = " + id + ";";
@@ -69,7 +67,7 @@ public class ElementRDGRDS implements ElementRDG {
    * @param inhabits
    */
   public ElementRDGRDS(int id, int atomicNum, int atomicMass, String name, double inventory) {
-    this.createTableElement();
+    
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + "VALUES (?, ?, ?);");
@@ -89,71 +87,6 @@ public class ElementRDGRDS implements ElementRDG {
       e.printStackTrace();
       System.out.println("Failed to insert");
     }
-  }
-
-  /**
-   * Create table
-   * Checking if the table exists already is included
-   */
-  @Override
-  public void createTableElement() {
-    String createTable = "CREATE TABLE IF NOT EXISTS Element" + "(" + "elementId INT NOT NULL, " + "atomicNumber INT, "
-        + "atomicMass DOUBLE, " + "FOREIGN KEY(elementId) REFERENCES Chemical(chemicalId)" + ");";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-
-      // Drop the table if exists first
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-
-      // Create tables
-      statement.executeUpdate(createTable);
-
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to create/drop element table");
-    }
-  }
-
-
-  @Override
-  public void dropTableElement() {
-    String dropTable = "DROP TABLE IF EXISTS Element;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping element table");
-    }
-  }
-
-  /**
-   * Drop the chemical table if it exists.
-   */
-
-  @Override
-  public void dropTableChemical() {
-    String dropTable = "DROP TABLE IF EXISTS Chemical;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping chemical table");
-    }
-  }
-
-  /**
-   * Drop Element and all tables connected (element & chemical)
-   */
-
-  @Override
-  public void dropAllTables() {
-    dropTableElement();
-    dropTableChemical();
   }
 
   /**

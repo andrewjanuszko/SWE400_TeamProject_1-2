@@ -8,14 +8,6 @@ import java.util.List;
  *
  */
 public interface ElementRDG {
-
-  public void createTableElement();
-
-  public void dropTableElement();
-
-  public void dropTableChemical();
-
-  public void dropAllTables();
   
   public void delete();
 

@@ -21,7 +21,7 @@ public class ChemicalRDGRDS implements ChemicalRDG {
    * Create table
    */
   public ChemicalRDGRDS() {
-    createTable();
+    
   }
   
   /**
@@ -29,7 +29,7 @@ public class ChemicalRDGRDS implements ChemicalRDG {
    * @param id to search for
    */
   public ChemicalRDGRDS(int id) throws SQLException, DatabaseException {
-    createTable();
+    
     // Select statement
     String getChem = new String("SELECT * FROM Chemical WHERE chemicalId = " + id + ";");
 
@@ -51,7 +51,7 @@ public class ChemicalRDGRDS implements ChemicalRDG {
    * @param inhabits
    */
   public ChemicalRDGRDS(int id, String name, double inventory) {
-    createTable();
+    
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -72,38 +72,6 @@ public class ChemicalRDGRDS implements ChemicalRDG {
     this.id = id;
     this.name = name;
     this.inventory = inventory;
-  }
-  
-  /**
-   * Create chemical table if it does not already exist.
-   */
-  public void createTable() {
-    String createChem = "CREATE TABLE IF NOT EXISTS Chemical" + "(" + "chemicalId INT NOT NULL, " + "name VARCHAR(20), "
-        + "inventory DOUBLE, " + "PRIMARY KEY (chemicalId)" + ");";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate(createChem);
-      
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to create chemical table");
-    }
-  }
-  
-  /**
-   * Drop the chemical table if it exists.
-   */
-  public void dropTable() {
-    String dropTable = "DROP TABLE IF EXISTS Chemical;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping chemical table");
-    }
   }
 
   /**
@@ -127,7 +95,7 @@ public class ChemicalRDGRDS implements ChemicalRDG {
    * Update the database.
    */
   public void update() {
-    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inhabits = ? WHERE chemicalID = " + id
+    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inventory = ? WHERE chemicalID = " + id
         + ";";
 
     try {
