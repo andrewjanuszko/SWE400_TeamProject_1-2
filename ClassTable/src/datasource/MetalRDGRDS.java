@@ -62,16 +62,16 @@ public class MetalRDGRDS implements MetalRDG {
    * @param id
    * @param dissolvedById
    * @param name
-   * @param inhabits
+   * @param inventory
    */
-  public MetalRDGRDS(int id, int dissolvedById, String name, String inhabits) {
+  public MetalRDGRDS(int id, int dissolvedById, String name, double inventory) {
     this.createTableMetal();
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
       insertChemical.setInt(1, id);
       insertChemical.setString(2, name);
-      insertChemical.setString(3, inhabits);
+      insertChemical.setDouble(3, inventory);
       PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Metal (metalId, dissolvedBy)" + "VALUES (?, ?);");
 

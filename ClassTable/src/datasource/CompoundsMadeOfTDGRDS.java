@@ -131,9 +131,9 @@ public class CompoundsMadeOfTDGRDS implements CompoundsMadeOfTDG {
    *          to search for
    */
   @Override
-  public List<CompoundDTO> findSetCompoundId(int elementId) {
+  public ArrayList<CompoundDTO> findSetCompoundId(int elementId) {
     String sql = "SELECT * FROM CompoundMadeFromElement WHERE elementId = " + elementId + ";";
-    List<CompoundDTO> compounds = new ArrayList<>();
+    ArrayList<CompoundDTO> compounds = new ArrayList<CompoundDTO>();
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
@@ -155,9 +155,9 @@ public class CompoundsMadeOfTDGRDS implements CompoundsMadeOfTDG {
    *          to search for
    */
   @Override
-  public List<CompoundDTO> findSetElementId(int compoundId) {
+  public ArrayList<CompoundDTO> findSetElementId(int compoundId) {
     String sql = "SELECT * FROM CompoundMadeFromElement WHERE compoundId = " + compoundId + ";";
-    List<CompoundDTO> compounds = new ArrayList<>();
+    ArrayList<CompoundDTO> compounds = new ArrayList<CompoundDTO>();
 
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
