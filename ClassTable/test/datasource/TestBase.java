@@ -27,10 +27,11 @@ class TestBase extends DatabaseTest {
     base.createTable();
     
     BaseRDG
-        base1 = new BaseRDGRDS(1, 2, "basename1", "baseinhabits1"),
-        base2 = new BaseRDGRDS(2, 4, "basename2", "baseinhabits2"),
-        base3 = new BaseRDGRDS(3, 6, "basename3", "baseinhabits3"),
-        base1_fetch = new BaseRDGRDS(1), base2_fetch = new BaseRDGRDS(2),
+        base1 = new BaseRDGRDS(1, 2, "basename1", 1.1),
+        base2 = new BaseRDGRDS(2, 4, "basename2", 1.2),
+        base3 = new BaseRDGRDS(3, 6, "basename3", 1.3),
+        base1_fetch = new BaseRDGRDS(1), 
+        base2_fetch = new BaseRDGRDS(2),
         base3_fetch = new BaseRDGRDS(3);
 
     // Testing to see if new gateways can properly fetch
@@ -44,16 +45,17 @@ class TestBase extends DatabaseTest {
   @Test
   void testGetInhabits() throws SQLException, DatabaseException {
     BaseRDG initialize = new BaseRDGRDS(),
-        base1 = new BaseRDGRDS(1, 2, "basename1", "baseihabits1"),
-        base2 = new BaseRDGRDS(2, 4, "basename2", "baseihabits2"),
-        base3 = new BaseRDGRDS(3, 6, "basename3", "baseihabits3"),
-        base1_fetch = new BaseRDGRDS(1), base2_fetch = new BaseRDGRDS(2),
+        base1 = new BaseRDGRDS(1, 2, "basename1", 1.1),
+        base2 = new BaseRDGRDS(2, 4, "basename2", 1.2),
+        base3 = new BaseRDGRDS(3, 6, "basename3", 1.3),
+        base1_fetch = new BaseRDGRDS(1), 
+        base2_fetch = new BaseRDGRDS(2),
         base3_fetch = new BaseRDGRDS(3);
 
     // Testing to see if new gateways can properly fetch
-    assertEquals("baseihabits1", base1_fetch.getInhabits());
-    assertEquals("baseihabits2", base2_fetch.getInhabits());
-    assertEquals("baseihabits3", base3_fetch.getInhabits());
+    assertEquals(1.1, base1_fetch.getInventory(), 0.1);
+    assertEquals(1.2, base2_fetch.getInventory(), 0.1);
+    assertEquals(1.3, base3_fetch.getInventory(), 0.1);
 
     initialize.dropAllTables();
   }
@@ -61,10 +63,11 @@ class TestBase extends DatabaseTest {
   @Test
   void testGetSolute() throws SQLException, DatabaseException {
     BaseRDG initialize = new BaseRDGRDS(),
-        base1 = new BaseRDGRDS(1, 2, "basename1", "baseihabits1"),
-        base2 = new BaseRDGRDS(2, 4, "basename2", "baseihabits2"),
-        base3 = new BaseRDGRDS(3, 6, "basename3", "baseihabits3"),
-        base1_fetch = new BaseRDGRDS(1), base2_fetch = new BaseRDGRDS(2),
+        base1 = new BaseRDGRDS(1, 2, "basename1", 1.1),
+        base2 = new BaseRDGRDS(2, 4, "basename2", 1.2),
+        base3 = new BaseRDGRDS(3, 6, "basename3", 1.3),
+        base1_fetch = new BaseRDGRDS(1), 
+        base2_fetch = new BaseRDGRDS(2),
         base3_fetch = new BaseRDGRDS(3);
 
     // Testing to see if new gateways can properly fetch
@@ -81,7 +84,7 @@ class TestBase extends DatabaseTest {
     initialize.dropAllTables();
     
     BaseRDG
-        base_setter = new BaseRDGRDS(1, 2, "basename1", "baseinhabits1"),
+        base_setter = new BaseRDGRDS(1, 2, "basename1", 1.1),
         base_getter = new BaseRDGRDS(1);
     
     // Test solute
@@ -99,11 +102,11 @@ class TestBase extends DatabaseTest {
     assertEquals("basename2", base_getter.getName());
     
     // Test inhabits
-    assertEquals("baseinhabits1", base_getter.getInhabits());
-    base_setter.setInhabits("baseinhabits2");
+    assertEquals(1.1, base_getter.getInventory(), 0.1);
+    base_setter.setInventory(1.3);
     base_setter.update();
     base_getter = new BaseRDGRDS(1);
-    assertEquals("baseinhabits2", base_getter.getInhabits());
+    assertEquals(1.3, base_getter.getInventory(), 0.1);
     
     initialize.dropAllTables();
   }
@@ -111,11 +114,11 @@ class TestBase extends DatabaseTest {
   @Test
   void testDelete() {
     BaseRDG createBase = new BaseRDGRDS(),
-        base = new BaseRDGRDS(1, 2, "chemname1", "cheminhabits1");
+        base = new BaseRDGRDS(1, 2, "chemname1", 1.1);
     
     // Ensure it has been added 
     assertEquals("chemname1", base.getName());
-    assertEquals("cheminhabits1", base.getInhabits());
+    assertEquals(1.1, base.getInventory(), 0.1);
     
     base.delete();
     
@@ -134,8 +137,8 @@ class TestBase extends DatabaseTest {
     BaseRDG createBase = new BaseRDGRDS();
     createBase.dropAllTables();
     ChemicalRDG createChemical = new ChemicalRDGRDS();
-    BaseRDG acid1 = new BaseRDGRDS(1, 15, "chemicalname1", "inhabits1");
-    BaseRDG acid2 = new BaseRDGRDS(2, 15, "chemicalname2", "inhabits2");
+    BaseRDG acid1 = new BaseRDGRDS(1, 15, "chemicalname1", 1.1);
+    BaseRDG acid2 = new BaseRDGRDS(2, 15, "chemicalname2", 1.2);
     
     BaseRDG getter = new BaseRDGRDS();
     List<BaseRDGRDS> acidGet = getter.findSet(15);
@@ -143,8 +146,8 @@ class TestBase extends DatabaseTest {
     assertEquals("chemicalname1", acidGet.get(0).getName());
     assertEquals("chemicalname2", acidGet.get(1).getName());
     
-    BaseRDG acid4 = new BaseRDGRDS(4, 32, "chemicalname4", "inhabits4");
-    BaseRDG acid6 = new BaseRDGRDS(6, 32, "chemicalname6", "inhabits6");
+    BaseRDG acid4 = new BaseRDGRDS(4, 32, "chemicalname4", 1.3);
+    BaseRDG acid6 = new BaseRDGRDS(6, 32, "chemicalname6", 1.4);
     
     acidGet = getter.findSet(32);
     

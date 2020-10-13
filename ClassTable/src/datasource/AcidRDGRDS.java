@@ -62,7 +62,7 @@ public class AcidRDGRDS implements AcidRDG {
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + " VALUES (?, ?, ?);");
       insertChemical.setInt(1, id);
       insertChemical.setString(2, name);
-      insertChemical.setString(3, inhabits);
+      insertChemical.setDouble(3, inventory);
       
       // Insert Acid
       PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
@@ -89,7 +89,7 @@ public class AcidRDGRDS implements AcidRDG {
    */
   public void createTable() {
     String createChem = "CREATE TABLE IF NOT EXISTS Chemical" + "(" + "chemicalId INT NOT NULL, " + "name VARCHAR(20), "
-        + "inhabits VARCHAR(20), " + "PRIMARY KEY (chemicalId)" + ");",
+        + "inventory DOUBLE, " + "PRIMARY KEY (chemicalId)" + ");",
         createAcid = "CREATE TABLE IF NOT EXISTS Acid" + "(acidId INT NOT NULL, " + 
         "solute INT, " + "FOREIGN KEY(acidId) REFERENCES Chemical(chemicalId)" + ");";
 

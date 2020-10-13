@@ -25,9 +25,9 @@ class TestChemical extends DatabaseTest {
   @Test
   void testGetName() throws SQLException, DatabaseException {
     ChemicalRDG initialize = new ChemicalRDGRDS(),
-        chem1 = new ChemicalRDGRDS(1, "chemname1", "cheminhabits1"),
-        chem2 = new ChemicalRDGRDS(2, "chemname2", "cheminhabits2"),
-        chem3 = new ChemicalRDGRDS(3, "chemname3", "cheminhabits3"),
+        chem1 = new ChemicalRDGRDS(1, "chemname1", 1.1),
+        chem2 = new ChemicalRDGRDS(2, "chemname2", 1.2),
+        chem3 = new ChemicalRDGRDS(3, "chemname3", 1.3),
         chem1_fetch = new ChemicalRDGRDS(1), chem2_fetch = new ChemicalRDGRDS(2),
         chem3_fetch = new ChemicalRDGRDS(3);
 
@@ -52,21 +52,21 @@ class TestChemical extends DatabaseTest {
   @Test
   void testGetInhabits() throws SQLException, DatabaseException {
     ChemicalRDG initialize = new ChemicalRDGRDS(),
-        chem1 = new ChemicalRDGRDS(1, "chemname1", "cheminhabits1"),
-        chem2 = new ChemicalRDGRDS(2, "chemname2", "cheminhabits2"),
-        chem3 = new ChemicalRDGRDS(3, "chemname3", "cheminhabits3"),
+        chem1 = new ChemicalRDGRDS(1, "chemname1", 1.1),
+        chem2 = new ChemicalRDGRDS(2, "chemname2", 1.2),
+        chem3 = new ChemicalRDGRDS(3, "chemname3", 1.3),
         chem1_fetch = new ChemicalRDGRDS(1), chem2_fetch = new ChemicalRDGRDS(2),
         chem3_fetch = new ChemicalRDGRDS(3);
 
     // Testing to see if they still hold values after adding
-    assertEquals("cheminhabits1", chem1.getInhabits());
-    assertEquals("cheminhabits2", chem2.getInhabits());
-    assertEquals("cheminhabits3", chem3.getInhabits());
+    assertEquals(1.1, chem1.getInventory(), 0.1);
+    assertEquals(1.2, chem2.getInventory(), 0.1);
+    assertEquals(1.3, chem3.getInventory(), 0.1);
 
     // Testing to see if new gateways can properly fetch
-    assertEquals("cheminhabits1", chem1_fetch.getInhabits());
-    assertEquals("cheminhabits2", chem2_fetch.getInhabits());
-    assertEquals("cheminhabits3", chem3_fetch.getInhabits());
+    assertEquals(1.1, chem1_fetch.getInventory(), 0.1);
+    assertEquals(1.2, chem2_fetch.getInventory(), 0.1);
+    assertEquals(1.3, chem3_fetch.getInventory(), 0.1);
 
     initialize.dropTable();
   }
@@ -77,7 +77,7 @@ class TestChemical extends DatabaseTest {
   @Test
   void testUpdate() {
     ChemicalRDG initialize = new ChemicalRDGRDS(),
-        chem = new ChemicalRDGRDS(1, "chemname1", "cheminhabits1");
+        chem = new ChemicalRDGRDS(1, "chemname1", 1.1);
     
     // Test name
     assertEquals("chemname1", chem.getName());
@@ -86,10 +86,10 @@ class TestChemical extends DatabaseTest {
     assertEquals("chemname2", chem.getName());
     
     // Test inhabits
-    assertEquals("cheminhabits1", chem.getInhabits());
-    chem.setInhabits("cheminhabits2");
+    assertEquals(1.1, chem.getInventory(), 0.1);
+    chem.setInventory(1.2);
     chem.update();
-    assertEquals("cheminhabits2", chem.getInhabits());
+    assertEquals(1.2, chem.getInventory(), 0.1);
     
     initialize.dropTable();
   }
@@ -100,11 +100,11 @@ class TestChemical extends DatabaseTest {
   @Test
   void testDelete() {
     ChemicalRDG initialize = new ChemicalRDGRDS(),
-        chem = new ChemicalRDGRDS(1, "chemname1", "cheminhabits1");
+        chem = new ChemicalRDGRDS(1, "chemname1", 1.1);
     
     // Ensure it has been added
     assertEquals("chemname1", chem.getName());
-    assertEquals("cheminhabits1", chem.getInhabits());
+    assertEquals(1.1, chem.getInventory(), 0.1);
     
     chem.delete();
     

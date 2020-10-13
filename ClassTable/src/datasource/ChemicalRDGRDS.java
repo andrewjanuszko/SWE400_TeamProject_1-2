@@ -127,7 +127,7 @@ public class ChemicalRDGRDS implements ChemicalRDG {
    * Update the database.
    */
   public void update() {
-    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inhabits = ? WHERE chemicalID = " + id
+    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inventory = ? WHERE chemicalID = " + id
         + ";";
 
     try {
