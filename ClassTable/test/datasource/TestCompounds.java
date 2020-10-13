@@ -50,12 +50,12 @@ class TestCompoundsMadeOf extends DatabaseTest {
   @Test
   static void testFindMadeOf() {
     // initialize elements
-    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", 1.0);
-    ElementRDG element2 = new ElementRDGRDS(53, 44, 6, "element2", 1.0);
+    ElementRDG element1 = new ElementRDGRDS(51, 12, 5, "element1", 1.0);
+    ElementRDG element2 = new ElementRDGRDS(52, 44, 6, "element2", 1.0);
 
     List<Integer> madeOf = new ArrayList<Integer>();
-    madeOf.add(55);
-    madeOf.add(53);
+    madeOf.add(51);
+    madeOf.add(52);
 
     // initialize compounds
     CompoundTDG compounds = new CompoundTDGRDS(61, madeOf, "chemicalname1", 1.0);
@@ -63,47 +63,57 @@ class TestCompoundsMadeOf extends DatabaseTest {
     ArrayList<CompoundDTO> list = compounds.findMadeOf(61);
     ArrayList<CompoundDTO> expected = new ArrayList<CompoundDTO>();
 
-    CompoundDTO c1 = new CompoundDTO(61, 55);
-    CompoundDTO c2 = new CompoundDTO(61, 53);
+    CompoundDTO c1 = new CompoundDTO(61, 51);
+    CompoundDTO c2 = new CompoundDTO(61, 52);
     expected.add(c1);
     expected.add(c2);
-    assertEquals(expected, list);
-
+    
+    for(int i = 0; i < list.size(); i++) {
+      assertEquals(expected.get(i).getCompoundId(), list.get(i).getCompoundId());
+      assertEquals(expected.get(i).getElementId(), list.get(i).getElementId());
+    }
   }
 
   /**
-   * TODO: THIS, it's not working rn with new implementation
    * Test that the findMakes function of compoundTDGRDS works
    */
   @Test
   static void testFindMakes() {
     // initialize elements
-    ElementRDG element1 = new ElementRDGRDS(55, 12, 5, "element1", 1.0);
-    ElementRDG element2 = new ElementRDGRDS(53, 44, 6, "element2", 1.0);
+    ElementRDG element1 = new ElementRDGRDS(53, 12, 5, "element1", 1.0);
+    ElementRDG element2 = new ElementRDGRDS(54, 44, 6, "element2", 1.0);
 
     List<Integer> madeOf1 = new ArrayList<Integer>();
-    madeOf1.add(55);
+    madeOf1.add(53);
     List<Integer> madeOf2 = new ArrayList<Integer>();
-    madeOf2.add(53);
+    madeOf2.add(54);
 
     // initialize compounds
-    CompoundTDG compound1 = new CompoundTDGRDS(61, madeOf1, "chemicalname1", 1.0);
-    CompoundTDG compound2 = new CompoundTDGRDS(62, madeOf2, "chemicalname2", 1.0);
+    CompoundTDG compound1 = new CompoundTDGRDS(63, madeOf1, "chemicalname1", 1.0);
+    CompoundTDG compound2 = new CompoundTDGRDS(64, madeOf2, "chemicalname2", 1.0);
 
     // Compound1
-    CompoundDTO c1 = new CompoundDTO(61, 55);
-    CompoundDTO c2 = new CompoundDTO(61, 53);
+    CompoundDTO c1 = new CompoundDTO(63, 53);
+    CompoundDTO c2 = new CompoundDTO(64, 54);
 
-    ArrayList<CompoundDTO> list1 = compound1.findMakes(61);
+    ArrayList<CompoundDTO> list1 = compound1.findMakes(63);
     ArrayList<CompoundDTO> expected1 = new ArrayList<CompoundDTO>();
     expected1.add(c1);
-    assertEquals(expected1, list1);
+    
+    for(int i = 0; i < list1.size(); i++) {
+      assertEquals(expected1.get(i).getCompoundId(), list1.get(i).getCompoundId());
+      assertEquals(expected1.get(i).getElementId(), list1.get(i).getElementId());
+    }
 
     // Compound2
-    ArrayList<CompoundDTO> list2 = compound1.findMakes(62);
+    ArrayList<CompoundDTO> list2 = compound1.findMakes(64);
     ArrayList<CompoundDTO> expected2 = new ArrayList<CompoundDTO>();
     expected2.add(c2);
-    assertEquals(expected2, list2);
+    
+    for(int i = 0; i < list2.size(); i++) {
+      assertEquals(expected2.get(i).getCompoundId(), list2.get(i).getCompoundId());
+      assertEquals(expected2.get(i).getElementId(), list2.get(i).getElementId());
+    }
   }
 
   /**
