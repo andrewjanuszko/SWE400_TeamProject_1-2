@@ -3,7 +3,7 @@ package datasource;
 public class TestAll {
 
   public static void testAllTests() {
-    TestAcid.testAll(); 
+    TestAcid.testAll();
     TestBase.testAll();
     TestChemical.testAll();
     TestElement.testAll();

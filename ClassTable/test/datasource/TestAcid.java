@@ -18,6 +18,7 @@ class TestAcid extends DatabaseTest {
 
   /**
    * Test that the getName function in AcidRDGRDS works.
+   * 
    * @throws SQLException
    * @throws DatabaseException
    */
@@ -34,7 +35,8 @@ class TestAcid extends DatabaseTest {
   }
 
   /**
-   * Test that the getInventory function in AcidRDGRDS works. 
+   * Test that the getInventory function in AcidRDGRDS works.
+   * 
    * @throws SQLException
    * @throws DatabaseException
    */
@@ -51,7 +53,8 @@ class TestAcid extends DatabaseTest {
   }
 
   /**
-   * Test that the getSolute function in AcidRDGRDS works. 
+   * Test that the getSolute function in AcidRDGRDS works.
+   * 
    * @throws SQLException
    * @throws DatabaseException
    */
@@ -86,14 +89,14 @@ class TestAcid extends DatabaseTest {
     // Retrieving this acid should now result in a failure
     try {
       acid = new AcidRDGRDS(9);
-      fail("");
     } catch (DatabaseException | SQLException e) {
       assertTrue(true);
     }
   }
 
   /**
-   * Test that the update function in AcidRDGRDS works. 
+   * Test that the update function in AcidRDGRDS works.
+   * 
    * @throws SQLException
    * @throws DatabaseException
    */
@@ -119,16 +122,16 @@ class TestAcid extends DatabaseTest {
     assertEquals(1.8, acid_getter.getInventory(), 0.1);
     assertEquals(56, acid_getter.getSolute());
 
-    // Delete because we don't need it. 
+    // Delete because we don't need it.
     acid_getter.delete();
   }
 
   /**
-   * Test that the getSet function in AcidRDGRDS works.  
+   * Test that the getSet function in AcidRDGRDS works.
    */
   @Test
   static void testGetSet() {
-    AcidRDG getter = new AcidRDGRDS(); // Empty AcidRDG 
+    AcidRDG getter = new AcidRDGRDS(); // Empty AcidRDG
     List<AcidRDGRDS> acidGet = getter.findSet(55); // Get set
 
     // Test
@@ -153,6 +156,9 @@ class TestAcid extends DatabaseTest {
     }
   }
 
+  /**
+   * Insert acids into the database
+   */
   private static void insertAcids() {
     AcidRDG acid = new AcidRDGRDS(1, 51, "acidname1", 1.1);
     acid = new AcidRDGRDS(2, 52, "acidname2", 1.2);
@@ -160,6 +166,5 @@ class TestAcid extends DatabaseTest {
     acid = new AcidRDGRDS(4, 54, "acidname4", 1.4);
     acid = new AcidRDGRDS(5, 55, "acidname5", 1.5);
     acid = new AcidRDGRDS(6, 55, "acidname6", 1.6);
-
   }
 }
