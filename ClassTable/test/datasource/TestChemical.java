@@ -7,6 +7,8 @@ import java.sql.SQLException;
 
 import org.junit.jupiter.api.Test;
 
+import database.DatabaseException;
+
 /**
  * 
  * @author Isabella Boone

@@ -7,6 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.DatabaseException;
+import database.DatabaseManager;
+
 /**
  * ChemicalRowDataGatewayRDS 
  * @author Isabella Boone, Kim O'Neill

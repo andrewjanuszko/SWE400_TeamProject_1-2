@@ -3,9 +3,6 @@ package database;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import datasource.DatabaseException;
-import datasource.DatabaseManager;
-
 public class ClassTableInitializer {
   
   public static void createTables() {

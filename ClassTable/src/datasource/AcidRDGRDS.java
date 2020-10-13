@@ -7,6 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.DatabaseException;
+import database.DatabaseManager;
+
 /**
  * AcidRowDataGatewayRDS 
  * @author Isabella Boone, Kim O'Neill
@@ -168,6 +171,15 @@ public class AcidRDGRDS implements AcidRDG {
     }
     return results;
   }
+  
+  public List<AcidDTO> getAll() {
+    String SQL = "SELECT * FROM ACID INNER JOIN Chemical";
+    return null;
+  }
+  
+  
+  
+  
   
   /**
    * Return solute of acid
