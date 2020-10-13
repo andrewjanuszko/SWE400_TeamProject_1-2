@@ -13,11 +13,9 @@ public interface ChemicalRDG {
   
   public void update(); 
   
-  public String getName();
+  public ChemicalDTO getChemical();
   
   public void setName(String newName);
-
-  public double getInventory();
   
   public void setInventory(double inventory);
   

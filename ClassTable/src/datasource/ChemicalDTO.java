@@ -27,16 +27,18 @@ public class ChemicalDTO {
     return name;
   }
   
-  public double inventory() {
+  public double getInventory() {
     return inventory;
   }
   
   public void setChemicalId(int chemicalId) {
     this.chemicalId = chemicalId;
   }
+  
   public void setName(String name) {
     this.name = name; 
   }
+  
   public void setInventory(double inventory) {
     this.inventory = inventory;
   }
