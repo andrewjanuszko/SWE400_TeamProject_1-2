@@ -1,27 +1,16 @@
 package interfaces;
 
-import java.util.List;
-
+import java.util.ArrayList;
 import model.Element;
 
 public interface ElementDataMapperInterface extends ChemicalDataMapperInterface {
   
-  public void addElement(Element element);
+  public ArrayList<Element> filterByAtomicNumber(int atomicNumber);
   
-  public void deleteElement(Element element);
+  public ArrayList<Element> filterByAtomicMass(double atomicMass);
   
-  public void updateElement(int id, Element newElement);
+  public ArrayList<Element> filterByAtomicMassRange(double min, double max);
   
-  public Element fetchElement(int id);
-  
-  public List<Element> getAllElements();
-  
-  public List<Element> getElementsAtomicMassRange(double high, double low);
-  
-  public List<Element> getElementsAtomicNumberRange(double high, double low);
-  
-  public Element getByAtomicMass(double mass);
-  
-  public Element getByAtomicNumber(double num);
+  public ArrayList<Element> filterByPartOfCompound(int compoundID);
   
 }

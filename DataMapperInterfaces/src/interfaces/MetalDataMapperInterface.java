@@ -1,22 +1,15 @@
 package interfaces;
 
-import java.util.List;
-
+import java.util.ArrayList;
 import model.Metal;
 
-public interface MetalDataMapperInterface extends ChemicalDataMapperInterface{
+public interface MetalDataMapperInterface extends ChemicalDataMapperInterface {
   
-  public void addMetald(Metal metal);
+  public ArrayList<Metal> filterByAcidRequired(double acidRequired);
   
-  public void deleteMetal(Metal metal);
+  public ArrayList<Metal> filterByAcidRequiredRange(double min, double max);
   
-  public void updateMetal(int id, Metal newMetal);
-  
-  public Metal fetchMetal(int id);
-  
-  public List<Metal> getAllMetals();
-  
-  public double getMolesRequiredToDissolve(Metal metal);
+  public ArrayList<Metal> filterByDissolvedBy(int acidID);
   
 
 }
