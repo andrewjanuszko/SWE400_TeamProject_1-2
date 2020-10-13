@@ -16,11 +16,7 @@ import database.DatabaseManager;
  *
  */
 public class MetalRDGRDS implements MetalRDG {
-
-  private int metalId;
-  private int dissolvedById;
-  private String name;
-  private double inventory;
+  MetalDTO metal; 
 
   /**
    * empty constructor drops the table and recreates it
@@ -35,28 +31,18 @@ public class MetalRDGRDS implements MetalRDG {
    * @param id
    */
   public MetalRDGRDS(int id) {
-    
-    this.metalId = id;
-
-    String sqlChem = "SELECT * FROM Chemical WHERE chemicalId = " + id + ";";
-    String sqlElement = "SELECT * FROM Metal WHERE metalId = " + id + ";";
+    String sql = "SELECT * FROM Metal INNER JOIN Chemical WHERE chemicalId = Metal.metalId AND metalId = " + id + ";";
     try {
-
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sqlElement);
+      ResultSet rs = statement.executeQuery(sql);
       rs.next();
-      this.dissolvedById = rs.getInt("dissolvedBy");
-
-      rs = statement.executeQuery(sqlChem);
-      rs.next();
-      this.name = rs.getString("name");
-      this.inventory = rs.getDouble("inventory");
+      
+      metal = new MetalDTO(id, rs.getInt("dissolvedBy"), rs.getString("name"), rs.getDouble("inventory"));
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("No entry with id " + id);
     }
-
   }
 
   /**
@@ -83,6 +69,8 @@ public class MetalRDGRDS implements MetalRDG {
 
       insertChemical.execute();
       insert.execute();
+      
+      metal = new MetalDTO(id, dissolvedById, name, inventory);
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert");
@@ -95,8 +83,8 @@ public class MetalRDGRDS implements MetalRDG {
   @Override
   public void delete() {
 
-    String sqlMetal = "DELETE FROM Metal WHERE metalId = " + this.metalId + ";";
-    String sqlChem = "DELETE FROM Chemical WHERE chemicalId = " + this.metalId + ";";
+    String sqlMetal = "DELETE FROM Metal WHERE metalId = " + metal.getMetalId() + ";";
+    String sqlChem = "DELETE FROM Chemical WHERE chemicalId = " + metal.getMetalId() + ";";
     try {
 
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -105,7 +93,7 @@ public class MetalRDGRDS implements MetalRDG {
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Problem deleting Metal with id " + this.metalId);
+      System.out.println("Problem deleting Metal with id " + metal.getMetalId());
     }
   }
 
@@ -117,14 +105,14 @@ public class MetalRDGRDS implements MetalRDG {
     try {
       PreparedStatement updateMetal = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Metal SET dissolvedById = ? WHERE elementId = ?;");
-      updateMetal.setInt(1, this.dissolvedById);
-      updateMetal.setInt(2, this.metalId);
+      updateMetal.setInt(1, metal.getDissolvedById());
+      updateMetal.setInt(2, metal.getMetalId());
 
       PreparedStatement updateChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Chemical SET name = ?, inventory = ? WHERE chemicalId = ?;");
-      updateChemical.setString(1, this.name);
-      updateChemical.setDouble(2, this.inventory);
-      updateChemical.setInt(3, this.metalId);
+      updateChemical.setString(1, metal.getName());
+      updateChemical.setDouble(2, metal.getInventory());
+      updateChemical.setInt(3, metal.getMetalId());
 
       updateMetal.execute();
       updateChemical.execute();
@@ -158,55 +146,25 @@ public class MetalRDGRDS implements MetalRDG {
     }
     return results;
   }
-  
-  /**
-   * getter for name
-   */
-  @Override
-  public String getName() {
-    return this.name;
-  }
-
-  /**
-   * getter for inhabits
-   */
-  @Override
-  public double getInventory() {
-    return this.inventory;
-  }
-
-  @Override
-  public int getMetalId() {
-    return metalId;
-  }
-  /**
-   * getter for name
-   */
-  @Override
-  public int getDissolvedBy() {
-    return this.dissolvedById;
-  }
-
-  @Override
-  public void setMetalId(int metalId) {
-    this.metalId = metalId;
-  }
 
   @Override
   public void setDissolvedById(int dissolvedById) {
-    this.dissolvedById = dissolvedById;
+    metal.setDissolvedById(dissolvedById);;
   }
 
   @Override
   public void setName(String name) {
-    this.name = name;
+    metal.setName(name);
   }
 
   @Override
   public void setInventory(double inventory) {
-    this.inventory = inventory;
+    metal.setInventory(inventory);
   }
 
+  public MetalDTO getMetal() {
+    return metal;
+  }
 
   
 }
