@@ -53,4 +53,45 @@ public class ElementDTO {
     this.name = name;
   }
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    long temp;
+    temp = Double.doubleToLongBits(atomicMass);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + atomicNumber;
+    result = prime * result + elementId;
+    temp = Double.doubleToLongBits(inventory);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ElementDTO other = (ElementDTO) obj;
+    if (Double.doubleToLongBits(atomicMass) != Double.doubleToLongBits(other.atomicMass))
+      return false;
+    if (atomicNumber != other.atomicNumber)
+      return false;
+    if (elementId != other.elementId)
+      return false;
+    if (Double.doubleToLongBits(inventory) != Double.doubleToLongBits(other.inventory))
+      return false;
+    if (name == null) {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals(other.name))
+      return false;
+    return true;
+  }
+
+  
 }
