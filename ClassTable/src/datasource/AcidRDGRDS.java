@@ -44,7 +44,7 @@ public class AcidRDGRDS implements AcidRDG {
     // Get chemical information
     rs = statement.executeQuery(getChem);
     rs.next();
-    acid = new AcidDTO(rs.getInt("chemicalId"), solute, rs.getString("name"), rs.getDouble("inventory"));
+    acid = new AcidDTO(id, solute, rs.getString("name"), rs.getDouble("inventory"));
 
   }
   
