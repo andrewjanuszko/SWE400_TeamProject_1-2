@@ -22,7 +22,7 @@ class TestElement extends DatabaseTest {
     ele.createTableElement();
     
     //initialize element
-    ElementRDG element = new ElementRDGRDS(1, 55, 123, "chemicalname1", "inhabits1");
+    ElementRDG element = new ElementRDGRDS(1, 55, 123, "chemicalname1", 1.0);
     
     //element getter
     ElementRDG elementGet = new ElementRDGRDS(1);
@@ -38,7 +38,7 @@ class TestElement extends DatabaseTest {
     chem.createTable();
     ele.createTableElement();
     
-    ElementRDG element = new ElementRDGRDS(1, 55, 123, "chemicalname1", "inhabits1");
+    ElementRDG element = new ElementRDGRDS(1, 55, 123, "chemicalname1", 1.0);
     
     ElementRDG elementGet = new ElementRDGRDS(1);
     
@@ -53,7 +53,7 @@ class TestElement extends DatabaseTest {
     chem.createTable();
     ele.createTableElement();
     
-    ElementRDG element = new ElementRDGRDS(1, 55, 123, "chemicalname1", "inhabits1");
+    ElementRDG element = new ElementRDGRDS(1, 55, 123, "chemicalname1", 1.0);
     
     ElementRDG elementGet = new ElementRDGRDS(1);
     
@@ -68,12 +68,12 @@ class TestElement extends DatabaseTest {
     chem.createTable();
     ele.createTableElement();
     
-    ElementRDG element = new ElementRDGRDS(1, 15, 18, "chemicalname1", "inhabits1");
+    ElementRDG element = new ElementRDGRDS(1, 15, 18, "chemicalname1", 1.0);
     
     ElementRDG elementGet = new ElementRDGRDS(1);
     
     // Test
-    assertEquals("inhabits1", elementGet.getInhabits());
+    assertEquals(1.0, elementGet.getInventory());
   }
 
 }

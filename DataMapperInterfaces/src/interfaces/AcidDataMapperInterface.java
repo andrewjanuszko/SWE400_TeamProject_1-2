@@ -6,11 +6,11 @@ import model.Acid;
 
 public interface AcidDataMapperInterface extends ChemicalDataMapperInterface {
   
-  public void addAcid(int acidId, int soluteId, String name, double inventory);
+  public void addAcid(Acid acid);
   
   public void deleteAcid(int acidId);
   
-  public void updateAcid(int id, int newId, int newSoluteId, String newName, double newInventory);
+  public void updateAcid(int id, Acid acid);
   
   public Acid fetchAcid(int id);
   

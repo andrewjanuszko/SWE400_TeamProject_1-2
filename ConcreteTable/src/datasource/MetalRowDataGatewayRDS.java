@@ -27,7 +27,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 		String create = "CREATE TABLE Metal (" + 
 				"metalID INT NOT NULL, " + 
 				"name VARCHAR(30) NOT NULL, " +                     
-				"inhabits VARCHAR(30), " +
+				"inventory Double, " +
 				"atomicNumber INT NOT NULL, " +
 				"atomicMass DOUBLE NOT NULL, " +
 				"dissolvedBy INT, " + 
@@ -77,7 +77,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 	
 	private int metalID;
 	private String name;
-	private String inhabits;
+	private double inventory;
 	private int atomicNumber;
 	private double atomicMass;
 	private int dissolvedBy;
@@ -104,7 +104,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			name = rs.getString("name");
-			inhabits = rs.getString("inhabits");
+			inventory = rs.getDouble("inventory");
 			atomicNumber = rs.getInt("atomicNumber");
 			atomicMass = rs.getDouble("atomicMass");
 			dissolvedBy = rs.getInt("dissolvedBy");
@@ -135,7 +135,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
 			metalID = rs.getInt("metalID");
-			inhabits = rs.getString("inhabits");
+			inventory = rs.getDouble("inventory");
 			atomicNumber = rs.getInt("atomicNumber");
 			atomicMass = rs.getDouble("atomicMass");
 			dissolvedBy = rs.getInt("dissolvedBy");
@@ -148,17 +148,17 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 	 * Constructs new Metal Row Data Gateway from given parameters.
 	 * @param id
 	 * @param name
-	 * @param inhabits
+	 * @param inventory
 	 * @param atomicNumber
 	 * @param atomicMass
 	 * @param dissolvedBy
 	 * @throws DatabaseException
 	 */
-	public MetalRowDataGatewayRDS(int id, String name, String inhabits, int atomicNumber, double atomicMass, int dissolvedBy) throws DatabaseException {
+	public MetalRowDataGatewayRDS(int id, String name, double inventory, int atomicNumber, double atomicMass, int dissolvedBy) throws DatabaseException {
 	  conn = DatabaseManager.getSingleton().getConnection();
 	  metalID = id;
 		this.name = name;
-		this.inhabits = inhabits;
+		this.inventory = inventory;
 		this.atomicNumber = atomicNumber;
 		this.atomicMass = atomicMass;
 		this.dissolvedBy = dissolvedBy;
@@ -176,8 +176,8 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
   }
 
   @Override
-  public String getInhabits() {
-    return this.inhabits;
+  public double getInventory() {
+    return this.inventory;
   }
 
   @Override
@@ -201,8 +201,8 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
   }
 
   @Override
-  public void setInhabits(String s) {
-   this.inhabits = s;
+  public void setInventory(double i) {
+   this.inventory = i;
   }
 
   @Override
@@ -228,7 +228,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 	  try {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE Metal SET"
 				+ " name = '" + name
-				+ "', inhabits = '" + inhabits
+				+ "', inventory = '" + inventory
 				+ "', atomicNumber = " + atomicNumber
 				+ ", atomicMass = " + atomicMass
 				+ ", dissolvedBy = " + dissolvedBy
@@ -262,7 +262,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
    */
   private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Metal (metalID, name, inhabits, atomicNumber, atomicMass, dissolvedBy) VALUES (" + metalID + ", '" + name + "', '" + inhabits + "', " + atomicNumber + ", " + atomicMass + ", " + dissolvedBy +");");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Metal (metalID, name, inventory, atomicNumber, atomicMass, dissolvedBy) VALUES (" + metalID + ", '" + name + "', '" + inventory + "', " + atomicNumber + ", " + atomicMass + ", " + dissolvedBy +");");
 			stmt.execute();
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into Metal table");

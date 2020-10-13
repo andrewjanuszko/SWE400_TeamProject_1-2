@@ -6,7 +6,7 @@ public interface ElementRowDataGateway {
 	
 	public String getName();
 	
-	public String getInhabits();
+	public double getInventory();
 	
 	public int getAtomicNumber();
 	
@@ -14,7 +14,7 @@ public interface ElementRowDataGateway {
 	
 	public void setName(String s);
 	
-	public void setInhabits(String s);
+	public void setInventory(double s);
 	
 	public void setAtomicNumber(int i);
 	

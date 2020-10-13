@@ -6,9 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/ClassTable"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ConcreteTable"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Project2"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SingleTable"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
