@@ -26,10 +26,10 @@ class TestMetal {
     MetalRDG metalGet4 = new MetalRDGRDS(34);
 
     // Test getName
-    assertEquals("metalname1", metalGet1.getName());
-    assertEquals("metalname2", metalGet2.getName());
-    assertEquals("metalname3", metalGet3.getName());
-    assertEquals("metalname4", metalGet4.getName());
+    assertEquals("metalname1", metalGet1.getMetal().getName());
+    assertEquals("metalname2", metalGet2.getMetal().getName());
+    assertEquals("metalname3", metalGet3.getMetal().getName());
+    assertEquals("metalname4", metalGet4.getMetal().getName());
   }
 
   /**
@@ -44,10 +44,10 @@ class TestMetal {
     MetalRDG metalGet4 = new MetalRDGRDS(34);
 
     // Test getInventory
-    assertEquals(1.1, metalGet1.getInventory(), 0.1);
-    assertEquals(1.2, metalGet2.getInventory(), 0.1);
-    assertEquals(1.3, metalGet3.getInventory(), 0.1);
-    assertEquals(1.4, metalGet4.getInventory(), 0.1);
+    assertEquals(1.1, metalGet1.getMetal().getInventory(), 0.1);
+    assertEquals(1.2, metalGet2.getMetal().getInventory(), 0.1);
+    assertEquals(1.3, metalGet3.getMetal().getInventory(), 0.1);
+    assertEquals(1.4, metalGet4.getMetal().getInventory(), 0.1);
   }
 
   /**
@@ -62,10 +62,10 @@ class TestMetal {
     MetalRDG metalGet4 = new MetalRDGRDS(34);
 
     // Test that getDissolvedBy works
-    assertEquals(1, metalGet1.getDissolvedBy());
-    assertEquals(2, metalGet2.getDissolvedBy());
-    assertEquals(3, metalGet3.getDissolvedBy());
-    assertEquals(4, metalGet4.getDissolvedBy());
+    assertEquals(1, metalGet1.getMetal().getDissolvedById());
+    assertEquals(2, metalGet2.getMetal().getDissolvedById());
+    assertEquals(3, metalGet3.getMetal().getDissolvedById());
+    assertEquals(4, metalGet4.getMetal().getDissolvedById());
   }
 
   /**
@@ -77,8 +77,8 @@ class TestMetal {
     List<MetalRDGRDS> metalGet = metal.findSet(5);
 
     // Test that we found the set
-    assertEquals("metalname5", metalGet.get(0).getName());
-    assertEquals("metalname6", metalGet.get(1).getName());
+    assertEquals("metalname5", metalGet.get(0).getMetal().getName());
+    assertEquals("metalname6", metalGet.get(1).getMetal().getName());
   }
 
   /**

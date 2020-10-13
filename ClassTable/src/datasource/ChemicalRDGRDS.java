@@ -7,15 +7,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.DatabaseException;
+import database.DatabaseManager;
+
 /**
  * ChemicalRowDataGatewayRDS 
  * @author Isabella Boone, Kim O'Neill
  *
  */
 public class ChemicalRDGRDS implements ChemicalRDG {
-  int id;
-  String name;
-  double inventory;
+  ChemicalDTO chemical;
   
   /**
    * Create table
@@ -38,20 +39,19 @@ public class ChemicalRDGRDS implements ChemicalRDG {
     ResultSet rs = statement.executeQuery(getChem);
     rs.next();
 
-    this.name = rs.getString("name");
-    this.inventory = rs.getDouble("inventory");
-    this.id = id;
+    chemical = new ChemicalDTO(id, rs.getString("name"), rs.getDouble("inventory"));
 
   }
   
   /**
    * Constructor ChemicalRowDataGatewayRDS, create a new chemical.
+   * 
    * @param id
    * @param name
    * @param inhabits
    */
   public ChemicalRDGRDS(int id, String name, double inventory) {
-    
+
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -59,26 +59,23 @@ public class ChemicalRDGRDS implements ChemicalRDG {
       insertChemical.setInt(1, id);
       insertChemical.setString(2, name);
       insertChemical.setDouble(3, inventory);
-      
-      
+
       insertChemical.execute(); // Insert chemical
-      
-    } catch(SQLException | DatabaseException e) {
+
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert chemical through constructor");
     }
     
     // Set instance variables
-    this.id = id;
-    this.name = name;
-    this.inventory = inventory;
+    chemical = new ChemicalDTO(id, name, inventory);
   }
 
   /**
    * Delete the currently selected chemical from the database. 
    */
   public void delete() {
-    String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + id + ";";
+    String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + chemical.getChemicalId() + ";";
     
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -87,7 +84,7 @@ public class ChemicalRDGRDS implements ChemicalRDG {
       
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Error deleting chemical " + id);
+      System.out.println("Error deleting chemical " + chemical.getChemicalId());
     }
   }
   
@@ -95,15 +92,15 @@ public class ChemicalRDGRDS implements ChemicalRDG {
    * Update the database.
    */
   public void update() {
-    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inventory = ? WHERE chemicalID = " + id
+    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inventory = ? WHERE chemicalID = " + chemical.getChemicalId()
         + ";";
 
     try {
       // Chemical
       PreparedStatement chem = DatabaseManager.getSingleton().getConnection().prepareStatement(updateChemicalSQL);
-      chem.setInt(1, id);
-      chem.setString(2, name);
-      chem.setDouble(3, inventory);
+      chem.setInt(1, chemical.getChemicalId());
+      chem.setString(2, chemical.getName());
+      chem.setDouble(3, chemical.getInventory());
 
       chem.execute();
       
@@ -113,28 +110,30 @@ public class ChemicalRDGRDS implements ChemicalRDG {
     }
   }
   
-  /**
-   * Get name.
-   */
-  @Override
-  public String getName() {
-    return name;
-  }
+  public List<ChemicalDTO> getAll() {
+    String sql = "SELECT * FROM Chemical;";
+    ArrayList<ChemicalDTO> chemicals = new ArrayList<ChemicalDTO>();
+    
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sql);
 
+      while (rs.next()) {
+        chemicals.add(new ChemicalDTO(rs.getInt("chemicalId"), rs.getString("name"), rs.getDouble("inventory")));
+      }
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+    return chemicals;
+  }
+  
   /**
    * Set name.
    * @param newName new name to set
    */
   @Override
   public void setName(String newName) {
-    this.name = newName;
-  }
-
-  /**
-   * Get inhabits.
-   */
-  public double getInventory() {
-    return inventory;
+    chemical.setName(newName);
   }
 
   /**
@@ -143,7 +142,11 @@ public class ChemicalRDGRDS implements ChemicalRDG {
    */
   @Override
   public void setInventory(double inventory) {
-    this.inventory = inventory;
+    chemical.setInventory(inventory);
+  }
+  
+  public ChemicalDTO getChemical() {
+    return chemical;
   }
 
 }

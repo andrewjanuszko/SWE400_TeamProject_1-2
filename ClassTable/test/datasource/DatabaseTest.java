@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
-import datasource.DatabaseException;
-import datasource.DatabaseManager;
-import datasource.OptionsManager;
+import database.DatabaseException;
+import database.DatabaseManager;
+import database.OptionsManager;
 
 /**
  * Defines set up and tear down methods that set up the DB for testing and roll

@@ -14,16 +14,6 @@ public interface MetalRDG {
   public void update();
 
    public List<MetalRDGRDS> findSet(int dissolvedById);
-   
-   public String getName();
-   
-   public double getInventory();
-   
-   public int getMetalId();
-   
-   public int getDissolvedBy();
-
-   public void setMetalId(int metalId);
 
    public void setDissolvedById(int dissolvedById);
 
@@ -31,6 +21,7 @@ public interface MetalRDG {
 
    public void setInventory(double inventory);
 
+   MetalDTO getMetal();
 
 
 }

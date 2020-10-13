@@ -140,4 +140,6 @@ class TestCompoundsMadeOf extends DatabaseTest {
     CompoundTDG compounds1 = new CompoundTDGRDS(41, madeOf1, "compoundname1", 1.1);
     CompoundTDG compounds2 = new CompoundTDGRDS(42, madeOf2, "compoundname2", 1.2);
   }
+  
+  
 }

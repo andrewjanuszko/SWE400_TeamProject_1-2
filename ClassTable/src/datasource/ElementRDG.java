@@ -13,19 +13,11 @@ public interface ElementRDG {
 
   public void update();
   
-  public void findByAtomicNumber(int atomicNum);
+  public ElementDTO findByAtomicNumber(int atomicNum);
   
-  public void findByAtomicMass(double atomicMass);
+  public ElementDTO findByAtomicMass(double atomicMass);
 
-  public List<ElementRDGRDS> findSetAtomicMass(double lowerLimit, double upperLimit);
-  
-  public int getAtomicNumber();
-
-  public double getAtomicMass();
-
-  public String getName();
-
-  public double getInventory();
+  public List<ElementDTO> findSetAtomicMass(double lowerLimit, double upperLimit);
 
   public void setElementId(int elementId);
 
@@ -36,5 +28,7 @@ public interface ElementRDG {
   public void setName(String name);
   
   public void setInventory(double inventory);
+  
+  ElementDTO getElement();
 
 }
