@@ -20,7 +20,7 @@ public class AcidRDGRDS implements AcidRDG {
    * Create tables
    */
   public AcidRDGRDS() {
-    createTable(); 
+    
   }
   
   /**
@@ -55,7 +55,7 @@ public class AcidRDGRDS implements AcidRDG {
    * @param inhabits of acid to insert
    */
   public AcidRDGRDS(int id, int solute, String name, double inventory) {
-    createTable(); 
+    
     try {
       // Insert chemical 
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -83,65 +83,12 @@ public class AcidRDGRDS implements AcidRDG {
       System.out.println("Failed to insert acid through constructor");
     }
   }
-
-  /**
-   * Create acid and chemical table if they do not already exist. 
-   */
-  public void createTable() {
-    String createChem = "CREATE TABLE IF NOT EXISTS Chemical" + "(" + "chemicalId INT NOT NULL, " + "name VARCHAR(20), "
-        + "inventory DOUBLE, " + "PRIMARY KEY (chemicalId)" + ");",
-        createAcid = "CREATE TABLE IF NOT EXISTS Acid" + "(acidId INT NOT NULL, " + 
-        "solute INT, " + "FOREIGN KEY(acidId) REFERENCES Chemical(chemicalId)" + ");";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate(createChem);
-      statement.executeUpdate(createAcid);
-      
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to create acid and/or chemical table");
-    }
-  }
-  
-	/**
-	 * Drop the acid table if it exists.
-	 */
-	public void dropTableAcid() {
-	  String dropTable = "DROP TABLE IF EXISTS Acid;";
-	  try {
-	    Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-	    statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-	    statement.executeUpdate(dropTable);
-	    statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
-	  } catch (SQLException | DatabaseException e) {
-	    e.printStackTrace();
-	    System.out.println("Error dropping acid table");
-	  }
-	}
-	
-	/**
-	 * Drop the chemical table if it exists.
-	 */
-	public void dropTableChemical() {
-	  String dropTable = "DROP TABLE IF EXISTS Chemical;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping chemical table");
-    }
-	}
 	
 	/**
 	 * Drop acid and all tables connected (acid & chemical)
 	 */
 	public void dropAllTables() {
-	  dropTableAcid();
-	  dropTableChemical();
+	  
 	}
 	
 	/**

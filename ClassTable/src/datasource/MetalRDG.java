@@ -8,14 +8,6 @@ import java.util.List;
  *
  */
 public interface MetalRDG {
-
-  public void createTableMetal();
-
-  public void dropTableMetal();
-
-  public void dropTableChemical();
-
-  public void dropAllTables();
   
   public void delete();
 

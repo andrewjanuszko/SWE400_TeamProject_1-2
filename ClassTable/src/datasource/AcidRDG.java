@@ -24,15 +24,7 @@ public interface AcidRDG {
   public void update(); 
   
   public void delete();
-  
-  public void dropTableAcid();
-  
-  public void dropTableChemical();
-  
-  public void dropAllTables();
 
   public List<AcidRDGRDS> findSet(int i);
-
-  public void createTable();
   
 }

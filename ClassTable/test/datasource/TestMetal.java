@@ -15,69 +15,68 @@ import org.junit.jupiter.api.Test;
 class TestMetal {
 
   @Test
-  void testGetName() {
-    ChemicalRDG chem = new ChemicalRDGRDS();
-    MetalRDG met = new MetalRDGRDS(); 
-    met.dropAllTables();
-    chem.createTable();
-    met.createTableMetal();
+  static void testGetName() {    
+    MetalRDG metalGet1 = new MetalRDGRDS(31);
+    MetalRDG metalGet2 = new MetalRDGRDS(32);
+    MetalRDG metalGet3 = new MetalRDGRDS(33);
+    MetalRDG metalGet4 = new MetalRDGRDS(34);
     
-    MetalRDG metal = new MetalRDGRDS(1, 55, "chemicalname1", 1.0);
-    
-    MetalRDG metalGet = new MetalRDGRDS(1);
-
-    assertEquals("chemicalname1", metalGet.getName());
+    assertEquals("metalname1", metalGet1.getName());
+    assertEquals("metalname2", metalGet2.getName());
+    assertEquals("metalname3", metalGet3.getName());
+    assertEquals("metalname4", metalGet4.getName());
   }
 
   @Test
-  void testGetInhabits() {
-    // Create row data gateways
-    ChemicalRDG chem = new ChemicalRDGRDS();
-    MetalRDG met = new MetalRDGRDS(); 
-    met.dropAllTables();
-    chem.createTable();
-    met.createTableMetal();
+  static void testGetInhabits() {    
+    MetalRDG metalGet1 = new MetalRDGRDS(31);
+    MetalRDG metalGet2 = new MetalRDGRDS(32);
+    MetalRDG metalGet3 = new MetalRDGRDS(33);
+    MetalRDG metalGet4 = new MetalRDGRDS(34);
     
-    MetalRDG metal = new MetalRDGRDS(1, 15, "chemicalname1", 1.0);
-    
-    MetalRDG metalGet = new MetalRDGRDS(1);
-
-    // Test
-    assertEquals(1.0, metalGet.getInventory());
+    assertEquals(1.1, metalGet1.getInventory(), 0.1);
+    assertEquals(1.2, metalGet2.getInventory(), 0.1);
+    assertEquals(1.3, metalGet3.getInventory(), 0.1);
+    assertEquals(1.4, metalGet4.getInventory(), 0.1);
   }
 
   @Test
-  void testGetDissolvedBy() {
-    ChemicalRDG chem = new ChemicalRDGRDS();
-    MetalRDG met = new MetalRDGRDS(); 
-    met.dropAllTables();
-    chem.createTable();
-    met.createTableMetal();
+  static void testGetDissolvedBy() {    
+    MetalRDG metalGet1 = new MetalRDGRDS(31);
+    MetalRDG metalGet2 = new MetalRDGRDS(32);
+    MetalRDG metalGet3 = new MetalRDGRDS(33);
+    MetalRDG metalGet4 = new MetalRDGRDS(34);
     
-    MetalRDG metal = new MetalRDGRDS(1, 15, "chemicalname1", 1.0);
-
-    MetalRDG metalGet = new MetalRDGRDS(1);
-    // Test
-    assertEquals(15, metalGet.getDissolvedBy());
+    assertEquals(1, metalGet1.getDissolvedBy());
+    assertEquals(2, metalGet2.getDissolvedBy());
+    assertEquals(3, metalGet3.getDissolvedBy());
+    assertEquals(4, metalGet4.getDissolvedBy());
   }
 
   @Test
-  void testGetSet() {
-    ChemicalRDG chem = new ChemicalRDGRDS();
-    AcidRDG acid = new AcidRDGRDS();
-    MetalRDG met = new MetalRDGRDS();
-    acid.dropAllTables();
-    met.dropTableMetal();
-    chem.createTable();
-    acid.createTable();
-    met.createTableMetal();
+  static void testGetSet() {    
+    MetalRDG metal = new MetalRDGRDS(); 
+    List<MetalRDGRDS> metalGet = metal.findSet(5);
     
-    MetalRDG metal1 = new MetalRDGRDS(1, 15, "chemicalname1", 1.0);
-    MetalRDG metal2 = new MetalRDGRDS(2, 15, "chemicalname2", 1.0);
-    
-    List<MetalRDGRDS> metalGet = metal2.findSet(15);
-    
-    assertEquals("chemicalname1", metalGet.get(0).getName());
-    assertEquals("chemicalname2", metalGet.get(1).getName());
+    assertEquals("metalname5", metalGet.get(0).getName());
+    assertEquals("metalname6", metalGet.get(1).getName());
+  }
+  
+  static void testAll() {
+    insertMetals();
+    testGetName();
+    testGetInhabits();
+    testGetDissolvedBy();
+    testGetSet(); 
+  }
+  
+  private static void insertMetals() {
+    MetalRDG 
+    metal = new MetalRDGRDS(31, 1, "metalname1", 1.1);
+    metal = new MetalRDGRDS(32, 2, "metalname2", 1.2);
+    metal = new MetalRDGRDS(33, 3, "metalname3", 1.3);
+    metal = new MetalRDGRDS(34, 4, "metalname4", 1.4);
+    metal = new MetalRDGRDS(35, 5, "metalname5", 1.5);
+    metal = new MetalRDGRDS(36, 5, "metalname6", 1.6);
   }
 }

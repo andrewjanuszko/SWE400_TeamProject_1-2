@@ -7,10 +7,6 @@ import java.sql.SQLException;
  * @author Isabella Boone, Kim O'Neill
  */
 public interface ChemicalRDG {
-
-  public void createTable(); 
-  
-  public void dropTable();
   
   public void delete();
   
@@ -22,6 +18,6 @@ public interface ChemicalRDG {
 
   public double getInventory();
   
-  public void setInventory(double newInhabits);
+  public void setInventory(double inventory);
   
 }

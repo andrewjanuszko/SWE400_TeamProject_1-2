@@ -7,17 +7,13 @@ import java.util.List;
  * @author kimberlyoneill
  *
  */
-public interface CompoundsMadeOfTDG {
-
-  void createTableCompoundMadeFrom();
-
-  public void dropTableCompoundMadeFromElement();
+public interface CompoundTDG {
 
   public void delete();
 
-  ArrayList<CompoundDTO> findSetCompoundId(int elementId);
+  ArrayList<CompoundDTO> findMakes(int elementId);
 
-  ArrayList<CompoundDTO> findSetElementId(int compoundId);
+  ArrayList<CompoundDTO> findMadeOf(int compoundId);
 
   String getCompoundName();
   

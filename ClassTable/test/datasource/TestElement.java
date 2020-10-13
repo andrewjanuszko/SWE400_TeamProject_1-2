@@ -12,68 +12,71 @@ import org.junit.jupiter.api.Test;
  */
 class TestElement extends DatabaseTest {
 
-  
   @Test
-  void testGetAtomicNumber() {
-    ChemicalRDG chem = new ChemicalRDGRDS(); 
-    ElementRDG ele = new ElementRDGRDS();
-    ele.dropAllTables();
-    chem.createTable();
-    ele.createTableElement();
-    
-    //initialize element
-    ElementRDG element = new ElementRDGRDS(1, 55, 123, "chemicalname1", 1.0);
-    
-    //element getter
-    ElementRDG elementGet = new ElementRDGRDS(1);
-    
-    assertEquals(55, elementGet.getAtomicNumber());
+  static void testGetAtomicNumber() {    
+    ElementRDG elementGet1 = new ElementRDGRDS(21);
+    ElementRDG elementGet2 = new ElementRDGRDS(22);
+    ElementRDG elementGet3 = new ElementRDGRDS(23);
+    ElementRDG elementGet4 = new ElementRDGRDS(24);
+
+    assertEquals(1, elementGet1.getAtomicNumber());
+    assertEquals(2, elementGet2.getAtomicNumber());
+    assertEquals(3, elementGet3.getAtomicNumber());
+    assertEquals(4, elementGet4.getAtomicNumber());
   }
   
   @Test
-  void testGetAtomicMass() {
-    ChemicalRDG chem = new ChemicalRDGRDS(); 
-    ElementRDG ele = new ElementRDGRDS();
-    ele.dropAllTables();
-    chem.createTable();
-    ele.createTableElement();
-    
-    ElementRDG element = new ElementRDGRDS(1, 55, 123, "chemicalname1", 1.0);
-    
-    ElementRDG elementGet = new ElementRDGRDS(1);
-    
-    assertEquals(123, elementGet.getAtomicMass(), .01);
+  static void testGetAtomicMass() {    
+    ElementRDG elementGet1 = new ElementRDGRDS(21);
+    ElementRDG elementGet2 = new ElementRDGRDS(22);
+    ElementRDG elementGet3 = new ElementRDGRDS(23);
+    ElementRDG elementGet4 = new ElementRDGRDS(24);
+
+    assertEquals(9, elementGet1.getAtomicMass(), 0.1);
+    assertEquals(8, elementGet2.getAtomicMass(), 0.1);
+    assertEquals(7, elementGet3.getAtomicMass(), 0.1);
+    assertEquals(6, elementGet4.getAtomicMass(), 0.1);
   }
   
   @Test
-  void testGetName() {
-    ChemicalRDG chem = new ChemicalRDGRDS(); 
-    ElementRDG ele = new ElementRDGRDS();
-    ele.dropAllTables();
-    chem.createTable();
-    ele.createTableElement();
-    
-    ElementRDG element = new ElementRDGRDS(1, 55, 123, "chemicalname1", 1.0);
-    
-    ElementRDG elementGet = new ElementRDGRDS(1);
-    
-    assertEquals("chemicalname1", elementGet.getName());
+  static void testGetName() {    
+    ElementRDG elementGet1 = new ElementRDGRDS(21);
+    ElementRDG elementGet2 = new ElementRDGRDS(22);
+    ElementRDG elementGet3 = new ElementRDGRDS(23);
+    ElementRDG elementGet4 = new ElementRDGRDS(24);
+
+    assertEquals("elementname1", elementGet1.getName());
+    assertEquals("elementname2", elementGet2.getName());
+    assertEquals("elementname3", elementGet3.getName());
+    assertEquals("elementname4", elementGet4.getName());
   }
   
   @Test
-  void testGetInhabits() {
-    ChemicalRDG chem = new ChemicalRDGRDS(); 
-    ElementRDG ele = new ElementRDGRDS();
-    ele.dropAllTables();
-    chem.createTable();
-    ele.createTableElement();
-    
-    ElementRDG element = new ElementRDGRDS(1, 15, 18, "chemicalname1", 1.0);
-    
-    ElementRDG elementGet = new ElementRDGRDS(1);
-    
-    // Test
-    assertEquals(1.0, elementGet.getInventory());
+  static void testGetInhabits() {    
+    ElementRDG elementGet1 = new ElementRDGRDS(21);
+    ElementRDG elementGet2 = new ElementRDGRDS(22);
+    ElementRDG elementGet3 = new ElementRDGRDS(23);
+    ElementRDG elementGet4 = new ElementRDGRDS(24);
+
+    assertEquals(1.1, elementGet1.getInventory(), 0.1);
+    assertEquals(1.2, elementGet2.getInventory(), 0.1);
+    assertEquals(1.3, elementGet3.getInventory(), 0.1);
+    assertEquals(1.4, elementGet4.getInventory(), 0.1);
+  }
+  
+  static void testAll() {
+    insertElements(); 
+    testGetAtomicNumber();
+    testGetAtomicMass();
+    testGetName();
+    testGetInhabits();
+  }
+  
+  private static void insertElements() {
+    ElementRDG ele = new ElementRDGRDS(21, 1, 9, "elementname1", 1.1);
+    ele = new ElementRDGRDS(22, 2, 8, "elementname2", 1.2);
+    ele = new ElementRDGRDS(23, 3, 7, "elementname3", 1.3);
+    ele = new ElementRDGRDS(24, 4, 6, "elementname4", 1.4);
   }
 
 }
