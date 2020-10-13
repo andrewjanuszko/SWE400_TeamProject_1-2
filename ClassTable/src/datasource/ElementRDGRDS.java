@@ -75,7 +75,7 @@ public class ElementRDGRDS implements ElementRDG {
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + "VALUES (?, ?, ?);");
       insertChemical.setInt(1, id);
       insertChemical.setString(2, name);
-      insertChemical.setString(3, inventory);
+      insertChemical.setDouble(3, inventory);
       PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Element (elementId, atomicNumber, atomicMass)" + "VALUES (?, ?, ?);");
 

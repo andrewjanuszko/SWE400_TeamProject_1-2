@@ -1,5 +1,6 @@
 package datasource;
 
+import java.util.ArrayList;
 import java.util.List;
 /**
  * 
@@ -14,9 +15,9 @@ public interface CompoundsMadeOfTDG {
 
   public void delete();
 
-  List<CompoundDTO> findSetCompoundId(int elementId);
+  ArrayList<CompoundDTO> findSetCompoundId(int elementId);
 
-  List<CompoundDTO> findSetElementId(int compoundId);
+  ArrayList<CompoundDTO> findSetElementId(int compoundId);
 
   String getCompoundName();
   
