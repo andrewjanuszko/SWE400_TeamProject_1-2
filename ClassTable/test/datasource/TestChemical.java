@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -106,6 +107,36 @@ class TestChemical extends DatabaseTest {
   }
 
   /**
+   * Test the getAll function in ChemicalRDGRDS
+   * 
+   * Note: this test is run after TestAcid and TestBase, but before the others, so
+   * at this point in the test only acids and bases have been inserted.
+   */
+  @Test
+  static void testGetAll() {
+    ChemicalRDG getter = new ChemicalRDGRDS(); // Empty ChemicalRDGRDS
+    List<ChemicalDTO> getAll = getter.getAll(); // Get all elements
+
+    // At this point in the test we have only inserted acids and bases, but nothing
+    // else,
+    // so we only have 12 chemicals total. This test is sensitive to when we run it,
+    // so be careful when moving tests in TestAll.
+    assertEquals(12, getAll.size());
+    assertEquals(1, getAll.get(0).getChemicalId());
+    assertEquals(2, getAll.get(1).getChemicalId());
+    assertEquals(3, getAll.get(2).getChemicalId());
+    assertEquals(4, getAll.get(3).getChemicalId());
+    assertEquals(5, getAll.get(4).getChemicalId());
+    assertEquals(6, getAll.get(5).getChemicalId());
+    assertEquals(11, getAll.get(6).getChemicalId());
+    assertEquals(12, getAll.get(7).getChemicalId());
+    assertEquals(13, getAll.get(8).getChemicalId());
+    assertEquals(14, getAll.get(9).getChemicalId());
+    assertEquals(15, getAll.get(10).getChemicalId());
+    assertEquals(16, getAll.get(11).getChemicalId());
+  }
+
+  /**
    * Run every test in TestChemical
    */
   static void testAll() {
@@ -114,6 +145,7 @@ class TestChemical extends DatabaseTest {
       testGetInventory();
       testDelete();
       testUpdate();
+      testGetAll();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }

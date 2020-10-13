@@ -1,6 +1,7 @@
 package datasource;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * ChemicalRowDataGateway
@@ -19,5 +20,7 @@ public interface ChemicalRDG {
   public double getInventory();
   
   public void setInventory(double inventory);
+  
+  public List<ChemicalDTO> getAll();
   
 }

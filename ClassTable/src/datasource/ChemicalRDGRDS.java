@@ -116,6 +116,23 @@ public class ChemicalRDGRDS implements ChemicalRDG {
     }
   }
   
+  public List<ChemicalDTO> getAll() {
+    String sql = "SELECT * FROM Chemical;";
+    ArrayList<ChemicalDTO> chemicals = new ArrayList<ChemicalDTO>();
+    
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sql);
+
+      while (rs.next()) {
+        chemicals.add(new ChemicalDTO(rs.getInt("chemicalId"), rs.getString("name"), rs.getDouble("inventory")));
+      }
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+    return chemicals;
+  }
+  
   /**
    * Get name.
    */
