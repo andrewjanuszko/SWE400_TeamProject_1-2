@@ -8,18 +8,14 @@ import java.util.List;
  * @author Isabella Boone, Kim O'Neill
  */
 public interface AcidRDG {
-
-  public int getSolute();
   
   public void setSolute(int newSolute);
   
-  public String getName();
-  
   public void setName(String newName);
   
-  public double getInventory();
-  
   void setInventory(double inventory); 
+  
+  AcidDTO getAcid();
   
   public void update(); 
   

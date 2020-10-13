@@ -30,10 +30,10 @@ class TestAcid extends DatabaseTest {
     AcidRDG acid1 = new AcidRDGRDS(1), acid2 = new AcidRDGRDS(2), acid3 = new AcidRDGRDS(3), acid4 = new AcidRDGRDS(4);
 
     // Test
-    assertEquals("acidname1", acid1.getName());
-    assertEquals("acidname2", acid2.getName());
-    assertEquals("acidname3", acid3.getName());
-    assertEquals("acidname4", acid4.getName());
+    assertEquals("acidname1", acid1.getAcid().getName());
+    assertEquals("acidname2", acid2.getAcid().getName());
+    assertEquals("acidname3", acid3.getAcid().getName());
+    assertEquals("acidname4", acid4.getAcid().getName());
   }
 
   /**
@@ -48,10 +48,10 @@ class TestAcid extends DatabaseTest {
     AcidRDG acid1 = new AcidRDGRDS(1), acid2 = new AcidRDGRDS(2), acid3 = new AcidRDGRDS(3), acid4 = new AcidRDGRDS(4);
 
     // Test
-    assertEquals(1.1, acid1.getInventory(), 0.1);
-    assertEquals(1.2, acid2.getInventory(), 0.1);
-    assertEquals(1.3, acid3.getInventory(), 0.1);
-    assertEquals(1.4, acid4.getInventory(), 0.1);
+    assertEquals(1.1, acid1.getAcid().getInventory(), 0.1);
+    assertEquals(1.2, acid2.getAcid().getInventory(), 0.1);
+    assertEquals(1.3, acid3.getAcid().getInventory(), 0.1);
+    assertEquals(1.4, acid4.getAcid().getInventory(), 0.1);
   }
 
   /**
@@ -66,10 +66,10 @@ class TestAcid extends DatabaseTest {
     AcidRDG acid1 = new AcidRDGRDS(1), acid2 = new AcidRDGRDS(2), acid3 = new AcidRDGRDS(3), acid4 = new AcidRDGRDS(4);
 
     // Test
-    assertEquals(51, acid1.getSolute());
-    assertEquals(52, acid2.getSolute());
-    assertEquals(53, acid3.getSolute());
-    assertEquals(54, acid4.getSolute());
+    assertEquals(51, acid1.getAcid().getSoluteId());
+    assertEquals(52, acid2.getAcid().getSoluteId());
+    assertEquals(53, acid3.getAcid().getSoluteId());
+    assertEquals(54, acid4.getAcid().getSoluteId());
   }
 
   /**
@@ -81,9 +81,9 @@ class TestAcid extends DatabaseTest {
     AcidRDG acid = new AcidRDGRDS(9, 59, "acidname1", 1.9);
 
     // Ensure it has been added
-    assertEquals("acidname1", acid.getName());
-    assertEquals(1.9, acid.getInventory(), 0.1);
-    assertEquals(59, acid.getSolute());
+    assertEquals("acidname1", acid.getAcid().getName());
+    assertEquals(1.9, acid.getAcid().getInventory(), 0.1);
+    assertEquals(59, acid.getAcid().getSoluteId());
 
     // Delete
     acid.delete();
@@ -108,9 +108,9 @@ class TestAcid extends DatabaseTest {
     AcidRDG acid_setter = new AcidRDGRDS(9, 59, "acidname9", 1.9), acid_getter = new AcidRDGRDS(9);
 
     // Ensure that acid has been added and fetches the right information
-    assertEquals("acidname9", acid_getter.getName());
-    assertEquals(1.9, acid_getter.getInventory(), 0.1);
-    assertEquals(59, acid_getter.getSolute());
+    assertEquals("acidname9", acid_getter.getAcid().getName());
+    assertEquals(1.9, acid_getter.getAcid().getInventory(), 0.1);
+    assertEquals(59, acid_getter.getAcid().getSoluteId());
 
     // Change the information, then update and refresh the getter
     acid_setter.setName("acidname6");
@@ -120,9 +120,9 @@ class TestAcid extends DatabaseTest {
     acid_getter = new AcidRDGRDS(9);
 
     // Test that the new information has been updated
-    assertEquals("acidname6", acid_getter.getName());
-    assertEquals(1.8, acid_getter.getInventory(), 0.1);
-    assertEquals(56, acid_getter.getSolute());
+    assertEquals("acidname6", acid_getter.getAcid().getName());
+    assertEquals(1.8, acid_getter.getAcid().getInventory(), 0.1);
+    assertEquals(56, acid_getter.getAcid().getSoluteId());
 
     // Delete because we don't need it.
     acid_getter.delete();
@@ -137,8 +137,8 @@ class TestAcid extends DatabaseTest {
     List<AcidRDGRDS> acidGet = getter.findSet(55); // Get set
 
     // Test
-    assertEquals("acidname5", acidGet.get(0).getName());
-    assertEquals("acidname6", acidGet.get(1).getName());
+    assertEquals("acidname5", acidGet.get(0).getAcid().getName());
+    assertEquals("acidname6", acidGet.get(1).getAcid().getName());
   }
   
   /**

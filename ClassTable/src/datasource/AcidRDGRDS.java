@@ -15,12 +15,10 @@ import database.DatabaseManager;
  * @author Isabella Boone, Kim O'Neill
  */
 public class AcidRDGRDS implements AcidRDG {
-  private int acidId, solute;
-  private String name;
-  private double inventory;
+  private AcidDTO acid;
   
   /**
-   * Create tables
+   * Empty constructor
    */
   public AcidRDGRDS() {
     
@@ -31,6 +29,8 @@ public class AcidRDGRDS implements AcidRDG {
    * @param id of the acid to find
    */
   public AcidRDGRDS(int id) throws SQLException, DatabaseException {
+    int solute; 
+
     // Statements to find existing acid/chemical and collect their information.
     String getAcid = new String("SELECT * FROM Acid WHERE acidId = " + id + ";"),
         getChem = new String("SELECT * FROM Chemical WHERE chemicalId = " + id + ";");
@@ -39,14 +39,12 @@ public class AcidRDGRDS implements AcidRDG {
     Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
     ResultSet rs = statement.executeQuery(getAcid);
     rs.next(); // Get result
-    this.solute = rs.getInt("solute");
+    solute = rs.getInt("solute");
 
     // Get chemical information
     rs = statement.executeQuery(getChem);
     rs.next();
-    this.name = rs.getString("name");
-    this.inventory = rs.getDouble("inventory");
-    this.acidId = id;
+    acid = new AcidDTO(rs.getInt("chemicalId"), solute, rs.getString("name"), rs.getDouble("inventory"));
 
   }
   
@@ -76,10 +74,7 @@ public class AcidRDGRDS implements AcidRDG {
       insertChemical.execute(); // Insert chemical
       insertAcid.execute();  // Insert acid
       
-      this.acidId = id;
-      this.solute = solute; 
-      this.name = name;
-      this.inventory = inventory;
+      acid = new AcidDTO(id, solute, name, inventory);
       
     } catch(SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -88,19 +83,12 @@ public class AcidRDGRDS implements AcidRDG {
   }
 	
 	/**
-	 * Drop acid and all tables connected (acid & chemical)
-	 */
-	public void dropAllTables() {
-	  
-	}
-	
-	/**
 	 * Delete an acid from both acid and chemical tables
 	 */
   @Override
   public void delete() {
-    String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + acidId + ";",
-        deleteAcid = "DELETE FROM Acid WHERE AcidId = " + acidId + ";";
+    String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + acid.getAcidId() + ";",
+        deleteAcid = "DELETE FROM Acid WHERE AcidId = " + acid.getAcidId() + ";";
     
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -112,7 +100,7 @@ public class AcidRDGRDS implements AcidRDG {
       
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Error deleting acid " + acidId);
+      System.out.println("Error deleting acid " + acid.getAcidId());
     }
   }
 
@@ -121,22 +109,22 @@ public class AcidRDGRDS implements AcidRDG {
    */
   @Override
   public void update() {
-    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inventory = ? WHERE chemicalID = " + acidId + ";";
-    String updateAcidSQL = "UPDATE Acid SET acidId = ?, solute = ? WHERE acidId = " + acidId + ";";
+    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inventory = ? WHERE chemicalID = " + acid.getAcidId() + ";";
+    String updateAcidSQL = "UPDATE Acid SET acidId = ?, solute = ? WHERE acidId = " + acid.getAcidId() + ";";
     
     try {
       // Chemical
       PreparedStatement chem = DatabaseManager.getSingleton().getConnection().prepareStatement(updateChemicalSQL);
-      chem.setInt(1, acidId);
-      chem.setString(2, name);
-      chem.setDouble(3, inventory);
+      chem.setInt(1, acid.getAcidId());
+      chem.setString(2, acid.getName());
+      chem.setDouble(3, acid.getInventory());
 
       chem.execute();
       
       // Acid
       PreparedStatement acid = DatabaseManager.getSingleton().getConnection().prepareStatement(updateAcidSQL);
-      acid.setInt(1, acidId);
-      acid.setInt(2, solute);
+      acid.setInt(1, this.acid.getAcidId());
+      acid.setInt(2, this.acid.getSoluteId());
       
       acid.execute();
       
@@ -193,28 +181,13 @@ public class AcidRDGRDS implements AcidRDG {
     return acids;
   }
   
-  /**
-   * Return solute of acid
-   */
-  @Override
-  public int getSolute() {
-    return solute;
-  }
 
   /**
    * Set solute
    */
   @Override
   public void setSolute(int newSolute) {
-    this.solute = newSolute;
-  }
-
-  /**
-   * Return name of acid.
-   */
-  @Override
-  public String getName() {
-    return name;
+    acid.setSoluteId(newSolute);
   }
 
   /**
@@ -222,15 +195,7 @@ public class AcidRDGRDS implements AcidRDG {
    */
   @Override
   public void setName(String newName) {
-    this.name = newName;
-  }
-
-  /**
-   * Return inhabits of acid
-   */
-  @Override
-  public double getInventory() {
-    return inventory;
+    acid.setName(newName);
   }
 
   /**
@@ -238,7 +203,11 @@ public class AcidRDGRDS implements AcidRDG {
    */
   @Override
   public void setInventory(double inventory) {
-    this.inventory = inventory;
+    acid.setInventory(inventory);
+  }
+  
+  public AcidDTO getAcid() {
+    return acid;
   }
 	
 }
