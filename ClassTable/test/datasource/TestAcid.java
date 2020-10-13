@@ -140,6 +140,21 @@ class TestAcid extends DatabaseTest {
     assertEquals("acidname5", acidGet.get(0).getName());
     assertEquals("acidname6", acidGet.get(1).getName());
   }
+  
+  @Test
+  static void testGetAll() {
+    AcidRDG getter = new AcidRDGRDS(); // Empty AcidRDGRDS
+    List<AcidDTO> getAll = getter.getAll(); // Get all elements
+    
+    // Assert that we have 6 acids, and that they are the right ids. 
+    assertEquals(6, getAll.size());
+    assertEquals(1, getAll.get(0).getAcidId());
+    assertEquals(2, getAll.get(1).getAcidId());
+    assertEquals(3, getAll.get(2).getAcidId());
+    assertEquals(4, getAll.get(3).getAcidId());
+    assertEquals(5, getAll.get(4).getAcidId());
+    assertEquals(6, getAll.get(5).getAcidId());
+  }
 
   /**
    * Test all functions in TestAcid
@@ -153,6 +168,7 @@ class TestAcid extends DatabaseTest {
       testDelete();
       testUpdate();
       testGetSet();
+      testGetAll();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
