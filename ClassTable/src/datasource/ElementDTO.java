@@ -5,12 +5,12 @@ public class ElementDTO {
   double atomicMass, inventory;
   String name;
 
-  public ElementDTO(int elementId, int atomicNumber, double atomicMass, double inventory, String name) {
+  public ElementDTO(int elementId, int atomicNumber, double atomicMass, String name, double inventory) {
     this.elementId = elementId;
     this.atomicNumber = atomicNumber;
     this.atomicMass = atomicMass;
-    this.inventory = inventory;
     this.name = name;
+    this.inventory = inventory;
   }
 
   public int getElementId() {

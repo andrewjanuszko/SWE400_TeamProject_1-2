@@ -17,17 +17,10 @@ import database.DatabaseManager;
  *
  */
 public class ElementRDGRDS implements ElementRDG {
-  /**
-   * Create element table
-   */
-  private int elementId;
-  private int atomicNumber;
-  private double atomicMass;
-  private String name;
-  private double inventory;
+  ElementDTO element;
 
   /**
-   * Empty constructor drops and recreates table
+   * Empty constructor 
    */
   public ElementRDGRDS() {
   }
@@ -37,22 +30,19 @@ public class ElementRDGRDS implements ElementRDG {
    * @param id
    */
   public ElementRDGRDS(int id) {
-    this.elementId = id;
-
     String sqlChem = "SELECT * FROM Chemical INNER JOIN Element ON Chemical.chemicalId = " + id + ";";
     String sqlElement = "SELECT * FROM Element WHERE elementId = " + id + ";";
+    
     try {
-
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sqlElement);
       rs.next();
-      this.atomicNumber = rs.getInt("atomicNumber");
-      this.atomicMass = rs.getDouble("atomicMass");
+      int atomicNumber = rs.getInt("atomicNumber");
+      double atomicMass = rs.getDouble("atomicMass");
 
       rs = statement.executeQuery(sqlChem);
       rs.next();
-      this.name = rs.getString("name");
-      this.inventory = rs.getDouble("inventory");
+      element = new ElementDTO(id, atomicNumber, atomicMass, rs.getString("name"), rs.getDouble("inventory"));
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -86,6 +76,9 @@ public class ElementRDGRDS implements ElementRDG {
 
       insertChemical.execute();
       insert.execute();
+      
+      element = new ElementDTO(id, atomicNum, atomicMass, name, inventory);
+      
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert");
@@ -98,8 +91,8 @@ public class ElementRDGRDS implements ElementRDG {
   @Override
   public void delete() {
 
-    String sqlElement = "DELETE FROM Element WHERE elementId = " + this.elementId + ";";
-    String sqlChem = "DELETE FROM Chemical WHERE chemicalId = " + this.elementId + ";";
+    String sqlElement = "DELETE FROM Element WHERE elementId = " + element.getElementId() + ";";
+    String sqlChem = "DELETE FROM Chemical WHERE chemicalId = " + element.getElementId() + ";";
     try {
 
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -108,7 +101,7 @@ public class ElementRDGRDS implements ElementRDG {
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Problem deleting Element with id " + this.elementId);
+      System.out.println("Problem deleting Element with id " + element.getElementId());
     }
   }
 
@@ -120,15 +113,15 @@ public class ElementRDGRDS implements ElementRDG {
     try {
       PreparedStatement updateElement = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Element SET atomicNumber = ?, atomicMass = ? WHERE elementId = ?;");
-      updateElement.setInt(1, this.atomicNumber);
-      updateElement.setDouble(2, this.atomicMass);
-      updateElement.setInt(3, this.elementId);
+      updateElement.setInt(1, element.getAtomicNumber());
+      updateElement.setDouble(2, element.getAtomicMass());
+      updateElement.setInt(3, element.getElementId());
 
       PreparedStatement updateChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Chemical SET name = ?, inventory = ? WHERE chemicalId = ?;");
-      updateChemical.setString(1, this.name);
-      updateChemical.setDouble(2, this.inventory);
-      updateChemical.setInt(3, this.elementId);
+      updateChemical.setString(1, element.getName());
+      updateChemical.setDouble(2, element.getInventory());
+      updateChemical.setInt(3, element.getElementId());
 
       updateElement.execute();
       updateChemical.execute();
@@ -141,26 +134,30 @@ public class ElementRDGRDS implements ElementRDG {
   /**
    * finds entry by atomic number
    */
-  @Override
-  public void findByAtomicNumber(int atomicNum) {
-    this.atomicNumber = atomicNum;
+  public ElementDTO findByAtomicNumber(int atomicNum) {
+    int id;
+    double atomicMass, inventory;
+    String name;
     String sqlElement = "SELECT * FROM Element WHERE atomicNumber = " + atomicNum + ";";
     try {
-
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sqlElement);
       rs.next();
-      this.elementId = rs.getInt("elementId");
-      this.atomicMass = rs.getDouble("atomicMass");
+      id = rs.getInt("elementId");
+      atomicMass = rs.getDouble("atomicMass");
 
-      String sqlChem = "SELECT * FROM Chemical INNER JOIN Element ON Chemical.chemicalId = " + this.elementId + ";";
+      String sqlChem = "SELECT * FROM Chemical INNER JOIN Element ON Chemical.chemicalId = " + id + ";";
       rs = statement.executeQuery(sqlChem);
       rs.next();
-      this.name = rs.getString("name");
-      this.inventory = rs.getDouble("inventory");
+      
+      name = rs.getString("name");
+      inventory = rs.getDouble("inventory");
+      
+      return new ElementDTO(id, atomicNum, atomicMass, name, inventory);
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
+      return null; 
     }
   }
   
@@ -168,38 +165,44 @@ public class ElementRDGRDS implements ElementRDG {
    * finds entry by atomic Mass
    */
   @Override
-  public void findByAtomicMass(double atomicMass) {
-    this.atomicMass = atomicMass;
+  public ElementDTO findByAtomicMass(double atomicMass) {
+    int id, atomicNum;
+    double inventory;
+    String name;
+    
     String sqlElement = "SELECT * FROM Element WHERE atomicMass = " + atomicMass + ";";
     try {
 
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sqlElement);
       rs.next();
-      this.elementId = rs.getInt("elementId");
-      this.atomicNumber = rs.getInt("atomicNumber");
+      id = rs.getInt("elementId");
+      atomicNum = rs.getInt("atomicNumber");
 
-      String sqlChem = "SELECT * FROM Chemical INNER JOIN Element ON Chemical.chemicalId = " + this.elementId + ";";
+      String sqlChem = "SELECT * FROM Chemical INNER JOIN Element ON Chemical.chemicalId = " + id + ";";
       rs = statement.executeQuery(sqlChem);
       rs.next();
-      this.name = rs.getString("name");
-      this.inventory = rs.getDouble("inventory");
+      name = rs.getString("name");
+      inventory = rs.getDouble("inventory");
+      
+      return new ElementDTO(id, atomicNum, atomicMass, name, inventory);
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
+      return null;
     }
   }
 
   @Override
-  public List<ElementRDGRDS> findSetAtomicMass(double lowerLimit, double upperLimit) {
-    List<ElementRDGRDS> results = new ArrayList<>();
+  public List<ElementDTO> findSetAtomicMass(double lowerLimit, double upperLimit) {
+    List<ElementDTO> results = new ArrayList<>();
     try {
       String sql = "SELECT * FROM Metal WHERE atomicMass BETWEEN " + lowerLimit + " AND " + upperLimit + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       while (rs.next()) {
-        ElementRDGRDS elementRDS = new ElementRDGRDS(rs.getInt("elementId"));
-        results.add(elementRDS);
+        ElementDTO element = getDTO(rs.getInt("elementId"));
+        results.add(element);
       }
     } catch (SQLException | DatabaseException e) {
 
@@ -207,74 +210,52 @@ public class ElementRDGRDS implements ElementRDG {
     return results;
   }
   
-  /**
-   * Get atomic number of element from a given id
-   * 
-   * @param id
-   *          to search for atomic number of
-   */
-  @Override
-  public int getAtomicNumber() {
-    return this.atomicNumber;
-  }
+  public ElementDTO getDTO(int id) {
+    String sql = "SELECT * FROM Element INNER JOIN Chemical ON Element.elementId = Chemical.chemicalId AND elementId = "
+        + id + ";";
 
-  /**
-   * Get atomic mass of element from a given id
-   * 
-   * @param to
-   *          search for atomic mass of
-   */
-  @Override
-  public double getAtomicMass() {
-    return this.atomicMass;
-  }
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sql);
+      rs.next();
 
-  /**
-   * Get name of element
-   * 
-   * @param id
-   *          to search for name of
-   */
-  @Override
-  public String getName() {
-    return this.name;
-  }
+      return new ElementDTO(id, rs.getInt("atomicNum"), rs.getDouble("atomicMass"), rs.getString("name"),
+          rs.getDouble("inventory"));
 
-  /**
-   * Get inhabits of a element
-   * 
-   * @param id
-   *          to search for inhabits of
-   */
-  @Override
-  public double getInventory() {
-    return this.inventory;
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("No entry with id " + id);
+    }
+    return null;
   }
 
   @Override
   public void setElementId(int elementId) {
-    this.elementId = elementId;
+    element.setElementId(elementId);;
   }
 
   @Override
   public void setAtomicNumber(int atomicNumber) {
-    this.atomicNumber = atomicNumber;
+    element.setAtomicNumber(atomicNumber);
   }
 
   @Override
   public void setAtomicMass(double atomicMass) {
-    this.atomicMass = atomicMass;
+    element.setAtomicMass(atomicMass);
   }
 
   @Override
   public void setName(String name) {
-    this.name = name;
+    element.setName(name);
   }
 
   @Override
   public void setInventory(double inventory) {
-    this.inventory = inventory;
+    element.setInventory(inventory);
   }
   
+  public ElementDTO getElement() {
+    return element;
+  }
   
 }

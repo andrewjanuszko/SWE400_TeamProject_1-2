@@ -24,10 +24,10 @@ class TestElement extends DatabaseTest {
     ElementRDG elementGet4 = new ElementRDGRDS(24);
 
     // Test getAtomicNumber
-    assertEquals(1, elementGet1.getAtomicNumber());
-    assertEquals(2, elementGet2.getAtomicNumber());
-    assertEquals(3, elementGet3.getAtomicNumber());
-    assertEquals(4, elementGet4.getAtomicNumber());
+    assertEquals(1, elementGet1.getElement().getAtomicNumber());
+    assertEquals(2, elementGet2.getElement().getAtomicNumber());
+    assertEquals(3, elementGet3.getElement().getAtomicNumber());
+    assertEquals(4, elementGet4.getElement().getAtomicNumber());
   }
 
   /**
@@ -42,10 +42,10 @@ class TestElement extends DatabaseTest {
     ElementRDG elementGet4 = new ElementRDGRDS(24);
 
     // Test getAtomicMass
-    assertEquals(9, elementGet1.getAtomicMass(), 0.1);
-    assertEquals(8, elementGet2.getAtomicMass(), 0.1);
-    assertEquals(7, elementGet3.getAtomicMass(), 0.1);
-    assertEquals(6, elementGet4.getAtomicMass(), 0.1);
+    assertEquals(9, elementGet1.getElement().getAtomicMass(), 0.1);
+    assertEquals(8, elementGet2.getElement().getAtomicMass(), 0.1);
+    assertEquals(7, elementGet3.getElement().getAtomicMass(), 0.1);
+    assertEquals(6, elementGet4.getElement().getAtomicMass(), 0.1);
   }
 
   /**
@@ -60,10 +60,10 @@ class TestElement extends DatabaseTest {
     ElementRDG elementGet4 = new ElementRDGRDS(24);
 
     // Test getName
-    assertEquals("elementname1", elementGet1.getName());
-    assertEquals("elementname2", elementGet2.getName());
-    assertEquals("elementname3", elementGet3.getName());
-    assertEquals("elementname4", elementGet4.getName());
+    assertEquals("elementname1", elementGet1.getElement().getName());
+    assertEquals("elementname2", elementGet2.getElement().getName());
+    assertEquals("elementname3", elementGet3.getElement().getName());
+    assertEquals("elementname4", elementGet4.getElement().getName());
   }
 
   /**
@@ -78,10 +78,10 @@ class TestElement extends DatabaseTest {
     ElementRDG elementGet4 = new ElementRDGRDS(24);
 
     // Test getInventory
-    assertEquals(1.1, elementGet1.getInventory(), 0.1);
-    assertEquals(1.2, elementGet2.getInventory(), 0.1);
-    assertEquals(1.3, elementGet3.getInventory(), 0.1);
-    assertEquals(1.4, elementGet4.getInventory(), 0.1);
+    assertEquals(1.1, elementGet1.getElement().getInventory(), 0.1);
+    assertEquals(1.2, elementGet2.getElement().getInventory(), 0.1);
+    assertEquals(1.3, elementGet3.getElement().getInventory(), 0.1);
+    assertEquals(1.4, elementGet4.getElement().getInventory(), 0.1);
   }
 
   /**
