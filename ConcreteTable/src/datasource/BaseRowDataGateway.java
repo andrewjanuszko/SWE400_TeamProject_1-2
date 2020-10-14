@@ -6,13 +6,13 @@ public interface BaseRowDataGateway {
 	
 	public String getName();
 	
-	public String getInhabits();
+	public double getInventory();
 	
 	public String getSolute();
 	
 	public void setName(String name);
 	
-	public void setInhabits(String inhabits);
+	public void setInventory(double inventory);
 	
 	public void setSolute(String solute);
 	

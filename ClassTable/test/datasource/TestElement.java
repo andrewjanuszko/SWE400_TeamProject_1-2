@@ -12,68 +12,96 @@ import org.junit.jupiter.api.Test;
  */
 class TestElement extends DatabaseTest {
 
-  
+  /**
+   * Test that the getAtomicNumber function in ElementRDGRDS works
+   */
   @Test
-  void testGetAtomicNumber() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    ele.dropAllTables();
-    chem.createTable();
-    ele.createTableElement();
-    
-    //initialize element
-    ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 55, 123, "chemicalname1", "inhabits1");
-    
-    //element getter
-    ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
-    
-    assertEquals(55, elementGet.getAtomicNumber());
-  }
-  
-  @Test
-  void testGetAtomicMass() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    ele.dropAllTables();
-    chem.createTable();
-    ele.createTableElement();
-    
-    ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 55, 123, "chemicalname1", "inhabits1");
-    
-    ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
-    
-    assertEquals(123, elementGet.getAtomicMass(), .01);
-  }
-  
-  @Test
-  void testGetName() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    ele.dropAllTables();
-    chem.createTable();
-    ele.createTableElement();
-    
-    ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 55, 123, "chemicalname1", "inhabits1");
-    
-    ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
-    
-    assertEquals("chemicalname1", elementGet.getName());
-  }
-  
-  @Test
-  void testGetInhabits() {
-    ChemicalRowDataGateway chem = new ChemicalRowDataGatewayRDS(); 
-    ElementRowDataGateway ele = new ElementRowDataGatewayRDS();
-    ele.dropAllTables();
-    chem.createTable();
-    ele.createTableElement();
-    
-    ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, 15, 18, "chemicalname1", "inhabits1");
-    
-    ElementRowDataGateway elementGet = new ElementRowDataGatewayRDS(1);
-    
-    // Test
-    assertEquals("inhabits1", elementGet.getInhabits());
+  static void testGetAtomicNumber() {
+    // Fetch elements
+    ElementRDG elementGet1 = new ElementRDGRDS(21);
+    ElementRDG elementGet2 = new ElementRDGRDS(22);
+    ElementRDG elementGet3 = new ElementRDGRDS(23);
+    ElementRDG elementGet4 = new ElementRDGRDS(24);
+
+    // Test getAtomicNumber
+    assertEquals(1, elementGet1.getElement().getAtomicNumber());
+    assertEquals(2, elementGet2.getElement().getAtomicNumber());
+    assertEquals(3, elementGet3.getElement().getAtomicNumber());
+    assertEquals(4, elementGet4.getElement().getAtomicNumber());
   }
 
+  /**
+   * Test that the getAtomicMass function in ElementRDGRDS works
+   */
+  @Test
+  static void testGetAtomicMass() {
+    // Fetch elements
+    ElementRDG elementGet1 = new ElementRDGRDS(21);
+    ElementRDG elementGet2 = new ElementRDGRDS(22);
+    ElementRDG elementGet3 = new ElementRDGRDS(23);
+    ElementRDG elementGet4 = new ElementRDGRDS(24);
+
+    // Test getAtomicMass
+    assertEquals(9, elementGet1.getElement().getAtomicMass(), 0.1);
+    assertEquals(8, elementGet2.getElement().getAtomicMass(), 0.1);
+    assertEquals(7, elementGet3.getElement().getAtomicMass(), 0.1);
+    assertEquals(6, elementGet4.getElement().getAtomicMass(), 0.1);
+  }
+
+  /**
+   * Test that the getName function in ElementRDGRDS works
+   */
+  @Test
+  static void testGetName() {
+    // Fetch elements
+    ElementRDG elementGet1 = new ElementRDGRDS(21);
+    ElementRDG elementGet2 = new ElementRDGRDS(22);
+    ElementRDG elementGet3 = new ElementRDGRDS(23);
+    ElementRDG elementGet4 = new ElementRDGRDS(24);
+
+    // Test getName
+    assertEquals("elementname1", elementGet1.getElement().getName());
+    assertEquals("elementname2", elementGet2.getElement().getName());
+    assertEquals("elementname3", elementGet3.getElement().getName());
+    assertEquals("elementname4", elementGet4.getElement().getName());
+  }
+
+  /**
+   * Test that the getInventory function works
+   */
+  @Test
+  static void testGetInventory() {
+    // Fetch elements
+    ElementRDG elementGet1 = new ElementRDGRDS(21);
+    ElementRDG elementGet2 = new ElementRDGRDS(22);
+    ElementRDG elementGet3 = new ElementRDGRDS(23);
+    ElementRDG elementGet4 = new ElementRDGRDS(24);
+
+    // Test getInventory
+    assertEquals(1.1, elementGet1.getElement().getInventory(), 0.1);
+    assertEquals(1.2, elementGet2.getElement().getInventory(), 0.1);
+    assertEquals(1.3, elementGet3.getElement().getInventory(), 0.1);
+    assertEquals(1.4, elementGet4.getElement().getInventory(), 0.1);
+  }
+
+  /**
+   * Run all tests in TestElement
+   */
+  static void testAll() {
+    insertElements();
+    testGetAtomicNumber();
+    testGetAtomicMass();
+    testGetName();
+    testGetInventory();
+  }
+
+  /**
+   * Insert elements into the database to test
+   */
+  private static void insertElements() {
+    ElementRDG ele = new ElementRDGRDS(21, 1, 9, "elementname1", 1.1);
+    ele = new ElementRDGRDS(22, 2, 8, "elementname2", 1.2);
+    ele = new ElementRDGRDS(23, 3, 7, "elementname3", 1.3);
+    ele = new ElementRDGRDS(24, 4, 6, "elementname4", 1.4);
+  }
 }

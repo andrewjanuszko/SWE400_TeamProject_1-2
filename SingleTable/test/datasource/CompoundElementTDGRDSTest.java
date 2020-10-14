@@ -27,12 +27,12 @@ public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
 		ChemicalRowDataGatewayRDS.createTable();
 		gateway = getSingletonInstance();
 		//Inserting 3 elements to make up the compounds
-		ChemicalRowDataGatewayRDS carbon = new ChemicalRowDataGatewayRDS(1, "Carbon", "Earth", 6, 12.011, -1, -1);
-		ChemicalRowDataGatewayRDS oxygen = new ChemicalRowDataGatewayRDS(1, "Oxygen", "Earth", 8, 15.999, -1, -1);
-		ChemicalRowDataGatewayRDS hydrogen = new ChemicalRowDataGatewayRDS(1, "Hydrogen", "Earth", 1, 1.007, -1, -1);
+	    ChemicalRowDataGatewayRDS carbon = new ChemicalRowDataGatewayRDS(1, "Carbon", 1.0, 6, 12.011, 0, 0, 0);
+	    ChemicalRowDataGatewayRDS oxygen = new ChemicalRowDataGatewayRDS(1, "Oxygen", 20.0, 8, 15.999, 0, 0, 0);
+		ChemicalRowDataGatewayRDS hydrogen = new ChemicalRowDataGatewayRDS(1, "Hydrogen", 12.2, 1, 1.007, 0, 0, 0);
 		//Inserting 2 compounds
-		ChemicalRowDataGatewayRDS water = new ChemicalRowDataGatewayRDS(3, "Water", "Earth", -1, -1, -1, -1);
-		ChemicalRowDataGatewayRDS carbonMonoxide = new ChemicalRowDataGatewayRDS(3, "Carbon Monoxide", "Earth", -1, -1, -1, -1);
+		ChemicalRowDataGatewayRDS water = new ChemicalRowDataGatewayRDS(3, "Water", 2, 0, 0, 0, 0, 0);
+		ChemicalRowDataGatewayRDS carbonMonoxide = new ChemicalRowDataGatewayRDS(3, "Carbon Monoxide", 12, 0, 0, 0, 0, 0);
 		// water is made of hydrogen and oxygen
 		gateway.createRow(4, 2);
 		gateway.createRow(4, 3);

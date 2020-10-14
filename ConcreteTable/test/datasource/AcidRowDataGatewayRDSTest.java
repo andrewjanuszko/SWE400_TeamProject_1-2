@@ -24,18 +24,18 @@ class AcidRowDataGatewayRDSTest extends DatabaseTest {
    */
   @Test
   void testConstructors() throws DatabaseException{
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", "inhabit", "solute");
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, "solute");
     AcidRowDataGateway acid1FindByID = new AcidRowDataGatewayRDS(1);
     AcidRowDataGateway acid1FindByName = new AcidRowDataGatewayRDS("acid");
     
     assertEquals(acid1.getAcidID(), acid1FindByID.getAcidID());
     assertEquals(acid1.getName(), acid1FindByID.getName());
-    assertEquals(acid1.getInhabits(), acid1FindByID.getInhabits());
+    assertEquals(acid1.getInventory(), acid1FindByID.getInventory());
     assertEquals(acid1.getSolute(), acid1FindByID.getSolute());
     
     assertEquals(acid1.getAcidID(), acid1FindByName.getAcidID());
     assertEquals(acid1.getName(), acid1FindByName.getName());
-    assertEquals(acid1.getInhabits(), acid1FindByName.getInhabits());
+    assertEquals(acid1.getInventory(), acid1FindByName.getInventory());
     assertEquals(acid1.getSolute(), acid1FindByName.getSolute());
   }
   
@@ -45,11 +45,11 @@ class AcidRowDataGatewayRDSTest extends DatabaseTest {
 	 */
   @Test
   void testGetters() throws DatabaseException{
-	 AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", "inhabit", "solute");
+	 AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, "solute");
 	 
 	 assertEquals(1, acid1.getAcidID());
 	 assertEquals("acid", acid1.getName());
-	 assertEquals("inhabit", acid1.getInhabits());
+	 assertEquals(1.0, acid1.getInventory());
 	 assertEquals("solute", acid1.getSolute());
   }
   
@@ -59,13 +59,13 @@ class AcidRowDataGatewayRDSTest extends DatabaseTest {
    */
   @Test
   void testSetters() throws DatabaseException{
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", "inhabit", "solute");
-    acid1.setInhabits("new");
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, "solute");
+    acid1.setInventory(2.0);
     acid1.setName("new");
     acid1.setSolute("new");
     
     assertEquals("new", acid1.getName());
-    assertEquals("new", acid1.getInhabits());
+    assertEquals(2.0, acid1.getInventory());
     assertEquals("new", acid1.getSolute());
   }
   
@@ -75,7 +75,7 @@ class AcidRowDataGatewayRDSTest extends DatabaseTest {
    */
   @Test
   void testPersist() throws DatabaseException {
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", "inhabit", "solute");
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, "solute");
     acid1.setName("newName");
     assertTrue(acid1.persist());
     acid1 = null;
@@ -90,7 +90,7 @@ class AcidRowDataGatewayRDSTest extends DatabaseTest {
    */
   @Test
   void testDelete() throws DatabaseException {
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", "inhabit", "solute");
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, "solute");
     MetalRowDataGatewayRDS.createTable();
     assertTrue(acid1.delete());
   }

@@ -3,12 +3,13 @@ package datasource;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+
+import database.DatabaseException;
 
 /**
  * 
@@ -16,143 +17,175 @@ import org.junit.jupiter.api.Test;
  * 
  */
 class TestAcid extends DatabaseTest {
-  
+
+  /**
+   * Test that the getName function in AcidRDGRDS works.
+   * 
+   * @throws SQLException
+   * @throws DatabaseException
+   */
   @Test
-  void testGetName() throws SQLException, DatabaseException {
-    AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
-    acid.dropAllTables();
-    acid.createTable();
-    
-    AcidRowDataGateway
-        acid1 = new AcidRowDataGatewayRDS(99, 2, "acidname1", "acidihabits1"),
-        acid2 = new AcidRowDataGatewayRDS(8, 4, "acidname2", "acidihabits2"),
-        acid3 = new AcidRowDataGatewayRDS(63, 6, "acidname3", "acidihabits3"),
-        acid1_fetch = new AcidRowDataGatewayRDS(99), acid2_fetch = new AcidRowDataGatewayRDS(8),
-        acid3_fetch = new AcidRowDataGatewayRDS(63);
-
-    // Tests
-    assertEquals("acidname1", acid1_fetch.getName());
-    assertEquals("acidname2", acid2_fetch.getName());
-    assertEquals("acidname3", acid3_fetch.getName());
-
-    // Drop acid and chemical tables to get rid of anything we added to the database.
-    acid.dropAllTables();
-  }
-  
-  @Test
-  void testGetInhabits() throws SQLException, DatabaseException {
-    ChemicalRowDataGateway resetChem = new ChemicalRowDataGatewayRDS();
-    AcidRowDataGateway resetAcid = new AcidRowDataGatewayRDS(),
-        acid1 = new AcidRowDataGatewayRDS(56, 2, "acidname1", "acidihabits1"),
-        acid2 = new AcidRowDataGatewayRDS(22, 4, "acidname2", "acidihabits2"),
-        acid3 = new AcidRowDataGatewayRDS(38, 6, "acidname3", "acidihabits3"),
-        acid1_fetch = new AcidRowDataGatewayRDS(56), acid2_fetch = new AcidRowDataGatewayRDS(22),
-        acid3_fetch = new AcidRowDataGatewayRDS(38);
-
-    // Tests
-    assertEquals("acidihabits1", acid1_fetch.getInhabits());
-    assertEquals("acidihabits2", acid2_fetch.getInhabits());
-    assertEquals("acidihabits3", acid3_fetch.getInhabits());
-
-    // Drop acid and chemical tables to get rid of anything we added to the database.
-    resetAcid.dropAllTables();
-  }
-  
-  @Test
-  void testGetSolute() throws SQLException, DatabaseException {
-    AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
-    acid.dropAllTables();
-    acid.createTable();
-    AcidRowDataGateway
-        acid1 = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidihabits1"),
-        acid2 = new AcidRowDataGatewayRDS(2, 4, "acidname2", "acidihabits2"),
-        acid3 = new AcidRowDataGatewayRDS(3, 6, "acidname3", "acidihabits3"),
-        acid1_fetch = new AcidRowDataGatewayRDS(1), acid2_fetch = new AcidRowDataGatewayRDS(2),
-        acid3_fetch = new AcidRowDataGatewayRDS(3);
+  static void testGetName() throws SQLException, DatabaseException {
+    // Fetch acids
+    AcidRDG acid1 = new AcidRDGRDS(1), acid2 = new AcidRDGRDS(2), acid3 = new AcidRDGRDS(3), acid4 = new AcidRDGRDS(4);
 
     // Test
-    assertEquals(2, acid1_fetch.getSolute());
-    assertEquals(4, acid2_fetch.getSolute());
-    assertEquals(6, acid3_fetch.getSolute());
-
-    acid.dropAllTables();
+    assertEquals("acidname1", acid1.getAcid().getName());
+    assertEquals("acidname2", acid2.getAcid().getName());
+    assertEquals("acidname3", acid3.getAcid().getName());
+    assertEquals("acidname4", acid4.getAcid().getName());
   }
-  
+
+  /**
+   * Test that the getInventory function in AcidRDGRDS works.
+   * 
+   * @throws SQLException
+   * @throws DatabaseException
+   */
   @Test
-  void testDelete() {
-    AcidRowDataGateway initialize = new AcidRowDataGatewayRDS(),
-        acid = new AcidRowDataGatewayRDS(1, 2, "chemname1", "cheminhabits1");
-    
+  static void testGetInventory() throws SQLException, DatabaseException {
+    // Fetch acids
+    AcidRDG acid1 = new AcidRDGRDS(1), acid2 = new AcidRDGRDS(2), acid3 = new AcidRDGRDS(3), acid4 = new AcidRDGRDS(4);
+
+    // Test
+    assertEquals(1.1, acid1.getAcid().getInventory(), 0.1);
+    assertEquals(1.2, acid2.getAcid().getInventory(), 0.1);
+    assertEquals(1.3, acid3.getAcid().getInventory(), 0.1);
+    assertEquals(1.4, acid4.getAcid().getInventory(), 0.1);
+  }
+
+  /**
+   * Test that the getSolute function in AcidRDGRDS works.
+   * 
+   * @throws SQLException
+   * @throws DatabaseException
+   */
+  @Test
+  static void testGetSolute() throws SQLException, DatabaseException {
+    // Fetch acids
+    AcidRDG acid1 = new AcidRDGRDS(1), acid2 = new AcidRDGRDS(2), acid3 = new AcidRDGRDS(3), acid4 = new AcidRDGRDS(4);
+
+    // Test
+    assertEquals(51, acid1.getAcid().getSoluteId());
+    assertEquals(52, acid2.getAcid().getSoluteId());
+    assertEquals(53, acid3.getAcid().getSoluteId());
+    assertEquals(54, acid4.getAcid().getSoluteId());
+  }
+
+  /**
+   * Test that the delete function in AcidRDGRDS works.
+   */
+  @Test
+  static void testDelete() {
+    // Create acid
+    AcidRDG acid = new AcidRDGRDS(9, 59, "acidname1", 1.9);
+
     // Ensure it has been added
-    assertEquals("chemname1", acid.getName());
-    assertEquals("cheminhabits1", acid.getInhabits());
-    
+    assertEquals("acidname1", acid.getAcid().getName());
+    assertEquals(1.9, acid.getAcid().getInventory(), 0.1);
+    assertEquals(59, acid.getAcid().getSoluteId());
+
+    // Delete
     acid.delete();
-    
-    try { 
-      acid = new AcidRowDataGatewayRDS(1);
-      fail("");
-    } catch(DatabaseException | SQLException e) {
-      assertTrue(true); 
+
+    // Retrieving this acid should now result in a failure
+    try {
+      acid = new AcidRDGRDS(9);
+    } catch (DatabaseException | SQLException e) {
+      assertTrue(true);
     }
   }
-  
+
+  /**
+   * Test that the update function in AcidRDGRDS works.
+   * 
+   * @throws SQLException
+   * @throws DatabaseException
+   */
   @Test
-  void testUpdate() throws SQLException, DatabaseException {
-    AcidRowDataGateway acid = new AcidRowDataGatewayRDS();
-    acid.dropAllTables();
-    acid.createTable();
-    
-    AcidRowDataGateway
-        acid_setter = new AcidRowDataGatewayRDS(1, 2, "acidname1", "acidinhabits1"),
-        acid_getter = new AcidRowDataGatewayRDS(1);
-    
-    // Test solute
-    assertEquals(2, acid_getter.getSolute());
-    acid_setter.setSolute(3);
+  static void testUpdate() throws SQLException, DatabaseException {
+    // Create acid and getter for that acid
+    AcidRDG acid_setter = new AcidRDGRDS(9, 59, "acidname9", 1.9), acid_getter = new AcidRDGRDS(9);
+
+    // Ensure that acid has been added and fetches the right information
+    assertEquals("acidname9", acid_getter.getAcid().getName());
+    assertEquals(1.9, acid_getter.getAcid().getInventory(), 0.1);
+    assertEquals(59, acid_getter.getAcid().getSoluteId());
+
+    // Change the information, then update and refresh the getter
+    acid_setter.setName("acidname6");
+    acid_setter.setInventory(1.8);
+    acid_setter.setSolute(56);
     acid_setter.update();
-    acid_getter = new AcidRowDataGatewayRDS(1);
-    assertEquals(3, acid_getter.getSolute());
-    
-    // Test name
-    assertEquals("acidname1", acid_getter.getName());
-    acid_setter.setName("acidname2");
-    acid_setter.update();
-    acid_getter = new AcidRowDataGatewayRDS(1);
-    assertEquals("acidname2", acid_getter.getName());
-    
-    // Test inhabits
-    assertEquals("acidinhabits1", acid_getter.getInhabits());
-    acid_setter.setInhabits("acidinhabits2");
-    acid_setter.update();
-    acid_getter = new AcidRowDataGatewayRDS(1);
-    assertEquals("acidinhabits2", acid_getter.getInhabits());
-    
-    acid.dropAllTables();
+    acid_getter = new AcidRDGRDS(9);
+
+    // Test that the new information has been updated
+    assertEquals("acidname6", acid_getter.getAcid().getName());
+    assertEquals(1.8, acid_getter.getAcid().getInventory(), 0.1);
+    assertEquals(56, acid_getter.getAcid().getSoluteId());
+
+    // Delete because we don't need it.
+    acid_getter.delete();
+  }
+
+  /**
+   * Test that the getSet function in AcidRDGRDS works.
+   */
+  @Test
+  static void testGetSet() {
+    AcidRDG getter = new AcidRDGRDS(); // Empty AcidRDG
+    List<AcidRDGRDS> acidGet = getter.findSet(55); // Get set
+
+    // Test
+    assertEquals("acidname5", acidGet.get(0).getAcid().getName());
+    assertEquals("acidname6", acidGet.get(1).getAcid().getName());
   }
   
+  /**
+   * Test the getAll function inside AcidRDGRDS
+   */
   @Test
-  void testGetSet() {
-    AcidRowDataGateway createAcid = new AcidRowDataGatewayRDS();
-    createAcid.dropAllTables();
-    ChemicalRowDataGateway createChemical = new ChemicalRowDataGatewayRDS();
-    createAcid.createTable();
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, 15, "chemicalname1", "inhabits1");
-    AcidRowDataGateway acid2 = new AcidRowDataGatewayRDS(2, 15, "chemicalname2", "inhabits2");
+  static void testGetAll() {
+    AcidRDG getter = new AcidRDGRDS(); // Empty AcidRDGRDS
+    List<AcidDTO> getAll = getter.getAll(); // Get all elements
     
-    AcidRowDataGateway getter = new AcidRowDataGatewayRDS();
-    List<AcidRowDataGatewayRDS> acidGet = getter.findSet(15);
-    
-    assertEquals("chemicalname1", acidGet.get(0).getName());
-    assertEquals("chemicalname2", acidGet.get(1).getName());
-    
-    AcidRowDataGateway acid4 = new AcidRowDataGatewayRDS(4, 32, "chemicalname4", "inhabits4");
-    AcidRowDataGateway acid6 = new AcidRowDataGatewayRDS(6, 32, "chemicalname6", "inhabits6");
-    
-    acidGet = getter.findSet(32);
-    
-    assertEquals("chemicalname4", acidGet.get(0).getName());
-    assertEquals("chemicalname6", acidGet.get(1).getName());
+    // Assert that we have 6 acids, and that they are the right ids. 
+    assertEquals(6, getAll.size());
+    assertEquals(1, getAll.get(0).getAcidId());
+    assertEquals(2, getAll.get(1).getAcidId());
+    assertEquals(3, getAll.get(2).getAcidId());
+    assertEquals(4, getAll.get(3).getAcidId());
+    assertEquals(5, getAll.get(4).getAcidId());
+    assertEquals(6, getAll.get(5).getAcidId());
+  }
 
+  /**
+   * Test all functions in TestAcid
+   */
+  static void testAll() {
+    try {
+      insertAcids();
+      testGetName();
+      testGetInventory();
+      testGetSolute();
+      testDelete();
+      testUpdate();
+      testGetSet();
+      testGetAll();
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Insert acids into the database
+   */
+  private static void insertAcids() {
+    AcidRDG acid = new AcidRDGRDS(1, 51, "acidname1", 1.1);
+    acid = new AcidRDGRDS(2, 52, "acidname2", 1.2);
+    acid = new AcidRDGRDS(3, 53, "acidname3", 1.3);
+    acid = new AcidRDGRDS(4, 54, "acidname4", 1.4);
+    acid = new AcidRDGRDS(5, 55, "acidname5", 1.5);
+    acid = new AcidRDGRDS(6, 55, "acidname6", 1.6);
   }
 }

@@ -1,27 +1,24 @@
 package datasource;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * ChemicalRowDataGateway
  * @author Isabella Boone, Kim O'Neill
  */
-public interface ChemicalRowDataGateway {
-
-  public void createTable(); 
-  
-  public void dropTable();
+public interface ChemicalRDG {
   
   public void delete();
   
   public void update(); 
   
-  public String getName();
+  public ChemicalDTO getChemical();
   
   public void setName(String newName);
-
-  public String getInhabits();
   
-  public void setInhabits(String newInhabits);
+  public void setInventory(double inventory);
+  
+  public List<ChemicalDTO> getAll();
   
 }

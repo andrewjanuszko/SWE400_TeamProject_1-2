@@ -7,24 +7,26 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.DatabaseException;
+import database.DatabaseManager;
+
 /**
  * RDS For Compounds table many-to-many relationship
  * 
  * @author kimberlyoneill
  *
  */
-public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableDataGateway {
+public class CompoundTDGRDS implements CompoundTDG {
 
   private int compoundId;
   private List<Integer> madeOf; // Element ids
   private String name;
-  private String inhabits;
+  private double inventory;
 
   /**
    * Empty constructor drops and re-creates the table
    */
-  public CompoundsMadeOfTableDataGatewayRDS() {
-    this.createTableCompoundMadeFrom();
+  public CompoundTDGRDS() {
   }
 
   /**
@@ -33,8 +35,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    * @param compoundId
    *          to search for
    */
-  public CompoundsMadeOfTableDataGatewayRDS(int compoundId) {
-    this.createTableCompoundMadeFrom();
+  public CompoundTDGRDS(int compoundId) {
     String sql = "SELECT * FROM Chemical WHERE chemicalId = " + compoundId + ";";
 
     try {
@@ -44,7 +45,7 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
       rs.next();
 
       this.name = rs.getString("name");
-      this.inhabits = rs.getString("inhabits");
+      this.inventory = rs.getDouble("inventory");
       this.compoundId = compoundId;
 
     } catch (SQLException | DatabaseException e) {
@@ -60,14 +61,13 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    * @param name
    * @param inhabits
    */
-  public CompoundsMadeOfTableDataGatewayRDS(int compoundId, List<Integer> madeOf, String name, String inhabits) {
-    createTableCompoundMadeFrom();
+  public CompoundTDGRDS(int compoundId, List<Integer> madeOf, String name, double inventory) {
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inhabits)" + "VALUES (?, ?, ?);");
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + "VALUES (?, ?, ?);");
       insertChemical.setInt(1, compoundId);
       insertChemical.setString(2, name);
-      insertChemical.setString(3, inhabits);
+      insertChemical.setDouble(3, inventory);
 
       insertChemical.execute();
 
@@ -83,44 +83,11 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
       this.compoundId = compoundId;
       this.madeOf = madeOf;
       this.name = name;
-      this.inhabits = inhabits;
+      this.inventory = inventory;
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Problem inserting CompoundsMadeOfTableDataGatewayRDS");
-    }
-  }
-
-  @Override
-  public void createTableCompoundMadeFrom() {
-    String createTable = "CREATE TABLE IF NOT EXISTS CompoundMadeFromElement(" + "compoundId INT NOT NULL, "
-        + "elementId INT NOT NULL, " + "FOREIGN KEY (compoundId) REFERENCES Chemical(chemicalId), "
-        + "FOREIGN KEY (elementId) REFERENCES Element(elementId));";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-
-      // Drop the table if exists first
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      //
-      statement.executeUpdate(createTable);
-
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Failed to create/drop CompoundMadeFromElement");
-    }
-  }
-
-  @Override
-  public void dropTableCompoundMadeFromElement() {
-    String dropTable = "DROP TABLE IF EXISTS CompoundMadeFromElement;";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(dropTable);
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error dropping Compound table");
     }
   }
 
@@ -131,9 +98,9 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    *          to search for
    */
   @Override
-  public List<CompoundDTO> findSetCompoundId(int elementId) {
+  public ArrayList<CompoundDTO> findMakes(int elementId) {
     String sql = "SELECT * FROM CompoundMadeFromElement WHERE elementId = " + elementId + ";";
-    List<CompoundDTO> compounds = new ArrayList<>();
+    ArrayList<CompoundDTO> compounds = new ArrayList<CompoundDTO>();
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
@@ -155,9 +122,9 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    *          to search for
    */
   @Override
-  public List<CompoundDTO> findSetElementId(int compoundId) {
-    String sql = "SELECT * FROM CompoundMadeFromElement WHERE compoundId = " + compoundId + ";";
-    List<CompoundDTO> compounds = new ArrayList<>();
+  public ArrayList<CompoundDTO> findMadeOf(int compoundId) {
+    String sql = "SELECT * FROM Compound WHERE compoundId = " + compoundId + ";";
+    ArrayList<CompoundDTO> compounds = new ArrayList<CompoundDTO>();
 
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -205,8 +172,8 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
    *          to search for
    */
   @Override
-  public String getInhabits() {
-    return this.inhabits;
+  public double getInventory() {
+    return this.inventory;
   }
 
   @Override
@@ -225,8 +192,8 @@ public class CompoundsMadeOfTableDataGatewayRDS implements CompoundsMadeOfTableD
   }
 
   @Override
-  public void setInhabits(String inhabits) {
-    this.inhabits = inhabits;
+  public void setInventory(double inventory) {
+    this.inventory = inventory;
   }
 
 }

@@ -26,9 +26,15 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
     ChemicalRowDataGatewayRDS gold = new ChemicalRowDataGatewayRDS(2, "Gold", 923, 0, 0, 1, 170.0, 0);
     ChemicalRowDataGatewayRDS platinum = new ChemicalRowDataGatewayRDS(2, "Platinum", 923, 0, 0, 1, 17.0, 0);
     ChemicalRowDataGatewayRDS palladium = new ChemicalRowDataGatewayRDS(2, "Palladium", 923, 0, 0, 1, 17.0, 0);
-    ChemicalRowDataGatewayRDS unknown = new ChemicalRowDataGatewayRDS(0, "Unknown", 123.0, 0, 0, 0, 0, 0);
+    ChemicalRowDataGatewayRDS unknown = new ChemicalRowDataGatewayRDS(1, "Unknown", 123.0, 0, 0, 0, 0, 0);
     ChemicalRowDataGatewayRDS funky = new ChemicalRowDataGatewayRDS(1, "Funky", 9.0, 17, 9.810, 0, 0, 0);
     ChemicalRowDataGatewayRDS carbon = new ChemicalRowDataGatewayRDS(1, "Carbon", 1.0, 6, 12.011, 0, 0, 0);
+    ChemicalRowDataGatewayRDS cmpd1 = new ChemicalRowDataGatewayRDS(3, "Compound #1", 66.6, 0, 0, 0, 0, 0);
+    ChemicalRowDataGatewayRDS cmpd4 = new ChemicalRowDataGatewayRDS(3, "Compound #4", 213.6, 0, 0, 0, 0, 0);
+    ChemicalRowDataGatewayRDS cmpd2 = new ChemicalRowDataGatewayRDS(3, "Compound #2", 621, 0, 0, 0, 0, 0);
+    ChemicalRowDataGatewayRDS cmpd3 = new ChemicalRowDataGatewayRDS(3, "Compound #3", 24.2, 0, 0, 0, 0, 0);
+    ChemicalRowDataGatewayRDS element1 = new ChemicalRowDataGatewayRDS(1, "element1", 777, 7, 14,5, 0, 0);
+    ChemicalRowDataGatewayRDS base = new ChemicalRowDataGatewayRDS(4, "base", 36.6, 0, 0, 0, 0, 2);
   }
 
   /**
@@ -47,9 +53,9 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchAll() throws DatabaseException {
-
     ArrayList<ChemicalDTO> chemicals = gateway.getAll().executeQuery();
-    assertEquals(20, chemicals.size());
+    assertEquals(13, chemicals.size());
+    assertEquals("Aqua Regia", chemicals.get(0).getName());
   }
 
   /**
@@ -60,6 +66,8 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
   @Test
   void testFetchElements() throws DatabaseException {
     ArrayList<ChemicalDTO> elements = gateway.getElements().executeQuery();
+    assertEquals(7, elements.size());
+    assertEquals("Gold", elements.get(0).getName());
   }
 
   /**
@@ -69,18 +77,9 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchMetals() throws DatabaseException {
-    ArrayList<ChemicalDTO> chemicals = gateway.fetchMetals();
-    assertEquals(4, chemicals.size());
-
-    ChemicalDTO chem1 = chemicals.get(0);
-    assertEquals(9, chem1.getChemicalID());
-    assertEquals(2, chem1.getType());
-    assertEquals("Copper", chem1.getName());
-    assertEquals("Earth", chem1.getInhabits());
-    assertEquals(29, chem1.getAtomicNumber());
-    assertEquals(63.546, chem1.getAtomicMass(), 0.001);
-    assertEquals(10, chem1.getDissolvedBy());
-    assertEquals(0, chem1.getSolute());
+    ArrayList<ChemicalDTO> chemicals = gateway.getMetals().executeQuery();
+    assertEquals(3, chemicals.size());
+    assertEquals("Platinum", chemicals.get(1).getName());
   }
 
   /**
@@ -90,18 +89,9 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchCompounds() throws DatabaseException {
-    ArrayList<ChemicalDTO> chemicals = gateway.fetchCompounds();
+    ArrayList<ChemicalDTO> chemicals = gateway.getCompounds().executeQuery();
     assertEquals(4, chemicals.size());
-
-    ChemicalDTO chem1 = chemicals.get(0);
-    assertEquals(13, chem1.getChemicalID());
-    assertEquals(3, chem1.getType());
-    assertEquals("Glucose", chem1.getName());
-    assertEquals("Earth", chem1.getInhabits());
-    assertEquals(0, chem1.getAtomicNumber());
-    assertEquals(0, chem1.getAtomicMass(), 0.001);
-    assertEquals(0, chem1.getDissolvedBy());
-    assertEquals(0, chem1.getSolute());
+    assertEquals("Compound #1", chemicals.get(0).getName());
   }
 
   /**
@@ -111,18 +101,9 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchBases() throws DatabaseException {
-    ArrayList<ChemicalDTO> chemicals = gateway.fetchBases();
-    assertEquals(4, chemicals.size());
-
-    ChemicalDTO chem1 = chemicals.get(0);
-    assertEquals(17, chem1.getChemicalID());
-    assertEquals(4, chem1.getType());
-    assertEquals("Potassium hydroxide", chem1.getName());
-    assertEquals("Earth", chem1.getInhabits());
-    assertEquals(0, chem1.getAtomicNumber());
-    assertEquals(0, chem1.getAtomicMass(), 0.001);
-    assertEquals(0, chem1.getDissolvedBy());
-    assertEquals(50, chem1.getSolute());
+    ArrayList<ChemicalDTO> chemicals = gateway.getBases().executeQuery();
+    assertEquals(1, chemicals.size());
+    assertEquals("base", chemicals.get(0).getName());
   }
 
   /**
@@ -132,18 +113,9 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchAcids() throws DatabaseException {
-    ArrayList<ChemicalDTO> chemicals = gateway.fetchAcids();
-    assertEquals(4, chemicals.size());
-
-    ChemicalDTO chem1 = chemicals.get(0);
-    assertEquals(21, chem1.getChemicalID());
-    assertEquals(5, chem1.getType());
-    assertEquals("Hydrochloric acid", chem1.getName());
-    assertEquals("Earth", chem1.getInhabits());
-    assertEquals(0, chem1.getAtomicNumber());
-    assertEquals(0, chem1.getAtomicMass(), 0.001);
-    assertEquals(0, chem1.getDissolvedBy());
-    assertEquals(50, chem1.getSolute());
+    ArrayList<ChemicalDTO> chemicals = gateway.getAcids().executeQuery();
+    assertEquals(1, chemicals.size());
+    assertEquals("Aqua Regia", chemicals.get(0).getName());
   }
 
   /**
@@ -153,18 +125,9 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchByName() throws DatabaseException {
-    ArrayList<ChemicalDTO> chemicals = gateway.fetchByName("Oxygen");
-    assertEquals(1, chemicals.size());
-
-    ChemicalDTO chem1 = chemicals.get(0);
-    assertEquals(7, chem1.getChemicalID());
-    assertEquals(1, chem1.getType());
-    assertEquals("Oxygen", chem1.getName());
-    assertEquals("Earth", chem1.getInhabits());
-    assertEquals(8, chem1.getAtomicNumber());
-    assertEquals(15.999, chem1.getAtomicMass(), 0.001);
-    assertEquals(0, chem1.getDissolvedBy());
-    assertEquals(0, chem1.getSolute());
+    ArrayList<ChemicalDTO> chemicals = gateway.getAll().filterByWildCardName("Compound").executeQuery();
+    assertEquals(4, chemicals.size());
+    assertEquals("Compound #1", chemicals.get(0).getName());
   }
 
   /**
@@ -173,19 +136,10 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    * @throws DatabaseException when things go wrong.
    */
   @Test
-  void testFetchByHabitat() throws DatabaseException {
-    ArrayList<ChemicalDTO> chemicals = gateway.fetchByHabitat("Mars");
+  void testFetchByInventory() throws DatabaseException {
+    ArrayList<ChemicalDTO> chemicals = gateway.getAll().filterByInventoryValue(66.6).executeQuery();
     assertEquals(1, chemicals.size());
-
-    ChemicalDTO chem1 = chemicals.get(0);
-    assertEquals(1, chem1.getChemicalID());
-    assertEquals(0, chem1.getType());
-    assertEquals("FunkyChemical", chem1.getName());
-    assertEquals("Mars", chem1.getInhabits());
-    assertEquals(0, chem1.getAtomicNumber());
-    assertEquals(0, chem1.getAtomicMass(), 0.001);
-    assertEquals(0, chem1.getDissolvedBy());
-    assertEquals(0, chem1.getSolute());
+    assertEquals("Compound #1", chemicals.get(0).getName());
   }
 
   /**
@@ -195,18 +149,9 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchByAtomicNumber() throws DatabaseException {
-    ArrayList<ChemicalDTO> chemicals = gateway.fetchByAtomicNumber(79);
+    ArrayList<ChemicalDTO> chemicals = gateway.getElements().filterByAtomicNumberValue(6).executeQuery();
     assertEquals(1, chemicals.size());
-
-    ChemicalDTO chem1 = chemicals.get(0);
-    assertEquals(12, chem1.getChemicalID());
-    assertEquals(2, chem1.getType());
-    assertEquals("Gold", chem1.getName());
-    assertEquals("Earth", chem1.getInhabits());
-    assertEquals(79, chem1.getAtomicNumber());
-    assertEquals(196.966, chem1.getAtomicMass(), 0.001);
-    assertEquals(40, chem1.getDissolvedBy());
-    assertEquals(0, chem1.getSolute());
+    assertEquals("Carbon", chemicals.get(0).getName());
   }
 
   /**
@@ -215,28 +160,10 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    * @throws DatabaseException when things go wrong.
    */
   @Test
-  void testFetchByAtomicMassRange() throws DatabaseException {
-    ArrayList<ChemicalDTO> chemicals = gateway.fetchByAtomicMassRange(60.0, 70.0);
-    assertEquals(2, chemicals.size());
-
-    ChemicalDTO chem1 = chemicals.get(0);
-    assertEquals(9, chem1.getChemicalID());
-    assertEquals(2, chem1.getType());
-    assertEquals("Copper", chem1.getName());
-    assertEquals("Earth", chem1.getInhabits());
-    assertEquals(29, chem1.getAtomicNumber());
-    assertEquals(63.546, chem1.getAtomicMass(), 0.001);
-    assertEquals(10, chem1.getDissolvedBy());
-    assertEquals(0, chem1.getSolute());
-    chem1 = chemicals.get(1);
-    assertEquals(11, chem1.getChemicalID());
-    assertEquals(2, chem1.getType());
-    assertEquals("Zinc", chem1.getName());
-    assertEquals("Earth", chem1.getInhabits());
-    assertEquals(30, chem1.getAtomicNumber());
-    assertEquals(65.380, chem1.getAtomicMass(), 0.001);
-    assertEquals(30, chem1.getDissolvedBy());
-    assertEquals(0, chem1.getSolute());
+  void testFetchByAtomicMassValue() throws DatabaseException {
+    ArrayList<ChemicalDTO> chemicals = gateway.getElements().filterByAtomicMassValue(12.011).executeQuery();
+    assertEquals(1, chemicals.size());
+    assertEquals("Carbon", chemicals.get(0).getName());
   }
 
   /**
@@ -246,17 +173,20 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchByDissolvedBy() throws DatabaseException {
-    ArrayList<ChemicalDTO> chemicals = gateway.fetchByDissolvedBy(10);
-
-    ChemicalDTO chem1 = chemicals.get(0);
-    assertEquals(9, chem1.getChemicalID());
-    assertEquals(2, chem1.getType());
-    assertEquals("Copper", chem1.getName());
-    assertEquals("Earth", chem1.getInhabits());
-    assertEquals(29, chem1.getAtomicNumber());
-    assertEquals(63.546, chem1.getAtomicMass(), 0.001);
-    assertEquals(10, chem1.getDissolvedBy());
-    assertEquals(0, chem1.getSolute());
+    ArrayList<ChemicalDTO> chemicals = gateway.getMetals().filterByDissolvedBy(1).executeQuery();
+    assertEquals(3, chemicals.size());
+    assertEquals("Palladium", chemicals.get(2).getName());
+  }
+  
+  /**
+   * Test getting things by their moles.
+   * @throws DatabaseException
+   */
+  @Test
+  void testFetchByMoles() throws DatabaseException {
+    ArrayList<ChemicalDTO> chemicals = gateway.getMetals().filterByMolesRange(16, 18).executeQuery();
+    assertEquals(2, chemicals.size());
+    assertEquals("Palladium", chemicals.get(1).getName());
   }
 
   /**
@@ -266,18 +196,20 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchBySolute() throws DatabaseException {
-    ArrayList<ChemicalDTO> chemicals = gateway.fetchBySolute(50);
-    assertEquals(2, chemicals.size());
-
-    ChemicalDTO chem1 = chemicals.get(0);
-    assertEquals(17, chem1.getChemicalID());
-    assertEquals(4, chem1.getType());
-    assertEquals("Potassium hydroxide", chem1.getName());
-    assertEquals("Earth", chem1.getInhabits());
-    assertEquals(0, chem1.getAtomicNumber());
-    assertEquals(0, chem1.getAtomicMass(), 0.001);
-    assertEquals(0, chem1.getDissolvedBy());
-    assertEquals(50, chem1.getSolute());
+    ArrayList<ChemicalDTO> chemicals = gateway.getAll().filterBySolute(2).executeQuery();
+    assertEquals(1, chemicals.size());
+    assertEquals("base", chemicals.get(0).getName());
+  }
+  
+  /**
+   * Test getting things with low inventory.
+   * @throws DatabaseException
+   */
+  @Test
+  void testGetLowAll() throws DatabaseException {
+    ArrayList<ChemicalDTO> chemicals = gateway.executeFindAllWithLowInventory();
+    assertEquals(4, chemicals.size());
+    assertEquals("Carbon", chemicals.get(1).getName());
   }
 
 }
