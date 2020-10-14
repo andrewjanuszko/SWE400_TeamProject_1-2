@@ -2,7 +2,7 @@ package mappers;
 
 import java.util.List;
 
-import interfaces.AcidDataMapperInterface;
+import model.AcidDataMapperInterface;
 
 public class AcidDataMapper implements AcidDataMapperInterface {
 
