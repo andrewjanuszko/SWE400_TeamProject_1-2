@@ -21,6 +21,7 @@ public class AcidPanel extends JPanel{
 	JButton addButton = new JButton("Add");
 	JButton deleteButton = new JButton("Delete");
 	JButton filterButton = new JButton("Filter");
+	JButton detailsButton = new JButton("Details");
 	JLabel selected = null;
 
 	public AcidPanel() {
@@ -56,12 +57,13 @@ public class AcidPanel extends JPanel{
 	    buttons.add(addButton, gbc);
 	    
 	    gbc.gridx = 1;
-	    gbc.gridy = 0;
 	    buttons.add(deleteButton, gbc);
 	    
 	    gbc.gridx = 2;
-	    gbc.gridy = 0;
 	    buttons.add(filterButton, gbc);
+	    
+	    gbc.gridx = 3;
+	    buttons.add(detailsButton, gbc);
 	    
 	    gbc.gridx = 0;
 	    gbc.gridy = 1;
@@ -69,6 +71,8 @@ public class AcidPanel extends JPanel{
 	    gbc.weighty = 1;
 	    buttons.setBackground(Color.GRAY);
 	    add(buttons, gbc);
+	    
+	    gbc.gridx
 	}
 	
 	private void addAcid() {
@@ -95,6 +99,12 @@ public class AcidPanel extends JPanel{
 					//reset the view
 				}
 			});
+		}
+	}
+	
+	private void getDetailsAcid() {
+		if(selected == null) {
+			return;
 		}
 	}
 }
