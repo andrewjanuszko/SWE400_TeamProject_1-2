@@ -24,6 +24,7 @@ public class ClassTableInitializer {
               
           "CREATE TABLE IF NOT EXISTS Metal(metalId INT NOT NULL, dissolvedBy INT,"
               + "FOREIGN KEY(dissolvedBy) REFERENCES Acid(acidId), "
+              + "FOREIGN KEY(metalId) REFERENCES Element(elementId), "
               + "FOREIGN KEY(metalId) REFERENCES Chemical(chemicalId));",
               
           "CREATE TABLE IF NOT EXISTS Compound(compoundId INT NOT NULL, "

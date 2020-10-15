@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface MetalTDG {
 
-  public List<MetalDTO> getAllMetals();
+  public void getAllMetals();
 }

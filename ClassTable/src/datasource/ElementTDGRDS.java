@@ -1,5 +1,6 @@
 package datasource;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,7 +11,7 @@ import database.DatabaseException;
 import database.DatabaseManager;
 
 public class ElementTDGRDS implements ElementTDG {
-
+  String sql = "SELECT * FROM Element INNER JOIN Chemical ";
   private static ElementTDGRDS singleton;
   
   public ElementTDGRDS() {
@@ -77,5 +78,59 @@ public class ElementTDGRDS implements ElementTDG {
     }
     return null;
   }
+  
+  public List<ElementDTO> executeQuery() throws DatabaseException {
+    List<ElementDTO> listDTO = new ArrayList<>();
+    try {
+      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(this.sql + ";");
+      try {
+        ResultSet results = statement.executeQuery();
 
+        sql = "";
+        while (results.next()) {
+          int acidId = results.getInt("acidId");
+          int atomicNum = results.getInt("atomicNumber");
+          double atomicMass = results.getDouble("atomicMass");
+          String name = results.getString("name");
+          double inventory = results.getDouble("inventory");
+          ElementDTO element = new ElementDTO(acidId, atomicNum, atomicMass, name, inventory);
+          listDTO.add(element);
+        }
+      } catch (SQLException e) {
+        throw new DatabaseException("Failed to convert query to DTO.", e);
+      }
+    } catch (SQLException e) {
+      throw new DatabaseException("Failed to execute query.", e);
+    }
+    return listDTO;
+  }
+
+  public void filterByName(String name) {
+    sql += " AND (Chemical.name LIKE '" + name + "' ";
+  }
+
+  public void filterByInventory(double inventory) {
+    sql += " AND (Chemical.inventory = " + inventory + ")";
+  }
+
+  public void filterByInventoryRange(double high, double low) {
+    sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ")";
+  }
+  
+  public void filterByAtomicMass(double atomicMass) {
+    sql += " AND (Element.atomicMass = " + atomicMass + ")";
+  }
+  
+  public void filterByAtomicMassRange(double high, double low) {
+    sql += " AND (Element.atomicMass BETWEEN " + low + " AND " + high + ")";
+  }
+  
+  public void filterByAtomicNumber(int atomicNumber) {
+    sql += " AND (Element.atomicNumber = " + atomicNumber + ")";
+  }
+  
+  public void filterByAtomicNumberRange(int high, int low) {
+    sql += " AND (Element.atomicNumber BETWEEN " + low + " AND " + high + ")";
+  }
+  
 }

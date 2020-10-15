@@ -1,13 +1,15 @@
 package datasource;
 
 public class MetalDTO {
-  int metalId, dissolvedById; 
+  int metalId, dissolvedById, atomicNumber; 
   String name;
-  double inventory;
+  double inventory, atomicMass;
   
-  public MetalDTO(int metalId, int dissolvedById, String name, double inventory) {
+  public MetalDTO(int metalId, int dissolvedById, int atomicNumber, double atomicMass, String name, double inventory) {
     this.metalId = metalId;
     this.dissolvedById = dissolvedById; 
+    this.atomicNumber = atomicNumber;
+    this.atomicMass = atomicMass;
     this.name = name;
     this.inventory = inventory;
   }
@@ -42,6 +44,22 @@ public class MetalDTO {
   
   public void setInventory(double inventory) {
     this.inventory = inventory; 
+  }
+  
+  public int getAtomicNumber() {
+    return atomicNumber;
+  }
+
+  public void setAtomicNumber(int atomicNumber) {
+    this.atomicNumber = atomicNumber;
+  }
+
+  public double getAtomicMass() {
+    return atomicMass;
+  }
+
+  public void setAtomicMass(double atomicMass) {
+    this.atomicMass = atomicMass;
   }
 
   @Override

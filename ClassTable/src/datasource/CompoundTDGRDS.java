@@ -17,6 +17,7 @@ import database.DatabaseManager;
  *
  */
 public class CompoundTDGRDS implements CompoundTDG {
+  String sql = "SELECT * FROM Compound INNER JOIN Chemical ";
   private static CompoundTDGRDS singleton;
 
   /**
@@ -149,4 +150,59 @@ public class CompoundTDGRDS implements CompoundTDG {
       e.printStackTrace();
     }
   }
+  
+  
+  
+  public void filterByName(String name) {
+    sql += " AND (Chemical.name LIKE '" + name + "' ";
+  }
+
+  @Override
+  public void filterByInventory(double inventory) {
+    sql += " AND (Chemical.inventory = " + inventory + ")";
+  }
+
+  @Override
+  public void filterByInventoryRange(double high, double low) {
+    sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ")";
+  }
+  
+  @Override
+  public void filterByElements(int elementId) {
+    sql += " WHERE Compound.elementId = " + elementId;
+  }
+  
+  
+  @Override
+  public List<CompoundDTO> executeQuery() throws DatabaseException {
+    List<CompoundDTO> listDTO = new ArrayList<>();
+    try {
+      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(this.sql + ";");
+      try {
+        ResultSet results = statement.executeQuery();
+
+        sql = "";
+        while (results.next()) {
+          int compoundId = results.getInt("compoundId");
+          int elementId = results.getInt("elementId");
+          String name = results.getString("name");
+          double inventory = results.getDouble("inventory");
+          
+          CompoundDTO base = new CompoundDTO(compoundId, elementId, name, inventory);
+          listDTO.add(base);
+        }
+      } catch (SQLException e) {
+        throw new DatabaseException("Failed to convert query to DTO.", e);
+      }
+    } catch (SQLException e) {
+      throw new DatabaseException("Failed to execute query.", e);
+    }
+    return listDTO;
+  }
+
+  @Override
+  public void getAllCompounds() {
+    //
+  }
+  
 }

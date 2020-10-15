@@ -1,5 +1,6 @@
 package datasource;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,7 +11,8 @@ import database.DatabaseException;
 import database.DatabaseManager;
 
 public class BaseTDGRDS implements BaseTDG {
-
+  
+  String sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId ";
   private static BaseTDGRDS singleton;
   
   public BaseTDGRDS() {
@@ -23,24 +25,54 @@ public class BaseTDGRDS implements BaseTDG {
     }
     return singleton;
   }
-
-  @Override
-  public List<BaseDTO> getAllBases() {
-    String sql = "SELECT * FROM Base INNER JOIN Chemical WHERE Base.baseId = Chemical.chemicalId;";
-    List<BaseDTO> bases = new ArrayList<BaseDTO>();
-    
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-      while (rs.next()) {
-        bases.add(new BaseDTO(rs.getInt("baseId"), rs.getInt("solute"), 
-            rs.getString("name"), rs.getDouble("inventory")));
-      }
-      return bases;
-    } catch(SQLException | DatabaseException e) {
-      e.printStackTrace();
-      return null;
-    }
+  
+  public void filterByName(String name) {
+    sql +=  " AND (Chemical.name LIKE '" + name + "' ";
   }
 
+  @Override
+  public void filterByInventory(double inventory) {
+    sql += " AND (Chemical.inventory = " + inventory + ")";
+  }
+
+  @Override
+  public void filterBySolute(int solute) {
+    sql += " AND (Acid.solute = " + solute + ")";
+  }
+
+  @Override
+  public void filterByInventoryRange(double high, double low) {
+    sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ")";
+  }
+
+  @Override
+  public List<BaseDTO> executeQuery() throws DatabaseException {
+    List<BaseDTO> listDTO = new ArrayList<>();
+    try {
+      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(this.sql + ";");
+      try {
+        ResultSet results = statement.executeQuery();
+
+        sql = "";
+        while (results.next()) {
+          int baseId = results.getInt("baseId");
+          int soluteId = results.getInt("solute");
+          String name = results.getString("name");
+          double inventory = results.getDouble("inventory");
+          BaseDTO base = new BaseDTO(baseId, soluteId, name, inventory);
+          listDTO.add(base);
+        }
+      } catch (SQLException e) {
+        throw new DatabaseException("Failed to convert query to DTO.", e);
+      }
+    } catch (SQLException e) {
+      throw new DatabaseException("Failed to execute query.", e);
+    }
+    return listDTO;
+  }
+
+  @Override
+  public void getAllBases() {
+    
+  }
 }

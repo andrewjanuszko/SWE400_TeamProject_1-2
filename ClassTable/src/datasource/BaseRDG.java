@@ -22,6 +22,5 @@ public interface BaseRDG {
   public void delete();
 
   public List<BaseRDGRDS> findSet(int solute);
-
-  public List<BaseDTO> getAll();
+  
 }

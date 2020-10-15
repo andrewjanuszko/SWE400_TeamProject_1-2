@@ -1,4 +1,4 @@
-package model;
+package command;
 
 public class Command {
 
