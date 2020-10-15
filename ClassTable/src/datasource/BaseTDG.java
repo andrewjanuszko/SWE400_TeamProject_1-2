@@ -6,15 +6,15 @@ import database.DatabaseException;
 
 public interface BaseTDG {
 
-  public void getAllBases();
+  public BaseTDGRDS getAllBases();
   
-  public void filterByName(String name);
+  public BaseTDGRDS filterByName(String name);
   
-  public void filterByInventory(double inventory); 
+  public BaseTDGRDS filterByInventory(double inventory); 
   
-  public void filterBySolute(int solute);
+  public BaseTDGRDS filterBySolute(int solute);
   
-  public void filterByInventoryRange(double high, double low);
+  public BaseTDGRDS filterByInventoryRange(double high, double low);
   
   public List<BaseDTO> executeQuery() throws DatabaseException;
 }

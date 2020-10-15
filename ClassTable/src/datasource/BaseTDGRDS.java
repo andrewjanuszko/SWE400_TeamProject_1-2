@@ -16,7 +16,7 @@ public class BaseTDGRDS implements BaseTDG {
   private static BaseTDGRDS singleton;
   
   public BaseTDGRDS() {
-    // TODO Auto-generated constructor stub
+    sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId ";
   }
   
   public static BaseTDGRDS getSingleton() {
@@ -26,27 +26,31 @@ public class BaseTDGRDS implements BaseTDG {
     return singleton;
   }
   
-  public void filterByName(String name) {
+  public BaseTDGRDS filterByName(String name) {
     sql +=  " AND (Chemical.name LIKE '" + name + "') ";
     System.out.println(sql);
+    return getSingleton();
   }
 
   @Override
-  public void filterByInventory(double inventory) {
+  public BaseTDGRDS filterByInventory(double inventory) {
     sql += " AND (Chemical.inventory = " + inventory + ") ";
     System.out.println(sql);
+    return getSingleton();
   }
 
   @Override
-  public void filterBySolute(int solute) {
+  public BaseTDGRDS filterBySolute(int solute) {
     sql += " AND (Acid.solute = " + solute + ") ";
     System.out.println(sql);
+    return getSingleton();
   }
 
   @Override
-  public void filterByInventoryRange(double high, double low) {
+  public BaseTDGRDS filterByInventoryRange(double high, double low) {
     sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
     System.out.println(sql);
+    return getSingleton();
   }
 
   @Override
@@ -78,7 +82,8 @@ public class BaseTDGRDS implements BaseTDG {
   }
 
   @Override
-  public void getAllBases() {
-    
+  public BaseTDGRDS getAllBases() {
+    sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId ";
+    return getSingleton();
   }
 }

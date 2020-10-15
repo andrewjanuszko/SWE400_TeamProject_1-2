@@ -149,17 +149,23 @@ class TestBase extends DatabaseTest {
    */
   @Test
   static void testGetAll() {
-    BaseTDG getter = new BaseTDGRDS(); // Empty BaseTDGRDS
-    List<BaseDTO> getAll = getter.getAllBases(); // Get all elements
+    List<BaseDTO> getAll;
+    try {
+      getAll = new BaseTDGRDS().getAllBases().executeQuery();
+      
+      // Assert that we have 6 bases, and that they are the right ids. 
+      assertEquals(6, getAll.size());
+      assertEquals(11, getAll.get(0).getBaseId());
+      assertEquals(12, getAll.get(1).getBaseId());
+      assertEquals(13, getAll.get(2).getBaseId());
+      assertEquals(14, getAll.get(3).getBaseId());
+      assertEquals(15, getAll.get(4).getBaseId());
+      assertEquals(16, getAll.get(5).getBaseId());
+      
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    } 
     
-    // Assert that we have 6 bases, and that they are the right ids. 
-    assertEquals(6, getAll.size());
-    assertEquals(11, getAll.get(0).getBaseId());
-    assertEquals(12, getAll.get(1).getBaseId());
-    assertEquals(13, getAll.get(2).getBaseId());
-    assertEquals(14, getAll.get(3).getBaseId());
-    assertEquals(15, getAll.get(4).getBaseId());
-    assertEquals(16, getAll.get(5).getBaseId());
   }
 
   /**
