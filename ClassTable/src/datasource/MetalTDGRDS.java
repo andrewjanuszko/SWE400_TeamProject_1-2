@@ -10,7 +10,8 @@ import database.DatabaseException;
 import database.DatabaseManager;
 
 public class MetalTDGRDS implements MetalTDG {
-
+  String sql = "SELECT * FROM Metal INNER JOIN Chemical WHERE Metal.metalId = Chemical.chemicalId "
+      + "INNER JOIN Element WHERE Element.elementId = Metal.metalId ";
   private static MetalTDGRDS singleton;
   
   public MetalTDGRDS() {
@@ -25,22 +26,44 @@ public class MetalTDGRDS implements MetalTDG {
   }
 
   @Override
-  public List<MetalDTO> getAllMetals() {
-    String sql = "SELECT * FROM Metal INNER JOIN Chemical WHERE Metal.metalId = Chemical.chemicalId;";
-    List<MetalDTO> metals = new ArrayList<MetalDTO>();
+  public void getAllMetals() {
     
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-      while (rs.next()) {
-        metals.add(new MetalDTO(rs.getInt("metalId"), rs.getInt("dissolvedBy"), 
-            rs.getString("name"), rs.getDouble("inventory")));
-      }
-      return metals;
-    } catch(SQLException | DatabaseException e) {
-      e.printStackTrace();
-      return null;
-    }
   }
 
+  public void filterByName(String name) {
+    sql += " AND (Chemical.name LIKE '" + name + "' ";
+  }
+
+  public void filterByInventory(double inventory) {
+    sql += " AND (Chemical.inventory = " + inventory + ")";
+  }
+
+  public void filterByInventoryRange(double high, double low) {
+    sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ")";
+  }
+  
+  public void filterByAtomicMass(double atomicMass) {
+    sql += " AND (Element.atomicMass = " + atomicMass + ")";
+  }
+  
+  public void filterByAtomicMassRange(double high, double low) {
+    sql += " AND (Element.atomicMass BETWEEN " + low + " AND " + high + ")";
+  }
+  
+  public void filterByAtomicNumber(int atomicNumber) {
+    sql += " AND (Element.atomicNumber = " + atomicNumber + ")";
+  }
+  
+  public void filterByAtomicNumberRange(int high, int low) {
+    sql += " AND (Element.atomicNumber BETWEEN " + low + " AND " + high + ")";
+  }
+  
+  public void filterByDissolvedBy() {
+    
+  }
+  
+  public void filterByMoles() {
+    
+  }
+  
 }

@@ -1,5 +1,6 @@
 package datasource;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,11 +11,12 @@ import database.DatabaseException;
 import database.DatabaseManager;
 
 public class BaseTDGRDS implements BaseTDG {
-
+  
+  String sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId ";
   private static BaseTDGRDS singleton;
   
   public BaseTDGRDS() {
-    // TODO Auto-generated constructor stub
+    sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId ";
   }
   
   public static BaseTDGRDS getSingleton() {
@@ -23,24 +25,65 @@ public class BaseTDGRDS implements BaseTDG {
     }
     return singleton;
   }
-
-  @Override
-  public List<BaseDTO> getAllBases() {
-    String sql = "SELECT * FROM Base INNER JOIN Chemical WHERE Base.baseId = Chemical.chemicalId;";
-    List<BaseDTO> bases = new ArrayList<BaseDTO>();
-    
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-      while (rs.next()) {
-        bases.add(new BaseDTO(rs.getInt("baseId"), rs.getInt("solute"), 
-            rs.getString("name"), rs.getDouble("inventory")));
-      }
-      return bases;
-    } catch(SQLException | DatabaseException e) {
-      e.printStackTrace();
-      return null;
-    }
+  
+  public BaseTDGRDS filterByName(String name) {
+    sql +=  " AND (Chemical.name LIKE '" + name + "') ";
+    System.out.println(sql);
+    return getSingleton();
   }
 
+  @Override
+  public BaseTDGRDS filterByInventory(double inventory) {
+    sql += " AND (Chemical.inventory = " + inventory + ") ";
+    System.out.println(sql);
+    return getSingleton();
+  }
+
+  @Override
+  public BaseTDGRDS filterBySolute(int solute) {
+    sql += " AND (Acid.solute = " + solute + ") ";
+    System.out.println(sql);
+    return getSingleton();
+  }
+
+  @Override
+  public BaseTDGRDS filterByInventoryRange(double high, double low) {
+    sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
+    System.out.println(sql);
+    return getSingleton();
+  }
+
+  @Override
+  public List<BaseDTO> executeQuery() throws DatabaseException {
+    List<BaseDTO> listDTO = new ArrayList<>();
+    try {
+      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(this.sql + ";");
+      try {
+        ResultSet results = statement.executeQuery();
+
+        while (results.next()) {
+          int baseId = results.getInt("baseId");
+          int soluteId = results.getInt("solute");
+          String name = results.getString("name");
+          double inventory = results.getDouble("inventory");
+          BaseDTO base = new BaseDTO(baseId, soluteId, name, inventory);
+          listDTO.add(base);
+        }
+        
+        // Reset sql string
+        sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId ";
+      } catch (SQLException e) {
+        throw new DatabaseException("Failed to convert query to DTO.", e);
+      }
+    } catch (SQLException e) {
+      throw new DatabaseException("Failed to execute query.", e);
+    }
+    return listDTO;
+  }
+
+  @Override
+  public BaseTDGRDS getAllBases() {
+    sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId ";
+    return getSingleton();
+  }
 }

@@ -31,13 +31,14 @@ public class MetalRDGRDS implements MetalRDG {
    * @param id
    */
   public MetalRDGRDS(int id) {
-    String sql = "SELECT * FROM Metal INNER JOIN Chemical WHERE chemicalId = Metal.metalId AND metalId = " + id + ";";
+    String sql = "SELECT * FROM Metal INNER JOIN Chemical WHERE chemicalId = Metal.metalId  INNER JOIN Element WHERE elementId = Metal.metalId AND metalId = " + id + ";";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       rs.next();
       
-      metal = new MetalDTO(id, rs.getInt("dissolvedBy"), rs.getString("name"), rs.getDouble("inventory"));
+      metal = new MetalDTO(id, rs.getInt("dissolvedBy"), rs.getInt("atomicNumber"), rs.getDouble("atomicMass"), 
+          rs.getInt("moles"),rs.getString("name"), rs.getDouble("inventory"));
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -53,7 +54,7 @@ public class MetalRDGRDS implements MetalRDG {
    * @param name
    * @param inventory
    */
-  public MetalRDGRDS(int id, int dissolvedById, String name, double inventory) {
+  public MetalRDGRDS(int id, int dissolvedById, int atomicNumber, double atomicMass, int moles, String name, double inventory) {
     
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -61,16 +62,24 @@ public class MetalRDGRDS implements MetalRDG {
       insertChemical.setInt(1, id);
       insertChemical.setString(2, name);
       insertChemical.setDouble(3, inventory);
+      
+      PreparedStatement insertElement = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO Element (atomicNumber, atomicMass)" + "VALUES (?, ?);");
+      insertElement.setInt(1, atomicNumber);
+      insertElement.setDouble(2, atomicMass);
+      
       PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Metal (metalId, dissolvedBy)" + "VALUES (?, ?);");
+          .prepareStatement("INSERT INTO Metal (metalId, dissolvedBy, moles)" + "VALUES (?, ?, ?);");
 
       insert.setInt(1, id);
       insert.setInt(2, dissolvedById);
+      insert.setInt(3, moles);
 
       insertChemical.execute();
+      insertElement.execute();
       insert.execute();
       
-      metal = new MetalDTO(id, dissolvedById, name, inventory);
+      metal = new MetalDTO(id, dissolvedById, atomicNumber, atomicMass, moles, name, inventory);
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert");
@@ -85,11 +94,13 @@ public class MetalRDGRDS implements MetalRDG {
 
     String sqlMetal = "DELETE FROM Metal WHERE metalId = " + metal.getMetalId() + ";";
     String sqlChem = "DELETE FROM Chemical WHERE chemicalId = " + metal.getMetalId() + ";";
+    String sqlElement = "DELETE FROM Element WHERE elementId = " + metal.getMetalId() + ";";
     try {
 
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.executeUpdate(sqlMetal);
       statement.executeUpdate(sqlChem);
+      statement.executeUpdate(sqlElement);
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -108,6 +119,12 @@ public class MetalRDGRDS implements MetalRDG {
       updateMetal.setInt(1, metal.getDissolvedById());
       updateMetal.setInt(2, metal.getMetalId());
 
+      PreparedStatement updateElement = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("UPDATE Element SET atomicNumber = ?, atomicMass = ? WHERE elementId = ?;");
+      updateMetal.setInt(1, metal.getAtomicNumber());
+      updateMetal.setDouble(2, metal.getAtomicMass());
+      updateMetal.setInt(3, metal.getMetalId());
+      
       PreparedStatement updateChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Chemical SET name = ?, inventory = ? WHERE chemicalId = ?;");
       updateChemical.setString(1, metal.getName());
@@ -115,12 +132,12 @@ public class MetalRDGRDS implements MetalRDG {
       updateChemical.setInt(3, metal.getMetalId());
 
       updateMetal.execute();
+      updateElement.execute();
       updateChemical.execute();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to update");
     }
-
   }
 
   /**
@@ -161,10 +178,13 @@ public class MetalRDGRDS implements MetalRDG {
   public void setInventory(double inventory) {
     metal.setInventory(inventory);
   }
+  
+  @Override
+  public void setMoles(int moles) {
+    metal.setMoles(moles); 
+  }
 
   public MetalDTO getMetal() {
     return metal;
   }
-
-  
 }

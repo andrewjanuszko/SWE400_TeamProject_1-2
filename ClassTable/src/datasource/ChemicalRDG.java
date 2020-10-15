@@ -19,6 +19,4 @@ public interface ChemicalRDG {
   
   public void setInventory(double inventory);
   
-  public List<ChemicalDTO> getAll();
-  
 }

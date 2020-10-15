@@ -146,17 +146,81 @@ class TestAcid extends DatabaseTest {
    */
   @Test
   static void testGetAll() {
-    AcidTDG getter = new AcidTDGRDS(); // Empty AcidTDGRDS
-    List<AcidDTO> getAll = getter.getAllAcids(); // Get all elements
+    try {
+      AcidTDG acid = new AcidTDGRDS().getAllAcids(); 
+      
+      List<AcidDTO> getAll = acid.executeQuery();
+      
+      // Assert that we have 6 acids, and that they are the right ids.
+      assertEquals(6, getAll.size());
+      assertEquals(1, getAll.get(0).getAcidId());
+      assertEquals(2, getAll.get(1).getAcidId());
+      assertEquals(3, getAll.get(2).getAcidId());
+      assertEquals(4, getAll.get(3).getAcidId());
+      assertEquals(5, getAll.get(4).getAcidId());
+      assertEquals(6, getAll.get(5).getAcidId());
+      
+    } catch (DatabaseException e) {
+      System.out.println("Failed testGetAll()");
+      e.printStackTrace();
+    } 
+  }
+  
+  public static void testFilters() {
+    // Insert sample acids to mess with
+    AcidRDG gateway1 = new AcidRDGRDS(80, 12, "funkyacid1", 41.2); 
+    AcidRDG gateway2 = new AcidRDGRDS(81, 15, "funkyacid2", 42.4); 
+    try {
+      assertEquals(80, new AcidRDGRDS(80).getAcid().getAcidId());
+      assertEquals(81, new AcidRDGRDS(81).getAcid().getAcidId());
+      System.out.println("passed");
+    } catch (SQLException | DatabaseException e1) {
+      e1.printStackTrace();
+    }
     
-    // Assert that we have 6 acids, and that they are the right ids. 
-    assertEquals(6, getAll.size());
-    assertEquals(1, getAll.get(0).getAcidId());
-    assertEquals(2, getAll.get(1).getAcidId());
-    assertEquals(3, getAll.get(2).getAcidId());
-    assertEquals(4, getAll.get(3).getAcidId());
-    assertEquals(5, getAll.get(4).getAcidId());
-    assertEquals(6, getAll.get(5).getAcidId());
+    // Test filter by name
+    try {
+      List<AcidDTO> get = new AcidTDGRDS().getAllAcids().filterByName("funky").executeQuery();
+      
+      assertEquals(2, get.size());
+      assertEquals(80, get.get(0).getAcidId());
+      assertEquals(81, get.get(1).getAcidId());
+      
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+    // Filter by inventory & inventory range
+    try {
+      List<AcidDTO> get = new AcidTDGRDS().getAllAcids().filterByInventory(41.2).executeQuery();
+      
+      assertEquals(80, get.get(0).getAcidId());
+      
+      get = new AcidTDGRDS().getAllAcids().filterByInventoryRange(42, 40).executeQuery();
+      
+      assertEquals(80, get.get(0).getAcidId());
+      
+      get = new AcidTDGRDS().getAllAcids().filterByInventoryRange(43, 40).executeQuery();
+      
+      assertEquals(80, get.get(0).getAcidId());
+      assertEquals(81, get.get(1).getAcidId());
+      
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+    // Filter by solute id
+    try {
+      List<AcidDTO> get = new AcidTDGRDS().getAllAcids().filterBySolute(15).executeQuery();
+      
+      assertEquals(15, get.get(0).getSoluteId());
+      
+    } catch(DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+    AcidTDGRDS.delete(80); 
+    AcidTDGRDS.delete(81); 
   }
 
   /**
@@ -172,6 +236,7 @@ class TestAcid extends DatabaseTest {
       testUpdate();
       testGetSet();
       testGetAll();
+      testFilters();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
