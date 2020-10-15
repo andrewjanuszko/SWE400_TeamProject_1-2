@@ -13,10 +13,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class AcidPanel extends JPanel{
 
-	JScrollPane chemicals = new JScrollPane(); 
+	JScrollPane acids = new JScrollPane(); 
 	GridBagConstraints gbc = new GridBagConstraints(); 
 	JButton addButton = new JButton("Add");
 	JButton deleteButton = new JButton("Delete");
@@ -25,10 +26,30 @@ public class AcidPanel extends JPanel{
 	JLabel selected = null;
 
 	public AcidPanel() {
+		this.setLayout(new GridBagLayout());
+		addScrollPane();
 		setButtons();
+		
+	}
+
+	private void addScrollPane() {
+		acids.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		acids.add(acids.createVerticalScrollBar());
+		
+		acids.setViewportView(Labels());
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 1;
+		gbc.weighty = Integer.MAX_VALUE;
+		gbc.fill = GridBagConstraints.BOTH;
+		add(acids,gbc);
 	}
 	
-	
+	private JPanel Labels() {
+		JPanel labels = new JPanel();
+		
+		return labels;
+	}
 	
 	private void setButtons() {
 		addButton.addActionListener( new ActionListener() {
@@ -49,9 +70,15 @@ public class AcidPanel extends JPanel{
 		        filterAcid();
 		      }
 		    });
+		detailsButton.addActionListener( new ActionListener() {
+		      @Override
+		      public void actionPerformed(ActionEvent ae) {
+		        getDetailsAcid();
+		      }
+		    });
 		JPanel buttons = new JPanel(new GridBagLayout());
-	    gbc.fill = GridBagConstraints.HORIZONTAL;
-	    gbc.weightx = 1;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+	    gbc.weightx = 0;
 	    gbc.gridx = 0;
 	    gbc.gridy = 0;
 	    buttons.add(addButton, gbc);
@@ -67,19 +94,19 @@ public class AcidPanel extends JPanel{
 	    
 	    gbc.gridx = 0;
 	    gbc.gridy = 1;
-	    gbc.anchor = GridBagConstraints.NORTHWEST;
+	    gbc.anchor = GridBagConstraints.SOUTHWEST;
 	    gbc.weighty = 1;
 	    buttons.setBackground(Color.GRAY);
-	    add(buttons, gbc);
 	    
-	    gbc.gridx
+	    add(buttons, gbc);
+
 	}
 	
 	private void addAcid() {
 		new AddAcidFrame().addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosed(WindowEvent arg0) {
-				//reset the view
+				
 			}
 		});
 	}
@@ -107,4 +134,10 @@ public class AcidPanel extends JPanel{
 			return;
 		}
 	}
+	
+	private void removeSelectedBackground() {
+	    if(selected != null)
+	      selected.setBackground(new Color(30, 30, 30));
+	  }
+
 }
