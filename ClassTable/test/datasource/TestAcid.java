@@ -142,12 +142,12 @@ class TestAcid extends DatabaseTest {
   }
   
   /**
-   * Test the getAll function inside AcidRDGRDS
+   * Test the getAll function inside AcidTDGRDS
    */
   @Test
   static void testGetAll() {
-    AcidRDG getter = new AcidRDGRDS(); // Empty AcidRDGRDS
-    List<AcidDTO> getAll = getter.getAll(); // Get all elements
+    AcidTDG getter = new AcidTDGRDS(); // Empty AcidTDGRDS
+    List<AcidDTO> getAll = getter.getAllAcids(); // Get all elements
     
     // Assert that we have 6 acids, and that they are the right ids. 
     assertEquals(6, getAll.size());

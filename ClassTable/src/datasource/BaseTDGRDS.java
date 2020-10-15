@@ -1,6 +1,13 @@
 package datasource;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
+
+import database.DatabaseException;
+import database.DatabaseManager;
 
 public class BaseTDGRDS implements BaseTDG {
 
@@ -19,8 +26,21 @@ public class BaseTDGRDS implements BaseTDG {
 
   @Override
   public List<BaseDTO> getAllBases() {
-    // TODO Auto-generated method stub
-    return null;
+    String sql = "SELECT * FROM Base INNER JOIN Chemical WHERE Base.baseId = Chemical.chemicalId;";
+    List<BaseDTO> bases = new ArrayList<BaseDTO>();
+    
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sql);
+      while (rs.next()) {
+        bases.add(new BaseDTO(rs.getInt("baseId"), rs.getInt("solute"), 
+            rs.getString("name"), rs.getDouble("inventory")));
+      }
+      return bases;
+    } catch(SQLException | DatabaseException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
 }

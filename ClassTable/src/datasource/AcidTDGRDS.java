@@ -1,6 +1,13 @@
 package datasource;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
+
+import database.DatabaseException;
+import database.DatabaseManager;
 
 public class AcidTDGRDS implements AcidTDG{
 
@@ -17,10 +24,25 @@ public class AcidTDGRDS implements AcidTDG{
     return singleton;
   }
 
-  @Override
+  /**
+   * Get all acids in the database. 
+   */
   public List<AcidDTO> getAllAcids() {
-    // TODO Auto-generated method stub
-    return null;
+    String sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId;";
+    ArrayList<AcidDTO> acids = new ArrayList<AcidDTO>();
+    
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sql);
+
+      while (rs.next()) {
+        acids.add(
+            new AcidDTO(rs.getInt("acidId"), rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory")));
+      }
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+    return acids;
   }
 
 }

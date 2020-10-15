@@ -145,12 +145,12 @@ class TestBase extends DatabaseTest {
   }
   
   /**
-   * Test the getAll function in BaseRDGRDS
+   * Test the getAll function in BaseTDGRDS
    */
   @Test
   static void testGetAll() {
-    BaseRDG getter = new BaseRDGRDS(); // Empty BaseRDGRDS
-    List<BaseDTO> getAll = getter.getAll(); // Get all elements
+    BaseTDG getter = new BaseTDGRDS(); // Empty BaseTDGRDS
+    List<BaseDTO> getAll = getter.getAllBases(); // Get all elements
     
     // Assert that we have 6 bases, and that they are the right ids. 
     assertEquals(6, getAll.size());

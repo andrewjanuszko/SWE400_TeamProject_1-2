@@ -3,6 +3,8 @@ package datasource;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 /**
@@ -83,6 +85,22 @@ class TestElement extends DatabaseTest {
     assertEquals(1.3, elementGet3.getElement().getInventory(), 0.1);
     assertEquals(1.4, elementGet4.getElement().getInventory(), 0.1);
   }
+  
+  /**
+   * Test the getAll function in ElementTDGRDS
+   */
+  @Test
+  static void testGetAll() {
+    ElementTDG getter = new ElementTDGRDS(); // Empty ElementTDG
+    List<ElementDTO> getAll = getter.getAllElements(); // Get all elements
+    
+    // Assert that we have 4 elements, and that they are the right ids. 
+    assertEquals(4, getAll.size());
+    assertEquals(21, getAll.get(0).getElementId());
+    assertEquals(22, getAll.get(1).getElementId());
+    assertEquals(23, getAll.get(2).getElementId());
+    assertEquals(24, getAll.get(3).getElementId());
+  }
 
   /**
    * Run all tests in TestElement
@@ -93,6 +111,7 @@ class TestElement extends DatabaseTest {
     testGetAtomicMass();
     testGetName();
     testGetInventory();
+    testGetAll();
   }
 
   /**

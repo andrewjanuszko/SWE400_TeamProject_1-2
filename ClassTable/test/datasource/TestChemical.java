@@ -114,8 +114,8 @@ class TestChemical extends DatabaseTest {
    */
   @Test
   static void testGetAll() {
-    ChemicalRDG getter = new ChemicalRDGRDS(); // Empty ChemicalRDGRDS
-    List<ChemicalDTO> getAll = getter.getAll(); // Get all elements
+    ChemicalTDG getter = new ChemicalTDGRDS(); // Empty ChemicalRDGRDS
+    List<ChemicalDTO> getAll = getter.getAllChemicals(); // Get all elements
 
     // At this point in the test we have only inserted acids and bases, but nothing
     // else,
