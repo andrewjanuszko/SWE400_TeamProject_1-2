@@ -159,28 +159,6 @@ public class AcidRDGRDS implements AcidRDG {
     }
     return results;
   }
-  
-  /**
-   * Get all acids in the database. 
-   */
-  public List<AcidDTO> getAll() {
-    String sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId;";
-    ArrayList<AcidDTO> acids = new ArrayList<AcidDTO>();
-    
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-
-      while (rs.next()) {
-        acids.add(
-            new AcidDTO(rs.getInt("acidId"), rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory")));
-      }
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-    }
-    return acids;
-  }
-  
 
   /**
    * Set solute

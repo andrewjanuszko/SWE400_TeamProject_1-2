@@ -26,4 +26,8 @@ public interface CompoundTDG {
   public void setName(String name);
 
   public void setInventory(double inventory);
+  
+  public void addCompound(int compoundId, List<Integer> madeOf, String name, double inventory);
+
+  void delete(int compoundId);
 }

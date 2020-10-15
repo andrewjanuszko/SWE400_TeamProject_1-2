@@ -80,6 +80,24 @@ class TestMetal {
     assertEquals("metalname5", metalGet.get(0).getMetal().getName());
     assertEquals("metalname6", metalGet.get(1).getMetal().getName());
   }
+  
+  /**
+   * Test the getAll function in MetalDGRDS
+   */
+  @Test
+  static void testGetAll() {
+    MetalTDG getter = new MetalTDGRDS(); // Empty ElementTDG
+    List<MetalDTO> getAll = getter.getAllMetals(); // Get all elements
+    
+    // Assert that we have 6 metals, and that they are the right ids. 
+    assertEquals(6, getAll.size());
+    assertEquals(31, getAll.get(0).getMetalId());
+    assertEquals(32, getAll.get(1).getMetalId());
+    assertEquals(33, getAll.get(2).getMetalId());
+    assertEquals(34, getAll.get(3).getMetalId());
+    assertEquals(35, getAll.get(4).getMetalId());
+    assertEquals(36, getAll.get(5).getMetalId());
+  }
 
   /**
    * Run all tests in TestMetal
@@ -90,6 +108,7 @@ class TestMetal {
     testGetInventory();
     testGetDissolvedBy();
     testGetSet();
+    testGetAll();
   }
 
   /**

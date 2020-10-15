@@ -44,4 +44,40 @@ public class BaseDTO {
     this.inventory = inventory;
   }
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + baseId;
+    long temp;
+    temp = Double.doubleToLongBits(inventory);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + soluteId;
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    BaseDTO other = (BaseDTO) obj;
+    if (baseId != other.baseId)
+      return false;
+    if (Double.doubleToLongBits(inventory) != Double.doubleToLongBits(other.inventory))
+      return false;
+    if (name == null) {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals(other.name))
+      return false;
+    if (soluteId != other.soluteId)
+      return false;
+    return true;
+  }
+
 }

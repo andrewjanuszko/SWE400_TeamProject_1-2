@@ -17,8 +17,6 @@ public interface ElementRDG {
   
   public ElementDTO findByAtomicMass(double atomicMass);
 
-  public List<ElementDTO> findSetAtomicMass(double lowerLimit, double upperLimit);
-
   public void setElementId(int elementId);
 
   public void setAtomicNumber(int atomicNumber);

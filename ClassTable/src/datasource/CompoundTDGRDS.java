@@ -17,51 +17,31 @@ import database.DatabaseManager;
  *
  */
 public class CompoundTDGRDS implements CompoundTDG {
-
-  private int compoundId;
-  private List<Integer> madeOf; // Element ids
-  private String name;
-  private double inventory;
+  private static CompoundTDGRDS singleton;
 
   /**
    * Empty constructor drops and re-creates the table
    */
   public CompoundTDGRDS() {
+    
   }
 
-  /**
-   * Constructor to find a compound
-   * 
-   * @param compoundId
-   *          to search for
-   */
-  public CompoundTDGRDS(int compoundId) {
-    String sql = "SELECT * FROM Chemical WHERE chemicalId = " + compoundId + ";";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-
-      rs.next();
-
-      this.name = rs.getString("name");
-      this.inventory = rs.getDouble("inventory");
-      this.compoundId = compoundId;
-
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
+  public static CompoundTDGRDS getSingleton() {
+    if (singleton == null) {
+      singleton = new CompoundTDGRDS();
     }
+    return singleton;
   }
 
   /**
-   * Constructor to insert a Compound
+   * Add method
    * 
    * @param compoundId
    * @param madeOf
    * @param name
    * @param inhabits
    */
-  public CompoundTDGRDS(int compoundId, List<Integer> madeOf, String name, double inventory) {
+  public void addCompound(int compoundId, List<Integer> madeOf, String name, double inventory) {
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + "VALUES (?, ?, ?);");
@@ -73,46 +53,17 @@ public class CompoundTDGRDS implements CompoundTDG {
 
       for (int i = 0; i < madeOf.size(); i++) {
         PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
-            .prepareStatement("INSERT INTO CompoundMadeFromElement (compoundId, elementId)" + "VALUES (?, ?);");
+            .prepareStatement("INSERT INTO Compound(compoundId, elementId)" + "VALUES (?, ?);");
 
         insert.setInt(1, compoundId);
         insert.setInt(2, madeOf.get(i));
         insert.execute();
       }
 
-      this.compoundId = compoundId;
-      this.madeOf = madeOf;
-      this.name = name;
-      this.inventory = inventory;
-
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Problem inserting CompoundsMadeOfTableDataGatewayRDS");
     }
-  }
-
-  /**
-   * Get all compoundId's of elementId
-   * 
-   * @param elementId
-   *          to search for
-   */
-  @Override
-  public ArrayList<CompoundDTO> findMakes(int elementId) {
-    String sql = "SELECT * FROM CompoundMadeFromElement WHERE elementId = " + elementId + ";";
-    ArrayList<CompoundDTO> compounds = new ArrayList<CompoundDTO>();
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-      // While there are still results to search through
-      while (rs.next()) {
-        // Add each result to compound list
-        compounds.add(new CompoundDTO(rs.getInt("compoundId"), elementId));
-      }
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-    }
-    return compounds;
   }
 
   /**
@@ -123,7 +74,7 @@ public class CompoundTDGRDS implements CompoundTDG {
    */
   @Override
   public ArrayList<CompoundDTO> findMadeOf(int compoundId) {
-    String sql = "SELECT * FROM Compound WHERE compoundId = " + compoundId + ";";
+    String sql = "SELECT * FROM Compound INNER JOIN Chemical WHERE compoundId = " + compoundId + ";";
     ArrayList<CompoundDTO> compounds = new ArrayList<CompoundDTO>();
 
     try {
@@ -132,68 +83,70 @@ public class CompoundTDGRDS implements CompoundTDG {
       // While there are still results to search through
       while (rs.next()) {
         // Add each result to compound list
-        compounds.add(new CompoundDTO(compoundId,rs.getInt("elementId")));
+        compounds.add(new CompoundDTO(compoundId, rs.getInt("elementId"), 
+            rs.getString("name"), rs.getDouble("inventory")));
       }
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
+    
     return compounds;
+  }
+  
+  /**
+   * Get all compoundId's of elementId
+   * 
+   * @param elementId
+   *          to search for
+   */
+  @Override
+  public ArrayList<CompoundDTO> findMakes(int elementId) { 
+    String sql = "SELECT * FROM Compound WHERE elementId = " + elementId + ";"; 
+    ArrayList<CompoundDTO> compounds = new ArrayList<CompoundDTO>(); 
+    try { 
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement(); 
+      ResultSet thatboy = statement.executeQuery(sql); 
+      // While there are still results to search through 
+      while (thatboy.next()) { 
+        // Add each result to compound list 
+        compounds.add(this.getDTO(thatboy.getInt("compoundId"))); 
+      } 
+    } catch (SQLException | DatabaseException e) { 
+      e.printStackTrace(); 
+    } 
+    return compounds; 
+  } 
+
+  public CompoundDTO getDTO(int id) {
+    String sql = "SELECT * FROM Element INNER JOIN Chemical ON Element.elementId = Chemical.chemicalId AND elementId = "
+        + id + ";";
+
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(sql);
+      rs.next();
+
+      return new CompoundDTO(rs.getInt("compoundId"), rs.getInt("elementId"), rs.getString("name"),
+          rs.getDouble("inventory"));
+
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("No entry with id " + id);
+    }
+    return null;
   }
 
   /**
    * Deletes entry already held by instance of this object
    */
   @Override
-  public void delete() {
+  public void delete(int compoundId) {
     try {
       PreparedStatement sql = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("DELETE FROM CompoundMadeFromElement WHERE compoundId = " + this.compoundId + ";");
+          .prepareStatement("DELETE FROM Compound WHERE compoundId = " + compoundId + ";");
       sql.execute();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
   }
-
-  /**
-   * Get compound name from compoundId
-   * 
-   * @param compoundId
-   *          compoundId of id searching for
-   */
-  @Override
-  public String getCompoundName() {
-    return this.name;
-  }
-
-  /**
-   * Get inhabits from the Chemical table of a given chemicalId
-   * 
-   * @param chemicalId
-   *          to search for
-   */
-  @Override
-  public double getInventory() {
-    return this.inventory;
-  }
-
-  @Override
-  public void setCompoundId(int compoundId) {
-    this.compoundId = compoundId;
-  }
-
-  @Override
-  public void setMadeOf(List<Integer> madeOf) {
-    this.madeOf = madeOf;
-  }
-
-  @Override
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  @Override
-  public void setInventory(double inventory) {
-    this.inventory = inventory;
-  }
-
 }
