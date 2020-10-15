@@ -58,4 +58,12 @@ public class MetalTDGRDS implements MetalTDG {
     sql += " AND (Element.atomicNumber BETWEEN " + low + " AND " + high + ")";
   }
   
+  public void filterByDissolvedBy() {
+    
+  }
+  
+  public void filterByMoles() {
+    
+  }
+  
 }

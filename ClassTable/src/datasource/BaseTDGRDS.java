@@ -27,22 +27,26 @@ public class BaseTDGRDS implements BaseTDG {
   }
   
   public void filterByName(String name) {
-    sql +=  " AND (Chemical.name LIKE '" + name + "' ";
+    sql +=  " AND (Chemical.name LIKE '" + name + "') ";
+    System.out.println(sql);
   }
 
   @Override
   public void filterByInventory(double inventory) {
-    sql += " AND (Chemical.inventory = " + inventory + ")";
+    sql += " AND (Chemical.inventory = " + inventory + ") ";
+    System.out.println(sql);
   }
 
   @Override
   public void filterBySolute(int solute) {
-    sql += " AND (Acid.solute = " + solute + ")";
+    sql += " AND (Acid.solute = " + solute + ") ";
+    System.out.println(sql);
   }
 
   @Override
   public void filterByInventoryRange(double high, double low) {
-    sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ")";
+    sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
+    System.out.println(sql);
   }
 
   @Override
@@ -53,7 +57,6 @@ public class BaseTDGRDS implements BaseTDG {
       try {
         ResultSet results = statement.executeQuery();
 
-        sql = "";
         while (results.next()) {
           int baseId = results.getInt("baseId");
           int soluteId = results.getInt("solute");
@@ -62,6 +65,9 @@ public class BaseTDGRDS implements BaseTDG {
           BaseDTO base = new BaseDTO(baseId, soluteId, name, inventory);
           listDTO.add(base);
         }
+        
+        // Reset sql string
+        sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId ";
       } catch (SQLException e) {
         throw new DatabaseException("Failed to convert query to DTO.", e);
       }

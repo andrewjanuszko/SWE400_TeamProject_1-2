@@ -102,6 +102,8 @@ public class AcidRDGRDS implements AcidRDG {
       e.printStackTrace();
       System.out.println("Error deleting acid " + acid.getAcidId());
     }
+    
+    acid = null;
   }
 
   /**

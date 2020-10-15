@@ -20,8 +20,9 @@ public interface MetalRDG {
    public void setName(String name);
 
    public void setInventory(double inventory);
+   
+   public void setMoles(int moles);
 
    MetalDTO getMetal();
-
 
 }

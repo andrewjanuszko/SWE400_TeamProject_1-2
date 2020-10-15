@@ -37,7 +37,8 @@ public class MetalRDGRDS implements MetalRDG {
       ResultSet rs = statement.executeQuery(sql);
       rs.next();
       
-      metal = new MetalDTO(id, rs.getInt("dissolvedBy"), rs.getInt("atomicNumber"), rs.getDouble("atomicMass"), rs.getString("name"), rs.getDouble("inventory"));
+      metal = new MetalDTO(id, rs.getInt("dissolvedBy"), rs.getInt("atomicNumber"), rs.getDouble("atomicMass"), 
+          rs.getInt("moles"),rs.getString("name"), rs.getDouble("inventory"));
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -53,7 +54,7 @@ public class MetalRDGRDS implements MetalRDG {
    * @param name
    * @param inventory
    */
-  public MetalRDGRDS(int id, int dissolvedById, int atomicNumber, double atomicMass, String name, double inventory) {
+  public MetalRDGRDS(int id, int dissolvedById, int atomicNumber, double atomicMass, int moles, String name, double inventory) {
     
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -68,16 +69,17 @@ public class MetalRDGRDS implements MetalRDG {
       insertElement.setDouble(2, atomicMass);
       
       PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Metal (metalId, dissolvedBy)" + "VALUES (?, ?);");
+          .prepareStatement("INSERT INTO Metal (metalId, dissolvedBy, moles)" + "VALUES (?, ?, ?);");
 
       insert.setInt(1, id);
       insert.setInt(2, dissolvedById);
+      insert.setInt(3, moles);
 
       insertChemical.execute();
       insertElement.execute();
       insert.execute();
       
-      metal = new MetalDTO(id, dissolvedById, atomicNumber, atomicMass, name, inventory);
+      metal = new MetalDTO(id, dissolvedById, atomicNumber, atomicMass, moles, name, inventory);
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert");
@@ -136,7 +138,6 @@ public class MetalRDGRDS implements MetalRDG {
       e.printStackTrace();
       System.out.println("Failed to update");
     }
-
   }
 
   /**
@@ -177,10 +178,13 @@ public class MetalRDGRDS implements MetalRDG {
   public void setInventory(double inventory) {
     metal.setInventory(inventory);
   }
+  
+  @Override
+  public void setMoles(int moles) {
+    metal.setMoles(moles); 
+  }
 
   public MetalDTO getMetal() {
     return metal;
   }
-
-  
 }

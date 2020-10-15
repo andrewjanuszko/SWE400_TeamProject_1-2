@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.Connection;
+
 import database.DatabaseException;
 import database.DatabaseManager;
 
@@ -18,15 +20,20 @@ import database.DatabaseManager;
  */
 public class CompoundTDGRDS implements CompoundTDG {
   String sql = "SELECT * FROM Compound INNER JOIN Chemical ";
+  
   private static CompoundTDGRDS singleton;
 
   /**
-   * Empty constructor drops and re-creates the table
+   * Empty constructor
    */
   public CompoundTDGRDS() {
     
   }
 
+  /**
+   * Singleton
+   * @return
+   */
   public static CompoundTDGRDS getSingleton() {
     if (singleton == null) {
       singleton = new CompoundTDGRDS();
@@ -66,7 +73,21 @@ public class CompoundTDGRDS implements CompoundTDG {
       System.out.println("Problem inserting CompoundsMadeOfTableDataGatewayRDS");
     }
   }
-
+  
+  /**
+   * Delete a compound from the database. 
+   */
+  @Override
+  public void delete(int compoundId) {
+    try {
+      PreparedStatement sql = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("DELETE FROM Compound WHERE compoundId = " + compoundId + ";");
+      sql.execute();
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+  }
+  
   /**
    * Get all elementId's of of compoundId
    * 
@@ -118,6 +139,10 @@ public class CompoundTDGRDS implements CompoundTDG {
     return compounds; 
   } 
 
+  /**
+   * Create a dto from a given compoundId. 
+   * @param id int compoundid
+   */
   public CompoundDTO getDTO(int id) {
     String sql = "SELECT * FROM Element INNER JOIN Chemical ON Element.elementId = Chemical.chemicalId AND elementId = "
         + id + ";";
@@ -137,39 +162,23 @@ public class CompoundTDGRDS implements CompoundTDG {
     return null;
   }
 
-  /**
-   * Deletes entry already held by instance of this object
-   */
-  @Override
-  public void delete(int compoundId) {
-    try {
-      PreparedStatement sql = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("DELETE FROM Compound WHERE compoundId = " + compoundId + ";");
-      sql.execute();
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-    }
-  }
-  
-  
-  
   public void filterByName(String name) {
-    sql += " AND (Chemical.name LIKE '" + name + "' ";
+    sql += " AND (Chemical.name LIKE '" + name + "') ";
   }
 
   @Override
   public void filterByInventory(double inventory) {
-    sql += " AND (Chemical.inventory = " + inventory + ")";
+    sql += " AND (Chemical.inventory = " + inventory + ") ";
   }
 
   @Override
   public void filterByInventoryRange(double high, double low) {
-    sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ")";
+    sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
   }
   
   @Override
   public void filterByElements(int elementId) {
-    sql += " WHERE Compound.elementId = " + elementId;
+    sql += " AND Compound.elementId = " + elementId;
   }
   
   

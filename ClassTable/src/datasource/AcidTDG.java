@@ -7,15 +7,15 @@ import database.DatabaseException;
 
 public interface AcidTDG {
 
-  public void getAllAcids();
+  public AcidTDGRDS getAllAcids();
   
-  public void filterByName(String name);
+  public AcidTDGRDS filterByName(String name);
   
-  public void filterByInventory(double inventory); 
+  public AcidTDGRDS filterByInventory(double inventory); 
   
-  public void filterBySolute(int solute);
+  public AcidTDGRDS filterBySolute(int solute);
   
-  public void filterByInventoryRange(double high, double low);
+  public AcidTDGRDS filterByInventoryRange(double high, double low);
   
   public List<AcidDTO> executeQuery() throws DatabaseException;
   
