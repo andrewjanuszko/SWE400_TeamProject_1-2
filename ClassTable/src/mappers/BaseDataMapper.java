@@ -32,6 +32,114 @@ public class BaseDataMapper implements BaseDataMapperInterface {
       BaseDTO dto = row.getBase();
 
       base = new Base(dto.getBaseId(), dto.getName(), dto.getInventory(), dto.getSoluteId());
+<<<<<<< HEAD
+    
+    } catch (DatabaseException | SQLException e) {
+      e.printStackTrace();
+    }
+    return base;
+  }
+
+  @Override
+  public void update(Base base) {
+    try {
+      BaseRDG row = new BaseRDGRDS(base.getID());
+      row.setName(base.getName());
+      row.setInventory(base.getInventory());
+      row.setSolute(base.getSolute());
+      row.update();
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  @Override
+  public void delete(Base base) {
+    try {
+      BaseRDG row = new BaseRDGRDS(base.getID());
+      row.delete();
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  @Override
+  public List<Base> getAll() {
+    List<BaseDTO> dtos;
+    ArrayList<Base> base = new ArrayList<>();
+    try {
+      dtos = BaseTDGRDS.getSingleton().executeQuery();
+
+      for (BaseDTO b : dtos) {
+        base.add(new Base(b.getBaseId(), b.getName(), b.getInventory(), b.getSoluteId()));
+      }
+    } catch (DatabaseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    return base;
+  }
+
+  @Override
+  public List<Base> filterByWildCardName(String wildCardName) {
+    List<BaseDTO> dtos;
+    ArrayList<Base> base = new ArrayList<>();
+    try {
+      dtos = BaseTDGRDS.getSingleton().filterByName(wildCardName).executeQuery();
+
+      for (BaseDTO b : dtos) {
+        base.add(new Base(b.getBaseId(), b.getName(), b.getInventory(), b.getSoluteId()));
+      }
+    } catch (DatabaseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    return base;
+  }
+
+  @Override
+  public List<Base> filterByInventory(double inventory) {
+    List<BaseDTO> dtos;
+    ArrayList<Base> base = new ArrayList<>();
+    try {
+      dtos = BaseTDGRDS.getSingleton().filterByInventory(inventory).executeQuery();
+
+      for (BaseDTO b : dtos) {
+        base.add(new Base(b.getBaseId(), b.getName(), b.getInventory(), b.getSoluteId()));
+      }
+    } catch (DatabaseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    return base;
+  }
+
+  @Override
+  public List<Base> filterByInventoryRange(double min, double max) {
+    List<BaseDTO> dtos;
+    ArrayList<Base> base = new ArrayList<>();
+    try {
+      dtos = BaseTDGRDS.getSingleton().filterByInventoryRange(max, min).executeQuery();
+
+      for (BaseDTO b : dtos) {
+        base.add(new Base(b.getBaseId(), b.getName(), b.getInventory(), b.getSoluteId()));
+      }
+    } catch (DatabaseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    return base;
+  }
+
+  @Override
+  public List<Base> filterBySolute(int chemicalID) {
+=======
     } catch (SQLException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -141,6 +249,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
 
   @Override
   public ArrayList<Base> filterBySolute(int chemicalID) {
+>>>>>>> branch '85-class-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     List<BaseDTO> dtos;
     ArrayList<Base> base = new ArrayList<>();
     try {

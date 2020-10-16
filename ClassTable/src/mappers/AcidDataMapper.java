@@ -71,7 +71,11 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
+<<<<<<< HEAD
+  public List<Acid> getAll() {
+=======
   public ArrayList<Acid> getAll() {
+>>>>>>> branch '85-class-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
@@ -94,7 +98,11 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
+<<<<<<< HEAD
+  public List<Acid> filterByWildCardName(String wildCardName) {
+=======
   public ArrayList<Acid> filterByWildCardName(String wildCardName) {
+>>>>>>> branch '85-class-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
@@ -117,7 +125,11 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
+<<<<<<< HEAD
+  public List<Acid> filterByInventory(double inventory) {
+=======
   public ArrayList<Acid> filterByInventory(double inventory) {
+>>>>>>> branch '85-class-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
@@ -140,7 +152,11 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
+<<<<<<< HEAD
+  public List<Acid> filterByInventoryRange(double min, double max) {
+=======
   public ArrayList<Acid> filterByInventoryRange(double min, double max) {
+>>>>>>> branch '85-class-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
@@ -163,7 +179,11 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
+<<<<<<< HEAD
+  public List<Acid> filterBySolute(int chemicalID) {
+=======
   public ArrayList<Acid> filterBySolute(int chemicalID) {
+>>>>>>> branch '85-class-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
