@@ -102,7 +102,7 @@ public class MetalTDGRDS implements MetalTDG {
   }
 
   public MetalTDGRDS filterByMolesRange(double high, double low) {
-    sql += " AND (Metal.moles BETWEEN " + high + " AND " + low + ")";
+    sql += " AND (Metal.moles BETWEEN " + low + " AND " + high + ")";
     return getSingleton();
   }
 
@@ -127,7 +127,7 @@ public class MetalTDGRDS implements MetalTDG {
       double inventory) {
 
     String createChemical = "INSERT INTO Chemical (chemicalId, name, inventory) VALUES (?, ?, ?);",
-        createElement = "INSERT INTO Element (elementId, atomicNumber, atomicMass VALUES (?, ?, ?);",
+        createElement = "INSERT INTO Element (elementId, atomicNumber, atomicMass) VALUES (?, ?, ?);",
         createMetal = "INSERT INTO Metal (metalId, dissolvedBy, moles) VALUES (?, ?, ?);";
 
     try {

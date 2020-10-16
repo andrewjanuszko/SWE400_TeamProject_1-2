@@ -22,7 +22,7 @@ public class ClassTableInitializer {
           "CREATE TABLE IF NOT EXISTS Element(elementId INT NOT NULL, atomicNumber INT, "
               + "atomicMass DOUBLE, FOREIGN KEY(elementId) REFERENCES Chemical(chemicalId));",
               
-          "CREATE TABLE IF NOT EXISTS Metal(metalId INT NOT NULL, dissolvedBy INT, moles INT, "
+          "CREATE TABLE IF NOT EXISTS Metal(metalId INT NOT NULL, dissolvedBy INT, moles DOUBLE, "
               + "FOREIGN KEY(dissolvedBy) REFERENCES Acid(acidId), "
               + "FOREIGN KEY(metalId) REFERENCES Element(elementId)); ",
               

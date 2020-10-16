@@ -47,9 +47,9 @@ class TestMetal {
 
     // Test getInventory
     assertEquals(41.1, metalGet1.getMetal().getInventory(), 0.1);
-    assertEquals(42.2, metalGet2.getMetal().getInventory(), 0.1);
-    assertEquals(43.3, metalGet3.getMetal().getInventory(), 0.1);
-    assertEquals(44.4, metalGet4.getMetal().getInventory(), 0.1);
+    assertEquals(42.1, metalGet2.getMetal().getInventory(), 0.1);
+    assertEquals(43.1, metalGet3.getMetal().getInventory(), 0.1);
+    assertEquals(44.1, metalGet4.getMetal().getInventory(), 0.1);
   }
 
   /**
@@ -64,10 +64,10 @@ class TestMetal {
     MetalRDG metalGet4 = new MetalRDGRDS(34);
 
     // Test that getDissolvedBy works
-    assertEquals(11, metalGet1.getMetal().getDissolvedById());
-    assertEquals(12, metalGet2.getMetal().getDissolvedById());
-    assertEquals(13, metalGet3.getMetal().getDissolvedById());
-    assertEquals(14, metalGet4.getMetal().getDissolvedById());
+    assertEquals(1, metalGet1.getMetal().getDissolvedById());
+    assertEquals(2, metalGet2.getMetal().getDissolvedById());
+    assertEquals(3, metalGet3.getMetal().getDissolvedById());
+    assertEquals(4, metalGet4.getMetal().getDissolvedById());
   }
   
   /**
@@ -154,7 +154,7 @@ class TestMetal {
   @Test
   static void testFilterByDissolvedBy() {
     try {
-      List<MetalDTO> get = new MetalTDGRDS().getAllMetals().filterByDissolvedBy(11).executeQuery();
+      List<MetalDTO> get = new MetalTDGRDS().getAllMetals().filterByDissolvedBy(1).executeQuery();
       
       assertEquals(1, get.size());
       assertEquals(31, get.get(0).getMetalId());
@@ -171,7 +171,7 @@ class TestMetal {
       assertEquals(1, get.size());
       assertEquals(31, get.get(0).getMetalId());
       
-      get = new MetalTDGRDS().getAllMetals().filterByMolesRange(14, 11).executeQuery();
+      get = new MetalTDGRDS().getAllMetals().filterByMolesRange(14.0, 11.0).executeQuery();
       
       assertEquals(3, get.size());
       assertEquals(31, get.get(0).getMetalId());
@@ -201,9 +201,9 @@ class TestMetal {
    * Insert data into the database to test metal.
    */
   private static void insertMetals() {
-    MetalTDGRDS.create(31, 11, 11.1, 1, 1.1, "metalname1", 41.1);
-    MetalTDGRDS.create(32, 12, 12.2, 2, 2.1, "metalname2", 42.1);
-    MetalTDGRDS.create(33, 13, 13.3, 3, 3.1, "metalname3", 43.1);
-    MetalTDGRDS.create(34, 14, 14.4, 4, 4.1, "metalname4", 44.1);
+    MetalTDGRDS.create(31, 1, 11.1, 1, 1.1, "metalname1", 41.1);
+    MetalTDGRDS.create(32, 2, 12.2, 2, 2.1, "metalname2", 42.1);
+    MetalTDGRDS.create(33, 3, 13.3, 3, 3.1, "metalname3", 43.1);
+    MetalTDGRDS.create(34, 4, 14.4, 4, 4.1, "metalname4", 44.1);
   }
 }
