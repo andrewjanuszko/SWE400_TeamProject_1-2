@@ -59,7 +59,7 @@ public class ElementRDGRDS implements ElementRDG {
    * @param name
    * @param inhabits
    */
-  public ElementRDGRDS(int id, int atomicNum, int atomicMass, String name, double inventory) {
+  public ElementRDGRDS(int id, int atomicNum, double atomicMass, String name, double inventory) {
     
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -72,7 +72,7 @@ public class ElementRDGRDS implements ElementRDG {
 
       insert.setInt(1, id);
       insert.setInt(2, atomicNum);
-      insert.setInt(3, atomicMass);
+      insert.setDouble(3, atomicMass);
 
       insertChemical.execute();
       insert.execute();
