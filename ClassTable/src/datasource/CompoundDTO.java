@@ -1,15 +1,16 @@
 package datasource;
 
-public class CompoundDTO {
+import java.util.List;
 
+public class CompoundDTO {
   int compoundId;
-  int elementId;
+  List<ElementDTO> elements;
   String name;
   double inventory;
 
-  public CompoundDTO(int cId, int eId, String name, double inv) {
+  public CompoundDTO(int cId, List<ElementDTO> elements, String name, double inv) {
     this.compoundId = cId;
-    this.elementId = eId;
+    this.elements = elements;
     this.name = name;
     this.inventory = inv;
   }
@@ -18,8 +19,8 @@ public class CompoundDTO {
     return compoundId;
   }
 
-  public int getElementId() {
-    return elementId;
+  public List<ElementDTO> getElements() {
+    return elements;
   }
 
   public String getName() {
@@ -34,8 +35,8 @@ public class CompoundDTO {
     this.compoundId = compoundId;
   }
 
-  public void setElementId(int elementId) {
-    this.elementId = elementId;
+  public void setElements(List<ElementDTO> elements) {
+    this.elements = elements;
   }
 
   public void setName(String name) {
@@ -51,7 +52,11 @@ public class CompoundDTO {
     final int prime = 31;
     int result = 1;
     result = prime * result + compoundId;
-    result = prime * result + elementId;
+    result = prime * result + ((elements == null) ? 0 : elements.hashCode());
+    long temp;
+    temp = Double.doubleToLongBits(inventory);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
   }
 
@@ -66,9 +71,20 @@ public class CompoundDTO {
     CompoundDTO other = (CompoundDTO) obj;
     if (compoundId != other.compoundId)
       return false;
-    if (elementId != other.elementId)
+    if (elements == null) {
+      if (other.elements != null)
+        return false;
+    } else if (!elements.equals(other.elements))
+      return false;
+    if (Double.doubleToLongBits(inventory) != Double.doubleToLongBits(other.inventory))
+      return false;
+    if (name == null) {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals(other.name))
       return false;
     return true;
   }
+
 
 }
