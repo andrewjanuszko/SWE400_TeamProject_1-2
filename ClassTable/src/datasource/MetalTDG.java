@@ -20,8 +20,10 @@ public interface MetalTDG {
   
   public MetalTDGRDS filterByAtomicNumberRange(int high, int low);
   
-  public MetalTDGRDS filterByDissolvedBy();
+  public MetalTDGRDS filterByDissolvedBy(int dissolvedBy);
   
-  public MetalTDGRDS filterByMoles();
+  public MetalTDGRDS filterByMoles(double moles);
+  
+  public MetalTDGRDS filterByMolesRange(double high, double low);
   
 }

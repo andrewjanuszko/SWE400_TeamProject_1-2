@@ -46,28 +46,24 @@ public class BaseTDGRDS implements BaseTDG {
   
   public BaseTDGRDS filterByName(String name) {
     sql +=  " AND (Chemical.name LIKE '%" + name + "%') ";
-    System.out.println(sql);
     return getSingleton();
   }
 
   @Override
   public BaseTDGRDS filterByInventory(double inventory) {
     sql += " AND (Chemical.inventory = " + inventory + ") ";
-    System.out.println(sql);
     return getSingleton();
   }
 
   @Override
   public BaseTDGRDS filterBySolute(int solute) {
     sql += " AND (Base.solute = " + solute + ") ";
-    System.out.println(sql);
     return getSingleton();
   }
 
   @Override
   public BaseTDGRDS filterByInventoryRange(double high, double low) {
     sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
-    System.out.println(sql);
     return getSingleton();
   }
 

@@ -19,26 +19,19 @@ public class MetalRDGRDS implements MetalRDG {
   MetalDTO metal; 
 
   /**
-   * empty constructor drops the table and recreates it
-   */
-  public MetalRDGRDS() {
-    
-  }
-
-  /**
    * finds a metal
    * 
    * @param id
    */
   public MetalRDGRDS(int id) {
-    String sql = "SELECT * FROM Metal INNER JOIN Chemical WHERE chemicalId = Metal.metalId  INNER JOIN Element WHERE elementId = Metal.metalId AND metalId = " + id + ";";
+    String sql = "SELECT * FROM Metal INNER JOIN Chemical ON chemicalId = Metal.metalId  INNER JOIN Element ON elementId = Metal.metalId AND Metal.metalId = " + id + ";";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       rs.next();
       
       metal = new MetalDTO(id, rs.getInt("dissolvedBy"), rs.getInt("atomicNumber"), rs.getDouble("atomicMass"), 
-          rs.getInt("moles"),rs.getString("name"), rs.getDouble("inventory"));
+          rs.getDouble("moles"), rs.getString("name"), rs.getDouble("inventory"));
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -47,14 +40,16 @@ public class MetalRDGRDS implements MetalRDG {
   }
 
   /**
-   * constructor to create a metal
-   * 
-   * @param id
-   * @param dissolvedById
-   * @param name
-   * @param inventory
+   * Constructor to create a metal
+   * @param id int 
+   * @param dissolvedById int
+   * @param atomicNumber int
+   * @param atomicMass double
+   * @param moles double
+   * @param name String
+   * @param inventory double
    */
-  public MetalRDGRDS(int id, int dissolvedById, int atomicNumber, double atomicMass, int moles, String name, double inventory) {
+  public MetalRDGRDS(int id, int dissolvedById, int atomicNumber, double atomicMass, double moles, String name, double inventory) {
     
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
@@ -64,16 +59,16 @@ public class MetalRDGRDS implements MetalRDG {
       insertChemical.setDouble(3, inventory);
       
       PreparedStatement insertElement = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Element (atomicNumber, atomicMass)" + "VALUES (?, ?);");
-      insertElement.setInt(1, atomicNumber);
-      insertElement.setDouble(2, atomicMass);
+          .prepareStatement("INSERT INTO Element (elementId, atomicNumber, atomicMass)" + "VALUES (?, ?, ?);");
+      insertElement.setInt(1, id);
+      insertElement.setInt(2, atomicNumber);
+      insertElement.setDouble(3, atomicMass);
       
       PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Metal (metalId, dissolvedBy, moles)" + "VALUES (?, ?, ?);");
-
       insert.setInt(1, id);
       insert.setInt(2, dissolvedById);
-      insert.setInt(3, moles);
+      insert.setDouble(3, moles);
 
       insertChemical.execute();
       insertElement.execute();
@@ -91,7 +86,6 @@ public class MetalRDGRDS implements MetalRDG {
    */
   @Override
   public void delete() {
-
     String sqlMetal = "DELETE FROM Metal WHERE metalId = " + metal.getMetalId() + ";";
     String sqlChem = "DELETE FROM Chemical WHERE chemicalId = " + metal.getMetalId() + ";";
     String sqlElement = "DELETE FROM Element WHERE elementId = " + metal.getMetalId() + ";";
@@ -115,9 +109,10 @@ public class MetalRDGRDS implements MetalRDG {
   public void update() {
     try {
       PreparedStatement updateMetal = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("UPDATE Metal SET dissolvedById = ? WHERE elementId = ?;");
+          .prepareStatement("UPDATE Metal SET dissolvedById = ?, moles = ? WHERE elementId = ?;");
       updateMetal.setInt(1, metal.getDissolvedById());
-      updateMetal.setInt(2, metal.getMetalId());
+      updateMetal.setDouble(2, metal.getMoles());
+      updateMetal.setInt(3, metal.getMetalId());
 
       PreparedStatement updateElement = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Element SET atomicNumber = ?, atomicMass = ? WHERE elementId = ?;");

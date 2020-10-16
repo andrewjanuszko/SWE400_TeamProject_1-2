@@ -32,8 +32,6 @@ public class ChemicalTDGRDS implements ChemicalTDG {
       sql += " AND (name LIKE '%" + name + "%')";
     }
     
-    System.out.println(sql);
-    
     return getSingleton();
   }
 
@@ -44,7 +42,7 @@ public class ChemicalTDGRDS implements ChemicalTDG {
     } else {
       sql += " AND (inventory = '" + inventory + "')";
     }
-    System.out.println(sql);
+
     return getSingleton();
   }
 
@@ -55,7 +53,7 @@ public class ChemicalTDGRDS implements ChemicalTDG {
     } else {
       sql += " AND (inventory BETWEEN " + low + " AND " + high + ")";
     }
-    System.out.println(sql);
+
     return getSingleton();
   }
 
@@ -76,7 +74,6 @@ public class ChemicalTDGRDS implements ChemicalTDG {
           listDTO.add(base);
         }
         
-        // Reset SQL string
         sql = "SELECT * FROM Chemical";
       } catch (SQLException e) {
         throw new DatabaseException("Failed to convert query to DTO.", e);

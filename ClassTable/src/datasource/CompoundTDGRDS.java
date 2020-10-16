@@ -24,13 +24,6 @@ public class CompoundTDGRDS implements CompoundTDG {
   private static CompoundTDGRDS singleton;
 
   /**
-   * Empty constructor
-   */
-  public CompoundTDGRDS() {
-    
-  }
-
-  /**
    * Singleton
    * @return
    */
@@ -161,30 +154,6 @@ public class CompoundTDGRDS implements CompoundTDG {
     }
     return null;
   }
-
-  public CompoundTDGRDS filterByName(String name) {
-    sql += " AND (Chemical.name LIKE '" + name + "') ";
-    return getSingleton();
-  }
-
-  @Override
-  public CompoundTDGRDS filterByInventory(double inventory) {
-    sql += " AND (Chemical.inventory = " + inventory + ") ";
-    return getSingleton();
-  }
-
-  @Override
-  public CompoundTDGRDS filterByInventoryRange(double high, double low) {
-    sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
-    return getSingleton();
-  }
-  
-  @Override
-  public CompoundTDGRDS filterByElements(int elementId) {
-    sql += " AND Compound.elementId = " + elementId;
-    return getSingleton();
-  }
-  
   
   @Override
   public List<CompoundDTO> executeQuery() throws DatabaseException {
@@ -217,5 +186,27 @@ public class CompoundTDGRDS implements CompoundTDG {
     sql = "SELECT * FROM Compound INNER JOIN Chemical ";
     return getSingleton();
   }
+
+  public CompoundTDGRDS filterByName(String name) {
+    sql += " AND (Chemical.name LIKE '" + name + "') ";
+    return getSingleton();
+  }
+
+  @Override
+  public CompoundTDGRDS filterByInventory(double inventory) {
+    sql += " AND (Chemical.inventory = " + inventory + ") ";
+    return getSingleton();
+  }
+
+  @Override
+  public CompoundTDGRDS filterByInventoryRange(double high, double low) {
+    sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
+    return getSingleton();
+  }
   
+  @Override
+  public CompoundTDGRDS filterByElements(int elementId) {
+    sql += " AND Compound.elementId = " + elementId;
+    return getSingleton();
+  }
 }

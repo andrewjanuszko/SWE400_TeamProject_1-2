@@ -1,11 +1,11 @@
 package datasource;
 
 public class MetalDTO {
-  int metalId, dissolvedById, atomicNumber, moles; 
+  int metalId, dissolvedById, atomicNumber; 
   String name;
-  double inventory, atomicMass;
+  double inventory, atomicMass, moles;
   
-  public MetalDTO(int metalId, int dissolvedById, int atomicNumber, double atomicMass, int moles, String name, double inventory) {
+  public MetalDTO(int metalId, int dissolvedById, int atomicNumber, double atomicMass, double moles, String name, double inventory) {
     this.metalId = metalId;
     this.dissolvedById = dissolvedById; 
     this.atomicNumber = atomicNumber;
@@ -19,7 +19,7 @@ public class MetalDTO {
     return metalId;
   }
   
-  public int getMoles() {
+  public double getMoles() {
     return moles;
   }
 

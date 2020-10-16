@@ -75,25 +75,21 @@ public class AcidTDGRDS implements AcidTDG {
 
   public AcidTDGRDS filterByName(String name) {
     sql += " AND (Chemical.name LIKE '%" + name + "%') ";
-    System.out.println(sql);
     return getSingleton();
   }
 
   public AcidTDGRDS filterByInventory(double inventory) {
     sql += " AND (Chemical.inventory = " + inventory + ") ";
-    System.out.println(sql);
     return getSingleton();
   }
 
   public AcidTDGRDS filterBySolute(int solute) {
     sql += " AND (Acid.solute = " + solute + ") ";
-    System.out.println(sql);
     return singleton;
   }
 
   public AcidTDGRDS filterByInventoryRange(double high, double low) {
     sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
-    System.out.println(sql);
     return getSingleton();
   }
 
