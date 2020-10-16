@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface BaseDataMapperInterface {
   
@@ -12,13 +12,13 @@ public interface BaseDataMapperInterface {
   
   public void delete(Base base);
   
-  public ArrayList<Base> getAll();
+  public List<Base> getAll();
   
-  public ArrayList<Base> filterByWildCardName(String wildCardName);
+  public List<Base> filterByWildCardName(String wildCardName);
   
-  public ArrayList<Base> filterByInventory(double inventory);
+  public List<Base> filterByInventory(double inventory);
   
-  public ArrayList<Base> filterByInventoryRange(double min, double max);
+  public List<Base> filterByInventoryRange(double min, double max);
   
-  public ArrayList<Base> filterBySolute(int chemicalID);
+  public List<Base> filterBySolute(int chemicalID);
 }

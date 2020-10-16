@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implements a ChemicalTableDataGateway.
@@ -37,8 +38,8 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
    * @return a list of ChemicalDTOs.
    * @throws DatabaseException when things go wrong.
    */
-  private ArrayList<ChemicalDTO> convertToDTO(PreparedStatement statement) throws DatabaseException {
-    ArrayList<ChemicalDTO> listDTO = new ArrayList<ChemicalDTO>();
+  private List<ChemicalDTO> convertToDTO(PreparedStatement statement) throws DatabaseException {
+    List<ChemicalDTO> listDTO = new ArrayList<>();
     try {
       ResultSet results = statement.executeQuery();
       querySQL = "";
@@ -165,8 +166,8 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
   }
 
   @Override
-  public ArrayList<ChemicalDTO> executeFindAllWithLowInventory() throws DatabaseException {
-    ArrayList<ChemicalDTO> lowChemicals = new ArrayList<ChemicalDTO>();
+  public List<ChemicalDTO> executeFindAllWithLowInventory() throws DatabaseException {
+    List<ChemicalDTO> lowChemicals = new ArrayList<>();
     lowChemicals.addAll(executeFindElementsWithLowInventory());
     lowChemicals.addAll(executeFindBasesWithLowInventory());
     lowChemicals.addAll(executeFindAcidsWithLowInventory());
@@ -174,24 +175,24 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
   }
 
   @Override
-  public ArrayList<ChemicalDTO> executeFindElementsWithLowInventory() throws DatabaseException {
+  public List<ChemicalDTO> executeFindElementsWithLowInventory() throws DatabaseException {
     querySQL = "SELECT * FROM Chemical WHERE (Chemical.type = 1 OR Chemical.type = 2) AND (Chemical.inventory < 20)";
     return executeQuery();
   }
 
   @Override
-  public ArrayList<ChemicalDTO> executeFindBasesWithLowInventory() throws DatabaseException {
+  public List<ChemicalDTO> executeFindBasesWithLowInventory() throws DatabaseException {
     querySQL = "SELECT * FROM Chemical WHERE (Chemical.type = 4) AND (Chemical.inventory < 40)";
     return executeQuery();
   }
 
   @Override
-  public ArrayList<ChemicalDTO> executeFindAcidsWithLowInventory() throws DatabaseException {
+  public List<ChemicalDTO> executeFindAcidsWithLowInventory() throws DatabaseException {
     try {
-      ArrayList<ChemicalDTO> resultSet = new ArrayList<ChemicalDTO>();
-      ArrayList<ChemicalDTO> acids = getSingletonInstance().getAcids().executeQuery();
+      List<ChemicalDTO> resultSet = new ArrayList<>();
+      List<ChemicalDTO> acids = getSingletonInstance().getAcids().executeQuery();
       for (ChemicalDTO acid : acids) {
-        ArrayList<ChemicalDTO> metals = getSingletonInstance().getMetals().filterByDissolvedBy(acid.getChemicalID())
+        List<ChemicalDTO> metals = getSingletonInstance().getMetals().filterByDissolvedBy(acid.getChemicalID())
             .executeQuery();
         double totalMolesNeeded = 0.0;
         for (ChemicalDTO metal : metals) {
@@ -208,7 +209,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
   }
 
   @Override
-  public ArrayList<ChemicalDTO> executeQuery() throws DatabaseException {
+  public List<ChemicalDTO> executeQuery() throws DatabaseException {
     try {
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(querySQL + ";");
       return convertToDTO(statement);

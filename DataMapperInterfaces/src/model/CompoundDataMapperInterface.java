@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface CompoundDataMapperInterface {
   
@@ -12,14 +12,14 @@ public interface CompoundDataMapperInterface {
   
   public void delete(Compound compound);
   
-  public ArrayList<Compound> getAll();
+  public List<Compound> getAll();
   
-  public ArrayList<Compound> filterByWildCardName(String wildCardName);
+  public List<Compound> filterByWildCardName(String wildCardName);
   
-  public ArrayList<Compound> filterByInventory(double inventory);
+  public List<Compound> filterByInventory(double inventory);
   
-  public ArrayList<Compound> filterByInventoryRange(double min, double max);
+  public List<Compound> filterByInventoryRange(double min, double max);
   
-  public ArrayList<Compound> filterByMadeOf(int elementID);
+  public List<Compound> filterByMadeOf(int elementID);
   
 }

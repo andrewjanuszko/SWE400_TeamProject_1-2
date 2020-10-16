@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for creating a Compound.
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Compound extends Chemical {
 
-  ArrayList<Element> madeOf;
+  List<Element> madeOf;
 
   /**
    * Constructor for creating a Compound.
@@ -19,7 +19,7 @@ public class Compound extends Chemical {
    * @param inventory the inventory of the Compound.
    * @param madeOf    the Elements that make up the Compound.
    */
-  public Compound(int id, String name, double inventory, ArrayList<Element> madeOf) {
+  public Compound(int id, String name, double inventory, List<Element> madeOf) {
     super(id, name, inventory);
     setMadeOf(madeOf);
   }
@@ -29,7 +29,7 @@ public class Compound extends Chemical {
    * 
    * @param madeOf the Elements that make up the Compound.
    */
-  public void setMadeOf(ArrayList<Element> madeOf) {
+  public void setMadeOf(List<Element> madeOf) {
     this.madeOf = madeOf;
   }
 
@@ -38,7 +38,7 @@ public class Compound extends Chemical {
    * 
    * @return the Elements that make up the Compound.
    */
-  public ArrayList<Element> getMadeOf() {
+  public List<Element> getMadeOf() {
     return madeOf;
   }
 

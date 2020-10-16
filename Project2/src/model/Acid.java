@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for creating an Acid.
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Acid extends Chemical {
 
-  private ArrayList<Metal> dissolves;
+  private List<Metal> dissolves;
   private int solute;
 
   /**
@@ -21,7 +21,7 @@ public class Acid extends Chemical {
    * @param dissolves the Metals dissolved by this Acid.
    * @param solute    the Chemical that creates a solution.
    */
-  public Acid(int id, String name, double inventory, ArrayList<Metal> dissolves, int solute) {
+  public Acid(int id, String name, double inventory, List<Metal> dissolves, int solute) {
     super(id, name, inventory);
     setDissolves(dissolves);
     setSolute(solute);
@@ -32,7 +32,7 @@ public class Acid extends Chemical {
    * 
    * @return the Metals that are dissolved by this Acid.
    */
-  public ArrayList<Metal> getDissolves() {
+  public List<Metal> getDissolves() {
     return dissolves;
   }
 
@@ -50,7 +50,7 @@ public class Acid extends Chemical {
    * 
    * @param dissolves the Metals that are dissolved by this Acid.
    */
-  public void setDissolves(ArrayList<Metal> dissolves) {
+  public void setDissolves(List<Metal> dissolves) {
     this.dissolves = dissolves;
   }
 
