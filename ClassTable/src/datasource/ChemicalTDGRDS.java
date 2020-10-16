@@ -93,4 +93,18 @@ public class ChemicalTDGRDS implements ChemicalTDG {
     return getSingleton();
   }
 
+  public static void delete(int i) {
+    String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + i + ";";
+    
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      
+      statement.executeUpdate(deleteChemical);
+      
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error deleting chemical " + i);
+    }
+  }
+
 }

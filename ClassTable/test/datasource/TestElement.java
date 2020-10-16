@@ -109,7 +109,76 @@ class TestElement extends DatabaseTest {
   
   @Test
   static void testFilters() {
+    ElementRDG gateway1 = new ElementRDGRDS(80, 1, 1.2, "funkyelement1", 41.2);
+    ElementRDG gateway2 = new ElementRDGRDS(81, 2, 2.4, "funkyelement2", 42.4);
     
+    // filter by name
+    try {
+      List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByName("funky").executeQuery();
+      
+      assertEquals(2, get.size());
+      assertEquals(80, get.get(0).getElementId());
+      assertEquals(81, get.get(1).getElementId());
+      
+    } catch(DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+    // filter by inventory and inventory range
+    try {
+      List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByInventory(41.2).executeQuery();
+      
+      assertEquals(80, get.get(0).getElementId());
+      
+      get = new ElementTDGRDS().getAllElements().filterByInventoryRange(42, 40).executeQuery();
+    
+      assertEquals(80, get.get(0).getElementId());
+      
+      get = new ElementTDGRDS().getAllElements().filterByInventoryRange(43, 40).executeQuery();
+      
+      assertEquals(80, get.get(0).getElementId());
+      assertEquals(81, get.get(1).getElementId());
+      
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+    // filter by atomic num 
+    try {
+      List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByAtomicNumber(1).executeQuery();
+      
+      assertEquals(1, get.get(0).getAtomicNumber());
+      
+      get = new ElementTDGRDS().getAllElements().filterByAtomicNumberRange(2, 0).executeQuery();
+      
+      assertEquals(4, get.size());
+      assertEquals(21, get.get(0).getElementId());
+      assertEquals(22, get.get(1).getElementId());
+      assertEquals(80, get.get(2).getElementId());
+      assertEquals(81, get.get(3).getElementId());
+      
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+    // filter by atomic mass
+    try {
+      List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByAtomicMass(1.2).executeQuery();
+      
+      assertEquals(80, get.get(0).getElementId());
+      
+      get = new ElementTDGRDS().getAllElements().filterByAtomicMassRange(3, 0).executeQuery();
+      
+      assertEquals(2, get.size());
+      assertEquals(80, get.get(0).getElementId());
+      assertEquals(81, get.get(1).getElementId());
+      
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+    ElementTDGRDS.delete(80);
+    ElementTDGRDS.delete(81);
   }
 
   /**

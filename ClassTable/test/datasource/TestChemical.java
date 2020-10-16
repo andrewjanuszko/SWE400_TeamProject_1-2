@@ -179,6 +179,9 @@ class TestChemical extends DatabaseTest {
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
+    
+    ChemicalTDGRDS.delete(80);
+    ChemicalTDGRDS.delete(81);
   }
 
   /**
