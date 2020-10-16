@@ -154,7 +154,7 @@ class TestBase extends DatabaseTest {
       getAll = new BaseTDGRDS().getAllBases().executeQuery();
       
       // Assert that we have 6 bases, and that they are the right ids. 
-      assertEquals(6, getAll.size());
+      assertEquals(8, getAll.size());
       assertEquals(11, getAll.get(0).getBaseId());
       assertEquals(12, getAll.get(1).getBaseId());
       assertEquals(13, getAll.get(2).getBaseId());
@@ -165,53 +165,45 @@ class TestBase extends DatabaseTest {
     } catch (DatabaseException e) {
       e.printStackTrace();
     } 
-    
   }
   
-  
-  public static void testFilters() {
-    // Insert sample acids to mess with
-    BaseRDG gateway1 = new BaseRDGRDS(80, 12, "funkybase1", 41.2); 
-    BaseRDG gateway2 = new BaseRDGRDS(81, 15, "funkybase2", 42.4); 
-    try {
-      assertEquals(80, new BaseRDGRDS(80).getBase().getBaseId());
-      assertEquals(81, new BaseRDGRDS(81).getBase().getBaseId());
-    } catch (SQLException | DatabaseException e1) {
-      e1.printStackTrace();
-    }
-    
-    // Test filter by name
+  @Test
+  public static void testFilterByName() {
     try {
       List<BaseDTO> get = new BaseTDGRDS().getAllBases().filterByName("funky").executeQuery();
       
       assertEquals(2, get.size());
-      assertEquals(80, get.get(0).getBaseId());
-      assertEquals(81, get.get(1).getBaseId());
+      assertEquals(17, get.get(0).getBaseId());
+      assertEquals(18, get.get(1).getBaseId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    
-    // Filter by inventory & inventory range
+  }
+  
+  @Test
+  public static void testFilterByInventory() {
     try {
       List<BaseDTO> get = new BaseTDGRDS().getAllBases().filterByInventory(41.2).executeQuery();
       
-      assertEquals(80, get.get(0).getBaseId());
+      assertEquals(17, get.get(0).getBaseId());
       
       get = new BaseTDGRDS().getAllBases().filterByInventoryRange(42, 40).executeQuery();
       
-      assertEquals(80, get.get(0).getBaseId());
+      assertEquals(17, get.get(0).getBaseId());
       
       get = new BaseTDGRDS().getAllBases().filterByInventoryRange(43, 40).executeQuery();
       
-      assertEquals(80, get.get(0).getBaseId());
-      assertEquals(81, get.get(1).getBaseId());
+      assertEquals(17, get.get(0).getBaseId());
+      assertEquals(18, get.get(1).getBaseId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    
-    // Filter by solute id
+  }
+  
+  @Test
+  public static void testFilterBySolute() {
     try {
       List<BaseDTO> get = new BaseTDGRDS().getAllBases().filterBySolute(15).executeQuery();
       
@@ -220,9 +212,6 @@ class TestBase extends DatabaseTest {
     } catch(DatabaseException e) {
       e.printStackTrace();
     }
-    
-    BaseTDGRDS.delete(80); 
-    BaseTDGRDS.delete(81); 
   }
 
   /**
@@ -238,7 +227,9 @@ class TestBase extends DatabaseTest {
       testUpdate();
       testGetSet();
       testGetAll();
-      testFilters();
+      testFilterByName();
+      testFilterByInventory();
+      testFilterBySolute();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
@@ -254,6 +245,8 @@ class TestBase extends DatabaseTest {
     base = new BaseRDGRDS(14, 54, "basename4", 1.4);
     base = new BaseRDGRDS(15, 55, "basename5", 1.5);
     base = new BaseRDGRDS(16, 55, "basename6", 1.6);
+    base = new BaseRDGRDS(17, 12, "funkybase1", 41.2); 
+    base = new BaseRDGRDS(18, 15, "funkybase2", 42.4); 
 
   }
 }

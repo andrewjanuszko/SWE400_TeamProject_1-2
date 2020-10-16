@@ -11,25 +11,25 @@ import database.DatabaseException;
 import database.DatabaseManager;
 
 public class ElementTDGRDS implements ElementTDG {
-  String sql = "SELECT * FROM Element INNER JOIN Chemical ";
+  String sql = "SELECT * FROM Element INNER JOIN Chemical WHERE (Element.elementId = Chemical.chemicalId)";
   private static ElementTDGRDS singleton;
-  
+
   public ElementTDGRDS() {
     // TODO Auto-generated constructor stub
   }
 
   public static ElementTDGRDS getSingleton() {
-    if(singleton == null) {
+    if (singleton == null) {
       singleton = new ElementTDGRDS();
     }
     return singleton;
   }
-  
+
   public ElementTDGRDS getAllElements() {
-    sql = "SELECT * FROM Element INNER JOIN Chemical";
+    sql = "SELECT * FROM Element INNER JOIN Chemical WHERE (Element.elementId = Chemical.chemicalId)";
     return getSingleton();
   }
-  
+
   public ElementDTO getDTO(int id) {
     String sql = "SELECT * FROM Element INNER JOIN Chemical ON Element.elementId = Chemical.chemicalId AND elementId = "
         + id + ";";
@@ -48,9 +48,9 @@ public class ElementTDGRDS implements ElementTDG {
     }
     return null;
   }
-  
+
   public ElementTDGRDS filterByName(String name) {
-    sql += " AND (Chemical.name LIKE '" + name + "' ";
+    sql += " AND (Chemical.name LIKE '%" + name + "%') ";
     return getSingleton();
   }
 
@@ -63,50 +63,61 @@ public class ElementTDGRDS implements ElementTDG {
     sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ")";
     return getSingleton();
   }
-  
+
   public ElementTDGRDS filterByAtomicMass(double atomicMass) {
     sql += " AND (Element.atomicMass = " + atomicMass + ")";
     return getSingleton();
   }
-  
+
   public ElementTDGRDS filterByAtomicMassRange(double high, double low) {
     sql += " AND (Element.atomicMass BETWEEN " + low + " AND " + high + ")";
     return getSingleton();
   }
-  
+
   public ElementTDGRDS filterByAtomicNumber(int atomicNumber) {
     sql += " AND (Element.atomicNumber = " + atomicNumber + ")";
     return getSingleton();
   }
-  
+
   public ElementTDGRDS filterByAtomicNumberRange(int high, int low) {
     sql += " AND (Element.atomicNumber BETWEEN " + low + " AND " + high + ")";
     return getSingleton();
   }
-  
+
   public List<ElementDTO> executeQuery() throws DatabaseException {
     List<ElementDTO> listDTO = new ArrayList<>();
     try {
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(this.sql + ";");
-      try {
-        ResultSet results = statement.executeQuery();
-
-        sql = "";
-        while (results.next()) {
-          int acidId = results.getInt("acidId");
-          int atomicNum = results.getInt("atomicNumber");
-          double atomicMass = results.getDouble("atomicMass");
-          String name = results.getString("name");
-          double inventory = results.getDouble("inventory");
-          ElementDTO element = new ElementDTO(acidId, atomicNum, atomicMass, name, inventory);
-          listDTO.add(element);
-        }
-      } catch (SQLException e) {
-        throw new DatabaseException("Failed to convert query to DTO.", e);
+      ResultSet results = statement.executeQuery();
+      
+      while (results.next()) {
+        int id = results.getInt("chemicalId");
+        int atomicNum = results.getInt("atomicNumber");
+        double atomicMass = results.getDouble("atomicMass");
+        String name = results.getString("name");
+        double inventory = results.getDouble("inventory");
+        ElementDTO element = new ElementDTO(id, atomicNum, atomicMass, name, inventory);
+        listDTO.add(element);
       }
     } catch (SQLException e) {
       throw new DatabaseException("Failed to execute query.", e);
     }
+    sql = "SELECT * FROM Element INNER JOIN Chemical WHERE (Element.elementId = Chemical.chemicalId)";
     return listDTO;
+  }
+
+  public static void delete(int i) {
+    String sqlElement = "DELETE FROM Element WHERE elementId = " + i + ";";
+    String sqlChem = "DELETE FROM Chemical WHERE chemicalId = " + i + ";";
+    try {
+
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      statement.executeUpdate(sqlElement);
+      statement.executeUpdate(sqlChem);
+
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Problem deleting Element with id " + i);
+    }
   }
 }

@@ -32,8 +32,6 @@ public class ChemicalTDGRDS implements ChemicalTDG {
       sql += " AND (name LIKE '%" + name + "%')";
     }
     
-    System.out.println(sql);
-    
     return getSingleton();
   }
 
@@ -44,7 +42,7 @@ public class ChemicalTDGRDS implements ChemicalTDG {
     } else {
       sql += " AND (inventory = '" + inventory + "')";
     }
-    System.out.println(sql);
+
     return getSingleton();
   }
 
@@ -55,7 +53,7 @@ public class ChemicalTDGRDS implements ChemicalTDG {
     } else {
       sql += " AND (inventory BETWEEN " + low + " AND " + high + ")";
     }
-    System.out.println(sql);
+
     return getSingleton();
   }
 
@@ -76,7 +74,6 @@ public class ChemicalTDGRDS implements ChemicalTDG {
           listDTO.add(base);
         }
         
-        // Reset SQL string
         sql = "SELECT * FROM Chemical";
       } catch (SQLException e) {
         throw new DatabaseException("Failed to convert query to DTO.", e);
@@ -91,6 +88,36 @@ public class ChemicalTDGRDS implements ChemicalTDG {
   public ChemicalTDGRDS getAllChemicals() {
     sql = "SELECT * FROM Chemical";
     return getSingleton();
+  }
+
+  public static void delete(int i) {
+    String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + i + ";";
+    
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      
+      statement.executeUpdate(deleteChemical);
+      
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error deleting chemical " + i);
+    }
+  }
+  
+  public static void create(int id, String name, double inventory) {
+    try {
+      PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory) VALUES (?,?,?);");
+
+      insertChemical.setInt(1, id);
+      insertChemical.setString(2, name);
+      insertChemical.setDouble(3, inventory);
+
+      insertChemical.execute();
+
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
   }
 
 }

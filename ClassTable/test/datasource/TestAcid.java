@@ -152,7 +152,7 @@ class TestAcid extends DatabaseTest {
       List<AcidDTO> getAll = acid.executeQuery();
       
       // Assert that we have 6 acids, and that they are the right ids.
-      assertEquals(6, getAll.size());
+      assertEquals(8, getAll.size());
       assertEquals(1, getAll.get(0).getAcidId());
       assertEquals(2, getAll.get(1).getAcidId());
       assertEquals(3, getAll.get(2).getAcidId());
@@ -166,19 +166,8 @@ class TestAcid extends DatabaseTest {
     } 
   }
   
-  public static void testFilters() {
-    // Insert sample acids to mess with
-    AcidRDG gateway1 = new AcidRDGRDS(80, 12, "funkyacid1", 41.2); 
-    AcidRDG gateway2 = new AcidRDGRDS(81, 15, "funkyacid2", 42.4); 
-    try {
-      assertEquals(80, new AcidRDGRDS(80).getAcid().getAcidId());
-      assertEquals(81, new AcidRDGRDS(81).getAcid().getAcidId());
-      System.out.println("passed");
-    } catch (SQLException | DatabaseException e1) {
-      e1.printStackTrace();
-    }
-    
-    // Test filter by name
+  @Test
+  public static void testFilterByName() {
     try {
       List<AcidDTO> get = new AcidTDGRDS().getAllAcids().filterByName("funky").executeQuery();
       
@@ -189,8 +178,11 @@ class TestAcid extends DatabaseTest {
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    
-    // Filter by inventory & inventory range
+  }
+  
+  
+  @Test
+  public static void testFilterByInventory() {
     try {
       List<AcidDTO> get = new AcidTDGRDS().getAllAcids().filterByInventory(41.2).executeQuery();
       
@@ -208,8 +200,10 @@ class TestAcid extends DatabaseTest {
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    
-    // Filter by solute id
+  }
+  
+  @Test
+  public static void testFilterBySolute() {
     try {
       List<AcidDTO> get = new AcidTDGRDS().getAllAcids().filterBySolute(15).executeQuery();
       
@@ -218,9 +212,6 @@ class TestAcid extends DatabaseTest {
     } catch(DatabaseException e) {
       e.printStackTrace();
     }
-    
-    AcidTDGRDS.delete(80); 
-    AcidTDGRDS.delete(81); 
   }
 
   /**
@@ -236,7 +227,9 @@ class TestAcid extends DatabaseTest {
       testUpdate();
       testGetSet();
       testGetAll();
-      testFilters();
+      testFilterByName();
+      testFilterByInventory();
+      testFilterBySolute();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
@@ -252,5 +245,7 @@ class TestAcid extends DatabaseTest {
     acid = new AcidRDGRDS(4, 54, "acidname4", 1.4);
     acid = new AcidRDGRDS(5, 55, "acidname5", 1.5);
     acid = new AcidRDGRDS(6, 55, "acidname6", 1.6);
+    acid = new AcidRDGRDS(80, 12, "funkyacid1", 41.2); 
+    acid = new AcidRDGRDS(81, 15, "funkyacid2", 42.4); 
   }
 }

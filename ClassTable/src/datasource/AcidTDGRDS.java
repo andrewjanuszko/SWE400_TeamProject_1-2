@@ -25,24 +25,6 @@ public class AcidTDGRDS implements AcidTDG {
     return singleton;
   }
 
-  public static void delete(int acidId) {
-    String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + acidId + ";",
-        deleteAcid = "DELETE FROM Acid WHERE AcidId = " + acidId + ";";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(deleteAcid);
-      statement.executeUpdate(deleteChemical);
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
-
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error deleting acid " + acidId);
-    }
-  }
-
   public static ArrayList<MetalDTO> getMetals(int acidId) {
     String sqlMetal = "SELECT * FROM Metal INNER JOIN Chemical WHERE dissolvedBy = " + acidId + ";";
     ArrayList<MetalDTO> metals = new ArrayList<>();
@@ -75,25 +57,21 @@ public class AcidTDGRDS implements AcidTDG {
 
   public AcidTDGRDS filterByName(String name) {
     sql += " AND (Chemical.name LIKE '%" + name + "%') ";
-    System.out.println(sql);
     return getSingleton();
   }
 
   public AcidTDGRDS filterByInventory(double inventory) {
     sql += " AND (Chemical.inventory = " + inventory + ") ";
-    System.out.println(sql);
     return getSingleton();
   }
 
   public AcidTDGRDS filterBySolute(int solute) {
     sql += " AND (Acid.solute = " + solute + ") ";
-    System.out.println(sql);
     return singleton;
   }
 
   public AcidTDGRDS filterByInventoryRange(double high, double low) {
     sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
-    System.out.println(sql);
     return getSingleton();
   }
 
