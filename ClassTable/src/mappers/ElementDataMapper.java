@@ -29,7 +29,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     ElementRDG row = new ElementRDGRDS(id);
     ElementDTO dto = row.getElement();
 
-    element = new Element(dto.getElementId(), dto.getName(), dto.getInventory(), dto.getAtomicNumber(), dto.getAtomicMass());
+    element = convertFromDTO(dto);
     return element;
   }
 
@@ -59,7 +59,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
       dtos = ElementTDGRDS.getSingleton().executeQuery();
       
       for(ElementDTO e : dtos) {
-        element.add(new Element(e.getElementId(), e.getName(), e.getInventory(), e.getAtomicNumber(), e.getAtomicMass()));
+        element.add(convertFromDTO(e));
       }
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -115,4 +115,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     return null;
   }
 
+  public Element convertFromDTO(ElementDTO dto) {
+    return new Element(dto.getElementId(), dto.getName(), dto.getInventory(), dto.getAtomicNumber(), dto.getAtomicMass());
+  }
 }
