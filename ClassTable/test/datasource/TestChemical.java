@@ -119,7 +119,7 @@ class TestChemical extends DatabaseTest {
     try {
       getAll = new ChemicalTDGRDS().getAllChemicals().executeQuery();
       
-      assertEquals(12, getAll.size());
+      assertEquals(16, getAll.size());
       assertEquals(1, getAll.get(0).getChemicalId());
       assertEquals(2, getAll.get(1).getChemicalId());
       assertEquals(3, getAll.get(2).getChemicalId());
@@ -137,51 +137,46 @@ class TestChemical extends DatabaseTest {
     }
   }
   
-  public static void testFilters() {
-    // Insert sample chemicals to mess with
-    ChemicalRDG gateway1 = new ChemicalRDGRDS(80, "funkyacid1", 41.2);
-    ChemicalRDG gateway2 = new ChemicalRDGRDS(81, "funkyacid21", 42.4);
-    
-    try {
-      assertEquals(80, new ChemicalRDGRDS(80).getChemical().getChemicalId());
-      assertEquals(81, new ChemicalRDGRDS(81).getChemical().getChemicalId());
-    } catch (DatabaseException | SQLException e) {
-      e.printStackTrace();
-    }
-    
-    // filter by name
+  @Test
+  public static void testFilterByName() {
     try {
       List<ChemicalDTO> get = new ChemicalTDGRDS().getAllChemicals().filterByName("funky").executeQuery();
       
-      assertEquals(2, get.size());
-      assertEquals(80, get.get(0).getChemicalId());
-      assertEquals(81, get.get(1).getChemicalId());
+      assertEquals(6, get.size());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    
-    // filter by inventory & inventory range
+  }
+  
+  @Test
+  public static void testFilterByInventory() {
     try {
       List<ChemicalDTO> get = new ChemicalTDGRDS().getAllChemicals().filterByInventory(41.2).executeQuery();
       
-      assertEquals(80, get.get(0).getChemicalId());
+      assertEquals(17, get.get(0).getChemicalId());
+      assertEquals(80, get.get(1).getChemicalId());
+      assertEquals(90, get.get(2).getChemicalId());
       
       get = new ChemicalTDGRDS().getAllChemicals().filterByInventoryRange(42, 40).executeQuery();
       
-      assertEquals(80, get.get(0).getChemicalId());
+      assertEquals(17, get.get(0).getChemicalId());
+      assertEquals(80, get.get(1).getChemicalId());
+      assertEquals(90, get.get(2).getChemicalId());
       
       get = new ChemicalTDGRDS().getAllChemicals().filterByInventoryRange(43, 40).executeQuery();
       
-      assertEquals(80, get.get(0).getChemicalId());
-      assertEquals(81, get.get(1).getChemicalId());
+      System.out.println(get.size());
+      assertEquals(17, get.get(0).getChemicalId());
+      assertEquals(18, get.get(1).getChemicalId());
+      assertEquals(80, get.get(2).getChemicalId());
+      assertEquals(81, get.get(3).getChemicalId());
+      assertEquals(90, get.get(4).getChemicalId());
+      assertEquals(91, get.get(5).getChemicalId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    
-    ChemicalTDGRDS.delete(80);
-    ChemicalTDGRDS.delete(81);
   }
 
   /**
@@ -194,10 +189,17 @@ class TestChemical extends DatabaseTest {
       testDelete();
       testUpdate();
       testGetAll();
-      testFilters(); 
+      insert();
+      testFilterByName(); 
+      testFilterByInventory();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
+  }
+
+  private static void insert() {
+    ChemicalRDG gateway1 = new ChemicalRDGRDS(90, "funkychem1", 41.2);
+    ChemicalRDG gateway2 = new ChemicalRDGRDS(91, "funkychem2", 42.4);
   }
 
 }

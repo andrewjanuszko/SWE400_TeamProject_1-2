@@ -26,24 +26,6 @@ public class BaseTDGRDS implements BaseTDG {
     return singleton;
   }
   
-  public static void delete(int baseId) {
-    String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + baseId + ";",
-        deleteBase = "DELETE FROM Base WHERE BaseId = " + baseId + ";";
-    
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
-      statement.executeUpdate(deleteBase);
-      statement.executeUpdate(deleteChemical);
-      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
-      
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Error deleting base " + baseId);
-    }
-  }
-  
   public BaseTDGRDS filterByName(String name) {
     sql +=  " AND (Chemical.name LIKE '%" + name + "%') ";
     return getSingleton();

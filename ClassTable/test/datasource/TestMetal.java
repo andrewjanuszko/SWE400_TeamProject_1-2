@@ -201,9 +201,9 @@ class TestMetal {
    * Insert data into the database to test metal.
    */
   private static void insertMetals() {
-    MetalTDGRDS.create(31, 1, 11.1, 1, 1.1, "metalname1", 41.1);
-    MetalTDGRDS.create(32, 2, 12.2, 2, 2.1, "metalname2", 42.1);
-    MetalTDGRDS.create(33, 3, 13.3, 3, 3.1, "metalname3", 43.1);
-    MetalTDGRDS.create(34, 4, 14.4, 4, 4.1, "metalname4", 44.1);
+    MetalRDG metal = new MetalRDGRDS(31, 1, 1, 1.1, 11.1, "metalname1", 41.1);
+    metal = new MetalRDGRDS(32, 2, 2, 2.1, 12.2, "metalname2", 42.1);
+    metal = new MetalRDGRDS(33, 3, 3, 3.1, 13.3, "metalname3", 43.1);
+    metal = new MetalRDGRDS(34, 4, 4, 4.1, 14.4, "metalname4", 44.1);
   }
 }

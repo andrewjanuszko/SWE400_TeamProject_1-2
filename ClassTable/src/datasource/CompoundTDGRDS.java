@@ -188,7 +188,7 @@ public class CompoundTDGRDS implements CompoundTDG {
   }
 
   public CompoundTDGRDS filterByName(String name) {
-    sql += " AND (Chemical.name LIKE '" + name + "') ";
+    sql += " AND (Chemical.name LIKE '%" + name + "%') ";
     return getSingleton();
   }
 

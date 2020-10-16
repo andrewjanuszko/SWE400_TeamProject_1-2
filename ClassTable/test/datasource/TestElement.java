@@ -96,7 +96,7 @@ class TestElement extends DatabaseTest {
     try {
       List<ElementDTO> get = new ElementTDGRDS().getAllElements().executeQuery();
       
-      assertEquals(4, get.size());
+      assertEquals(6, get.size());
       assertEquals(21, get.get(0).getElementId());
       assertEquals(22, get.get(1).getElementId());
       assertEquals(23, get.get(2).getElementId());
@@ -108,42 +108,42 @@ class TestElement extends DatabaseTest {
   }
   
   @Test
-  static void testFilters() {
-    ElementRDG gateway1 = new ElementRDGRDS(80, 1, 1.2, "funkyelement1", 41.2);
-    ElementRDG gateway2 = new ElementRDGRDS(81, 2, 2.4, "funkyelement2", 42.4);
-    
-    // filter by name
+  public static void testFilterByName() {
     try {
       List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByName("funky").executeQuery();
       
       assertEquals(2, get.size());
-      assertEquals(80, get.get(0).getElementId());
-      assertEquals(81, get.get(1).getElementId());
+      assertEquals(82, get.get(0).getElementId());
+      assertEquals(83, get.get(1).getElementId());
       
     } catch(DatabaseException e) {
       e.printStackTrace();
     }
-    
-    // filter by inventory and inventory range
+  }
+  
+  @Test
+  public static void testFilterByInventory() {
     try {
       List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByInventory(41.2).executeQuery();
       
-      assertEquals(80, get.get(0).getElementId());
+      assertEquals(82, get.get(0).getElementId());
       
       get = new ElementTDGRDS().getAllElements().filterByInventoryRange(42, 40).executeQuery();
     
-      assertEquals(80, get.get(0).getElementId());
+      assertEquals(82, get.get(0).getElementId());
       
       get = new ElementTDGRDS().getAllElements().filterByInventoryRange(43, 40).executeQuery();
       
-      assertEquals(80, get.get(0).getElementId());
-      assertEquals(81, get.get(1).getElementId());
+      assertEquals(82, get.get(0).getElementId());
+      assertEquals(83, get.get(1).getElementId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    
-    // filter by atomic num 
+  }
+  
+  @Test
+  public static void testFilterByAtomicNumber() {
     try {
       List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByAtomicNumber(1).executeQuery();
       
@@ -154,31 +154,30 @@ class TestElement extends DatabaseTest {
       assertEquals(4, get.size());
       assertEquals(21, get.get(0).getElementId());
       assertEquals(22, get.get(1).getElementId());
-      assertEquals(80, get.get(2).getElementId());
-      assertEquals(81, get.get(3).getElementId());
+      assertEquals(82, get.get(2).getElementId());
+      assertEquals(83, get.get(3).getElementId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    
-    // filter by atomic mass
+  }
+  
+  @Test
+  public static void testFilterByAtomicMass() {
     try {
       List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByAtomicMass(1.2).executeQuery();
       
-      assertEquals(80, get.get(0).getElementId());
+      assertEquals(82, get.get(0).getElementId());
       
       get = new ElementTDGRDS().getAllElements().filterByAtomicMassRange(3, 0).executeQuery();
       
       assertEquals(2, get.size());
-      assertEquals(80, get.get(0).getElementId());
-      assertEquals(81, get.get(1).getElementId());
+      assertEquals(82, get.get(0).getElementId());
+      assertEquals(83, get.get(1).getElementId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    
-    ElementTDGRDS.delete(80);
-    ElementTDGRDS.delete(81);
   }
 
   /**
@@ -191,7 +190,10 @@ class TestElement extends DatabaseTest {
     testGetName();
     testGetInventory();
     testGetAll();
-    testFilters();
+    testFilterByName();
+    testFilterByInventory();
+    testFilterByAtomicNumber();
+    testFilterByAtomicMass();
   }
 
   /**
@@ -202,5 +204,7 @@ class TestElement extends DatabaseTest {
     ele = new ElementRDGRDS(22, 2, 8, "elementname2", 1.2);
     ele = new ElementRDGRDS(23, 3, 7, "elementname3", 1.3);
     ele = new ElementRDGRDS(24, 4, 6, "elementname4", 1.4);
+    ele = new ElementRDGRDS(82, 1, 1.2, "funkyelement1", 41.2);
+    ele = new ElementRDGRDS(83, 2, 2.4, "funkyelement2", 42.4);
   }
 }

@@ -103,5 +103,21 @@ public class ChemicalTDGRDS implements ChemicalTDG {
       System.out.println("Error deleting chemical " + i);
     }
   }
+  
+  public static void create(int id, String name, double inventory) {
+    try {
+      PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory) VALUES (?,?,?);");
+
+      insertChemical.setInt(1, id);
+      insertChemical.setString(2, name);
+      insertChemical.setDouble(3, inventory);
+
+      insertChemical.execute();
+
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+  }
 
 }
