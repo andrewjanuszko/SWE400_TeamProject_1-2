@@ -1,9 +1,13 @@
 package mappers;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import database.DatabaseException;
+import datasource.ElementDTO;
 import datasource.ElementRDG;
 import datasource.ElementRDGRDS;
+import datasource.ElementTDGRDS;
 import model.Element;
 import model.ElementDataMapperInterface;
 
@@ -21,31 +25,57 @@ public class ElementDataMapper implements ElementDataMapperInterface {
 
   @Override
   public Element read(int id) {
-    // TODO Auto-generated method stub
-    return null;
+    Element element = null;
+    ElementRDG row = new ElementRDGRDS(id);
+    ElementDTO dto = row.getElement();
+
+    element = new Element(dto.getElementId(), dto.getName(), dto.getInventory(), dto.getAtomicNumber(), dto.getAtomicMass());
+    return element;
   }
 
   @Override
   public void update(Element element) {
-    // TODO Auto-generated method stub
+    ElementRDG row = new ElementRDGRDS(element.getID());
+    row.setName(element.getName());
+    row.setInventory(element.getInventory());
+    row.setAtomicNumber(element.getAtomicNumber());
+    row.setAtomicMass(element.getAtomicMass());
+    row.update();
     
   }
 
   @Override
   public void delete(Element element) {
-    // TODO Auto-generated method stub
+    ElementRDG row = new ElementRDGRDS(element.getID());
+    row.delete();
     
   }
 
   @Override
   public List<Element> getAll() {
-    // TODO Auto-generated method stub
+    List<ElementDTO> dtos;
+    List<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().executeQuery();
+      
+      for(ElementDTO e : dtos) {
+        element.add(new Element(e.getElementId(), e.getName(), e.getInventory(), e.getAtomicNumber(), e.getAtomicMass()));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
     return null;
   }
 
   @Override
   public List<Element> filterByWildCardName(String wildCardName) {
-    // TODO Auto-generated method stub
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByName(wildCardName).executeQuery();
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
     return null;
   }
 

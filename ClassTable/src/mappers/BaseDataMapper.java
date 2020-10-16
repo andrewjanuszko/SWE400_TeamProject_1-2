@@ -32,11 +32,8 @@ public class BaseDataMapper implements BaseDataMapperInterface {
       BaseDTO dto = row.getBase();
 
       base = new Base(dto.getBaseId(), dto.getName(), dto.getInventory(), dto.getSoluteId());
-    } catch (SQLException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (DatabaseException e) {
-      // TODO Auto-generated catch block
+    
+    } catch (DatabaseException | SQLException e) {
       e.printStackTrace();
     }
     return base;
