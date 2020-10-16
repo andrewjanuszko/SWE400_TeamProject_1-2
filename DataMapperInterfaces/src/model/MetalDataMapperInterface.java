@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface MetalDataMapperInterface {
   
@@ -12,25 +12,25 @@ public interface MetalDataMapperInterface {
   
   public void delete(Metal metal);
   
-  public ArrayList<Metal> getAll();
+  public List<Metal> getAll();
   
-  public ArrayList<Metal> filterByWildCardName(String wildCardName);
+  public List<Metal> filterByWildCardName(String wildCardName);
   
-  public ArrayList<Metal> filterByInventory(double inventory);
+  public List<Metal> filterByInventory(double inventory);
   
-  public ArrayList<Metal> filterByInventoryRange(double min, double max);
+  public List<Metal> filterByInventoryRange(double min, double max);
   
-  public ArrayList<Metal> filterByAtomicNumber(int atomicNumber);
+  public List<Metal> filterByAtomicNumber(int atomicNumber);
   
-  public ArrayList<Metal> filterByAtomicMass(double atomicMass);
+  public List<Metal> filterByAtomicMass(double atomicMass);
   
-  public ArrayList<Metal> filterByAtomicMassRange(double min, double max);
+  public List<Metal> filterByAtomicMassRange(double min, double max);
   
-  public ArrayList<Metal> filterByAcidRequired(double acidRequired);
+  public List<Metal> filterByAcidRequired(double acidRequired);
   
-  public ArrayList<Metal> filterByAcidRequiredRange(double min, double max);
+  public List<Metal> filterByAcidRequiredRange(double min, double max);
   
-  public ArrayList<Metal> filterByDissolvedBy(int acidID);
+  public List<Metal> filterByDissolvedBy(int acidID);
   
 
 }

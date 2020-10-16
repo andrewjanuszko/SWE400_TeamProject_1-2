@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface ElementDataMapperInterface {
   
@@ -12,20 +12,20 @@ public interface ElementDataMapperInterface {
   
   public void delete(Element element);
   
-  public ArrayList<Element> getAll();
+  public List<Element> getAll();
   
-  public ArrayList<Element> filterByWildCardName(String wildCardName);
+  public List<Element> filterByWildCardName(String wildCardName);
   
-  public ArrayList<Element> filterByInventory(double inventory);
+  public List<Element> filterByInventory(double inventory);
   
-  public ArrayList<Element> filterByInventoryRange(double min, double max);
+  public List<Element> filterByInventoryRange(double min, double max);
   
-  public ArrayList<Element> filterByAtomicNumber(int atomicNumber);
+  public List<Element> filterByAtomicNumber(int atomicNumber);
   
-  public ArrayList<Element> filterByAtomicMass(double atomicMass);
+  public List<Element> filterByAtomicMass(double atomicMass);
   
-  public ArrayList<Element> filterByAtomicMassRange(double min, double max);
+  public List<Element> filterByAtomicMassRange(double min, double max);
   
-  public ArrayList<Element> filterByPartOfCompound(int compoundID);
+  public List<Element> filterByPartOfCompound(int compoundID);
   
 }

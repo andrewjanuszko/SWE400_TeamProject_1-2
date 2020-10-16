@@ -1,6 +1,6 @@
 package dataDTO;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A DTO for Elements and their Compounds.
@@ -9,14 +9,14 @@ import java.util.ArrayList;
 public final class ElementDTO {
 	
 	private final int elementID;
-	private final ArrayList<Integer> compounds;
+	private final List<Integer> compounds;
 	
 	/**
 	 * Constructor for a ElementInCompoundsDTO.
 	 * @param elementID is the ID of the Element.
 	 * @param compounds is the Compounds that contain the Element.
 	 */
-	public ElementDTO(int elementID, ArrayList<Integer> compounds) {
+	public ElementDTO(int elementID, List<Integer> compounds) {
 		this.elementID = elementID;
 		this.compounds = compounds;
 	}
@@ -33,7 +33,7 @@ public final class ElementDTO {
 	 * Return the Compounds that contain the Element.
 	 * @return the Compounds that contain the Element.
 	 */
-	public ArrayList<Integer> partOf() {
+	public List<Integer> partOf() {
 		return this.compounds;
 	}
 

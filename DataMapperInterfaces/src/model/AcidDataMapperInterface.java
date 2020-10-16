@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface AcidDataMapperInterface {
   
@@ -12,14 +12,14 @@ public interface AcidDataMapperInterface {
   
   public void delete(Acid acid);
   
-  public ArrayList<Acid> getAll();
+  public List<Acid> getAll();
   
-  public ArrayList<Acid> filterByWildCardName(String wildCardName);
+  public List<Acid> filterByWildCardName(String wildCardName);
   
-  public ArrayList<Acid> filterByInventory(double inventory);
+  public List<Acid> filterByInventory(double inventory);
   
-  public ArrayList<Acid> filterByInventoryRange(double min, double max);
+  public List<Acid> filterByInventoryRange(double min, double max);
   
-  public ArrayList<Acid> filterBySolute(int chemicalID);
+  public List<Acid> filterBySolute(int chemicalID);
   
 }

@@ -1,7 +1,7 @@
 package datasource;
 
 import dataDTO.ChemicalDTO;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Table Data Gateway for Chemical.
@@ -44,14 +44,14 @@ public interface ChemicalTableDataGateway {
   
   public ChemicalTableDataGatewayRDS filterBySolute(int soluteID);
   
-  public ArrayList<ChemicalDTO> executeFindAllWithLowInventory() throws DatabaseException;
+  public List<ChemicalDTO> executeFindAllWithLowInventory() throws DatabaseException;
   
-  public ArrayList<ChemicalDTO> executeFindElementsWithLowInventory() throws DatabaseException;
+  public List<ChemicalDTO> executeFindElementsWithLowInventory() throws DatabaseException;
   
-  public ArrayList<ChemicalDTO> executeFindBasesWithLowInventory() throws DatabaseException;
+  public List<ChemicalDTO> executeFindBasesWithLowInventory() throws DatabaseException;
   
-  public ArrayList<ChemicalDTO> executeFindAcidsWithLowInventory() throws DatabaseException;
+  public List<ChemicalDTO> executeFindAcidsWithLowInventory() throws DatabaseException;
   
-  public ArrayList<ChemicalDTO> executeQuery() throws DatabaseException;
+  public List<ChemicalDTO> executeQuery() throws DatabaseException;
 
 }
