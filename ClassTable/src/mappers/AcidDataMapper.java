@@ -71,7 +71,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-  public ArrayList<Acid> getAll() {
+  public List<Acid> getAll() {
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
@@ -94,7 +94,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-  public ArrayList<Acid> filterByWildCardName(String wildCardName) {
+  public List<Acid> filterByWildCardName(String wildCardName) {
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
@@ -117,7 +117,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-  public ArrayList<Acid> filterByInventory(double inventory) {
+  public List<Acid> filterByInventory(double inventory) {
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
@@ -140,7 +140,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-  public ArrayList<Acid> filterByInventoryRange(double min, double max) {
+  public List<Acid> filterByInventoryRange(double min, double max) {
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
@@ -163,7 +163,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-  public ArrayList<Acid> filterBySolute(int chemicalID) {
+  public List<Acid> filterBySolute(int chemicalID) {
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {

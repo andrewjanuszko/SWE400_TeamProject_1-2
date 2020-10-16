@@ -68,7 +68,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   @Override
-  public ArrayList<Base> getAll() {
+  public List<Base> getAll() {
     List<BaseDTO> dtos;
     ArrayList<Base> base = new ArrayList<>();
     try {
@@ -86,7 +86,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   @Override
-  public ArrayList<Base> filterByWildCardName(String wildCardName) {
+  public List<Base> filterByWildCardName(String wildCardName) {
     List<BaseDTO> dtos;
     ArrayList<Base> base = new ArrayList<>();
     try {
@@ -104,7 +104,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   @Override
-  public ArrayList<Base> filterByInventory(double inventory) {
+  public List<Base> filterByInventory(double inventory) {
     List<BaseDTO> dtos;
     ArrayList<Base> base = new ArrayList<>();
     try {
@@ -122,7 +122,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   @Override
-  public ArrayList<Base> filterByInventoryRange(double min, double max) {
+  public List<Base> filterByInventoryRange(double min, double max) {
     List<BaseDTO> dtos;
     ArrayList<Base> base = new ArrayList<>();
     try {
@@ -140,7 +140,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   @Override
-  public ArrayList<Base> filterBySolute(int chemicalID) {
+  public List<Base> filterBySolute(int chemicalID) {
     List<BaseDTO> dtos;
     ArrayList<Base> base = new ArrayList<>();
     try {
