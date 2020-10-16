@@ -26,7 +26,7 @@ public enum ChemicalEnum {
 	 * Get the type of the chemical.
 	 * @return the integer value of the chemical.
 	 */
-	public int getChemicalType() {
+	public int getIntValue() {
 		return this.chemicalType;
 	}
 	

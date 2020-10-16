@@ -26,7 +26,7 @@ public interface ChemicalRowDataGateway {
    * 
    * @return the Chemical ID.
    */
-  public int getChemicalID();
+  public int getID();
 
   /**
    * Get the type of the Chemical.
@@ -75,7 +75,7 @@ public interface ChemicalRowDataGateway {
    * 
    * @return the amount of acid moles required to dissolve a metal.
    */
-  public double getMoles();
+  public double getAcidAmount();
 
   /**
    * Get the Chemical ID of the solute.
@@ -131,7 +131,7 @@ public interface ChemicalRowDataGateway {
    * 
    * @param moles the amount of acid moles required to dissolve a metal.
    */
-  public void setMoles(double moles);
+  public void setAcidAmount(double acidAmount);
 
   /**
    * Set the Chemical ID of the solute.

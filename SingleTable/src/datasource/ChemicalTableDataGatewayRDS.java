@@ -44,17 +44,17 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
       ResultSet results = statement.executeQuery();
       querySQL = "";
       while (results.next()) {
-        int chemicalID = results.getInt("chemicalID");
+        int id = results.getInt("id");
         int type = results.getInt("type");
         String name = results.getString("name");
         double inventory = results.getDouble("inventory");
         int atomicNumber = results.getInt("atomicNumber");
         double atomicMass = results.getDouble("atomicMass");
         int dissolvedBy = results.getInt("dissolvedBy");
-        double moles = results.getDouble("moles");
+        double acidAmount = results.getDouble("acidAmount");
         int solute = results.getInt("solute");
-        ChemicalDTO chemical = new ChemicalDTO(chemicalID, type, name, inventory, atomicNumber, atomicMass, dissolvedBy,
-            moles, solute);
+        ChemicalDTO chemical = new ChemicalDTO(id, type, name, inventory, atomicNumber, atomicMass, dissolvedBy,
+            acidAmount, solute);
         listDTO.add(chemical);
       }
     } catch (SQLException e) {
@@ -148,14 +148,14 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
   }
 
   @Override
-  public ChemicalTableDataGatewayRDS filterByMolesValue(double molesValue) {
-    querySQL += " AND (Chemical.moles = " + molesValue + ")";
+  public ChemicalTableDataGatewayRDS filterByAcidAmountValue(double acidAmount) {
+    querySQL += " AND (Chemical.acidAmount = " + acidAmount + ")";
     return this;
   }
 
   @Override
-  public ChemicalTableDataGatewayRDS filterByMolesRange(double min, double max) {
-    querySQL += " AND (Chemical.moles BETWEEN " + min + " AND " + max + ")";
+  public ChemicalTableDataGatewayRDS filterByAcidAmountRange(double min, double max) {
+    querySQL += " AND (Chemical.acidAmount BETWEEN " + min + " AND " + max + ")";
     return this;
   }
 
@@ -192,11 +192,11 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
       List<ChemicalDTO> resultSet = new ArrayList<>();
       List<ChemicalDTO> acids = getSingletonInstance().getAcids().executeQuery();
       for (ChemicalDTO acid : acids) {
-        List<ChemicalDTO> metals = getSingletonInstance().getMetals().filterByDissolvedBy(acid.getChemicalID())
+        List<ChemicalDTO> metals = getSingletonInstance().getMetals().filterByDissolvedBy(acid.getID())
             .executeQuery();
         double totalMolesNeeded = 0.0;
         for (ChemicalDTO metal : metals) {
-          totalMolesNeeded += metal.getMoles();
+          totalMolesNeeded += metal.getAcidAmount();
         }
         if (acid.getInventory() < totalMolesNeeded) {
           resultSet.add(acid);
