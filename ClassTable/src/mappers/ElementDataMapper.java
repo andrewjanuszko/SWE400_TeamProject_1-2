@@ -14,7 +14,6 @@ import model.ElementDataMapperInterface;
 public class ElementDataMapper implements ElementDataMapperInterface {
 
   public ElementDataMapper() {
-    // TODO Auto-generated constructor stub
   }
 
   @Override
@@ -73,46 +72,103 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     ArrayList<Element> element = new ArrayList<>();
     try {
       dtos = ElementTDGRDS.getSingleton().filterByName(wildCardName).executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    return null;
+    return element;
   }
 
   @Override
   public List<Element> filterByInventory(double inventory) {
-    // TODO Auto-generated method stub
-    return null;
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByInventory(inventory).executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return element;
   }
 
   @Override
   public List<Element> filterByInventoryRange(double min, double max) {
-    // TODO Auto-generated method stub
-    return null;
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByInventoryRange(max, min).executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return element;
   }
 
   @Override
   public List<Element> filterByAtomicNumber(int atomicNumber) {
-    // TODO Auto-generated method stub
-    return null;
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByAtomicNumber(atomicNumber).executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return element;
   }
 
   @Override
   public List<Element> filterByAtomicMass(double atomicMass) {
-    // TODO Auto-generated method stub
-    return null;
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByAtomicMass(atomicMass).executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return element;
   }
 
   @Override
   public List<Element> filterByAtomicMassRange(double min, double max) {
-    // TODO Auto-generated method stub
-    return null;
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByAtomicMassRange(max, min).executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return element;
   }
 
   @Override
   public List<Element> filterByPartOfCompound(int compoundID) {
-    // TODO Auto-generated method stub
-    return null;
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return element;
   }
 
   public Element convertFromDTO(ElementDTO dto) {
