@@ -25,39 +25,9 @@ public class ElementTDGRDS implements ElementTDG {
     return singleton;
   }
   
-  @Override
-  public List<ElementDTO> getAllElements() {
-    String sql = "SELECT * FROM Element INNER JOIN Chemical WHERE Element.elementId = Chemical.chemicalId;";
-    List<ElementDTO> elements = new ArrayList<ElementDTO>();
-    
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-      while (rs.next()) {
-        elements.add(new ElementDTO(rs.getInt("elementId"), rs.getInt("atomicNumber"), 
-            rs.getDouble("atomicMass"), rs.getString("name"), rs.getDouble("inventory")));
-      }
-      return elements;
-    } catch(SQLException | DatabaseException e) {
-      e.printStackTrace();
-      return null;
-    }  
-  }
-  
-  public List<ElementDTO> findSetAtomicMass(double lowerLimit, double upperLimit) {
-    List<ElementDTO> results = new ArrayList<>();
-    try {
-      String sql = "SELECT * FROM Metal WHERE atomicMass BETWEEN " + lowerLimit + " AND " + upperLimit + ";";
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-      while (rs.next()) {
-        ElementDTO element = getDTO(rs.getInt("elementId"));
-        results.add(element);
-      }
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-    }
-    return results;
+  public ElementTDGRDS getAllElements() {
+    sql = "SELECT * FROM Element INNER JOIN Chemical";
+    return getSingleton();
   }
   
   public ElementDTO getDTO(int id) {
@@ -79,32 +49,39 @@ public class ElementTDGRDS implements ElementTDG {
     return null;
   }
   
-  public void filterByName(String name) {
+  public ElementTDGRDS filterByName(String name) {
     sql += " AND (Chemical.name LIKE '" + name + "' ";
+    return getSingleton();
   }
 
-  public void filterByInventory(double inventory) {
+  public ElementTDGRDS filterByInventory(double inventory) {
     sql += " AND (Chemical.inventory = " + inventory + ")";
+    return getSingleton();
   }
 
-  public void filterByInventoryRange(double high, double low) {
+  public ElementTDGRDS filterByInventoryRange(double high, double low) {
     sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ")";
+    return getSingleton();
   }
   
-  public void filterByAtomicMass(double atomicMass) {
+  public ElementTDGRDS filterByAtomicMass(double atomicMass) {
     sql += " AND (Element.atomicMass = " + atomicMass + ")";
+    return getSingleton();
   }
   
-  public void filterByAtomicMassRange(double high, double low) {
+  public ElementTDGRDS filterByAtomicMassRange(double high, double low) {
     sql += " AND (Element.atomicMass BETWEEN " + low + " AND " + high + ")";
+    return getSingleton();
   }
   
-  public void filterByAtomicNumber(int atomicNumber) {
+  public ElementTDGRDS filterByAtomicNumber(int atomicNumber) {
     sql += " AND (Element.atomicNumber = " + atomicNumber + ")";
+    return getSingleton();
   }
   
-  public void filterByAtomicNumberRange(int high, int low) {
+  public ElementTDGRDS filterByAtomicNumberRange(int high, int low) {
     sql += " AND (Element.atomicNumber BETWEEN " + low + " AND " + high + ")";
+    return getSingleton();
   }
   
   public List<ElementDTO> executeQuery() throws DatabaseException {

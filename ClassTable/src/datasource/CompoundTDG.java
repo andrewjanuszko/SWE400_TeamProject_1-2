@@ -23,11 +23,11 @@ public interface CompoundTDG {
 
   List<CompoundDTO> executeQuery() throws DatabaseException;
 
-  void filterByInventoryRange(double high, double low);
+  CompoundTDGRDS filterByInventoryRange(double high, double low);
 
-  void filterByInventory(double inventory);
+  CompoundTDGRDS filterByInventory(double inventory);
 
-  void filterByElements(int elementId);
+  CompoundTDGRDS filterByElements(int elementId);
 
-  void getAllCompounds();
+  CompoundTDGRDS getAllCompounds();
 }

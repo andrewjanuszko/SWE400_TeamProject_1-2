@@ -12,11 +12,11 @@ import database.DatabaseManager;
 
 public class BaseTDGRDS implements BaseTDG {
   
-  String sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId ";
+  String sql = "SELECT * FROM Base INNER JOIN Chemical WHERE (Base.BaseId = Chemical.chemicalId)";
   private static BaseTDGRDS singleton;
   
   public BaseTDGRDS() {
-    sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId ";
+    sql = "(SELECT * FROM Base INNER JOIN Chemical WHERE Base.BaseId = Chemical.chemicalId)";
   }
   
   public static BaseTDGRDS getSingleton() {
@@ -26,8 +26,26 @@ public class BaseTDGRDS implements BaseTDG {
     return singleton;
   }
   
+  public static void delete(int baseId) {
+    String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + baseId + ";",
+        deleteBase = "DELETE FROM Base WHERE BaseId = " + baseId + ";";
+    
+    try {
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
+      statement.executeUpdate(deleteBase);
+      statement.executeUpdate(deleteChemical);
+      statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
+      
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      System.out.println("Error deleting base " + baseId);
+    }
+  }
+  
   public BaseTDGRDS filterByName(String name) {
-    sql +=  " AND (Chemical.name LIKE '" + name + "') ";
+    sql +=  " AND (Chemical.name LIKE '%" + name + "%') ";
     System.out.println(sql);
     return getSingleton();
   }
@@ -41,7 +59,7 @@ public class BaseTDGRDS implements BaseTDG {
 
   @Override
   public BaseTDGRDS filterBySolute(int solute) {
-    sql += " AND (Acid.solute = " + solute + ") ";
+    sql += " AND (Base.solute = " + solute + ") ";
     System.out.println(sql);
     return getSingleton();
   }
@@ -71,7 +89,7 @@ public class BaseTDGRDS implements BaseTDG {
         }
         
         // Reset sql string
-        sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId ";
+        sql = "SELECT * FROM Base INNER JOIN Chemical WHERE (Base.baseId = Chemical.chemicalId)";
       } catch (SQLException e) {
         throw new DatabaseException("Failed to convert query to DTO.", e);
       }
@@ -83,7 +101,7 @@ public class BaseTDGRDS implements BaseTDG {
 
   @Override
   public BaseTDGRDS getAllBases() {
-    sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId ";
+    sql = "SELECT * FROM Base INNER JOIN Chemical WHERE (Base.baseId = Chemical.chemicalId)";
     return getSingleton();
   }
 }

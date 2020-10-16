@@ -3,23 +3,22 @@ package datasource;
 import java.util.List;
 
 public interface ElementTDG {
-  public List<ElementDTO> getAllElements();
-  
-  public List<ElementDTO> findSetAtomicMass(double lowerLimit, double upperLimit);
+  public ElementTDGRDS getAllElements();
   
   public ElementDTO getDTO(int id);
 
-  public void filterByName(String name);
+  public ElementTDGRDS filterByName(String name);
 
-  public void filterByInventory(double inventory);
+  public ElementTDGRDS filterByInventory(double inventory);
 
-  public void filterByInventoryRange(double high, double low);
+  public ElementTDGRDS filterByInventoryRange(double high, double low);
   
-  public void filterByAtomicMass(double atomicMass);
+  public ElementTDGRDS filterByAtomicMass(double atomicMass);
   
-  public void filterByAtomicMassRange(double high, double low);
+  public ElementTDGRDS filterByAtomicMassRange(double high, double low);
   
-  public void filterByAtomicNumber(int atomicNumber);
+  public ElementTDGRDS filterByAtomicNumber(int atomicNumber);
   
-  public void filterByAtomicNumberRange(int high, int low);
+  public ElementTDGRDS filterByAtomicNumberRange(int high, int low);
+  
 }

@@ -26,44 +26,55 @@ public class MetalTDGRDS implements MetalTDG {
   }
 
   @Override
-  public void getAllMetals() {
-    
+  public MetalTDGRDS getAllMetals() {
+    sql = "SELECT * FROM Metal INNER JOIN Chemical WHERE Metal.metalId = Chemical.chemicalId "
+        + "INNER JOIN Element WHERE Element.elementId = Metal.metalId ";
+    return getSingleton();
   }
 
-  public void filterByName(String name) {
-    sql += " AND (Chemical.name LIKE '" + name + "' ";
+  public MetalTDGRDS filterByName(String name) {
+    sql += " AND (Chemical.name LIKE '%" + name + "%')";
+    return getSingleton();
   }
 
-  public void filterByInventory(double inventory) {
+  public MetalTDGRDS filterByInventory(double inventory) {
     sql += " AND (Chemical.inventory = " + inventory + ")";
+    return getSingleton();
   }
 
-  public void filterByInventoryRange(double high, double low) {
+  public MetalTDGRDS filterByInventoryRange(double high, double low) {
     sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ")";
+    return getSingleton();
   }
   
-  public void filterByAtomicMass(double atomicMass) {
+  public MetalTDGRDS filterByAtomicMass(double atomicMass) {
     sql += " AND (Element.atomicMass = " + atomicMass + ")";
+    return getSingleton();
   }
   
-  public void filterByAtomicMassRange(double high, double low) {
+  public MetalTDGRDS filterByAtomicMassRange(double high, double low) {
     sql += " AND (Element.atomicMass BETWEEN " + low + " AND " + high + ")";
+    return getSingleton();
   }
   
-  public void filterByAtomicNumber(int atomicNumber) {
+  public MetalTDGRDS filterByAtomicNumber(int atomicNumber) {
     sql += " AND (Element.atomicNumber = " + atomicNumber + ")";
+    return getSingleton();
   }
   
-  public void filterByAtomicNumberRange(int high, int low) {
+  public MetalTDGRDS filterByAtomicNumberRange(int high, int low) {
     sql += " AND (Element.atomicNumber BETWEEN " + low + " AND " + high + ")";
+    return getSingleton();
   }
   
-  public void filterByDissolvedBy() {
+  public MetalTDGRDS filterByDissolvedBy() {
     
+    return getSingleton();
   }
   
-  public void filterByMoles() {
+  public MetalTDGRDS filterByMoles() {
     
+    return getSingleton();
   }
   
 }
