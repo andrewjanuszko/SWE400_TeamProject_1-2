@@ -6,13 +6,13 @@ import database.DatabaseException;
 
 public interface ChemicalTDG {
 
-  public void getAllChemicals();
+  public ChemicalTDGRDS getAllChemicals();
 
-  public void filterByName(String name);
+  public ChemicalTDGRDS filterByName(String name);
 
-  public void filterByInventory(double inventory);
+  public ChemicalTDGRDS filterByInventory(double inventory);
 
-  public void filterByInventoryRange(double high, double low);
+  public ChemicalTDGRDS filterByInventoryRange(double high, double low);
 
   public List<ChemicalDTO> executeQuery() throws DatabaseException;
 }

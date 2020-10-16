@@ -162,23 +162,27 @@ public class CompoundTDGRDS implements CompoundTDG {
     return null;
   }
 
-  public void filterByName(String name) {
+  public CompoundTDGRDS filterByName(String name) {
     sql += " AND (Chemical.name LIKE '" + name + "') ";
+    return getSingleton();
   }
 
   @Override
-  public void filterByInventory(double inventory) {
+  public CompoundTDGRDS filterByInventory(double inventory) {
     sql += " AND (Chemical.inventory = " + inventory + ") ";
+    return getSingleton();
   }
 
   @Override
-  public void filterByInventoryRange(double high, double low) {
+  public CompoundTDGRDS filterByInventoryRange(double high, double low) {
     sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
+    return getSingleton();
   }
   
   @Override
-  public void filterByElements(int elementId) {
+  public CompoundTDGRDS filterByElements(int elementId) {
     sql += " AND Compound.elementId = " + elementId;
+    return getSingleton();
   }
   
   
@@ -209,9 +213,9 @@ public class CompoundTDGRDS implements CompoundTDG {
     return listDTO;
   }
 
-  @Override
-  public void getAllCompounds() {
-    //
+  public CompoundTDGRDS getAllCompounds() {
+    sql = "SELECT * FROM Compound INNER JOIN Chemical ";
+    return getSingleton();
   }
   
 }

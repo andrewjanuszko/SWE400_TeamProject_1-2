@@ -167,6 +167,63 @@ class TestBase extends DatabaseTest {
     } 
     
   }
+  
+  
+  public static void testFilters() {
+    // Insert sample acids to mess with
+    BaseRDG gateway1 = new BaseRDGRDS(80, 12, "funkybase1", 41.2); 
+    BaseRDG gateway2 = new BaseRDGRDS(81, 15, "funkybase2", 42.4); 
+    try {
+      assertEquals(80, new BaseRDGRDS(80).getBase().getBaseId());
+      assertEquals(81, new BaseRDGRDS(81).getBase().getBaseId());
+    } catch (SQLException | DatabaseException e1) {
+      e1.printStackTrace();
+    }
+    
+    // Test filter by name
+    try {
+      List<BaseDTO> get = new BaseTDGRDS().getAllBases().filterByName("funky").executeQuery();
+      
+      assertEquals(2, get.size());
+      assertEquals(80, get.get(0).getBaseId());
+      assertEquals(81, get.get(1).getBaseId());
+      
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+    // Filter by inventory & inventory range
+    try {
+      List<BaseDTO> get = new BaseTDGRDS().getAllBases().filterByInventory(41.2).executeQuery();
+      
+      assertEquals(80, get.get(0).getBaseId());
+      
+      get = new BaseTDGRDS().getAllBases().filterByInventoryRange(42, 40).executeQuery();
+      
+      assertEquals(80, get.get(0).getBaseId());
+      
+      get = new BaseTDGRDS().getAllBases().filterByInventoryRange(43, 40).executeQuery();
+      
+      assertEquals(80, get.get(0).getBaseId());
+      assertEquals(81, get.get(1).getBaseId());
+      
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+    // Filter by solute id
+    try {
+      List<BaseDTO> get = new BaseTDGRDS().getAllBases().filterBySolute(15).executeQuery();
+      
+      assertEquals(15, get.get(0).getSoluteId());
+      
+    } catch(DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+    BaseTDGRDS.delete(80); 
+    BaseTDGRDS.delete(81); 
+  }
 
   /**
    * Run every test function in this class
@@ -181,6 +238,7 @@ class TestBase extends DatabaseTest {
       testUpdate();
       testGetSet();
       testGetAll();
+      testFilters();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }

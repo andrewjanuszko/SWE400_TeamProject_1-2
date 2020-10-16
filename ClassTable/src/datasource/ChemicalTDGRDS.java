@@ -15,7 +15,7 @@ public class ChemicalTDGRDS implements ChemicalTDG {
   private static ChemicalTDGRDS singleton;
 
   public ChemicalTDGRDS() {
-    // TODO Auto-generated constructor stub
+    sql = "SELECT * FROM Chemical";
   }
 
   public static ChemicalTDGRDS getSingleton() {
@@ -25,34 +25,38 @@ public class ChemicalTDGRDS implements ChemicalTDG {
     return singleton;
   }
 
-  public void filterByName(String name) {
+  public ChemicalTDGRDS filterByName(String name) {
     if(!(sql.contains("WHERE"))) {
-      sql += " WHERE Chemical.name LIKE '" + name + "')";
+      sql += " WHERE (name LIKE '%" + name + "%')";
     } else {
-      sql += " AND (Chemical.name LIKE '" + name + "')";
+      sql += " AND (name LIKE '%" + name + "%')";
     }
     
     System.out.println(sql);
+    
+    return getSingleton();
   }
 
   @Override
-  public void filterByInventory(double inventory) {
+  public ChemicalTDGRDS filterByInventory(double inventory) {
     if(!(sql.contains("WHERE"))) {
-      sql += " WHERE Chemical.inventory = '" + inventory + "')";
+      sql += " WHERE (inventory = '" + inventory + "')";
     } else {
-      sql += " AND (Chemical.inventory = '" + inventory + "')";
+      sql += " AND (inventory = '" + inventory + "')";
     }
     System.out.println(sql);
+    return getSingleton();
   }
 
   @Override
-  public void filterByInventoryRange(double high, double low) {
+  public ChemicalTDGRDS filterByInventoryRange(double high, double low) {
     if(!(sql.contains("WHERE"))) {
-      sql += " WHERE Chemical.inventory BETWEEN '" + low + " AND " + high + "')";
+      sql += " WHERE (inventory BETWEEN " + low + " AND " + high + ")";
     } else {
-      sql += " AND (Chemical.inventory BETWEEN '" + low + " AND " + high + "')";
+      sql += " AND (inventory BETWEEN " + low + " AND " + high + ")";
     }
     System.out.println(sql);
+    return getSingleton();
   }
 
   @Override
@@ -64,7 +68,8 @@ public class ChemicalTDGRDS implements ChemicalTDG {
         ResultSet results = statement.executeQuery();
 
         while (results.next()) {
-          int baseId = results.getInt("baseId");
+          
+          int baseId = results.getInt("chemicalId");
           String name = results.getString("name");
           double inventory = results.getDouble("inventory");
           ChemicalDTO base = new ChemicalDTO(baseId, name, inventory);
@@ -83,8 +88,9 @@ public class ChemicalTDGRDS implements ChemicalTDG {
   }
 
   @Override
-  public void getAllChemicals() {
-//
+  public ChemicalTDGRDS getAllChemicals() {
+    sql = "SELECT * FROM Chemical";
+    return getSingleton();
   }
 
 }

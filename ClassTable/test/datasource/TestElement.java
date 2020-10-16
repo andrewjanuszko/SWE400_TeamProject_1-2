@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import database.DatabaseException;
+
 /**
  * 
  * @author kimberlyoneill
@@ -91,15 +93,23 @@ class TestElement extends DatabaseTest {
    */
   @Test
   static void testGetAll() {
-    ElementTDG getter = new ElementTDGRDS(); // Empty ElementTDG
-    List<ElementDTO> getAll = getter.getAllElements(); // Get all elements
+    try {
+      List<ElementDTO> get = new ElementTDGRDS().getAllElements().executeQuery();
+      
+      assertEquals(4, get.size());
+      assertEquals(21, get.get(0).getElementId());
+      assertEquals(22, get.get(1).getElementId());
+      assertEquals(23, get.get(2).getElementId());
+      assertEquals(24, get.get(3).getElementId());
+      
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+  }
+  
+  @Test
+  static void testFilters() {
     
-    // Assert that we have 4 elements, and that they are the right ids. 
-    assertEquals(4, getAll.size());
-    assertEquals(21, getAll.get(0).getElementId());
-    assertEquals(22, getAll.get(1).getElementId());
-    assertEquals(23, getAll.get(2).getElementId());
-    assertEquals(24, getAll.get(3).getElementId());
   }
 
   /**
@@ -112,6 +122,7 @@ class TestElement extends DatabaseTest {
     testGetName();
     testGetInventory();
     testGetAll();
+    testFilters();
   }
 
   /**
