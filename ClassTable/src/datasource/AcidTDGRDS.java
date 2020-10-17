@@ -23,7 +23,7 @@ public class AcidTDGRDS implements AcidTDG {
       singleton = new AcidTDGRDS();
     }
     return singleton;
-  }
+  } 
 
   public static ArrayList<MetalDTO> getMetals(int acidId) {
     String sqlMetal = "SELECT * FROM Metal INNER JOIN Chemical WHERE dissolvedBy = " + acidId + ";";
