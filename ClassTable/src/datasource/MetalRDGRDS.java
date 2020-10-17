@@ -161,7 +161,7 @@ public class MetalRDGRDS implements MetalRDG {
 
   @Override
   public void setDissolvedById(int dissolvedById) {
-    metal.setDissolvedById(dissolvedById);;
+    metal.setDissolvedById(dissolvedById);
   }
 
   @Override
@@ -175,8 +175,18 @@ public class MetalRDGRDS implements MetalRDG {
   }
   
   @Override
-  public void setMoles(int moles) {
+  public void setMoles(double moles) {
     metal.setMoles(moles); 
+  }
+  
+  @Override
+  public void setAtomicNumber(int atomicNumber) {
+    metal.setAtomicNumber(atomicNumber);
+  }
+  
+  @Override
+  public void setAtomicMass(double atomicMass) {
+    metal.setAtomicMass(atomicMass);
   }
 
   public MetalDTO getMetal() {

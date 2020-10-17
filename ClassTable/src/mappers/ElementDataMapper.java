@@ -24,11 +24,9 @@ public class ElementDataMapper implements ElementDataMapperInterface {
 
   @Override
   public Element read(int id) {
-    Element element = null;
     ElementRDG row = new ElementRDGRDS(id);
     ElementDTO dto = row.getElement();
-
-    element = convertFromDTO(dto);
+    Element element = convertFromDTO(dto);
     return element;
   }
 
@@ -63,7 +61,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    return null;
+    return element;
   }
 
   @Override
@@ -161,7 +159,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     List<ElementDTO> dtos;
     ArrayList<Element> element = new ArrayList<>();
     try {
-      dtos = ElementTDGRDS.getSingleton().executeQuery();
+      dtos = ElementTDGRDS.getSingleton().executeQuery(); //this isnt done but like isabella is slow
       for(ElementDTO e : dtos) {
         element.add(convertFromDTO(e));
       }
