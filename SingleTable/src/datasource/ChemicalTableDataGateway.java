@@ -38,9 +38,9 @@ public interface ChemicalTableDataGateway {
   
   public ChemicalTableDataGatewayRDS filterByDissolvedBy(int dissolvedByID);
   
-  public ChemicalTableDataGatewayRDS filterByMolesValue(double molesValue);
+  public ChemicalTableDataGatewayRDS filterByAcidAmountValue(double molesValue);
   
-  public ChemicalTableDataGatewayRDS filterByMolesRange(double min, double max);
+  public ChemicalTableDataGatewayRDS filterByAcidAmountRange(double min, double max);
   
   public ChemicalTableDataGatewayRDS filterBySolute(int soluteID);
   

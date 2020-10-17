@@ -14,7 +14,7 @@ public final class ChemicalDTO {
   private final int atomicNumber;
   private final double atomicMass;
   private final int dissolvedBy;
-  private final double moles;
+  private final double acidAmount;
   private final int solute;
 
   /**
@@ -30,7 +30,7 @@ public final class ChemicalDTO {
    * @param solute       the solute of the Chemical.
    */
   public ChemicalDTO(int chemicalID, int type, String name, double inventory, int atomicNumber, double atomicMass,
-      int dissolvedBy, double moles, int solute) {
+      int dissolvedBy, double acidAmount, int solute) {
     this.chemicalID = chemicalID;
     this.type = type;
     this.name = name;
@@ -38,14 +38,14 @@ public final class ChemicalDTO {
     this.atomicNumber = atomicNumber;
     this.atomicMass = atomicMass;
     this.dissolvedBy = dissolvedBy;
-    this.moles = moles;
+    this.acidAmount = acidAmount;
     this.solute = solute;
   }
 
   /**
    * @return the chemicalID
    */
-  public int getChemicalID() {
+  public int getID() {
     return chemicalID;
   }
 
@@ -94,8 +94,8 @@ public final class ChemicalDTO {
   /**
    * @return the moles.
    */
-  public double getMoles() {
-    return moles;
+  public double getAcidAmount() {
+    return acidAmount;
   }
 
   /**

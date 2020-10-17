@@ -12,34 +12,34 @@ import java.sql.Statement;
  */
 public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
 
-  private int chemicalID;
+  private int id;
   private int type;
   private String name;
   private double inventory;
   private int atomicNumber;
   private double atomicMass;
   private int dissolvedBy;
-  private double moles;
+  private double acidAmount;
   private int solute;
 
   /**
    * Constructor for finding Chemicals by ID.
    * 
-   * @param chemicalID the ID of the Chemical.
+   * @param id the ID of the Chemical.
    * @throws DatabaseException when things go wrong.
    */
-  public ChemicalRowDataGatewayRDS(int chemicalID) throws DatabaseException {
+  public ChemicalRowDataGatewayRDS(int id) throws DatabaseException {
     try {
-      final String loadSQL = "SELECT * FROM Chemical WHERE Chemical.chemicalID = ?;";
+      final String loadSQL = "SELECT * FROM Chemical WHERE Chemical.id = ?;";
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(loadSQL);
-      statement.setInt(1, chemicalID);
+      statement.setInt(1, id);
       ResultSet result = statement.executeQuery();
       result.next();
-      loadInstanceVariables(chemicalID, result.getInt("type"), result.getString("name"), result.getDouble("inventory"),
+      loadInstanceVariables(id, result.getInt("type"), result.getString("name"), result.getDouble("inventory"),
           result.getInt("atomicNumber"), result.getDouble("atomicMass"), result.getInt("dissolvedBy"),
-          result.getDouble("moles"), result.getInt("solute"));
+          result.getDouble("acidAmount"), result.getInt("solute"));
     } catch (SQLException e) {
-      throw new DatabaseException("Could not find Chemical with ID " + chemicalID + ".", e);
+      throw new DatabaseException("Could not find Chemical with ID " + id + ".", e);
     }
   }
 
@@ -48,26 +48,26 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * 
    * @param type         the type of the Chemical.
    * @param name         the name of the Chemical.
-   * @param inventory    the amount of moles in storage.
+   * @param inventory    the amount of acidAmount in storage.
    * @param atomicNumber the atomic number of the Element.
    * @param atomicMass   the atomic mass of the Element.
    * @param dissolvedBy  the acid that dissolves a Metal.
-   * @param moles        the amount of acid needed to dissovle a Metal.
+   * @param acidAmount        the amount of acid needed to dissovle a Metal.
    * @param solute       the chemical solutes.
    * @throws DatabaseException when things go wrong.
    */
   public ChemicalRowDataGatewayRDS(int type, String name, double inventory, int atomicNumber, double atomicMass,
-      int dissolvedBy, double moles, int solute) throws DatabaseException {
+      int dissolvedBy, double acidAmount, int solute) throws DatabaseException {
     try {
-      String createSQL = "INSERT INTO Chemical (type, name, inventory, atomicNumber, atomicMass, dissolvedBy, moles, solute)"
+      String createSQL = "INSERT INTO Chemical (type, name, inventory, atomicNumber, atomicMass, dissolvedBy, acidAmount, solute)"
           + " VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(createSQL,
           PreparedStatement.RETURN_GENERATED_KEYS);
-      loadPreparedStatement(statement, type, name, inventory, atomicNumber, atomicMass, dissolvedBy, moles, solute);
+      loadPreparedStatement(statement, type, name, inventory, atomicNumber, atomicMass, dissolvedBy, acidAmount, solute);
       statement.executeUpdate();
       ResultSet result = statement.getGeneratedKeys();
       result.next();
-      loadInstanceVariables(result.getInt(1), type, name, inventory, atomicNumber, atomicMass, dissolvedBy, moles,
+      loadInstanceVariables(result.getInt(1), type, name, inventory, atomicNumber, atomicMass, dissolvedBy, acidAmount,
           solute);
     } catch (SQLException e) {
       throw new DatabaseException("Failed to insert into 'Chemical' table.", e);
@@ -82,9 +82,15 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
   public static void createTable() throws DatabaseException {
     try {
       final String createTableSQL = "CREATE TABLE IF NOT EXISTS Chemical("
-          + "chemicalID INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " + "type INTEGER NOT NULL, "
-          + "name VARCHAR(20) NOT NULL UNIQUE, " + "inventory DOUBLE NOT NULL, " + "atomicNumber INTEGER, "
-          + "atomicMass DOUBLE, " + "dissolvedBy INTEGER, " + "moles DOUBLE, " + "solute INTEGER);";
+                                  + "id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " 
+                                  + "type INTEGER NOT NULL, "
+                                  + "name VARCHAR(20) NOT NULL UNIQUE, " 
+                                  + "inventory DOUBLE NOT NULL, " 
+                                  + "atomicNumber INTEGER, "
+                                  + "atomicMass DOUBLE, " 
+                                  + "dissolvedBy INTEGER, " 
+                                  + "acidAmount DOUBLE, " 
+                                  + "solute INTEGER);";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
       statement.executeUpdate(createTableSQL);
@@ -115,12 +121,12 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
   @Override
   public void delete() throws DatabaseException {
     try {
-      final String deleteSQL = "DELETE FROM Chemical WHERE Chemical.chemicalID = ?;";
+      final String deleteSQL = "DELETE FROM Chemical WHERE Chemical.id = ?;";
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteSQL);
-      statement.setInt(1, chemicalID);
+      statement.setInt(1, id);
       statement.execute();
     } catch (SQLException e) {
-      throw new DatabaseException("Failed to delete Chemical with ID " + chemicalID + ".", e);
+      throw new DatabaseException("Failed to delete Chemical with ID " + id + ".", e);
     }
   }
 
@@ -132,13 +138,13 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
     try {
       final String updateSQL = "UPDATE Chemical " + "SET Chemical.type = ?, " + "Chemical.name = ?, "
           + "Chemical.inventory = ?, " + "Chemical.atomicNumber = ?, " + "Chemical.atomicMass = ?, "
-          + "Chemical.dissolvedBy = ?, " + "Chemical.moles = ?, " + "Chemical.solute = ?;";
+          + "Chemical.dissolvedBy = ?, " + "Chemical.acidAmount = ?, " + "Chemical.solute = ?;";
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateSQL);
       loadPreparedStatement(statement, this.type, this.name, this.inventory, this.atomicNumber, this.atomicMass,
-          this.dissolvedBy, this.moles, this.solute);
+          this.dissolvedBy, this.acidAmount, this.solute);
       statement.execute();
     } catch (SQLException e) {
-      throw new DatabaseException("Failed to update Chemical with ID " + chemicalID + ".", e);
+      throw new DatabaseException("Failed to update Chemical with ID " + id + ".", e);
     }
   }
 
@@ -147,16 +153,16 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * 
    * @param type         the type of the Chemical.
    * @param name         the name of the Chemical.
-   * @param inventory    the amount of moles in storage.
+   * @param inventory    the amount of acidAmount in storage.
    * @param atomicNumber the atomic number of the Element.
    * @param atomicMass   the atomic mass of the Element.
    * @param dissolvedBy  the acid that dissolves a Metal.
-   * @param moles        the amount of acid needed to dissovle a Metal.
+   * @param acidAmount        the amount of acid needed to dissovle a Metal.
    * @param solute       the chemical solutes.
    * @throws DatabaseException when things go wrong.
    */
   private void loadPreparedStatement(PreparedStatement statement, int type, String name, double inventory,
-      int atomicNumber, double atomicMass, int dissolvedBy, double moles, int solute) throws DatabaseException {
+      int atomicNumber, double atomicMass, int dissolvedBy, double acidAmount, int solute) throws DatabaseException {
     try {
       statement.setInt(1, type);
       statement.setString(2, name);
@@ -164,7 +170,7 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
       statement.setInt(4, atomicNumber);
       statement.setDouble(5, atomicMass);
       statement.setInt(6, dissolvedBy);
-      statement.setDouble(7, moles);
+      statement.setDouble(7, acidAmount);
       statement.setInt(8, solute);
     } catch (SQLException e) {
       throw new DatabaseException("Failed to load prepared statment.", e);
@@ -174,27 +180,27 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
   /**
    * Loads values into local instance variables.
    * 
-   * @param chemicalID   the ID of the Chemical.
+   * @param id   the ID of the Chemical.
    * @param type         the type of the Chemical.
    * @param name         the name of the Chemical.
-   * @param inventory    the amount of moles in storage.
+   * @param inventory    the amount of acidAmount in storage.
    * @param atomicNumber the atomic number of the Element.
    * @param atomicMass   the atomic mass of the Element.
    * @param dissolvedBy  the acid that dissolves a Metal.
-   * @param moles        the amount of acid needed to dissovle a Metal.
+   * @param acidAmount        the amount of acid needed to dissovle a Metal.
    * @param solute       the chemical solutes.
    * @throws DatabaseException when things go wrong.
    */
-  private void loadInstanceVariables(int chemicalID, int type, String name, double inventory, int atomicNumber,
-      double atomicMass, int dissolvedBy, double moles, int solute) {
-    setChemicalID(chemicalID);
+  private void loadInstanceVariables(int id, int type, String name, double inventory, int atomicNumber,
+      double atomicMass, int dissolvedBy, double acidAmount, int solute) {
+    setID(id);
     setType(type);
     setName(name);
     setInventory(inventory);
     setAtomicNumber(atomicNumber);
     setAtomicMass(atomicMass);
     setDissolvedBy(dissolvedBy);
-    setMoles(moles);
+    setAcidAmount(acidAmount);
     setSolute(solute);
   }
 
@@ -204,8 +210,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * @return the ID.
    */
   @Override
-  public int getChemicalID() {
-    return this.chemicalID;
+  public int getID() {
+    return this.id;
   }
 
   /**
@@ -260,8 +266,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * @see datasource.ChemicalRowDataGateway#getMoles().
    */
   @Override
-  public double getMoles() {
-    return this.moles;
+  public double getAcidAmount() {
+    return this.acidAmount;
   }
 
   /**
@@ -275,10 +281,10 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
   /**
    * Sets the ID of the chemical.
    * 
-   * @param chemicalID the ID of the Chemical.
+   * @param id the ID of the Chemical.
    */
-  private void setChemicalID(int chemicalID) {
-    this.chemicalID = chemicalID;
+  private void setID(int id) {
+    this.id = id;
   }
 
   /**
@@ -333,8 +339,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
    * @see datasource.ChemicalRowDataGateway#setMoles(double);
    */
   @Override
-  public void setMoles(double moles) {
-    this.moles = moles;
+  public void setAcidAmount(double acidAmount) {
+    this.acidAmount = acidAmount;
   }
 
   /**
