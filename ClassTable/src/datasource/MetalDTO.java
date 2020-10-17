@@ -23,8 +23,8 @@ public class MetalDTO {
     return moles;
   }
 
-  public void setMoles(int moles) {
-    this.moles = moles;
+  public void setMoles(double moles2) {
+    this.moles = moles2;
   }
 
   public int getDissolvedById() {

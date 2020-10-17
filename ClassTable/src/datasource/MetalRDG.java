@@ -21,7 +21,11 @@ public interface MetalRDG {
 
    public void setInventory(double inventory);
    
-   public void setMoles(int moles);
+   public void setMoles(double moles);
+   
+   public void setAtomicNumber(int atomicNumber);
+   
+   public void setAtomicMass(double atomicMass);
 
    MetalDTO getMetal();
 
