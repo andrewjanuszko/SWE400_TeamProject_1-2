@@ -11,9 +11,9 @@ import database.DatabaseException;
 import database.DatabaseManager;
 
 public class CompoundRDGRDS {
-  List<CompoundDTO> compounds = new ArrayList<>();
+  CompoundDTO compound;
 
-  public List<CompoundDTO> create(int id, List<Integer> madeOf, String name, double inventory) throws Exception {
+  public CompoundDTO create(int id, List<Integer> madeOf, String name, double inventory) throws Exception {
     try {
       List<ElementDTO> elements = new ArrayList<>();
       // Insert compound
@@ -38,10 +38,36 @@ public class CompoundRDGRDS {
         elements.add(elementIdToDTO(madeOf.get(i)));
       }
 
-      compounds.add(new CompoundDTO(id, elements, name, inventory));
+      compound = (new CompoundDTO(id, elements, name, inventory));
 
-      return compounds;
+      return compound;
 
+    } catch (SQLException | DatabaseException e) {
+      throw new Exception("CompoundRDGRDS", e);
+    }
+  }
+  
+  public void create(CompoundDTO compound) throws Exception {
+    try {
+      List<ElementDTO> elements = new ArrayList<>();
+      // Insert compound
+      PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory) VALUES (?, ?, ?);");
+      insertChemical.setInt(1, compound.getCompoundId());
+      insertChemical.setString(2, compound.getName());
+      insertChemical.setDouble(3, compound.getInventory());
+
+      insertChemical.execute();
+
+      // Insert all compounds
+      for (int i = 0; i < compound.getElements().size(); i++) {
+        PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
+            .prepareStatement("INSERT INTO Compound(compoundId, elementId) VALUES (?, ?);");
+
+        insert.setInt(1, compound.getCompoundId());
+        insert.setInt(2, compound.getElements().get(i).getElementId()); 
+        insert.execute();
+      }
     } catch (SQLException | DatabaseException e) {
       throw new Exception("CompoundRDGRDS", e);
     }
@@ -58,8 +84,6 @@ public class CompoundRDGRDS {
   }
 
   public CompoundDTO read(int id) throws Exception {
-    compounds = new ArrayList<>();
-    
     try {
       String sql = "SELECT * FROM Compound WHERE compoundId = " + id + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -71,9 +95,10 @@ public class CompoundRDGRDS {
         elements.add(elementIdToDTO(rs.getInt("elementId")));
       }
       
-      compounds.add(new CompoundDTO(id, elements, rs.getString("name"), rs.getDouble("inventory")));
+      compound = (new CompoundDTO(id, elements, rs.getString("name"), rs.getDouble("inventory")));
       
-      return compounds;
+      return compound;
+      
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       throw new Exception("Failed to read" + id, e);
@@ -81,13 +106,24 @@ public class CompoundRDGRDS {
   }
 
   public CompoundDTO update(CompoundDTO compound) {
-    // delete, re add
-    return compound;
-
+    // Note: This might get slow when we get a compound with a LOT of elements
+    try {
+      delete(compound.getCompoundId());
+      create(compound);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return this.compound;
   }
 
-  public CompoundDTO delete(int id) {
-    return null;
+  public void delete(int id) {
+    try {
+      PreparedStatement sql = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("DELETE FROM Compound WHERE compoundId = " + id + ";");
+      sql.execute();
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
   }
 
 }

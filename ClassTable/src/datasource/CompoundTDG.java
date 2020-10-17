@@ -11,18 +11,10 @@ import database.DatabaseException;
  */
 public interface CompoundTDG {
 
-  ArrayList<CompoundDTO> findMakes(int elementId);
-
-  ArrayList<CompoundDTO> findMadeOf(int compoundId);
-
-  public CompoundDTO getDTO(int id);
- 
-  public void addCompound(int compoundId, List<Integer> madeOf, String name, double inventory);
-
-  void delete(int compoundId);
-
   List<CompoundDTO> executeQuery() throws DatabaseException;
 
+  CompoundTDGRDS filterByName(String name); 
+  
   CompoundTDGRDS filterByInventoryRange(double high, double low);
 
   CompoundTDGRDS filterByInventory(double inventory);

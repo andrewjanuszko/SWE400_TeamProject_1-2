@@ -3,10 +3,10 @@ package datasource;
 import java.util.List;
 
 public class CompoundDTO {
-  int compoundId;
-  List<ElementDTO> elements;
-  String name;
-  double inventory;
+  private int compoundId;
+  private List<ElementDTO> elements;
+  private String name;
+  private double inventory;
 
   public CompoundDTO(int cId, List<ElementDTO> elements, String name, double inv) {
     this.compoundId = cId;
