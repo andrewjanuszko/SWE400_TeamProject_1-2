@@ -22,4 +22,5 @@ public interface CompoundTDG {
   CompoundTDGRDS filterByElements(int elementId);
 
   CompoundTDGRDS getAllCompounds();
+  
 }
