@@ -27,6 +27,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     ElementRDG row = new ElementRDGRDS(id);
     ElementDTO dto = row.getElement();
     Element element = convertFromDTO(dto);
+
     return element;
   }
 
