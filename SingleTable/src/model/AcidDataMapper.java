@@ -168,7 +168,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
   
   /**
-   * 
+   * @see model.AcidDataMapperInterface#filterByLowInventory().
    */
   @Override
   public List<Acid> filterByLowInventory() throws DomainModelException {

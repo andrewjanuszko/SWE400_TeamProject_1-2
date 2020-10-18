@@ -200,7 +200,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   }
   
   /**
-   * 
+   * @see model.ElementDataMapperInterface#filterByLowInventory().
    */
   @Override
   public List<Element> filterByLowInventory() throws DomainModelException {
