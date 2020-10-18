@@ -8,6 +8,7 @@ import datasource.ElementDTO;
 import datasource.ElementRDG;
 import datasource.ElementRDGRDS;
 import datasource.ElementTDGRDS;
+import model.DomainModelException;
 import model.Element;
 import model.ElementDataMapperInterface;
 
@@ -15,11 +16,12 @@ public class ElementDataMapper implements ElementDataMapperInterface {
 
   public ElementDataMapper() {
   }
-
+  
   @Override
-  public void create(Element element) {
-    ElementRDG rowGateway = new ElementRDGRDS(element.getID(), element.getAtomicNumber(), element.getAtomicMass(), element.getName(), element.getInventory());
-    
+  public Element create(String name, double inventory, int atomicNumber, double atomicMass)
+      throws DomainModelException {
+    ElementRDG row = new ElementRDGRDS(atomicNumber, atomicMass, name, inventory);
+    return convertFromDTO(row.getElement());
   }
 
   @Override
@@ -172,4 +174,6 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   public Element convertFromDTO(ElementDTO dto) {
     return new Element(dto.getElementId(), dto.getName(), dto.getInventory(), dto.getAtomicNumber(), dto.getAtomicMass());
   }
+
+  
 }

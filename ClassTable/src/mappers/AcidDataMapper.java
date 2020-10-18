@@ -10,20 +10,27 @@ import datasource.AcidRDG;
 import datasource.AcidRDGRDS;
 import datasource.AcidTDGRDS;
 import datasource.BaseDTO;
+import datasource.BaseRDG;
+import datasource.BaseRDGRDS;
 import datasource.MetalDTO;
 import model.Acid;
 import model.AcidDataMapperInterface;
 import model.Base;
+import model.DomainModelException;
 import model.Metal;
 
 public class AcidDataMapper implements AcidDataMapperInterface {
 
+
   @Override
-  public void create(Acid acid) {
-    AcidRDGRDS rowGateway = new AcidRDGRDS(acid.getID(), acid.getSolute(), acid.getName(), acid.getInventory());
-
+  public Acid create(String name, double inventory, List<Metal> dissolves,int solute) throws DomainModelException {
+    AcidRDG row = new AcidRDGRDS(solute, name, inventory);
+    Acid a = convertFromDTO(row.getAcid());
+    for(Metal m : dissolves) {
+      m.setDissolvedBy(a.getID());
+    }
+    return a;
   }
-
   @Override
   public Acid read(int id) {
     Acid acid = null;

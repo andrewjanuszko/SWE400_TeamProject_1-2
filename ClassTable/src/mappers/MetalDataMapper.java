@@ -12,6 +12,7 @@ import datasource.MetalDTO;
 import datasource.MetalRDG;
 import datasource.MetalRDGRDS;
 import datasource.MetalTDGRDS;
+import model.DomainModelException;
 import model.Element;
 import model.Metal;
 import model.MetalDataMapperInterface;
@@ -23,10 +24,10 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
 
   @Override
-  public void create(Metal metal) {
-    MetalRDG rowGateway = new MetalRDGRDS(metal.getID(), 0, metal.getAtomicNumber(), metal.getAtomicMass(),
-        metal.getAcidAmount(), metal.getName(), metal.getInventory());
-
+  public Metal create(String name, double inventory, int atomicNumber, double atomicMass, double acidAmount)
+      throws DomainModelException {
+    MetalRDG row = new MetalRDGRDS(0, acidAmount, atomicNumber, atomicMass, name, inventory);
+    return convertFromDTO(row.getMetal());
   }
 
   @Override
@@ -210,5 +211,11 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   public Metal convertFromDTO(MetalDTO dto) {
     return new Metal(dto.getMetalId(), dto.getName(), dto.getInventory(), dto.getAtomicNumber(), dto.getAtomicMass(),
         dto.getMoles());
+  }
+
+  @Override
+  public List<Metal> filterByPartOfCompound(int compoundID) throws DomainModelException {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

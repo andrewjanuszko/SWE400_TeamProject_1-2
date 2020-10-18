@@ -15,6 +15,7 @@ import datasource.MetalDTO;
 import model.Acid;
 import model.Base;
 import model.BaseDataMapperInterface;
+import model.DomainModelException;
 import model.Metal;
 
 public class BaseDataMapper implements BaseDataMapperInterface {
@@ -24,9 +25,9 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   @Override
-  public void create(Base base) {
-    BaseRDG rowGateway = new BaseRDGRDS(base.getID(), base.getSolute(), base.getName(), base.getInventory());
-
+  public Base create(String name, double inventory, int solute) throws DomainModelException {
+    BaseRDG row = new BaseRDGRDS(solute, name, inventory);
+    return convertFromDTO(row.getBase());
   }
 
   @Override
