@@ -26,7 +26,7 @@ public class FirstWindow extends JFrame{
 	public FirstWindow() {
 		setLayout(new GridBagLayout());
 	    setBackground(Color.BLACK);
-	    setSize(1000, 750); 
+	    setSize(500, 200); 
 	    setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setButtons();
@@ -75,8 +75,9 @@ public class FirstWindow extends JFrame{
 
 		    });
 	    buttons = new JPanel(new GridBagLayout());
-	    gbc.fill = GridBagConstraints.HORIZONTAL;
+	   
 	    gbc.weightx = 1;
+	    gbc.fill = GridBagConstraints.HORIZONTAL;
 	    gbc.gridx = 0;
 	    gbc.gridy = 0;
 	    buttons.add(chemicalButton, gbc);
@@ -106,6 +107,7 @@ public class FirstWindow extends JFrame{
 	    gbc.anchor = GridBagConstraints.NORTHWEST;
 	    gbc.weighty = 1;
 	    buttons.setBackground(Color.GRAY);
+	    
 	    add(buttons, gbc);
 	    
 	    
