@@ -13,6 +13,8 @@ public interface ChemicalTDG {
   public ChemicalTDGRDS filterByInventory(double inventory);
 
   public ChemicalTDGRDS filterByInventoryRange(double high, double low);
+  
+  public ChemicalTDGRDS filterLowInventory(double inventoryNeeded);
 
   public List<ChemicalDTO> executeQuery() throws DatabaseException;
 }
