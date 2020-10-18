@@ -10,48 +10,163 @@ import java.util.List;
  */
 public interface ChemicalTableDataGateway {
 
+  /**
+   * Get all Chemicals.
+   * @return all Chemicals.
+   */
   public ChemicalTableDataGatewayRDS getAll();
   
+  /**
+   * Get all Elements.
+   * @return all Elements.
+   */
   public ChemicalTableDataGatewayRDS getElements();
   
+  /**
+   * Get all Metals.
+   * @return all Metals.
+   */
   public ChemicalTableDataGatewayRDS getMetals();
   
+  /**
+   * Get all Compounds.
+   * @return all Compounds.
+   */
   public ChemicalTableDataGatewayRDS getCompounds();
   
+  /**
+   * Get all Bases.
+   * @return all Bases.
+   */
   public ChemicalTableDataGatewayRDS getBases();
   
+  /**
+   * Get all Acids.
+   * @return all Acids.
+   */
   public ChemicalTableDataGatewayRDS getAcids();
   
-  public ChemicalTableDataGatewayRDS filterByWildCardName(String wildCard);
+  /**
+   * Get all Chemicals with a name like String.
+   * @param nameLike the name we are looking for.
+   * @return all Chemicals with a name like String.
+   */
+  public ChemicalTableDataGatewayRDS filterByNameLike(String nameLike);
   
-  public ChemicalTableDataGatewayRDS filterByInventoryValue(double inventoryValue);
+  /**
+   * 
+   * @param inventoryValue
+   * @return
+   */
+  public ChemicalTableDataGatewayRDS filterByInventory(double inventoryValue);
 
-  public ChemicalTableDataGatewayRDS filterByInventoryRange(double min, double max);
+  /**
+   * 
+   * @param min
+   * @param max
+   * @return
+   */
+  public ChemicalTableDataGatewayRDS filterByInventoryBetween(double min, double max);
   
-  public ChemicalTableDataGatewayRDS filterByAtomicNumberValue(int atomicNumberValue);
+  /**
+   * 
+   * @param atomicNumberValue
+   * @return
+   */
+  public ChemicalTableDataGatewayRDS filterByAtomicNumber(int atomicNumberValue);
   
-  public ChemicalTableDataGatewayRDS filterByAtomicNumberRange(int min, int max);
+  /**
+   * 
+   * @param min
+   * @param max
+   * @return
+   */
+  public ChemicalTableDataGatewayRDS filterByAtomicNumberBetween(int min, int max);
   
-  public ChemicalTableDataGatewayRDS filterByAtomicMassValue(double atomicMassValue);
+  /**
+   * 
+   * @param atomicMassValue
+   * @return
+   */
+  public ChemicalTableDataGatewayRDS filterByAtomicMass(double atomicMassValue);
   
-  public ChemicalTableDataGatewayRDS filterByAtomicMassRange(double min, double max);
+  /**
+   * 
+   * @param min
+   * @param max
+   * @return
+   */
+  public ChemicalTableDataGatewayRDS filterByAtomicMassBetween(double min, double max);
   
+  /**
+   * 
+   * @param dissolvedByID
+   * @return
+   */
   public ChemicalTableDataGatewayRDS filterByDissolvedBy(int dissolvedByID);
   
-  public ChemicalTableDataGatewayRDS filterByAcidAmountValue(double molesValue);
+  /**
+   * 
+   * @param acidAmount
+   * @return
+   */
+  public ChemicalTableDataGatewayRDS filterByAcidAmount(double acidAmount);
   
-  public ChemicalTableDataGatewayRDS filterByAcidAmountRange(double min, double max);
+  /**
+   * 
+   * @param min
+   * @param max
+   * @return
+   */
+  public ChemicalTableDataGatewayRDS filterByAcidAmountBetween(double min, double max);
   
+  /**
+   * 
+   * @param soluteID
+   * @return
+   */
   public ChemicalTableDataGatewayRDS filterBySolute(int soluteID);
   
-  public List<ChemicalDTO> executeFindAllWithLowInventory() throws DatabaseException;
-  
-  public List<ChemicalDTO> executeFindElementsWithLowInventory() throws DatabaseException;
-  
-  public List<ChemicalDTO> executeFindBasesWithLowInventory() throws DatabaseException;
-  
-  public List<ChemicalDTO> executeFindAcidsWithLowInventory() throws DatabaseException;
-  
+  /**
+   * 
+   * @return
+   * @throws DatabaseException
+   */
   public List<ChemicalDTO> executeQuery() throws DatabaseException;
+  
+  /**
+   * 
+   * @return
+   * @throws DatabaseException
+   */
+  public List<ChemicalDTO> getAllWithLowInventory() throws DatabaseException;
+  
+  /**
+   * 
+   * @return
+   * @throws DatabaseException
+   */
+  public List<ChemicalDTO> getElementsWithLowInventory() throws DatabaseException;
+  
+  /**
+   * 
+   * @return
+   * @throws DatabaseException
+   */
+  public List<ChemicalDTO> getMetalsWithLowInventory() throws DatabaseException;
+  
+  /**
+   * 
+   * @return
+   * @throws DatabaseException
+   */
+  public List<ChemicalDTO> getBasesWithLowInventory() throws DatabaseException;
+  
+  /**
+   * 
+   * @return
+   * @throws DatabaseException
+   */
+  public List<ChemicalDTO> getAcidsWithLowInventory() throws DatabaseException;
 
 }

@@ -1,7 +1,6 @@
 package datasource;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -127,7 +126,7 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchByName() throws DatabaseException {
-    List<ChemicalDTO> chemicals = gateway.getAll().filterByWildCardName("Compound").executeQuery();
+    List<ChemicalDTO> chemicals = gateway.getAll().filterByNameLike("Compound").executeQuery();
     assertEquals(4, chemicals.size());
     assertEquals("Compound #1", chemicals.get(0).getName());
   }
@@ -139,7 +138,7 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchByInventory() throws DatabaseException {
-    List<ChemicalDTO> chemicals = gateway.getAll().filterByInventoryValue(66.6).executeQuery();
+    List<ChemicalDTO> chemicals = gateway.getAll().filterByInventory(66.6).executeQuery();
     assertEquals(1, chemicals.size());
     assertEquals("Compound #1", chemicals.get(0).getName());
   }
@@ -151,7 +150,7 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchByAtomicNumber() throws DatabaseException {
-    List<ChemicalDTO> chemicals = gateway.getElements().filterByAtomicNumberValue(6).executeQuery();
+    List<ChemicalDTO> chemicals = gateway.getElements().filterByAtomicNumber(6).executeQuery();
     assertEquals(1, chemicals.size());
     assertEquals("Carbon", chemicals.get(0).getName());
   }
@@ -163,7 +162,7 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchByAtomicMassValue() throws DatabaseException {
-    List<ChemicalDTO> chemicals = gateway.getElements().filterByAtomicMassValue(12.011).executeQuery();
+    List<ChemicalDTO> chemicals = gateway.getElements().filterByAtomicMass(12.011).executeQuery();
     assertEquals(1, chemicals.size());
     assertEquals("Carbon", chemicals.get(0).getName());
   }
@@ -186,7 +185,7 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testFetchByMoles() throws DatabaseException {
-    List<ChemicalDTO> chemicals = gateway.getMetals().filterByAcidAmountRange(16, 18).executeQuery();
+    List<ChemicalDTO> chemicals = gateway.getMetals().filterByAcidAmountBetween(16, 18).executeQuery();
     assertEquals(2, chemicals.size());
     assertEquals("Palladium", chemicals.get(1).getName());
   }
@@ -209,7 +208,7 @@ public abstract class ChemicalTDGRDSTest extends DatabaseTest {
    */
   @Test
   void testGetLowAll() throws DatabaseException {
-    List<ChemicalDTO> chemicals = gateway.executeFindAllWithLowInventory();
+    List<ChemicalDTO> chemicals = gateway.getAllWithLowInventory();
     assertEquals(4, chemicals.size());
     assertEquals("Carbon", chemicals.get(1).getName());
   }
