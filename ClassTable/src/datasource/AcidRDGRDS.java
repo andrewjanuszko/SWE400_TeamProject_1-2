@@ -29,23 +29,14 @@ public class AcidRDGRDS implements AcidRDG {
    * @param id of the acid to find
    */
   public AcidRDGRDS(int id) throws SQLException, DatabaseException {
-    int solute; 
-
     // Statements to find existing acid/chemical and collect their information.
-    String getAcid = new String("SELECT * FROM Acid WHERE acidId = " + id + ";"),
-        getChem = new String("SELECT * FROM Chemical WHERE chemicalId = " + id + ";");
+    String select = "SELECT * FROM Acid INNER JOIN Chemical WHERE chemicalId = acidId AND acidId = " + id + ";";
 
     // Get acid information
     Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-    ResultSet rs = statement.executeQuery(getAcid);
+    ResultSet rs = statement.executeQuery(select);
     rs.next(); // Get result
-    solute = rs.getInt("solute");
-
-    // Get chemical information
-    rs = statement.executeQuery(getChem);
-    rs.next();
-    acid = new AcidDTO(id, solute, rs.getString("name"), rs.getDouble("inventory"));
-
+    acid = new AcidDTO(id, rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory"));
   }
   
   /**
@@ -55,26 +46,29 @@ public class AcidRDGRDS implements AcidRDG {
    * @param name of acid to insert
    * @param inhabits of acid to insert
    */
-  public AcidRDGRDS(int id, int solute, String name, double inventory) {
+  public AcidRDGRDS(int solute, String name, double inventory) {
     
     try {
       // Insert chemical 
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + " VALUES (?, ?, ?);");
-      insertChemical.setInt(1, id);
-      insertChemical.setString(2, name);
-      insertChemical.setDouble(3, inventory);
+          .prepareStatement("INSERT INTO Chemical (name, inventory) VALUES (?, ?);");
+      insertChemical.setString(1, name);
+      insertChemical.setDouble(2, inventory);
       
       // Insert Acid
       PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
-        .prepareStatement("INSERT INTO Acid (acidId, solute)" + " VALUES (?, ?);");
-      insertAcid.setInt(1, id); // Set acid id
-      insertAcid.setInt(2, solute); // set solute id
+        .prepareStatement("INSERT INTO Acid (acidId, solute) VALUES (LAST_INSERT_ID(), ?);");
+      insertAcid.setInt(1, solute); // set solute id
       
       insertChemical.execute(); // Insert chemical
       insertAcid.execute();  // Insert acid
       
-      acid = new AcidDTO(id, solute, name, inventory);
+      String fetchId = ("SELECT LAST_INSERT_ID();");
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(fetchId);
+      rs.next();
+      
+      acid = new AcidDTO(rs.getInt("LAST_INSERT_ID()"), solute, name, inventory);
       
     } catch(SQLException | DatabaseException e) {
       e.printStackTrace();

@@ -10,7 +10,8 @@ public class ClassTableInitializer {
       Statement stmt = DatabaseManager.getSingleton().getConnection().createStatement();
       
       String[] create = { 
-          "CREATE TABLE IF NOT EXISTS Chemical(chemicalId INT NOT NULL, name VARCHAR(20), "
+          
+          "CREATE TABLE IF NOT EXISTS Chemical(chemicalId INT NOT NULL AUTO_INCREMENT, name VARCHAR(20), "
               + "inventory DOUBLE, PRIMARY KEY (chemicalId));",
               
           "CREATE TABLE IF NOT EXISTS Acid" + "(acidId INT NOT NULL, solute INT, " 

@@ -3,8 +3,9 @@ package datasource;
 import java.util.List;
 
 public interface CompoundRDG {
-  public CompoundDTO create(int id, List<Integer> madeOf, String name, double inventory);
-  public CompoundDTO read(int id);
+  public CompoundDTO create(List<Integer> madeOf, String name, double inventory) throws Exception;
+  public CompoundDTO read(int id) throws Exception;
   public CompoundDTO update(CompoundDTO compound);
-  public CompoundDTO delete(int id); 
+  public void delete(int id); 
+  public CompoundDTO getCompound();
 }
