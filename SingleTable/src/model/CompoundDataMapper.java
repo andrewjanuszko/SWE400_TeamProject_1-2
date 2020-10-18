@@ -168,7 +168,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   }
 
   /**
-   * 
+   * model.CompoundDataMapperInterface#filterByLowInventory().
    */
   @Override
   public List<Compound> filterByLowInventory() throws DomainModelException {

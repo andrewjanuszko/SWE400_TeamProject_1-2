@@ -152,7 +152,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
   
   /**
-   * 
+   * @see model.MetalDataMapperInterface#filterByAtomicNumberBetween(int min, int max).
    */
   @Override
   public List<Metal> filterByAtomicNumberBetween(int min, int max) throws DomainModelException {
@@ -216,7 +216,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
 
   /**
-   * 
+   * @see model.MetalDataMapperInterface#filterByDissolvedBy(int acidID).
    */
   @Override
   public ArrayList<Metal> filterByDissolvedBy(int acidID) throws DomainModelException {
@@ -228,7 +228,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
 
   /**
-   * 
+   *  @see model.MetalDataMapperInterface#filterByPartOfCompound(int compoundID).
    */
   @Override
   public List<Metal> filterByPartOfCompound(int compoundID) throws DomainModelException {
@@ -247,7 +247,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
   
   /**
-   * 
+   * @see model.MetalDataMapperInterface#filterByLowInventory().
    */
   @Override
   public List<Metal> filterByLowInventory() throws DomainModelException {
@@ -259,9 +259,9 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
 
   /**
-   * 
+   * Converts a list of chemicalDTOs to a list of metal
    * @param chemicals
-   * @return
+   * @return a list of metals
    */
   private ArrayList<Metal> convertToMetal(List<ChemicalDTO> chemicals) throws DomainModelException {
     ArrayList<Metal> metals = new ArrayList<Metal>();

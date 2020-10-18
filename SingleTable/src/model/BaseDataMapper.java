@@ -144,7 +144,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
   
   /**
-   * 
+   * @see model.BaseDataMapperInterface#filterByLowInventory().
    */
   @Override
   public List<Base> filterByLowInventory() throws DomainModelException {
