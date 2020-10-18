@@ -48,8 +48,8 @@ public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
    */
   @AfterEach
   void resetTable() throws DatabaseException {
-    ChemicalRowDataGatewayRDS.dropTable();
-    gateway.resetData();
+	gateway.resetData();
+	ChemicalRowDataGatewayRDS.dropTable();
   }
 
   /**
@@ -115,8 +115,8 @@ public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
     compound = gateway.findElementsByCompoundID(5);
 
     assertEquals(5, compound.getID());
-    assertEquals(2, compound.getRelations().get(0).getID());
-    assertEquals(3, compound.getRelations().get(1).getID());
+    assertEquals(3, compound.getRelations().get(0).getID());
+    assertEquals(2, compound.getRelations().get(1).getID());
   }
 
   /**
@@ -139,6 +139,7 @@ public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
     assertEquals(1, element.getRelations().size());
     assertEquals(2, element.getID());
     assertEquals(5, element.getRelations().get(0).getID());
+
   }
 
   /**
@@ -159,7 +160,7 @@ public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
 
     element = gateway.findCompoundsByElementID(2);
     assertEquals(1, element.getRelations().size());
-    assertEquals(2, element.getRelations());
+    assertEquals(2, element.getID());
     assertEquals(5, element.getRelations().get(0).getID());
   }
 }
