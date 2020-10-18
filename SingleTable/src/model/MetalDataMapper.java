@@ -245,6 +245,18 @@ public class MetalDataMapper implements MetalDataMapperInterface {
       throw new DomainModelException("Failed to get Metals in Compound with ID '" + compoundID + "'.", e);
     }
   }
+  
+  /**
+   * 
+   */
+  @Override
+  public List<Metal> filterByLowInventory() throws DomainModelException {
+    try {
+      return convertToMetal(chemicalTableDataGateway.getMetalsWithLowInventory());
+    } catch (DatabaseException e) {
+      throw new DomainModelException("Failed to get all Metals with low inventory.", e);
+    }
+  }
 
   /**
    * 

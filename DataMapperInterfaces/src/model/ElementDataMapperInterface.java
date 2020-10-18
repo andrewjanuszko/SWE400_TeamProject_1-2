@@ -128,5 +128,12 @@ public interface ElementDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Element> filterByPartOfCompound(int compoundID) throws DomainModelException;
+  
+  /**
+   * 
+   * @return
+   * @throws DomainModelException
+   */
+  public List<Element> filterByLowInventory() throws DomainModelException;
 
 }

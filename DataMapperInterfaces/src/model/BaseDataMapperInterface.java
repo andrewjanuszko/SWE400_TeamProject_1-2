@@ -90,4 +90,11 @@ public interface BaseDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Base> filterBySolute(int chemicalID) throws DomainModelException;
+  
+  /**
+   * 
+   * @return
+   * @throws DomainModelException
+   */
+  public List<Base> filterByLowInventory() throws DomainModelException;
 }

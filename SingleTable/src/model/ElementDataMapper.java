@@ -198,6 +198,18 @@ public class ElementDataMapper implements ElementDataMapperInterface {
       throw new DomainModelException("Failed to get Elements in Compound with ID '" + compoundID + "'.", e);
     }
   }
+  
+  /**
+   * 
+   */
+  @Override
+  public List<Element> filterByLowInventory() throws DomainModelException {
+    try {
+      return convertToElement(chemicalTableDataGateway.getElementsWithLowInventory());
+    } catch (DatabaseException e) {
+      throw new DomainModelException("Failed to get all Elements with low inventory.", e);
+    }
+  }
 
   /**
    * Converts ChemicalDTOs to a List of Elements.

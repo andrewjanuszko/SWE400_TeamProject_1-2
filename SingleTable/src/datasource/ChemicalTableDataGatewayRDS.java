@@ -210,7 +210,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
       for (ChemicalDTO metal : metals) {
         acidAmountNeeded += metal.getAcidAmount();
       }
-      if (acid.getInventory() > acidAmountNeeded) {
+      if (acid.getInventory() >= acidAmountNeeded) {
         acids.remove(acid);
       }
     }
