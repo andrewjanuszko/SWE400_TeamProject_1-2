@@ -22,16 +22,16 @@ class TestMetal {
   @Test
   static void testGetName() {
     // Fetch metals
-    MetalRDG metalGet1 = new MetalRDGRDS(31);
-    MetalRDG metalGet2 = new MetalRDGRDS(32);
-    MetalRDG metalGet3 = new MetalRDGRDS(33);
-    MetalRDG metalGet4 = new MetalRDGRDS(34);
+    MetalRDG metalGet1 = new MetalRDGRDS(24);
+    MetalRDG metalGet2 = new MetalRDGRDS(25);
+    MetalRDG metalGet3 = new MetalRDGRDS(26);
+    MetalRDG metalGet4 = new MetalRDGRDS(27);
 
     // Test getName
-    assertEquals("metalname1", metalGet1.getMetal().getName());
-    assertEquals("metalname2", metalGet2.getMetal().getName());
-    assertEquals("metalname3", metalGet3.getMetal().getName());
-    assertEquals("metalname4", metalGet4.getMetal().getName());
+    assertEquals("funkychem2", metalGet1.getMetal().getName());
+    assertEquals("metalname1", metalGet2.getMetal().getName());
+    assertEquals("metalname2", metalGet3.getMetal().getName());
+    assertEquals("metalname3", metalGet4.getMetal().getName());
   }
 
   /**
@@ -40,16 +40,16 @@ class TestMetal {
   @Test
   static void testGetInventory() {
     // Fetch metals
-    MetalRDG metalGet1 = new MetalRDGRDS(31);
-    MetalRDG metalGet2 = new MetalRDGRDS(32);
-    MetalRDG metalGet3 = new MetalRDGRDS(33);
-    MetalRDG metalGet4 = new MetalRDGRDS(34);
+    MetalRDG metalGet1 = new MetalRDGRDS(24);
+    MetalRDG metalGet2 = new MetalRDGRDS(25);
+    MetalRDG metalGet3 = new MetalRDGRDS(26);
+    MetalRDG metalGet4 = new MetalRDGRDS(27);
 
     // Test getInventory
-    assertEquals(41.1, metalGet1.getMetal().getInventory(), 0.1);
-    assertEquals(42.1, metalGet2.getMetal().getInventory(), 0.1);
-    assertEquals(43.1, metalGet3.getMetal().getInventory(), 0.1);
-    assertEquals(44.1, metalGet4.getMetal().getInventory(), 0.1);
+    assertEquals(42.4, metalGet1.getMetal().getInventory(), 0.1);
+    assertEquals(41.1, metalGet2.getMetal().getInventory(), 0.1);
+    assertEquals(42.1, metalGet3.getMetal().getInventory(), 0.1);
+    assertEquals(43.1, metalGet4.getMetal().getInventory(), 0.1);
   }
 
   /**
@@ -58,10 +58,10 @@ class TestMetal {
   @Test
   static void testGetDissolvedBy() {
     // Fetch metals
-    MetalRDG metalGet1 = new MetalRDGRDS(31);
-    MetalRDG metalGet2 = new MetalRDGRDS(32);
-    MetalRDG metalGet3 = new MetalRDGRDS(33);
-    MetalRDG metalGet4 = new MetalRDGRDS(34);
+    MetalRDG metalGet1 = new MetalRDGRDS(24);
+    MetalRDG metalGet2 = new MetalRDGRDS(25);
+    MetalRDG metalGet3 = new MetalRDGRDS(26);
+    MetalRDG metalGet4 = new MetalRDGRDS(27);
 
     // Test that getDissolvedBy works
     assertEquals(1, metalGet1.getMetal().getDissolvedById());
@@ -79,10 +79,10 @@ class TestMetal {
       List<MetalDTO> get = new MetalTDGRDS().getAllMetals().executeQuery();
       
       assertEquals(4, get.size());
-      assertEquals(31, get.get(0).getMetalId());
-      assertEquals(32, get.get(1).getMetalId());
-      assertEquals(33, get.get(2).getMetalId());
-      assertEquals(34, get.get(3).getMetalId());
+      assertEquals(24, get.get(0).getMetalId());
+      assertEquals(25, get.get(1).getMetalId());
+      assertEquals(26, get.get(2).getMetalId());
+      assertEquals(27, get.get(3).getMetalId());
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
@@ -97,18 +97,19 @@ class TestMetal {
       List<MetalDTO> get = new MetalTDGRDS().getAllMetals().filterByInventory(41.1).executeQuery();
     
       assertEquals(1, get.size());
-      assertEquals(31, get.get(0).getMetalId());
+      assertEquals(25, get.get(0).getMetalId());
       
       get = new MetalTDGRDS().getAllMetals().filterByInventoryRange(42, 40).executeQuery();
       
       assertEquals(1, get.size());
-      assertEquals(31, get.get(0).getMetalId());
+      assertEquals(25, get.get(0).getMetalId());
       
       get = new MetalTDGRDS().getAllMetals().filterByInventoryRange(43, 40).executeQuery();
       
-      assertEquals(2, get.size());
-      assertEquals(31, get.get(0).getMetalId());
-      assertEquals(32, get.get(1).getMetalId());
+      assertEquals(3, get.size());
+      assertEquals(24, get.get(0).getMetalId());
+      assertEquals(25, get.get(1).getMetalId());
+      assertEquals(26, get.get(2).getMetalId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -120,13 +121,13 @@ class TestMetal {
     try {
       List<MetalDTO> get = new MetalTDGRDS().getAllMetals().filterByAtomicNumber(1).executeQuery();
       
-      assertEquals(31, get.get(0).getMetalId());
+      assertEquals(24, get.get(0).getMetalId());
       
       get = new MetalTDGRDS().getAllMetals().filterByAtomicNumberRange(2, 0).executeQuery();
       
       assertEquals(2, get.size());
-      assertEquals(31, get.get(0).getMetalId());
-      assertEquals(32, get.get(1).getMetalId());
+      assertEquals(24, get.get(0).getMetalId());
+      assertEquals(25, get.get(1).getMetalId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -138,13 +139,13 @@ class TestMetal {
     try {
       List<MetalDTO> get = new MetalTDGRDS().getAllMetals().filterByAtomicMass(1.1).executeQuery();
       
-      assertEquals(31, get.get(0).getMetalId());
+      assertEquals(24, get.get(0).getMetalId());
       
       get = new MetalTDGRDS().getAllMetals().filterByAtomicMassRange(3, 0).executeQuery();
       
       assertEquals(2, get.size());
-      assertEquals(31, get.get(0).getMetalId());
-      assertEquals(32, get.get(1).getMetalId());
+      assertEquals(24, get.get(0).getMetalId());
+      assertEquals(25, get.get(1).getMetalId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -157,7 +158,7 @@ class TestMetal {
       List<MetalDTO> get = new MetalTDGRDS().getAllMetals().filterByDissolvedBy(1).executeQuery();
       
       assertEquals(1, get.size());
-      assertEquals(31, get.get(0).getMetalId());
+      assertEquals(24, get.get(0).getMetalId());
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
@@ -169,14 +170,14 @@ class TestMetal {
       List<MetalDTO> get = new MetalTDGRDS().getAllMetals().filterByMoles(11.1).executeQuery();
       
       assertEquals(1, get.size());
-      assertEquals(31, get.get(0).getMetalId());
+      assertEquals(24, get.get(0).getMetalId());
       
       get = new MetalTDGRDS().getAllMetals().filterByMolesRange(14.0, 11.0).executeQuery();
       
       assertEquals(3, get.size());
-      assertEquals(31, get.get(0).getMetalId());
-      assertEquals(32, get.get(1).getMetalId());
-      assertEquals(33, get.get(2).getMetalId());
+      assertEquals(24, get.get(0).getMetalId());
+      assertEquals(25, get.get(1).getMetalId());
+      assertEquals(26, get.get(2).getMetalId());
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
@@ -201,9 +202,9 @@ class TestMetal {
    * Insert data into the database to test metal.
    */
   private static void insertMetals() {
-    MetalRDG metal = new MetalRDGRDS(31, 1, 1, 1.1, 11.1, "metalname1", 41.1);
-    metal = new MetalRDGRDS(32, 2, 2, 2.1, 12.2, "metalname2", 42.1);
-    metal = new MetalRDGRDS(33, 3, 3, 3.1, 13.3, "metalname3", 43.1);
-    metal = new MetalRDGRDS(34, 4, 4, 4.1, 14.4, "metalname4", 44.1);
+    MetalRDG metal = new MetalRDGRDS(1, 1, 1.1, 11.1, "metalname1", 41.1);
+    metal = new MetalRDGRDS(2, 2, 2.1, 12.2, "metalname2", 42.1);
+    metal = new MetalRDGRDS(3, 3, 3.1, 13.3, "metalname3", 43.1);
+    metal = new MetalRDGRDS(4, 4, 4.1, 14.4, "metalname4", 44.1);
   }
 }

@@ -10,20 +10,46 @@ import java.util.List;
 import database.DatabaseException;
 import database.DatabaseManager;
 
-public class CompoundRDGRDS {
+public class CompoundRDGRDS implements CompoundRDG {
   CompoundDTO compound;
 
-  public CompoundDTO create(int id, List<Integer> madeOf, String name, double inventory) throws Exception {
+  public CompoundRDGRDS() {
+
+  }
+
+  public CompoundRDGRDS(int id) {
+    try {
+      compound = read(id);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public CompoundRDGRDS(List<Integer> madeOf, String name, double inventory) {
+    try {
+      compound = create(madeOf, name, inventory);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public CompoundDTO create(List<Integer> madeOf, String name, double inventory) throws Exception {
     try {
       List<ElementDTO> elements = new ArrayList<>();
       // Insert compound
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory) VALUES (?, ?, ?);");
-      insertChemical.setInt(1, id);
-      insertChemical.setString(2, name);
-      insertChemical.setDouble(3, inventory);
+          .prepareStatement("INSERT INTO Chemical (name, inventory) VALUES (?, ?);");
+      insertChemical.setString(1, name);
+      insertChemical.setDouble(2, inventory);
 
       insertChemical.execute();
+
+      String fetchId = ("SELECT LAST_INSERT_ID();");
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(fetchId);
+      rs.next();
+
+      int id = rs.getInt("LAST_INSERT_ID()");
 
       // Insert all compounds
       for (int i = 0; i < madeOf.size(); i++) {
@@ -32,6 +58,7 @@ public class CompoundRDGRDS {
 
         insert.setInt(1, id);
         insert.setInt(2, madeOf.get(i));
+
         insert.execute();
 
         // List of elements
@@ -46,7 +73,7 @@ public class CompoundRDGRDS {
       throw new Exception("CompoundRDGRDS", e);
     }
   }
-  
+
   public void create(CompoundDTO compound) throws Exception {
     try {
       List<ElementDTO> elements = new ArrayList<>();
@@ -65,7 +92,7 @@ public class CompoundRDGRDS {
             .prepareStatement("INSERT INTO Compound(compoundId, elementId) VALUES (?, ?);");
 
         insert.setInt(1, compound.getCompoundId());
-        insert.setInt(2, compound.getElements().get(i).getElementId()); 
+        insert.setInt(2, compound.getElements().get(i).getElementId());
         insert.execute();
       }
     } catch (SQLException | DatabaseException e) {
@@ -85,24 +112,28 @@ public class CompoundRDGRDS {
 
   public CompoundDTO read(int id) throws Exception {
     try {
-      String sql = "SELECT * FROM Compound WHERE compoundId = " + id + ";";
+      String sql = "SELECT * FROM Compound INNER JOIN Chemical WHERE Compound.compoundId = Chemical.chemicalId AND Compound.compoundId = "
+          + id + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
-      
+      String name = null ;
+      double inv = 0 ;
       // Get all elements connected to compound
-      List<ElementDTO> elements = new ArrayList<>(); 
-      while(rs.next()) {
+      List<ElementDTO> elements = new ArrayList<>();
+      while (rs.next()) {
         elements.add(elementIdToDTO(rs.getInt("elementId")));
+        name = rs.getString("name");
+        inv = rs.getDouble("inventory");
       }
-      
-      compound = (new CompoundDTO(id, elements, rs.getString("name"), rs.getDouble("inventory")));
-      
+
+      compound = (new CompoundDTO(id, elements, name, inv));
+
       return compound;
-      
+
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       throw new Exception("Failed to read" + id, e);
-    } 
+    }
   }
 
   public CompoundDTO update(CompoundDTO compound) {
@@ -124,6 +155,10 @@ public class CompoundRDGRDS {
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
+  }
+
+  public CompoundDTO getCompound() {
+    return compound;
   }
 
 }

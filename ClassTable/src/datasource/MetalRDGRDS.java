@@ -49,15 +49,20 @@ public class MetalRDGRDS implements MetalRDG {
    * @param name String
    * @param inventory double
    */
-  public MetalRDGRDS(int id, int dissolvedById, int atomicNumber, double atomicMass, double moles, String name, double inventory) {
+  public MetalRDGRDS(int dissolvedById, int atomicNumber, double atomicMass, double moles, String name, double inventory) {
     
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + "VALUES (?, ?, ?);");
-      insertChemical.setInt(1, id);
-      insertChemical.setString(2, name);
-      insertChemical.setDouble(3, inventory);
+          .prepareStatement("INSERT INTO Chemical (name, inventory)" + "VALUES (?, ?);");
+      insertChemical.setString(1, name);
+      insertChemical.setDouble(2, inventory);
       
+      String fetchId = ("SELECT LAST_INSERT_ID();");
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(fetchId);
+      rs.next();
+      int id = rs.getInt("LAST_INSERT_ID()");
+
       PreparedStatement insertElement = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Element (elementId, atomicNumber, atomicMass)" + "VALUES (?, ?, ?);");
       insertElement.setInt(1, id);
@@ -161,7 +166,7 @@ public class MetalRDGRDS implements MetalRDG {
 
   @Override
   public void setDissolvedById(int dissolvedById) {
-    metal.setDissolvedById(dissolvedById);;
+    metal.setDissolvedById(dissolvedById);
   }
 
   @Override
