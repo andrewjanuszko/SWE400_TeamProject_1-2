@@ -26,7 +26,7 @@ public class FirstWindow extends JFrame{
 	public FirstWindow() {
 		setLayout(new GridBagLayout());
 	    setBackground(Color.BLACK);
-	    setSize(2400, 1080); 
+	    setSize(500, 200); 
 	    setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setButtons();

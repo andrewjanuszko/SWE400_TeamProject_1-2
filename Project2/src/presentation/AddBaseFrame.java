@@ -11,12 +11,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class AddAcidFrame extends JFrame{
-	
+public class AddBaseFrame extends JFrame{
 	GridBagConstraints gbc = new GridBagConstraints(); 
 	int height = 450, width = 300;
 	
-	public AddAcidFrame() {
+	public AddBaseFrame() {
 		setLayout(new GridBagLayout());
 	    setBackground(Color.BLACK);
 	    setUp();
