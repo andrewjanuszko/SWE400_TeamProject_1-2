@@ -65,6 +65,9 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
     return listDTO;
   }
 
+  /**
+   * 
+   */
   @Override
   public ChemicalTableDataGatewayRDS getAll() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type <> 0)";

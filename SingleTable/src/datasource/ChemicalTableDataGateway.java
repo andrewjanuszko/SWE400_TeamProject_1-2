@@ -54,116 +54,116 @@ public interface ChemicalTableDataGateway {
   public ChemicalTableDataGatewayRDS filterByNameLike(String nameLike);
   
   /**
-   * 
-   * @param inventoryValue
-   * @return
+   * Get all Chemicals with a given inventoryValue.
+   * @param inventoryValue the amount of a chemical in stock.
+   * @return all chemical with a given inventory
    */
   public ChemicalTableDataGatewayRDS filterByInventory(double inventoryValue);
 
   /**
-   * 
-   * @param min
-   * @param max
-   * @return
+   * Get all Chemicals with an inventoryValue between the given range.
+   * @param min the minimum amount of a chemical.
+   * @param max the maximum amount of a chemical.
+   * @return all chemical in a given inventory range
    */
   public ChemicalTableDataGatewayRDS filterByInventoryBetween(double min, double max);
   
   /**
-   * 
-   * @param atomicNumberValue
-   * @return
+   * Get all Chemicals with an atomicNumberValue.
+   * @param atomicNumberValue the atomic number you are looking for.
+   * @return all chemical with a given atomic number
    */
   public ChemicalTableDataGatewayRDS filterByAtomicNumber(int atomicNumberValue);
   
   /**
-   * 
-   * @param min
-   * @param max
-   * @return
+   * Get all Chemicals with an atomic number between the given range.
+   * @param min the minimum amount for the atomic number range.
+   * @param max the maximum amount the atomic number range.
+   * @return all chemical in a given atomic number range
    */
   public ChemicalTableDataGatewayRDS filterByAtomicNumberBetween(int min, int max);
   
   /**
-   * 
-   * @param atomicMassValue
+   * Get all Chemicals with a given atomicMassValue.
+   * @param atomicMassValue the atomic mass you are searching by.
    * @return
    */
   public ChemicalTableDataGatewayRDS filterByAtomicMass(double atomicMassValue);
   
   /**
-   * 
-   * @param min
-   * @param max
-   * @return
+   * Get all Chemicals with an atomic mass between the given range.
+   * @param min the minimum amount for the atomic mass range.
+   * @param max the maximum amount the atomic mass range.
+   * @return all chemical in a given atomic mass reange.
    */
   public ChemicalTableDataGatewayRDS filterByAtomicMassBetween(double min, double max);
   
   /**
-   * 
-   * @param dissolvedByID
-   * @return
+   * Get all chemical with a given dissolvedByID.
+   * @param dissolvedByID the id of an acid the dissolves the a metal.
+   * @return all chemical that are dissolved by a the given id.
    */
   public ChemicalTableDataGatewayRDS filterByDissolvedBy(int dissolvedByID);
   
   /**
-   * 
-   * @param acidAmount
-   * @return
+   * Get all chemical that need a given acidAmount to be dissolved.
+   * @param acidAmount the amount of acid needed to dissolve a chemical.
+   * @return all chemical with that need the given acid amount to be dissolved.
    */
   public ChemicalTableDataGatewayRDS filterByAcidAmount(double acidAmount);
   
   /**
-   * 
-   * @param min
-   * @param max
-   * @return
+   * Get all chemicals in a given acid amount range.
+   * @param min the minimum amount for the acid amount range.
+   * @param max the maximum amount for the acid amount range.
+   * @return all chemical in the given acid amount range.
    */
   public ChemicalTableDataGatewayRDS filterByAcidAmountBetween(double min, double max);
   
   /**
-   * 
-   * @param soluteID
-   * @return
+   * Get all chemicals with given soluteId.
+   * @param soluteID the id of a solute.
+   * @return all chemicals with the given soluteId.
    */
   public ChemicalTableDataGatewayRDS filterBySolute(int soluteID);
   
   /**
-   * 
-   * @return
+   * Runs the query
+   * @return the results of the constructed query
    * @throws DatabaseException
    */
   public List<ChemicalDTO> executeQuery() throws DatabaseException;
   
   /**
-   * 
+   * Gets all the chemicals that are low inventory.
    * @return
    * @throws DatabaseException
    */
   public List<ChemicalDTO> getAllWithLowInventory() throws DatabaseException;
   
   /**
-   * 
+   * Gets all the elements that are low inventory.
    * @return
    * @throws DatabaseException
    */
   public List<ChemicalDTO> getElementsWithLowInventory() throws DatabaseException;
   
   /**
-   * 
+   * Gets all the metals that are low inventory
    * @return
    * @throws DatabaseException
    */
   public List<ChemicalDTO> getMetalsWithLowInventory() throws DatabaseException;
   
   /**
-   * 
+   *  Gets all the bases that are low inventory
    * @return
    * @throws DatabaseException
    */
   public List<ChemicalDTO> getBasesWithLowInventory() throws DatabaseException;
   
   /**
-   * 
+   *  Gets all the acids that are low inventory
    * @return
    * @throws DatabaseException
    */
