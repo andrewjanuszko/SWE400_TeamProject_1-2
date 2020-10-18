@@ -9,12 +9,25 @@ import datasource.ChemicalRowDataGatewayRDS;
 import datasource.ChemicalTableDataGatewayRDS;
 import datasource.DatabaseException;
 
+/**
+ * A mapper for Base objects.
+ * 
+ * @author andrewjanuszko
+ *
+ */
 public class BaseDataMapper implements BaseDataMapperInterface {
 
   private ChemicalTableDataGatewayRDS chemicalTableDataGateway;
 
   /**
-   * 
+   * Empty constructor for BaseDataMapper.
+   */
+  public BaseDataMapper() {
+    // EMPTY.
+  }
+
+  /**
+   * @see model.BaseDataMapperInterface#create(String, double, int).
    */
   @Override
   public Base create(String name, double inventory, int solute) throws DomainModelException {
@@ -28,7 +41,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   /**
-   * 
+   * @see model.BaseDataMapperInterface#read(int).
    */
   @Override
   public Base read(int id) throws DomainModelException {
@@ -41,7 +54,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   /**
-   * 
+   * @see model.BaseDataMapperInterface#update(Base).
    */
   @Override
   public void update(Base base) throws DomainModelException {
@@ -57,7 +70,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   /**
-   * 
+   * @see model.BaseDataMapperInterface#delete(Base).
    */
   @Override
   public void delete(Base base) throws DomainModelException {
@@ -70,7 +83,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   /**
-   * 
+   * @see model.BaseDataMapperInterface#getAll().
    */
   @Override
   public List<Base> getAll() throws DomainModelException {
@@ -82,36 +95,36 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   /**
-   * 
+   * @see model.BaseDataMapperInterface#filterByWildCardName(String).
    */
   @Override
-  public List<Base> filterByWildCardName(String wildCard) throws DomainModelException {
+  public List<Base> filterByNameLike(String nameLike) throws DomainModelException {
     try {
-      return convertToBase(chemicalTableDataGateway.getBases().filterByWildCardName(wildCard).executeQuery());
+      return convertToBase(chemicalTableDataGateway.getBases().filterByNameLike(nameLike).executeQuery());
     } catch (DatabaseException e) {
-      throw new DomainModelException("Failed to get all Bases with name '" + wildCard + "'.", e);
+      throw new DomainModelException("Failed to get all Bases with name '" + nameLike + "'.", e);
     }
   }
 
   /**
-   * 
+   * @see model.BaseDataMapperInterface#filterByInventory(double).
    */
   @Override
   public List<Base> filterByInventory(double inventory) throws DomainModelException {
     try {
-      return convertToBase(chemicalTableDataGateway.getBases().filterByInventoryValue(inventory).executeQuery());
+      return convertToBase(chemicalTableDataGateway.getBases().filterByInventory(inventory).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Bases with inventory of '" + inventory + "'.", e);
     }
   }
 
   /**
-   * 
+   * @see model.BaseDataMapperInterface#filterByInventoryRange(double, double).
    */
   @Override
-  public List<Base> filterByInventoryRange(double min, double max) throws DomainModelException {
+  public List<Base> filterByInventoryBetween(double min, double max) throws DomainModelException {
     try {
-      return convertToBase(chemicalTableDataGateway.getBases().filterByInventoryRange(min, max).executeQuery());
+      return convertToBase(chemicalTableDataGateway.getBases().filterByInventoryBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Bases with inventory between '" + min + "' < x < '" + max + "'.", e);
@@ -119,7 +132,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   /**
-   * 
+   * @see model.BaseDataMapperInterface#filterBySolute(int).
    */
   @Override
   public List<Base> filterBySolute(int chemicalID) throws DomainModelException {
@@ -131,10 +144,10 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   /**
-   * Converts an ArrayList of ChemicalDTOs from the DB to Base objects
+   * Converts a ChemicalDTO to a Base.
    * 
-   * @param chemicalDTOs
-   * @return
+   * @param chemicalDTOs the List of ChemicalDTO to convert.
+   * @return a List of Bases.
    */
   private List<Base> convertToBase(List<ChemicalDTO> chemicals) throws DomainModelException {
     ArrayList<Base> bases = new ArrayList<Base>();

@@ -90,7 +90,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
                                   + "atomicMass DOUBLE, " 
                                   + "dissolvedBy INTEGER, " 
                                   + "acidAmount DOUBLE, " 
-                                  + "solute INTEGER);";
+                                  + "solute INTEGER, "
+                                  + "CHECK (inventory >= 0));";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
       statement.executeUpdate(createTableSQL);
