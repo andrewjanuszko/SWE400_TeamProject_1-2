@@ -9,13 +9,11 @@ import datasource.AcidDTO;
 import datasource.AcidRDG;
 import datasource.AcidRDGRDS;
 import datasource.AcidTDGRDS;
-import datasource.BaseDTO;
-import datasource.BaseRDG;
-import datasource.BaseRDGRDS;
 import datasource.MetalDTO;
+import datasource.MetalRDG;
+import datasource.MetalRDGRDS;
 import model.Acid;
 import model.AcidDataMapperInterface;
-import model.Base;
 import model.DomainModelException;
 import model.Metal;
 
@@ -27,7 +25,8 @@ public class AcidDataMapper implements AcidDataMapperInterface {
     AcidRDG row = new AcidRDGRDS(solute, name, inventory);
     Acid a = convertFromDTO(row.getAcid());
     for(Metal m : dissolves) {
-      m.setDissolvedBy(a.getID());
+      MetalRDG metal = new MetalRDGRDS(m.getID());
+      metal.setDissolvedById(a.getID());
     }
     return a;
   }
