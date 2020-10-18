@@ -20,64 +20,53 @@ public class ElementRDGRDS implements ElementRDG {
   ElementDTO element;
 
   /**
-   * Empty constructor 
-   */
-  public ElementRDGRDS() {
-  }
-
-  /**
    * constructor to search for an element
    * @param id
    */
   public ElementRDGRDS(int id) {
-    String sqlChem = "SELECT * FROM Chemical INNER JOIN Element ON Chemical.chemicalId = " + id + ";";
-    String sqlElement = "SELECT * FROM Element WHERE elementId = " + id + ";";
+    String select = "SELECT * FROM Element INNER JOIN Chemical ON Chemical.chemicalId = Element.elementId WHERE Element.elementId = " + id + ";";
     
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sqlElement);
+      ResultSet rs = statement.executeQuery(select);
       rs.next();
-      int atomicNumber = rs.getInt("atomicNumber");
-      double atomicMass = rs.getDouble("atomicMass");
-
-      rs = statement.executeQuery(sqlChem);
-      rs.next();
-      element = new ElementDTO(id, atomicNumber, atomicMass, rs.getString("name"), rs.getDouble("inventory"));
+      
+      element = new ElementDTO(id, rs.getInt("atomicNumber"), rs.getDouble("atomicMass"), rs.getString("name"), rs.getDouble("inventory"));
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("No entry with id " + id);
     }
-
   }
   
   /**
    * Constructor to create an element
-   * @param id
    * @param atomicNum
    * @param atomicMass
    * @param name
    * @param inhabits
    */
-  public ElementRDGRDS(int id, int atomicNum, double atomicMass, String name, double inventory) {
-    
+  public ElementRDGRDS(int atomicNum, double atomicMass, String name, double inventory) {
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + "VALUES (?, ?, ?);");
-      insertChemical.setInt(1, id);
-      insertChemical.setString(2, name);
-      insertChemical.setDouble(3, inventory);
+          .prepareStatement("INSERT INTO Chemical (name, inventory) VALUES (?, ?);");
+      insertChemical.setString(1, name);
+      insertChemical.setDouble(2, inventory);
+      
       PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Element (elementId, atomicNumber, atomicMass)" + "VALUES (?, ?, ?);");
-
-      insert.setInt(1, id);
-      insert.setInt(2, atomicNum);
-      insert.setDouble(3, atomicMass);
+          .prepareStatement("INSERT INTO Element (elementId, atomicNumber, atomicMass) VALUES (LAST_INSERT_ID(), ?, ?);");
+      insert.setInt(1, atomicNum);
+      insert.setDouble(2, atomicMass);
 
       insertChemical.execute();
       insert.execute();
       
-      element = new ElementDTO(id, atomicNum, atomicMass, name, inventory);
+      String fetchId = ("SELECT LAST_INSERT_ID();");
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(fetchId);
+      rs.next();
+      
+      element = new ElementDTO(rs.getInt("LAST_INSERT_ID()"), atomicNum, atomicMass, name, inventory);
       
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -90,7 +79,6 @@ public class ElementRDGRDS implements ElementRDG {
    */
   @Override
   public void delete() {
-
     String sqlElement = "DELETE FROM Element WHERE elementId = " + element.getElementId() + ";";
     String sqlChem = "DELETE FROM Chemical WHERE chemicalId = " + element.getElementId() + ";";
     try {

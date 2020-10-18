@@ -85,7 +85,7 @@ class TestBase extends DatabaseTest {
   @Test
   static void testUpdate() throws SQLException, DatabaseException {
     // Create a new base and getter for the base
-    BaseRDG base_setter = new BaseRDGRDS(19, 59, "basename9", 1.9), base_getter = new BaseRDGRDS(19);
+    BaseRDG base_setter = new BaseRDGRDS(59, "basename9", 1.9), base_getter = new BaseRDGRDS(20);
 
     // Ensure the base has been added properly
     assertEquals("basename9", base_getter.getBase().getName());
@@ -97,7 +97,7 @@ class TestBase extends DatabaseTest {
     base_setter.setInventory(1.8);
     base_setter.setSolute(56);
     base_setter.update();
-    base_getter = new BaseRDGRDS(19);
+    base_getter = new BaseRDGRDS(20);
 
     // Ensure update method changed our values
     assertEquals("basename6", base_getter.getBase().getName());
@@ -113,11 +113,11 @@ class TestBase extends DatabaseTest {
   @Test
   static void testDelete() {
     // Create a new base
-    BaseRDG base = new BaseRDGRDS(19, 59, "basename9", 1.9);
+    BaseRDG base = new BaseRDGRDS(9, "basename9", 1.9);
 
     // Ensure the base has been added properly
     assertEquals("basename9", base.getBase().getName());
-    assertEquals(59, base.getBase().getSoluteId());
+    assertEquals(9, base.getBase().getSoluteId());
     assertEquals(1.9, base.getBase().getInventory(), 0.1);
 
     // Delete
@@ -239,14 +239,14 @@ class TestBase extends DatabaseTest {
    * Insert bases into the database 
    */
   private static void insertBases() {
-    BaseRDG base = new BaseRDGRDS(11, 51, "basename1", 1.1);
-    base = new BaseRDGRDS(12, 52, "basename2", 1.2);
-    base = new BaseRDGRDS(13, 53, "basename3", 1.3);
-    base = new BaseRDGRDS(14, 54, "basename4", 1.4);
-    base = new BaseRDGRDS(15, 55, "basename5", 1.5);
-    base = new BaseRDGRDS(16, 55, "basename6", 1.6);
-    base = new BaseRDGRDS(17, 12, "funkybase1", 41.2); 
-    base = new BaseRDGRDS(18, 15, "funkybase2", 42.4); 
+    BaseRDG base = new BaseRDGRDS(51, "basename1", 1.1);
+    base = new BaseRDGRDS(52, "basename2", 1.2);
+    base = new BaseRDGRDS(53, "basename3", 1.3);
+    base = new BaseRDGRDS(54, "basename4", 1.4);
+    base = new BaseRDGRDS(55, "basename5", 1.5);
+    base = new BaseRDGRDS(55, "basename6", 1.6);
+    base = new BaseRDGRDS(12, "funkybase1", 41.2); 
+    base = new BaseRDGRDS(15, "funkybase2", 42.4); 
 
   }
 }

@@ -12,104 +12,100 @@ import database.DatabaseManager;
 
 /**
  * BaseRowDataGatewayRDS
+ * 
  * @author Isabella Boone, Kim O'Neill
  */
 public class BaseRDGRDS implements BaseRDG {
   BaseDTO base;
-  
+
   /**
    * Empty constructor
    */
   public BaseRDGRDS() {
-    
+
   }
-  
+
   /**
-   * Constructor BaseRowDataGateway, search for existing Base via id 
+   * Constructor BaseRowDataGateway, search for existing Base via id
+   * 
    * @param id
    */
   public BaseRDGRDS(int id) throws SQLException, DatabaseException {
-    int solute; 
-    // Select statements
-    String getBase = new String("SELECT * FROM Base WHERE baseId = " + id + ";"),
-        getChem = new String("SELECT * FROM Chemical INNER JOIN Base ON Chemical.chemicalId = " + id + ";");
-
+    String select = "SELECT * FROM Base INNER JOIN Chemical WHERE Base.baseId = Chemical.chemicalId AND Chemical.chemicalId = "
+        + id + ";";
+    
     // Get acid information
     Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-    ResultSet rs = statement.executeQuery(getBase);
+    ResultSet rs = statement.executeQuery(select);
     rs.next(); // Get result
-    solute = rs.getInt("solute");
 
-    // Get chemical information
-    rs = statement.executeQuery(getChem);
-    rs.next();
-    
-    base = new BaseDTO(id, solute, rs.getString("name"), rs.getDouble("inventory"));
+    base = new BaseDTO(id, rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory"));
 
   }
-  
+
   /**
    * AcidRowDataGateway constructor for creating a new base
+   * 
    * @param id
    * @param solute
    * @param name
    * @param inhabits
    */
-  public BaseRDGRDS(int id, int solute, String name, double inventory) {   
-    
-    
+  public BaseRDGRDS(int solute, String name, double inventory) {
+
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory)" + "VALUES (?, ?, ?);");
-      insertChemical.setInt(1, id);
-      insertChemical.setString(2, name);
-      insertChemical.setDouble(3, inventory);
-      
+          .prepareStatement("INSERT INTO Chemical (name, inventory)" + "VALUES (?, ?);");
+      insertChemical.setString(1, name);
+      insertChemical.setDouble(2, inventory);
+
       // Insert Base
       PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
-        .prepareStatement("INSERT INTO Base (baseId, solute)" + "VALUES (?, ?);");
-      insertAcid.setInt(1, id); // Set acid id
-      insertAcid.setInt(2, solute); // set solute id
-      
+          .prepareStatement("INSERT INTO Base (baseId, solute)" + "VALUES (LAST_INSERT_ID(), ?);");
+      insertAcid.setInt(1, solute); // set solute id
+
       insertChemical.execute(); // Insert chemical
-      insertAcid.execute();  // Insert acid
-      
-    } catch(SQLException | DatabaseException e) {
+      insertAcid.execute(); // Insert acid
+
+      String fetchId = ("SELECT LAST_INSERT_ID();");
+      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
+      ResultSet rs = statement.executeQuery(fetchId);
+      rs.next();
+
+      base = new BaseDTO(rs.getInt("LAST_INSERT_ID()"), solute, name, inventory);
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert acid through constructor");
     }
-    
-    // Set instance variables
-    base = new BaseDTO(id, solute, name, inventory);
   }
-  
-  
+
   /**
    * Delete a base from both chemical and base tables.
    */
   public void delete() {
     String deleteChemical = "DELETE FROM Chemical WHERE ChemicalId = " + base.getBaseId() + ";",
-        deleteBase = "DELETE FROM Base WHERE baseId = " + base.getBaseId()  + ";";
-    
+        deleteBase = "DELETE FROM Base WHERE baseId = " + base.getBaseId() + ";";
+
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      
+
       statement.executeUpdate(deleteBase);
       statement.executeUpdate(deleteChemical);
-      
+
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Error deleting base " + base.getBaseId() );
+      System.out.println("Error deleting base " + base.getBaseId());
     }
   }
-  
+
   /**
    * Update the database.
    */
   public void update() {
-    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inventory = ? WHERE chemicalID = " + base.getBaseId() 
-        + ";", updateBaseSQL = "UPDATE Base SET baseId = ?, solute = ? WHERE baseId = " + base.getBaseId()  + ";";
+    String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inventory = ? WHERE chemicalID = "
+        + base.getBaseId() + ";",
+        updateBaseSQL = "UPDATE Base SET baseId = ?, solute = ? WHERE baseId = " + base.getBaseId() + ";";
 
     try {
       // Chemical
@@ -119,47 +115,44 @@ public class BaseRDGRDS implements BaseRDG {
       chem.setDouble(3, base.getInventory());
 
       chem.execute();
-      
+
       // Base
       PreparedStatement acid = DatabaseManager.getSingleton().getConnection().prepareStatement(updateBaseSQL);
       acid.setInt(1, base.getBaseId());
       acid.setInt(2, base.getSoluteId());
-      
+
       acid.execute();
-      
-      
-    } catch(SQLException | DatabaseException e) {
+
+    } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to update base");
     }
   }
-  
+
   /**
    * 
    */
   public List<BaseRDGRDS> findSet(int solute) {
-    List<BaseRDGRDS> results = new ArrayList<>(); 
-    
+    List<BaseRDGRDS> results = new ArrayList<>();
+
     try {
       String sql = "SELECT * FROM Base WHERE solute = " + solute + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
-      
-      while(rs.next()) {
+
+      while (rs.next()) {
         int sol = rs.getInt("baseId");
-        BaseRDGRDS id = new BaseRDGRDS(sol); 
+        BaseRDGRDS id = new BaseRDGRDS(sol);
         results.add(id);
       }
-      
+
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
     return results;
   }
-  
 
-
-  /** 
+  /**
    * Set solute.
    */
   @Override
@@ -182,7 +175,7 @@ public class BaseRDGRDS implements BaseRDG {
   public void setInventory(double inventory) {
     base.setInventory(inventory);
   }
-  
+
   public BaseDTO getBase() {
     return base;
   }

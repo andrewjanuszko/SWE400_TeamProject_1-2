@@ -22,14 +22,14 @@ class TestElement extends DatabaseTest {
   @Test
   static void testGetAtomicNumber() {
     // Fetch elements
-    ElementRDG elementGet1 = new ElementRDGRDS(21);
-    ElementRDG elementGet2 = new ElementRDGRDS(22);
-    ElementRDG elementGet3 = new ElementRDGRDS(23);
-    ElementRDG elementGet4 = new ElementRDGRDS(24);
+    ElementRDG elementGet1 = new ElementRDGRDS(25);
+    ElementRDG elementGet2 = new ElementRDGRDS(26);
+    ElementRDG elementGet3 = new ElementRDGRDS(27);
+    ElementRDG elementGet4 = new ElementRDGRDS(28);
 
     // Test getAtomicNumber
     assertEquals(1, elementGet1.getElement().getAtomicNumber());
-    assertEquals(2, elementGet2.getElement().getAtomicNumber());
+    assertEquals(2, elementGet2.getElement().getAtomicNumber()); // wrong
     assertEquals(3, elementGet3.getElement().getAtomicNumber());
     assertEquals(4, elementGet4.getElement().getAtomicNumber());
   }
@@ -40,16 +40,16 @@ class TestElement extends DatabaseTest {
   @Test
   static void testGetAtomicMass() {
     // Fetch elements
-    ElementRDG elementGet1 = new ElementRDGRDS(21);
-    ElementRDG elementGet2 = new ElementRDGRDS(22);
-    ElementRDG elementGet3 = new ElementRDGRDS(23);
-    ElementRDG elementGet4 = new ElementRDGRDS(24);
+    ElementRDG elementGet1 = new ElementRDGRDS(25);
+    ElementRDG elementGet2 = new ElementRDGRDS(26);
+    ElementRDG elementGet3 = new ElementRDGRDS(27);
+    ElementRDG elementGet4 = new ElementRDGRDS(28);
 
     // Test getAtomicMass
-    assertEquals(9, elementGet1.getElement().getAtomicMass(), 0.1);
-    assertEquals(8, elementGet2.getElement().getAtomicMass(), 0.1);
-    assertEquals(7, elementGet3.getElement().getAtomicMass(), 0.1);
-    assertEquals(6, elementGet4.getElement().getAtomicMass(), 0.1);
+    assertEquals(9.2, elementGet1.getElement().getAtomicMass(), 0.1);
+    assertEquals(8.2, elementGet2.getElement().getAtomicMass(), 0.1);
+    assertEquals(7.2, elementGet3.getElement().getAtomicMass(), 0.1);
+    assertEquals(6.2, elementGet4.getElement().getAtomicMass(), 0.1);
   }
 
   /**
@@ -58,10 +58,10 @@ class TestElement extends DatabaseTest {
   @Test
   static void testGetName() {
     // Fetch elements
-    ElementRDG elementGet1 = new ElementRDGRDS(21);
-    ElementRDG elementGet2 = new ElementRDGRDS(22);
-    ElementRDG elementGet3 = new ElementRDGRDS(23);
-    ElementRDG elementGet4 = new ElementRDGRDS(24);
+    ElementRDG elementGet1 = new ElementRDGRDS(25);
+    ElementRDG elementGet2 = new ElementRDGRDS(26);
+    ElementRDG elementGet3 = new ElementRDGRDS(27);
+    ElementRDG elementGet4 = new ElementRDGRDS(28);
 
     // Test getName
     assertEquals("elementname1", elementGet1.getElement().getName());
@@ -76,10 +76,10 @@ class TestElement extends DatabaseTest {
   @Test
   static void testGetInventory() {
     // Fetch elements
-    ElementRDG elementGet1 = new ElementRDGRDS(21);
-    ElementRDG elementGet2 = new ElementRDGRDS(22);
-    ElementRDG elementGet3 = new ElementRDGRDS(23);
-    ElementRDG elementGet4 = new ElementRDGRDS(24);
+    ElementRDG elementGet1 = new ElementRDGRDS(25);
+    ElementRDG elementGet2 = new ElementRDGRDS(26);
+    ElementRDG elementGet3 = new ElementRDGRDS(27);
+    ElementRDG elementGet4 = new ElementRDGRDS(28);
 
     // Test getInventory
     assertEquals(1.1, elementGet1.getElement().getInventory(), 0.1);
@@ -97,10 +97,12 @@ class TestElement extends DatabaseTest {
       List<ElementDTO> get = new ElementTDGRDS().getAllElements().executeQuery();
       
       assertEquals(6, get.size());
-      assertEquals(21, get.get(0).getElementId());
-      assertEquals(22, get.get(1).getElementId());
-      assertEquals(23, get.get(2).getElementId());
-      assertEquals(24, get.get(3).getElementId());
+      assertEquals(25, get.get(0).getElementId());
+      assertEquals(26, get.get(1).getElementId());
+      assertEquals(27, get.get(2).getElementId());
+      assertEquals(28, get.get(3).getElementId());
+      assertEquals(29, get.get(4).getElementId());
+      assertEquals(30, get.get(5).getElementId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -113,8 +115,8 @@ class TestElement extends DatabaseTest {
       List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByName("funky").executeQuery();
       
       assertEquals(2, get.size());
-      assertEquals(82, get.get(0).getElementId());
-      assertEquals(83, get.get(1).getElementId());
+      assertEquals(29, get.get(0).getElementId());
+      assertEquals(30, get.get(1).getElementId());
       
     } catch(DatabaseException e) {
       e.printStackTrace();
@@ -126,16 +128,16 @@ class TestElement extends DatabaseTest {
     try {
       List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByInventory(41.2).executeQuery();
       
-      assertEquals(82, get.get(0).getElementId());
+      assertEquals(29, get.get(0).getElementId());
       
       get = new ElementTDGRDS().getAllElements().filterByInventoryRange(42, 40).executeQuery();
     
-      assertEquals(82, get.get(0).getElementId());
+      assertEquals(29, get.get(0).getElementId());
       
       get = new ElementTDGRDS().getAllElements().filterByInventoryRange(43, 40).executeQuery();
       
-      assertEquals(82, get.get(0).getElementId());
-      assertEquals(83, get.get(1).getElementId());
+      assertEquals(29, get.get(0).getElementId());
+      assertEquals(30, get.get(1).getElementId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -152,10 +154,10 @@ class TestElement extends DatabaseTest {
       get = new ElementTDGRDS().getAllElements().filterByAtomicNumberRange(2, 0).executeQuery();
       
       assertEquals(4, get.size());
-      assertEquals(21, get.get(0).getElementId());
-      assertEquals(22, get.get(1).getElementId());
-      assertEquals(82, get.get(2).getElementId());
-      assertEquals(83, get.get(3).getElementId());
+      assertEquals(25, get.get(0).getElementId());
+      assertEquals(26, get.get(1).getElementId());
+      assertEquals(29, get.get(2).getElementId());
+      assertEquals(30, get.get(3).getElementId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -167,13 +169,13 @@ class TestElement extends DatabaseTest {
     try {
       List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByAtomicMass(1.2).executeQuery();
       
-      assertEquals(82, get.get(0).getElementId());
+      assertEquals(29, get.get(0).getElementId());
       
       get = new ElementTDGRDS().getAllElements().filterByAtomicMassRange(3, 0).executeQuery();
       
       assertEquals(2, get.size());
-      assertEquals(82, get.get(0).getElementId());
-      assertEquals(83, get.get(1).getElementId());
+      assertEquals(29, get.get(0).getElementId());
+      assertEquals(30, get.get(1).getElementId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -200,11 +202,11 @@ class TestElement extends DatabaseTest {
    * Insert elements into the database to test
    */
   private static void insertElements() {
-    ElementRDG ele = new ElementRDGRDS(21, 1, 9, "elementname1", 1.1);
-    ele = new ElementRDGRDS(22, 2, 8, "elementname2", 1.2);
-    ele = new ElementRDGRDS(23, 3, 7, "elementname3", 1.3);
-    ele = new ElementRDGRDS(24, 4, 6, "elementname4", 1.4);
-    ele = new ElementRDGRDS(82, 1, 1.2, "funkyelement1", 41.2);
-    ele = new ElementRDGRDS(83, 2, 2.4, "funkyelement2", 42.4);
+    ElementRDG ele = new ElementRDGRDS(1, 9.2, "elementname1", 1.1);
+    ele = new ElementRDGRDS(2, 8.2, "elementname2", 1.2);
+    ele = new ElementRDGRDS(3, 7.2, "elementname3", 1.3);
+    ele = new ElementRDGRDS(4, 6.2, "elementname4", 1.4);
+    ele = new ElementRDGRDS(1, 1.2, "funkyelement1", 41.2);
+    ele = new ElementRDGRDS(2, 2.4, "funkyelement2", 42.4);
   }
 }

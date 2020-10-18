@@ -78,7 +78,7 @@ class TestAcid extends DatabaseTest {
   @Test
   static void testDelete() {
     // Create acid
-    AcidRDG acid = new AcidRDGRDS(9, 59, "acidname1", 1.9);
+    AcidRDG acid = new AcidRDGRDS(59, "acidname1", 1.9);
 
     // Ensure it has been added
     assertEquals("acidname1", acid.getAcid().getName());
@@ -105,7 +105,7 @@ class TestAcid extends DatabaseTest {
   @Test
   static void testUpdate() throws SQLException, DatabaseException {
     // Create acid and getter for that acid
-    AcidRDG acid_setter = new AcidRDGRDS(9, 59, "acidname9", 1.9), acid_getter = new AcidRDGRDS(9);
+    AcidRDG acid_setter = new AcidRDGRDS(59, "acidname9", 1.9), acid_getter = new AcidRDGRDS(10);
 
     // Ensure that acid has been added and fetches the right information
     assertEquals("acidname9", acid_getter.getAcid().getName());
@@ -117,7 +117,7 @@ class TestAcid extends DatabaseTest {
     acid_setter.setInventory(1.8);
     acid_setter.setSolute(56);
     acid_setter.update();
-    acid_getter = new AcidRDGRDS(9);
+    acid_getter = new AcidRDGRDS(10);
 
     // Test that the new information has been updated
     assertEquals("acidname6", acid_getter.getAcid().getName());
@@ -172,8 +172,8 @@ class TestAcid extends DatabaseTest {
       List<AcidDTO> get = new AcidTDGRDS().getAllAcids().filterByName("funky").executeQuery();
       
       assertEquals(2, get.size());
-      assertEquals(80, get.get(0).getAcidId());
-      assertEquals(81, get.get(1).getAcidId());
+      assertEquals(7, get.get(0).getAcidId());
+      assertEquals(8, get.get(1).getAcidId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -186,16 +186,16 @@ class TestAcid extends DatabaseTest {
     try {
       List<AcidDTO> get = new AcidTDGRDS().getAllAcids().filterByInventory(41.2).executeQuery();
       
-      assertEquals(80, get.get(0).getAcidId());
+      assertEquals(7, get.get(0).getAcidId());
       
       get = new AcidTDGRDS().getAllAcids().filterByInventoryRange(42, 40).executeQuery();
       
-      assertEquals(80, get.get(0).getAcidId());
+      assertEquals(7, get.get(0).getAcidId());
       
       get = new AcidTDGRDS().getAllAcids().filterByInventoryRange(43, 40).executeQuery();
       
-      assertEquals(80, get.get(0).getAcidId());
-      assertEquals(81, get.get(1).getAcidId());
+      assertEquals(7, get.get(0).getAcidId());
+      assertEquals(8, get.get(1).getAcidId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -239,13 +239,13 @@ class TestAcid extends DatabaseTest {
    * Insert acids into the database
    */
   private static void insertAcids() {
-    AcidRDG acid = new AcidRDGRDS(1, 51, "acidname1", 1.1);
-    acid = new AcidRDGRDS(2, 52, "acidname2", 1.2);
-    acid = new AcidRDGRDS(3, 53, "acidname3", 1.3);
-    acid = new AcidRDGRDS(4, 54, "acidname4", 1.4);
-    acid = new AcidRDGRDS(5, 55, "acidname5", 1.5);
-    acid = new AcidRDGRDS(6, 55, "acidname6", 1.6);
-    acid = new AcidRDGRDS(80, 12, "funkyacid1", 41.2); 
-    acid = new AcidRDGRDS(81, 15, "funkyacid2", 42.4); 
+    AcidRDG acid = new AcidRDGRDS(51, "acidname1", 1.1);
+    acid = new AcidRDGRDS(52, "acidname2", 1.2);
+    acid = new AcidRDGRDS(53, "acidname3", 1.3);
+    acid = new AcidRDGRDS(54, "acidname4", 1.4);
+    acid = new AcidRDGRDS(55, "acidname5", 1.5);
+    acid = new AcidRDGRDS(55, "acidname6", 1.6);
+    acid = new AcidRDGRDS(12, "funkyacid1", 41.2); 
+    acid = new AcidRDGRDS(15, "funkyacid2", 42.4); 
   }
 }
