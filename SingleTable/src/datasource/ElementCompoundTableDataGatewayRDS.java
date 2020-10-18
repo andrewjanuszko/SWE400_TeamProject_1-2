@@ -47,8 +47,8 @@ public class ElementCompoundTableDataGatewayRDS implements ElementCompoundTableD
   public void createTable() throws DatabaseException {
     
     String createTableSQL = "CREATE TABLE IF NOT EXISTS ElementCompound (" + "compoundID INTEGER NOT NULL, "
-        + "elementID INTEGER NOT NULL, " + "FOREIGN KEY ElementCompound(compoundID) REFERENCES Chemical(id), "
-        + "FOREIGN KEY ElementCompound(elementID) REFERENCES Chemical(id));";
+        + "elementID INTEGER NOT NULL, " + "FOREIGN KEY (compoundID) REFERENCES Chemical(id), "
+        + "FOREIGN KEY (elementID) REFERENCES Chemical(id));";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.executeUpdate(createTableSQL);
@@ -79,7 +79,7 @@ public class ElementCompoundTableDataGatewayRDS implements ElementCompoundTableD
     try {
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertSQL);
       statement.setInt(1, compoundID);
-      statement.setInt(2, elementID);
+      statement.setInt(2, elementID); 
       statement.executeUpdate();
     } catch (SQLException e) {
       throw new DatabaseException("Failed to create row in CompoundMadeFromElement table.", e);
@@ -150,17 +150,17 @@ public class ElementCompoundTableDataGatewayRDS implements ElementCompoundTableD
     try {
       ResultSet results = statement.executeQuery();
       while (results.next()) {
-        int chemicalID = results.getInt("chemicalID");
+        int id = results.getInt("id");
         int type = results.getInt("type");
         String name = results.getString("name");
         double inventory = results.getDouble("inventory");
         int atomicNumber = results.getInt("atomicNumber");
         double atomicMass = results.getDouble("atomicMass");
         int dissolvedBy = results.getInt("dissolvedBy");
-        double moles = results.getDouble("moles");
+        double acidAmount = results.getDouble("acidAmount");
         int solute = results.getInt("solute");
-        ChemicalDTO chemical = new ChemicalDTO(chemicalID, type, name, inventory, atomicNumber, atomicMass, dissolvedBy,
-            moles, solute);
+        ChemicalDTO chemical = new ChemicalDTO(id, type, name, inventory, atomicNumber, atomicMass, dissolvedBy,
+        		acidAmount, solute);
         listDTO.add(chemical);
       }
     } catch (SQLException e) {
@@ -193,6 +193,7 @@ public class ElementCompoundTableDataGatewayRDS implements ElementCompoundTableD
   @Override
   public void resetData() throws DatabaseException {
     singletonInstance = null;
+    dropTable();
   }
 
 }
