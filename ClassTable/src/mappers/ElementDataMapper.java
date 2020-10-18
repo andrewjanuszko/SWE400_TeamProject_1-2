@@ -8,28 +8,27 @@ import datasource.ElementDTO;
 import datasource.ElementRDG;
 import datasource.ElementRDGRDS;
 import datasource.ElementTDGRDS;
+import model.DomainModelException;
 import model.Element;
 import model.ElementDataMapperInterface;
 
 public class ElementDataMapper implements ElementDataMapperInterface {
 
   public ElementDataMapper() {
-    // TODO Auto-generated constructor stub
   }
-
+  
   @Override
-  public void create(Element element) {
-    ElementRDG rowGateway = new ElementRDGRDS(element.getID(), element.getAtomicNumber(), element.getAtomicMass(), element.getName(), element.getInventory());
-    
+  public Element create(String name, double inventory, int atomicNumber, double atomicMass)
+      throws DomainModelException {
+    ElementRDG row = new ElementRDGRDS(atomicNumber, atomicMass, name, inventory);
+    return convertFromDTO(row.getElement());
   }
 
   @Override
   public Element read(int id) {
-    Element element = null;
     ElementRDG row = new ElementRDGRDS(id);
     ElementDTO dto = row.getElement();
-
-    element = new Element(dto.getElementId(), dto.getName(), dto.getInventory(), dto.getAtomicNumber(), dto.getAtomicMass());
+    Element element = convertFromDTO(dto);
     return element;
   }
 
@@ -59,12 +58,12 @@ public class ElementDataMapper implements ElementDataMapperInterface {
       dtos = ElementTDGRDS.getSingleton().executeQuery();
       
       for(ElementDTO e : dtos) {
-        element.add(new Element(e.getElementId(), e.getName(), e.getInventory(), e.getAtomicNumber(), e.getAtomicMass()));
+        element.add(convertFromDTO(e));
       }
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    return null;
+    return element;
   }
 
   @Override
@@ -73,46 +72,106 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     ArrayList<Element> element = new ArrayList<>();
     try {
       dtos = ElementTDGRDS.getSingleton().filterByName(wildCardName).executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
     } catch (DatabaseException e) {
       e.printStackTrace();
     }
-    return null;
+    return element;
   }
 
   @Override
   public List<Element> filterByInventory(double inventory) {
-    // TODO Auto-generated method stub
-    return null;
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByInventory(inventory).executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return element;
   }
 
   @Override
   public List<Element> filterByInventoryRange(double min, double max) {
-    // TODO Auto-generated method stub
-    return null;
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByInventoryRange(max, min).executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return element;
   }
 
   @Override
   public List<Element> filterByAtomicNumber(int atomicNumber) {
-    // TODO Auto-generated method stub
-    return null;
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByAtomicNumber(atomicNumber).executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return element;
   }
 
   @Override
   public List<Element> filterByAtomicMass(double atomicMass) {
-    // TODO Auto-generated method stub
-    return null;
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByAtomicMass(atomicMass).executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return element;
   }
 
   @Override
   public List<Element> filterByAtomicMassRange(double min, double max) {
-    // TODO Auto-generated method stub
-    return null;
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByAtomicMassRange(max, min).executeQuery();
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return element;
   }
 
   @Override
   public List<Element> filterByPartOfCompound(int compoundID) {
-    // TODO Auto-generated method stub
-    return null;
+    List<ElementDTO> dtos;
+    ArrayList<Element> element = new ArrayList<>();
+    try {
+      dtos = ElementTDGRDS.getSingleton().executeQuery(); //this isnt done but like isabella is slow
+      for(ElementDTO e : dtos) {
+        element.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return element;
   }
 
+  public Element convertFromDTO(ElementDTO dto) {
+    return new Element(dto.getElementId(), dto.getName(), dto.getInventory(), dto.getAtomicNumber(), dto.getAtomicMass());
+  }
 }

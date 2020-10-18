@@ -119,5 +119,18 @@ public class ChemicalTDGRDS implements ChemicalTDG {
       e.printStackTrace();
     }
   }
+  
+  public ChemicalTDGRDS filterLowInventory(double inventoryNeeded) {
+    try {
+      PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("SELECT * FROM Chemical WHERE inventory < " + inventoryNeeded + ";");
+
+      insertChemical.execute();
+
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+    }
+    return getSingleton();
+  }
 
 }

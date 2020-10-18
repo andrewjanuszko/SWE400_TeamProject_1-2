@@ -10,37 +10,34 @@ import datasource.AcidRDG;
 import datasource.AcidRDGRDS;
 import datasource.AcidTDGRDS;
 import datasource.MetalDTO;
+import datasource.MetalRDG;
+import datasource.MetalRDGRDS;
 import model.Acid;
 import model.AcidDataMapperInterface;
+import model.DomainModelException;
 import model.Metal;
 
 public class AcidDataMapper implements AcidDataMapperInterface {
 
+
   @Override
-  public void create(Acid acid) {
-    AcidRDGRDS rowGateway = new AcidRDGRDS(acid.getID(), acid.getSolute(), acid.getName(), acid.getInventory());
-
+  public Acid create(String name, double inventory, List<Metal> dissolves,int solute) throws DomainModelException {
+    AcidRDG row = new AcidRDGRDS(solute, name, inventory);
+    Acid a = convertFromDTO(row.getAcid());
+    for(Metal m : dissolves) {
+      MetalRDG metal = new MetalRDGRDS(m.getID());
+      metal.setDissolvedById(a.getID());
+    }
+    return a;
   }
-
   @Override
   public Acid read(int id) {
     Acid acid = null;
     try {
       AcidRDGRDS row = new AcidRDGRDS(id);
       AcidDTO dto = row.getAcid();
-
-      ArrayList<MetalDTO> metals = AcidTDGRDS.getMetals(dto.getAcidId());
-      ArrayList<Metal> betterMetals = new ArrayList<>();
-      for (MetalDTO m : metals) {
-        betterMetals.add(new Metal(m.getMetalId(), m.getName(), m.getInventory(), m.getAtomicNumber(),
-            m.getAtomicMass(), m.getMoles()));
-      }
-      acid = new Acid(dto.getAcidId(), dto.getName(), dto.getInventory(), betterMetals, dto.getSoluteId());
-    } catch (SQLException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (DatabaseException e) {
-      // TODO Auto-generated catch block
+      acid = convertFromDTO(dto);
+    } catch (DatabaseException | SQLException e) {
       e.printStackTrace();
     }
     return acid;
@@ -71,26 +68,15 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-<<<<<<< HEAD
-  public List<Acid> getAll() {
-=======
   public ArrayList<Acid> getAll() {
->>>>>>> branch '85-class-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
       dtos = AcidTDGRDS.getSingleton().executeQuery();
       for (AcidDTO a : dtos) {
-        ArrayList<MetalDTO> metals = AcidTDGRDS.getMetals(a.getAcidId());
-        ArrayList<Metal> betterMetals = new ArrayList<>();
-        for (MetalDTO m : metals) {
-          betterMetals.add(new Metal(m.getMetalId(), m.getName(), m.getInventory(), m.getAtomicNumber(),
-              m.getAtomicMass(), m.getMoles()));
-        }
-        acids.add(new Acid(a.getAcidId(), a.getName(), a.getInventory(), betterMetals, a.getSoluteId()));
+        acids.add(convertFromDTO(a));
       }
     } catch (DatabaseException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
@@ -98,26 +84,15 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-<<<<<<< HEAD
-  public List<Acid> filterByWildCardName(String wildCardName) {
-=======
   public ArrayList<Acid> filterByWildCardName(String wildCardName) {
->>>>>>> branch '85-class-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
       dtos = AcidTDGRDS.getSingleton().filterByName(wildCardName).executeQuery();
       for (AcidDTO a : dtos) {
-        ArrayList<MetalDTO> metals = AcidTDGRDS.getMetals(a.getAcidId());
-        ArrayList<Metal> betterMetals = new ArrayList<>();
-        for (MetalDTO m : metals) {
-          betterMetals.add(new Metal(m.getMetalId(), m.getName(), m.getInventory(), m.getAtomicNumber(),
-              m.getAtomicMass(), m.getMoles()));
-        }
-        acids.add(new Acid(a.getAcidId(), a.getName(), a.getInventory(), betterMetals, a.getSoluteId()));
+        acids.add(convertFromDTO(a));
       }
     } catch (DatabaseException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
@@ -125,26 +100,15 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-<<<<<<< HEAD
-  public List<Acid> filterByInventory(double inventory) {
-=======
   public ArrayList<Acid> filterByInventory(double inventory) {
->>>>>>> branch '85-class-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
       dtos = AcidTDGRDS.getSingleton().filterByInventory(inventory).executeQuery();
       for (AcidDTO a : dtos) {
-        ArrayList<MetalDTO> metals = AcidTDGRDS.getMetals(a.getAcidId());
-        ArrayList<Metal> betterMetals = new ArrayList<>();
-        for (MetalDTO m : metals) {
-          betterMetals.add(new Metal(m.getMetalId(), m.getName(), m.getInventory(), m.getAtomicNumber(),
-              m.getAtomicMass(), m.getMoles()));
-        }
-        acids.add(new Acid(a.getAcidId(), a.getName(), a.getInventory(), betterMetals, a.getSoluteId()));
+        acids.add(convertFromDTO(a));
       }
     } catch (DatabaseException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
@@ -152,26 +116,15 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-<<<<<<< HEAD
-  public List<Acid> filterByInventoryRange(double min, double max) {
-=======
   public ArrayList<Acid> filterByInventoryRange(double min, double max) {
->>>>>>> branch '85-class-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
       dtos = AcidTDGRDS.getSingleton().filterByInventoryRange(max, min).executeQuery();
       for (AcidDTO a : dtos) {
-        ArrayList<MetalDTO> metals = AcidTDGRDS.getMetals(a.getAcidId());
-        ArrayList<Metal> betterMetals = new ArrayList<>();
-        for (MetalDTO m : metals) {
-          betterMetals.add(new Metal(m.getMetalId(), m.getName(), m.getInventory(), m.getAtomicNumber(),
-              m.getAtomicMass(), m.getMoles()));
-        }
-        acids.add(new Acid(a.getAcidId(), a.getName(), a.getInventory(), betterMetals, a.getSoluteId()));
+        acids.add(convertFromDTO(a));
       }
     } catch (DatabaseException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
@@ -179,30 +132,30 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-<<<<<<< HEAD
-  public List<Acid> filterBySolute(int chemicalID) {
-=======
   public ArrayList<Acid> filterBySolute(int chemicalID) {
->>>>>>> branch '85-class-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
       dtos = AcidTDGRDS.getSingleton().filterBySolute(chemicalID).executeQuery();
       for (AcidDTO a : dtos) {
-        ArrayList<MetalDTO> metals = AcidTDGRDS.getMetals(a.getAcidId());
-        ArrayList<Metal> betterMetals = new ArrayList<>();
-        for (MetalDTO m : metals) {
-          betterMetals.add(new Metal(m.getMetalId(), m.getName(), m.getInventory(), m.getAtomicNumber(),
-              m.getAtomicMass(), m.getMoles()));
-        }
-        acids.add(new Acid(a.getAcidId(), a.getName(), a.getInventory(), betterMetals, a.getSoluteId()));
+        acids.add(convertFromDTO(a));
       }
     } catch (DatabaseException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
     return acids;
   }
+  
+  public Acid convertFromDTO(AcidDTO dto) {
+    ArrayList<MetalDTO> metals = AcidTDGRDS.getMetals(dto.getAcidId());
+    ArrayList<Metal> betterMetals = new ArrayList<>();
+    for (MetalDTO m : metals) {
+      betterMetals.add(new Metal(m.getMetalId(), m.getName(), m.getInventory(), m.getAtomicNumber(),
+          m.getAtomicMass(), m.getMoles()));
+    }
+    return new Acid(dto.getAcidId(), dto.getName(), dto.getInventory(), betterMetals, dto.getSoluteId()); 
+  }
+
 
 }
