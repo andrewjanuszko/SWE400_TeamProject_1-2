@@ -134,8 +134,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   @Override
   public List<Compound> filterByInventory(double inventory) throws DomainModelException {
     try {
-      return convertToCompound(
-          chemicalTableDataGateway.getCompounds().filterByInventory(inventory).executeQuery());
+      return convertToCompound(chemicalTableDataGateway.getCompounds().filterByInventory(inventory).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Compounds with an inventory of '" + inventory + "'.", e);
     }
@@ -148,7 +147,8 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   @Override
   public List<Compound> filterByInventoryBetween(double min, double max) throws DomainModelException {
     try {
-      return convertToCompound(chemicalTableDataGateway.getCompounds().filterByInventoryBetween(min, max).executeQuery());
+      return convertToCompound(
+          chemicalTableDataGateway.getCompounds().filterByInventoryBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Compounds with an inventory between  '" + min + "' < x < '" + max + "'.", e);
@@ -165,6 +165,25 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Compounds that contain Element '" + elementID + "'.", e);
     }
+  }
+
+  /**
+   * 
+   */
+  @Override
+  public List<Compound> filterByLowInventory() throws DomainModelException {
+    List<Compound> compounds = getAll();
+    for (Compound compound : compounds) {
+      int elementInventoryNeeded = 0;
+      List<Element> elements = new ElementDataMapper().filterByPartOfCompound(compound.getID());
+      for (Element element : elements) {
+        elementInventoryNeeded += element.getInventory();
+      }
+      if (compound.getInventory() >= elementInventoryNeeded) {
+        compounds.remove(compound);
+      }
+    }
+    return compounds;
   }
 
   /**

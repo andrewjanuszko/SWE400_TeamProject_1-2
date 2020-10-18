@@ -142,6 +142,18 @@ public class BaseDataMapper implements BaseDataMapperInterface {
       throw new DomainModelException("Failed to get all Bases with solute '" + chemicalID + "'.", e);
     }
   }
+  
+  /**
+   * 
+   */
+  @Override
+  public List<Base> filterByLowInventory() throws DomainModelException {
+    try {
+      return convertToBase(chemicalTableDataGateway.getBasesWithLowInventory());
+    } catch (DatabaseException e) {
+      throw new DomainModelException("Failed to get all Bases with low inventory.", e);
+    }
+  }
 
   /**
    * Converts a ChemicalDTO to a Base.
