@@ -66,7 +66,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
   }
 
   /**
-   * 
+   * @see datasource.ChemicalTableDataGateWay#getAll().
    */
   @Override
   public ChemicalTableDataGatewayRDS getAll() {
@@ -74,102 +74,153 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getElements().
+   */
   @Override
   public ChemicalTableDataGatewayRDS getElements() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.ELEMENT.getIntValue() + " OR Chemical.type = " + ChemicalEnum.METAL.getIntValue() + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getMetals().
+   */
   @Override
   public ChemicalTableDataGatewayRDS getMetals() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.METAL.getIntValue() + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getCompounds().
+   */
   @Override
   public ChemicalTableDataGatewayRDS getCompounds() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.COMPOUND.getIntValue() + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getBases().
+   */
   @Override
   public ChemicalTableDataGatewayRDS getBases() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.BASE.getIntValue() + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getAcids().
+   */
   @Override
   public ChemicalTableDataGatewayRDS getAcids() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.ACID.getIntValue() + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#filterByNameLike(String nameLike).
+   */
   @Override
   public ChemicalTableDataGatewayRDS filterByNameLike(String nameLike) {
     querySQL += " AND (Chemical.name LIKE '%" + nameLike + "%')";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#filterByInventory(double inventory).
+   */
   @Override
   public ChemicalTableDataGatewayRDS filterByInventory(double inventory) {
     querySQL += " AND (Chemical.inventory = " + inventory + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#filterByInventoryBetween(double min, double max).
+   */
   @Override
   public ChemicalTableDataGatewayRDS filterByInventoryBetween(double min, double max) {
     querySQL += " AND (Chemical.inventory BETWEEN " + min + " AND " + max + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#filterByAtomicNumber(int atomicNumber).
+   */
   @Override
   public ChemicalTableDataGatewayRDS filterByAtomicNumber(int atomicNumber) {
     querySQL += " AND (Chemical.atomicNumber = " + atomicNumber + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#filterByAtomicNumberBetween(int min, int max).
+   */
   @Override
   public ChemicalTableDataGatewayRDS filterByAtomicNumberBetween(int min, int max) {
     querySQL += " AND (Chemical.atomicNumber BETWEEN " + min + " AND " + max + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay# filterByAtomicMass(double atomicMass).
+   */
   @Override
   public ChemicalTableDataGatewayRDS filterByAtomicMass(double atomicMass) {
     querySQL += " AND (Chemical.atomicMass = " + atomicMass + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#filterByAtomicMassBetween(double min, double max).
+   */
   @Override
   public ChemicalTableDataGatewayRDS filterByAtomicMassBetween(double min, double max) {
     querySQL += " AND (Chemical.atomicMass BETWEEN " + min + " AND " + max + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#filterByDissolvedBy(int acidID).
+   */
   @Override
   public ChemicalTableDataGatewayRDS filterByDissolvedBy(int acidID) {
     querySQL += " AND (Chemical.dissolvedBy = " + acidID + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#filterByAcidAmount(double acidAmount).
+   */
   @Override
   public ChemicalTableDataGatewayRDS filterByAcidAmount(double acidAmount) {
     querySQL += " AND (Chemical.acidAmount = " + acidAmount + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#filterByAcidAmountBetween(double min, double max).
+   */
   @Override
   public ChemicalTableDataGatewayRDS filterByAcidAmountBetween(double min, double max) {
     querySQL += " AND (Chemical.acidAmount BETWEEN " + min + " AND " + max + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#filterBySolute(int soluteID).
+   */
   @Override
   public ChemicalTableDataGatewayRDS filterBySolute(int soluteID) {
     querySQL += " AND (Chemical.solute = " + soluteID + ")";
     return this;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#executeQuery().
+   */
   @Override
   public List<ChemicalDTO> executeQuery() throws DatabaseException {
     try {
@@ -180,6 +231,9 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
     }
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getAllWithLowInventory().
+   */
   @Override
   public List<ChemicalDTO> getAllWithLowInventory() throws DatabaseException {
     List<ChemicalDTO> lowChemicals = new ArrayList<>();
@@ -189,21 +243,33 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
     return lowChemicals;
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getElementsWithLowInventory().
+   */
   @Override
   public List<ChemicalDTO> getElementsWithLowInventory() throws DatabaseException {
     return getElements().filterByInventoryBetween(0, 20).executeQuery();
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getMetalsWithLowInventory().
+   */
   @Override
   public List<ChemicalDTO> getMetalsWithLowInventory() throws DatabaseException {
     return getMetals().filterByInventoryBetween(0, 20).executeQuery();
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getBasesWithLowInventory().
+   */
   @Override
   public List<ChemicalDTO> getBasesWithLowInventory() throws DatabaseException {
     return getBases().filterByInventoryBetween(0, 40).executeQuery();
   }
 
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getAcidsWithLowInventory().
+   */
   @Override
   public List<ChemicalDTO> getAcidsWithLowInventory() throws DatabaseException {
     List<ChemicalDTO> acids = getAcids().executeQuery();
