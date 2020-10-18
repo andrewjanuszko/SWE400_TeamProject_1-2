@@ -1,12 +1,15 @@
 package presentation;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JButton;
@@ -14,6 +17,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
+
+import model.Acid;
 
 public class AcidPanel extends JPanel{
 
@@ -24,12 +30,13 @@ public class AcidPanel extends JPanel{
 	JButton filterButton = new JButton("Filter");
 	JButton detailsButton = new JButton("Details");
 	JLabel selected = null;
-
+	Color labelColor = new Color(30,30,30);
+	List<Acid> acidList;
+	
 	public AcidPanel() {
 		this.setLayout(new GridBagLayout());
 		addScrollPane();
 		setButtons();
-		
 	}
 
 	private void addScrollPane() {
@@ -45,10 +52,12 @@ public class AcidPanel extends JPanel{
 		add(acids,gbc);
 	}
 	
-	private JPanel Labels() {
-		JPanel labels = new JPanel();
-		
-		return labels;
+	private JLabel Labels() {
+		JLabel label = new JLabel();
+		label.setBackground(Color.WHITE);
+	    label.setOpaque(true);
+	    label.setPreferredSize(new Dimension(100,20));
+		return label;
 	}
 	
 	private void setButtons() {
@@ -106,7 +115,7 @@ public class AcidPanel extends JPanel{
 		new AddAcidFrame().addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosed(WindowEvent arg0) {
-				
+				acids.setViewportView(buildLabels());
 			}
 		});
 	}
@@ -137,7 +146,13 @@ public class AcidPanel extends JPanel{
 	
 	private void removeSelectedBackground() {
 	    if(selected != null)
-	      selected.setBackground(new Color(30, 30, 30));
+	      selected.setBackground(labelColor);
 	  }
+	
+	private JPanel buildLabels() {
+		JPanel labels = new JPanel();
+		
+		return labels;
+	}
 
 }
