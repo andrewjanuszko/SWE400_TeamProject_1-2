@@ -77,6 +77,20 @@ public class AddBaseFrame extends JFrame{
 				int id;
 				double inventory;
 				String solute, name;
+<<<<<<< HEAD
+				try {
+					id = Integer.parseInt(jtfId.getText());
+					inventory = Double.parseDouble(jtfInventory.getText());
+					solute = jtfSolute.getText();
+					name = jtfName.getText();
+					System.out.println(id + "\n" + name + "\n" + inventory + "\n" + solute);
+					dispose();
+				} catch (NumberFormatException e1) {
+					new FailureFrame("Failed to create Base");
+				}
+						
+
+=======
 				id = Integer.parseInt(jtfId.getText());
 				inventory = Double.parseDouble(jtfInventory.getText());
 				solute = jtfSolute.getText();
@@ -84,6 +98,7 @@ public class AddBaseFrame extends JFrame{
 				System.out.println(id + "\n" + name + "\n" + inventory + "\n" + solute);
 						
 				dispose();
+>>>>>>> branch 'Gui' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
 			}
 		});
 		

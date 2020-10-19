@@ -16,7 +16,7 @@ public class DatabaseManager
 {
 	private static DatabaseManager singleton;
 	private HashMap<Long, Connection> connections;
-	private static int patternNumber = 1;
+	private static int patternNumber = 3;
 
 	/**
 	 * @return the only one
