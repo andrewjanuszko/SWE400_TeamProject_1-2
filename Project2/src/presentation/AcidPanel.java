@@ -1,33 +1,73 @@
 package presentation;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
+
+import model.Acid;
+<<<<<<< HEAD
+import model.AcidDataMapperInterface;
+
+=======
+>>>>>>> branch 'Gui' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
 
 public class AcidPanel extends JPanel{
 
-	JScrollPane chemicals = new JScrollPane(); 
+	JScrollPane acids = new JScrollPane(); 
 	GridBagConstraints gbc = new GridBagConstraints(); 
 	JButton addButton = new JButton("Add");
 	JButton deleteButton = new JButton("Delete");
 	JButton filterButton = new JButton("Filter");
+	JButton detailsButton = new JButton("Details");
 	JLabel selected = null;
-
+	Color labelColor = new Color(30,30,30);
+	List<Acid> acidList;
+<<<<<<< HEAD
+	AcidDataMapperInterface acid;
+=======
+>>>>>>> branch 'Gui' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+	
 	public AcidPanel() {
+		this.setLayout(new GridBagLayout());
+		addScrollPane();
 		setButtons();
 	}
+
+	private void addScrollPane() {
+		acids.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		acids.add(acids.createVerticalScrollBar());
+		
+		acids.setViewportView(Labels());
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 1;
+		gbc.weighty = Integer.MAX_VALUE;
+		gbc.fill = GridBagConstraints.BOTH;
+		add(acids,gbc);
+	}
 	
-	
+	private JLabel Labels() {
+		JLabel label = new JLabel();
+		label.setBackground(Color.WHITE);
+	    label.setOpaque(true);
+	    label.setPreferredSize(new Dimension(100,20));
+		return label;
+	}
 	
 	private void setButtons() {
 		addButton.addActionListener( new ActionListener() {
@@ -48,34 +88,43 @@ public class AcidPanel extends JPanel{
 		        filterAcid();
 		      }
 		    });
+		detailsButton.addActionListener( new ActionListener() {
+		      @Override
+		      public void actionPerformed(ActionEvent ae) {
+		        getDetailsAcid();
+		      }
+		    });
 		JPanel buttons = new JPanel(new GridBagLayout());
-	    gbc.fill = GridBagConstraints.HORIZONTAL;
-	    gbc.weightx = 1;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+	    gbc.weightx = 0;
 	    gbc.gridx = 0;
 	    gbc.gridy = 0;
 	    buttons.add(addButton, gbc);
 	    
 	    gbc.gridx = 1;
-	    gbc.gridy = 0;
 	    buttons.add(deleteButton, gbc);
 	    
 	    gbc.gridx = 2;
-	    gbc.gridy = 0;
 	    buttons.add(filterButton, gbc);
+	    
+	    gbc.gridx = 3;
+	    buttons.add(detailsButton, gbc);
 	    
 	    gbc.gridx = 0;
 	    gbc.gridy = 1;
-	    gbc.anchor = GridBagConstraints.NORTHWEST;
+	    gbc.anchor = GridBagConstraints.SOUTHWEST;
 	    gbc.weighty = 1;
 	    buttons.setBackground(Color.GRAY);
+	    
 	    add(buttons, gbc);
+
 	}
 	
 	private void addAcid() {
 		new AddAcidFrame().addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosed(WindowEvent arg0) {
-				//reset the view
+				acids.setViewportView(buildLabels());
 			}
 		});
 	}
@@ -97,4 +146,27 @@ public class AcidPanel extends JPanel{
 			});
 		}
 	}
+	
+	private void getDetailsAcid() {
+		if(selected == null) {
+			return;
+		}
+	}
+	
+	private void removeSelectedBackground() {
+	    if(selected != null)
+	      selected.setBackground(labelColor);
+	  }
+	
+	private JPanel buildLabels() {
+		JPanel labels = new JPanel();
+<<<<<<< HEAD
+		acids = 
+		
+=======
+>>>>>>> branch 'Gui' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+		
+		return labels;
+	}
+
 }

@@ -11,12 +11,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class AddAcidFrame extends JFrame{
-	
+public class AddBaseFrame extends JFrame{
 	GridBagConstraints gbc = new GridBagConstraints(); 
 	int height = 450, width = 300;
 	
-	public AddAcidFrame() {
+	public AddBaseFrame() {
 		setLayout(new GridBagLayout());
 	    setBackground(Color.BLACK);
 	    setUp();
@@ -84,13 +83,13 @@ public class AddAcidFrame extends JFrame{
 					inventory = Double.parseDouble(jtfInventory.getText());
 					solute = jtfSolute.getText();
 					name = jtfName.getText();
-					
 					System.out.println(id + "\n" + name + "\n" + inventory + "\n" + solute);
-					
 					dispose();
 				} catch (NumberFormatException e1) {
-					new FailureFrame("Failed to create Acid");
+					new FailureFrame("Failed to create Base");
 				}
+						
+
 =======
 				id = Integer.parseInt(jtfId.getText());
 				inventory = Double.parseDouble(jtfInventory.getText());
