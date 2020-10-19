@@ -6,5 +6,8 @@ public class ValidEntryReport implements Report {
   public ValidEntryReport(boolean flag) {
     this.isValid = flag;
   }
-
+  public boolean isValid() {
+    return isValid;
+  }
+  
 }
