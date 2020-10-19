@@ -45,7 +45,7 @@ public class FirstWindow extends JFrame{
 	      public void actionPerformed(ActionEvent ae) {
 	        setAcidView();
 	      }
-	    });
+	    }); 
 	    baseButton.addActionListener( new ActionListener() {
 	      @Override
 	      public void actionPerformed(ActionEvent ae) {
@@ -131,7 +131,7 @@ public class FirstWindow extends JFrame{
 	private void setAcidView() {
 		if(currentDisplay != null)
 		    remove(currentDisplay);
-		    
+		   
 		    currentDisplay = new AcidPanel();
 		    System.out.println("Acid View");
 		    gbc.gridx = 0;

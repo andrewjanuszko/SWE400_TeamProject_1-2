@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import model.AcidDataMapperInterface;
+//import model.AcidDataMapperInterface;
 import model.DomainModelException;
 import model.Metal;
 
@@ -20,7 +20,7 @@ public class AddAcidFrame extends JFrame{
 	
 	GridBagConstraints gbc = new GridBagConstraints(); 
 	int height = 450, width = 300;
-	AcidDataMapperInterface acidMapper;
+	
 	
 	public AddAcidFrame() {
 		setLayout(new GridBagLayout());
@@ -69,12 +69,12 @@ public class AddAcidFrame extends JFrame{
 		add(jtfSolute,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		JLabel dissolvesLabel = new JLabel("Dissolves: ");
 		add(dissolvesLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		JTextField jtfDissolves = new JTextField("Dissolves");
 		add(jtfDissolves,gbc);
 		
@@ -84,7 +84,7 @@ public class AddAcidFrame extends JFrame{
 		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int id;
+				
 				double inventory;
 				String name;
 				int solute;
@@ -93,13 +93,10 @@ public class AddAcidFrame extends JFrame{
 					inventory = Double.parseDouble(jtfInventory.getText());
 					solute = Integer.parseInt(jtfSolute.getText());
 					name = jtfName.getText();
+
+					//dissolves list
 					
 					System.out.println("\n" + name + "\n" + inventory + "\n" + solute);
-					try {
-						acidMapper.create(name, inventory, dissolves, solute);
-					} catch (DomainModelException e1) {
-						e1.printStackTrace();
-					}
 					dispose();
 				} catch (NumberFormatException e1) {
 					new FailureFrame("Failed to create Acid");

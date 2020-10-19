@@ -1,6 +1,7 @@
 package presentation;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -17,9 +18,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+
 import model.Acid;
 
-import model.AcidDataMapperInterface;
+//import model.AcidDataMapperInterface;
 import model.DomainModelException;
 
 public class AcidPanel extends JPanel{
@@ -34,7 +37,7 @@ public class AcidPanel extends JPanel{
 	int selectedID;
 	Color labelColor = new Color(30,30,30);
 	List<Acid> acidList;
-	AcidDataMapperInterface acid;
+	//AcidDataMapper acidMapper = new AcidDataMapper();
 	
 	public AcidPanel() {
 		this.setLayout(new GridBagLayout());
@@ -46,7 +49,7 @@ public class AcidPanel extends JPanel{
 		acids.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		acids.add(acids.createVerticalScrollBar());
 		
-		acids.setViewportView(buildLabels());
+		acids.setViewportView(label());
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 1;
@@ -55,6 +58,13 @@ public class AcidPanel extends JPanel{
 		add(acids,gbc);
 	}
 	
+	private JLabel label(){
+	    JLabel label = new JLabel("", SwingConstants.CENTER);
+	    label.setBackground(Color.WHITE);
+	    label.setOpaque(true);
+	    label.setPreferredSize(new Dimension(100,20));
+	    return label;
+	  }
 
 	
 	private void setButtons() {
@@ -112,14 +122,13 @@ public class AcidPanel extends JPanel{
 		new AddAcidFrame().addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosed(WindowEvent arg0) {
-				acids.setViewportView(buildLabels());
+				acids.setViewportView(label());
 			}
 		});
 	}
 	
 	private void deleteAcid() {
 		if(selected != null) {
-			//deletes selected acid
 		}
 	}
 	
@@ -137,7 +146,7 @@ public class AcidPanel extends JPanel{
 	
 	private void getDetailsAcid() {
 		if(selected == null) {
-			return;
+			
 		}
 	}
 	
@@ -145,15 +154,15 @@ public class AcidPanel extends JPanel{
 	    if(selected != null)
 	      selected.setBackground(labelColor);
 	  }
-	
+	/*
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
 		try {
-			acidList = acid.getAll();
+			//acidList = acidMapper.getAll();
 		} catch (DomainModelException e) {
 			e.printStackTrace();
 		}
-		
+
 		labels.setLayout(new GridLayout(acidList.size(), 1));
 		
 		for(int i = 0; i < acidList.size(); i++) {
@@ -175,7 +184,7 @@ public class AcidPanel extends JPanel{
 
 		return labels;
 	}
-
+    */
 	private String buildHtml(Acid acid) {
 		return acid.getName();
 	}
