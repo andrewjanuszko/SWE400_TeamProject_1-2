@@ -3,11 +3,15 @@ package datasource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
+import model.Metal;
 
 /**
  * Row Data Gateway for Metal.
@@ -220,6 +224,39 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
     this.dissolvedBy = i;
   }
   
+  /**
+   * Finds and returns all metals that dissolve by given acidID.
+   * @param acidID
+   * @return Array of MetalRowDataGateways
+   * @throws DatabaseException
+   * @throws SQLException 
+   */
+  public static ArrayList<MetalRowDataGatewayRDS> findDissolves(int acidID) throws DatabaseException{
+    try{
+      ArrayList<MetalRowDataGatewayRDS> metalGateways = new ArrayList<MetalRowDataGatewayRDS>();
+      ArrayList<Integer> metalIDs = new ArrayList<Integer>();
+      PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("SELECT metalID FROM Metal WHERE dissolvedBy = " + acidID);
+      
+      ResultSet rs = stmt.executeQuery();
+      
+      while(rs.next()) {
+        metalIDs.add(rs.getInt("metalID"));
+      }
+      
+      for(int i = 0; i < metalIDs.size(); i++) {
+        metalGateways.add(new MetalRowDataGatewayRDS(metalIDs.get(i)));
+      }
+      
+      return metalGateways;
+      
+    } catch (SQLException e) {
+      
+      e.printStackTrace();
+      new DatabaseException("Couldn't find metals");
+      return new ArrayList<MetalRowDataGatewayRDS>();
+    }
+  }
   /**
    * Updates the information in the database to reflect changes made.
    * @return boolean

@@ -10,13 +10,13 @@ public interface AcidRowDataGateway {
 	
 	public double getInventory();
 	
-	public String getSolute();
+	public int getSolute();
 	
 	public void setName(String n);
 	
 	public void setInventory(double i);
 	
-	public void setSolute(String s);
+	public void setSolute(int s);
 	
 	public boolean persist();
 	

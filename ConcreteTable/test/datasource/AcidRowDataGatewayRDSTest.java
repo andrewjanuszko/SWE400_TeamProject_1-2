@@ -24,7 +24,7 @@ class AcidRowDataGatewayRDSTest extends DatabaseTest {
    */
   @Test
   void testConstructors() throws DatabaseException{
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, "solute");
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, 1);
     AcidRowDataGateway acid1FindByID = new AcidRowDataGatewayRDS(1);
     AcidRowDataGateway acid1FindByName = new AcidRowDataGatewayRDS("acid");
     
@@ -45,12 +45,12 @@ class AcidRowDataGatewayRDSTest extends DatabaseTest {
 	 */
   @Test
   void testGetters() throws DatabaseException{
-	 AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, "solute");
+	 AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, 1);
 	 
 	 assertEquals(1, acid1.getAcidID());
 	 assertEquals("acid", acid1.getName());
 	 assertEquals(1.0, acid1.getInventory());
-	 assertEquals("solute", acid1.getSolute());
+	 assertEquals(1, acid1.getSolute());
   }
   
   /**
@@ -59,14 +59,14 @@ class AcidRowDataGatewayRDSTest extends DatabaseTest {
    */
   @Test
   void testSetters() throws DatabaseException{
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, "solute");
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, 1);
     acid1.setInventory(2.0);
     acid1.setName("new");
-    acid1.setSolute("new");
+    acid1.setSolute(2);
     
     assertEquals("new", acid1.getName());
     assertEquals(2.0, acid1.getInventory());
-    assertEquals("new", acid1.getSolute());
+    assertEquals(2, acid1.getSolute());
   }
   
   /**
@@ -75,7 +75,7 @@ class AcidRowDataGatewayRDSTest extends DatabaseTest {
    */
   @Test
   void testPersist() throws DatabaseException {
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, "solute");
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, 1);
     acid1.setName("newName");
     assertTrue(acid1.persist());
     acid1 = null;
@@ -90,7 +90,7 @@ class AcidRowDataGatewayRDSTest extends DatabaseTest {
    */
   @Test
   void testDelete() throws DatabaseException {
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, "solute");
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(1, "acid", 1.0, 1);
     MetalRowDataGatewayRDS.createTable();
     assertTrue(acid1.delete());
   }

@@ -2,6 +2,9 @@ package datasource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,6 +53,20 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest{
 	}
 	
 	@Test
+  void testFindDissolves() throws DatabaseException, SQLException {
+	  AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(10, "acid", 1.0, 1);
+	  MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS(1, "metal1", 1.0, 5, 10.0, 10);
+	  MetalRowDataGateway metal2 = new MetalRowDataGatewayRDS(2, "metal2", 1.0, 5, 10.0, 10);
+	  MetalRowDataGateway metal3 = new MetalRowDataGatewayRDS(3, "metal3", 1.0, 5, 10.0, 50);
+	  
+	  ArrayList<MetalRowDataGatewayRDS> metals = MetalRowDataGatewayRDS.findDissolves(10);
+	  
+	  assertEquals(2, metals.size());
+	  assertEquals(metal1.getMetalID(), metals.get(0).getMetalID());
+	  assertEquals(metal2.getMetalID(), metals.get(1).getMetalID());
+	}
+	
+	@Test
 	void testDelete() throws DatabaseException {
 	    MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS(1, "metal", 1.0, 5, 10.0, 10000);
 	    
@@ -58,7 +75,7 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest{
 	
 	@Test
 	void testConstructors() throws DatabaseException{
-	  AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(10000, "acid", 1.0, "solute");
+	  AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(10000, "acid", 1.0, 1);
 	    MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS(1, "metal", 1.0, 5, 10.0, 10000);
 	    MetalRowDataGateway metal1FindByID = new MetalRowDataGatewayRDS(1);
 	    MetalRowDataGateway metal1FindByName = new MetalRowDataGatewayRDS("metal");
@@ -80,7 +97,7 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest{
 	
 	@Test
 	void testPersist() throws DatabaseException {
-	  AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(10000, "acid", 1.0, "solute");
+	  AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(10000, "acid", 1.0, 1);
 		MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS(1, "metal", 1.0, 5, 10.0, 10000);
 	    metal1.setName("newName");
 		assertTrue(metal1.persist());
