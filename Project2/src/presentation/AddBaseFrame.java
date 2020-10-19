@@ -77,13 +77,18 @@ public class AddBaseFrame extends JFrame{
 				int id;
 				double inventory;
 				String solute, name;
-				id = Integer.parseInt(jtfId.getText());
-				inventory = Double.parseDouble(jtfInventory.getText());
-				solute = jtfSolute.getText();
-				name = jtfName.getText();
-				System.out.println(id + "\n" + name + "\n" + inventory + "\n" + solute);
+				try {
+					id = Integer.parseInt(jtfId.getText());
+					inventory = Double.parseDouble(jtfInventory.getText());
+					solute = jtfSolute.getText();
+					name = jtfName.getText();
+					System.out.println(id + "\n" + name + "\n" + inventory + "\n" + solute);
+					dispose();
+				} catch (NumberFormatException e1) {
+					new FailureFrame("Failed to create Base");
+				}
 						
-				dispose();
+
 			}
 		});
 		
