@@ -1,6 +1,8 @@
 package model;
 
 import mappers.AcidDataMapper;
+import reports.ReportObserverConnector;
+import reports.ValidEntryReport;
 
 public class CreateNewAcidCommand implements Command {
 
@@ -14,10 +16,12 @@ public class CreateNewAcidCommand implements Command {
    AcidDataMapperInterface acidMapper = new AcidDataMapper();
    try {
     acidMapper.create(acid.getName(), acid.getInventory(), acid.getDissolves(), acid.getSolute());
+    
   } catch (DomainModelException e) {
+    ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
     e.printStackTrace();
   }
-    
+   ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(true));
   }
 
 }

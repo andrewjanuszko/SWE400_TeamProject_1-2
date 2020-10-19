@@ -1,6 +1,8 @@
 package model;
 
 import mappers.BaseDataMapper;
+import reports.ReportObserverConnector;
+import reports.ValidEntryReport;
 
 public class CreateNewBaseCommand implements Command {
 
@@ -15,9 +17,10 @@ public class CreateNewBaseCommand implements Command {
     try {
       baseMapper.create(base.getName(), base.getInventory(), base.getSolute());
     } catch (DomainModelException e) {
+      ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
       e.printStackTrace();
     }
-    
+    ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(true));
   }
 
 }

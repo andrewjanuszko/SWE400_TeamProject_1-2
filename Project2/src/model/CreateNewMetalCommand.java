@@ -1,6 +1,8 @@
 package model;
 
 import mappers.MetalDataMapper;
+import reports.ReportObserverConnector;
+import reports.ValidEntryReport;
 
 public class CreateNewMetalCommand implements Command {
 
@@ -15,15 +17,19 @@ public class CreateNewMetalCommand implements Command {
     MetalDataMapperInterface metalMapper = new MetalDataMapper();
     try {
       if(metal.getAtomicNumber() > metal.getAtomicMass()) {
+        ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
         throw new Exception("Atomic Number cannot be more than Atomic Mass");
       } else {
       
+        ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(true));
         metalMapper.create(metal.getName(), metal.getInventory(), metal.getAtomicNumber(), metal.getAtomicMass(),
             metal.getAcidAmount());
       }
     } catch (DomainModelException e) {
+      ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
       e.printStackTrace();
     } catch (Exception e) {
+      ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
       e.printStackTrace();
     }
   }

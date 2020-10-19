@@ -1,6 +1,8 @@
 package model;
 
 import mappers.ElementDataMapper;
+import reports.ReportObserverConnector;
+import reports.ValidEntryReport;
 
 public class CreateNewElementCommand implements Command {
 
@@ -11,24 +13,24 @@ public class CreateNewElementCommand implements Command {
   }
 
   @Override
-  public void execute() {
+  public void execute()  {
     ElementDataMapperInterface elementMapper = new ElementDataMapper();
     try {
       if (element.getAtomicMass() < element.getAtomicNumber()) {
+        ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
         throw new Exception("Atomic Number cannot be more than Atomic Mass");
       } else if (element.getName().contains(" ")) {
+        ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
         throw new Exception("Element Names cannot contain a space");
       } else {
+        ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(true));
         elementMapper.create(element.getName(), element.getInventory(), element.getAtomicNumber(),
             element.getAtomicMass());
       }
-    } catch (
-
-    DomainModelException e) {
-      e.printStackTrace();
     } catch (Exception e) {
+      ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
       e.printStackTrace();
-    }
+    } 
   }
 
 }
