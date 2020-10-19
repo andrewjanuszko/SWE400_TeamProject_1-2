@@ -20,11 +20,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
 import model.Acid;
-<<<<<<< HEAD
 import model.AcidDataMapperInterface;
 
-=======
->>>>>>> branch 'Gui' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
 
 public class AcidPanel extends JPanel{
 
@@ -37,10 +34,8 @@ public class AcidPanel extends JPanel{
 	JLabel selected = null;
 	Color labelColor = new Color(30,30,30);
 	List<Acid> acidList;
-<<<<<<< HEAD
 	AcidDataMapperInterface acid;
-=======
->>>>>>> branch 'Gui' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+
 	
 	public AcidPanel() {
 		this.setLayout(new GridBagLayout());
@@ -160,11 +155,7 @@ public class AcidPanel extends JPanel{
 	
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
-<<<<<<< HEAD
-		acids = 
-		
-=======
->>>>>>> branch 'Gui' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+
 		
 		return labels;
 	}
