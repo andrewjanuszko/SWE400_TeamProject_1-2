@@ -130,7 +130,7 @@ public class FirstWindow extends JFrame{
 
 	private void setAcidView() {
 		if(currentDisplay != null)
-		      remove(currentDisplay);
+		    remove(currentDisplay);
 		    
 		    currentDisplay = new AcidPanel();
 		    System.out.println("Acid View");
@@ -161,7 +161,7 @@ public class FirstWindow extends JFrame{
 	
 	private void setCompoundView() {
 		if(currentDisplay != null)
-		      remove(currentDisplay);
+		    remove(currentDisplay);
 		    
 		    currentDisplay = new CompoundPanel();
 		    System.out.println("Compound View");

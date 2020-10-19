@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -20,8 +23,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
 import model.Acid;
-<<<<<<< HEAD
+
 import model.AcidDataMapperInterface;
+import model.DomainModelException;
 
 public class AcidPanel extends JPanel{
 
@@ -32,6 +36,7 @@ public class AcidPanel extends JPanel{
 	JButton filterButton = new JButton("Filter");
 	JButton detailsButton = new JButton("Details");
 	JLabel selected = null;
+	int selectedID;
 	Color labelColor = new Color(30,30,30);
 	List<Acid> acidList;
 	AcidDataMapperInterface acid;
@@ -46,7 +51,7 @@ public class AcidPanel extends JPanel{
 		acids.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		acids.add(acids.createVerticalScrollBar());
 		
-		acids.setViewportView(Labels());
+		acids.setViewportView(buildLabels());
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 1;
@@ -55,13 +60,7 @@ public class AcidPanel extends JPanel{
 		add(acids,gbc);
 	}
 	
-	private JLabel Labels() {
-		JLabel label = new JLabel();
-		label.setBackground(Color.WHITE);
-	    label.setOpaque(true);
-	    label.setPreferredSize(new Dimension(100,20));
-		return label;
-	}
+
 	
 	private void setButtons() {
 		addButton.addActionListener( new ActionListener() {
@@ -154,8 +153,36 @@ public class AcidPanel extends JPanel{
 	
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
+		try {
+			acidList = acid.getAll();
+		} catch (DomainModelException e) {
+			e.printStackTrace();
+		}
 		
+		labels.setLayout(new GridLayout(acidList.size(), 1));
+		
+		for(int i = 0; i < acidList.size(); i++) {
+		      final int x = i;
+		      JLabel label = new JLabel(buildHtml(acidList.get(i)));
+		      label.setOpaque(true);
+		      label.setBackground(new Color(30, 30, 30));
+		      label.addMouseListener( new MouseAdapter() {
+		          @Override
+		          public void mouseClicked(MouseEvent e) {
+		              removeSelectedBackground();
+		              label.setBackground(new Color(234, 201, 55));
+		              selected = label;
+		              selectedID = acidList.get(x).getID();
+		          }
+		      }); 
+		      labels.add(label);
+		    }
+
 		return labels;
+	}
+
+	private String buildHtml(Acid acid) {
+		return acid.getName();
 	}
 
 }
