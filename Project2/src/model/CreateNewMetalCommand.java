@@ -18,7 +18,7 @@ public class CreateNewMetalCommand implements Command {
     try {
       if(metal.getAtomicNumber() > metal.getAtomicMass()) {
         ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
-        throw new Exception("Atomic Number cannot be more than Atomic Mass");
+        throw new DomainModelException("Atomic Number cannot be more than Atomic Mass");
       } else {
       
         ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(true));

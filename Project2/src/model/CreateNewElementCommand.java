@@ -18,10 +18,10 @@ public class CreateNewElementCommand implements Command {
     try {
       if (element.getAtomicMass() < element.getAtomicNumber()) {
         ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
-        throw new Exception("Atomic Number cannot be more than Atomic Mass");
+        throw new DomainModelException("Atomic Number cannot be more than Atomic Mass");
       } else if (element.getName().contains(" ")) {
         ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
-        throw new Exception("Element Names cannot contain a space");
+        throw new DomainModelException("Element Names cannot contain a space");
       } else {
         ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(true));
         elementMapper.create(element.getName(), element.getInventory(), element.getAtomicNumber(),
