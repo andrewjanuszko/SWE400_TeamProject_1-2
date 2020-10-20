@@ -7,15 +7,18 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import datasource.ChemicalRowDataGatewayRDS;
+import datasource.ElementCompoundTableDataGatewayRDS;
 
-class ElementDataMapperTest {
+public class ElementDataMapperTest {
+  
+  private static ElementCompoundTableDataGatewayRDS elementCompoundTableDataGateway;
   
   /**
    * 
    * @throws Exception
    */
   @BeforeAll
-  static void setUpBeforeClass() throws Exception {
+  public static void setUpBeforeClass() throws Exception {
     ChemicalRowDataGatewayRDS.createTable();
   }
 
@@ -24,7 +27,7 @@ class ElementDataMapperTest {
    * @throws Exception
    */
   @AfterAll
-  static void tearDownAfterClass() throws Exception {
+  public static void tearDownAfterClass() throws Exception {
     ChemicalRowDataGatewayRDS.dropTable();
   }
 
@@ -33,7 +36,7 @@ class ElementDataMapperTest {
    * @throws DomainModelException
    */
   @Test
-  void testCreate() throws DomainModelException {
+  public void testCreate() throws DomainModelException {
     Element carbon = new ElementDataMapper().create("Carbon", 50, 6, 12.0096);
     System.out.println(carbon.getID() + " : " + carbon.getName());
     assertEquals("Carbon", carbon.getName());
@@ -47,7 +50,7 @@ class ElementDataMapperTest {
    * @throws DomainModelException
    */
   @Test
-  void testCreateDuplicate() throws DomainModelException {
+  public void testCreateDuplicate() throws DomainModelException {
     try {
       Element oxygen = new ElementDataMapper().create("Oxygen", 70, 8, 15.999);
       System.out.println(oxygen.getID() + " : " + oxygen.getName());
@@ -64,8 +67,12 @@ class ElementDataMapperTest {
     }
   }
   
+  /**
+   * 
+   * @throws DomainModelException
+   */
   @Test
-  void testRead() throws DomainModelException {
+  public void testRead() throws DomainModelException {
     Element nitrogen = new ElementDataMapper().create("Nitrogen", 75, 7, 14.0067);
     System.out.println(nitrogen.getID() + " : " + nitrogen.getName());
     assertEquals("Nitrogen", nitrogen.getName());
@@ -80,12 +87,40 @@ class ElementDataMapperTest {
     assertEquals(14.0067, nitrogen2.getAtomicMass(), 0.0001);
   }
   
+  @Test
+  public void testUpdate() throws DomainModelException {
+    try {
+      Element lead = new ElementDataMapper().create("Lead", 621, 82, 207.2);
+      assertEquals("Lead", lead.getName());
+      assertEquals(621, lead.getInventory());
+      assertEquals(82, lead.getAtomicNumber());
+      assertEquals(207.2, lead.getAtomicMass(), 0.001);
+      
+      lead.setName("Lead-207");
+      lead.setInventory(90210);
+      lead.setAtomicMass(206.976);
+      
+      new ElementDataMapper().update(lead);
+      
+      lead = new ElementDataMapper().read(lead.getID());
+      
+      assertEquals("Lead-207", lead.getName());
+      assertEquals(90210, lead.getInventory());
+      assertEquals(82, lead.getAtomicNumber());
+      assertEquals(206.976, lead.getAtomicMass(), 0.001);
+      
+    } catch (DomainModelException e) {
+      System.out.println(e);
+      fail();
+    }
+  }
+  
   /**
    * 
    * @throws DomainModelException
    */
   @Test
-  void testDelete() throws DomainModelException {
+  public void testDelete() throws DomainModelException {
     try {
       Element hydrogen = new ElementDataMapper().create("Hydrogen",34, 1, 1.008);
       System.out.println(hydrogen.getID() + " : " + hydrogen.getName());
