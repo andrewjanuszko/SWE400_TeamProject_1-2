@@ -6,6 +6,7 @@ import java.util.List;
 import dataDTO.ChemicalDTO;
 import dataENUM.ChemicalEnum;
 import datasource.ChemicalRowDataGatewayRDS;
+import datasource.ChemicalTableDataGateway;
 import datasource.ChemicalTableDataGatewayRDS;
 import datasource.DatabaseException;
 
@@ -17,7 +18,7 @@ import datasource.DatabaseException;
  */
 public class BaseDataMapper implements BaseDataMapperInterface {
 
-  private ChemicalTableDataGatewayRDS chemicalTableDataGateway;
+	private ChemicalTableDataGateway chemicalTableDataGateway = ChemicalTableDataGatewayRDS.getSingletonInstance();
 
   /**
    * Empty constructor for BaseDataMapper.
