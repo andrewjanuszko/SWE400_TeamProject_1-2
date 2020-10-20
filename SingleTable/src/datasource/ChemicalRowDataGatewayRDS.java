@@ -139,7 +139,8 @@ public class ChemicalRowDataGatewayRDS implements ChemicalRowDataGateway {
     try {
       final String updateSQL = "UPDATE Chemical " + "SET Chemical.type = ?, " + "Chemical.name = ?, "
           + "Chemical.inventory = ?, " + "Chemical.atomicNumber = ?, " + "Chemical.atomicMass = ?, "
-          + "Chemical.dissolvedBy = ?, " + "Chemical.acidAmount = ?, " + "Chemical.solute = ?;";
+          + "Chemical.dissolvedBy = ?, " + "Chemical.acidAmount = ?, " + "Chemical.solute = ? "
+              + "WHERE Chemical.id = " + id + ";";
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateSQL);
       loadPreparedStatement(statement, this.type, this.name, this.inventory, this.atomicNumber, this.atomicMass,
           this.dissolvedBy, this.acidAmount, this.solute);

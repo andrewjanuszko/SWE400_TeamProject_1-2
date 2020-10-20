@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 
-  private static ChemicalTableDataGateway singletonInstance;
+  private static ChemicalTableDataGatewayRDS singletonInstance;
 
   private static String querySQL = "";
 
@@ -26,11 +26,15 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
    * 
    * @return a Singleton instance of ChemicalTableDataGateway.
    */
-  public static synchronized ChemicalTableDataGateway getSingletonInstance() {
+  public static synchronized ChemicalTableDataGatewayRDS getSingletonInstance() {
     if (singletonInstance == null) {
       singletonInstance = new ChemicalTableDataGatewayRDS();
     }
     return singletonInstance;
+  }
+  
+  private ChemicalTableDataGatewayRDS() {
+    
   }
 
   /**
@@ -71,7 +75,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
   @Override
   public ChemicalTableDataGatewayRDS getAll() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type <> 0)";
-    return this;
+    return getSingletonInstance();
   }
 
   /**

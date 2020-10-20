@@ -2,10 +2,11 @@ package model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import datasource.ChemicalRowDataGatewayRDS;
 import datasource.ElementCompoundTableDataGatewayRDS;
 
@@ -87,6 +88,10 @@ public class ElementDataMapperTest {
     assertEquals(14.0067, nitrogen2.getAtomicMass(), 0.0001);
   }
   
+  /**
+   * 
+   * @throws DomainModelException
+   */
   @Test
   public void testUpdate() throws DomainModelException {
     try {
@@ -108,7 +113,7 @@ public class ElementDataMapperTest {
       assertEquals(90210, lead.getInventory());
       assertEquals(82, lead.getAtomicNumber());
       assertEquals(206.976, lead.getAtomicMass(), 0.001);
-      
+      System.out.println(lead.getID() + " : " + lead.getName());
     } catch (DomainModelException e) {
       System.out.println(e);
       fail();
@@ -137,6 +142,19 @@ public class ElementDataMapperTest {
     } catch (DomainModelException e) {
       assertTrue(true);
     }
+  }
+  
+  /**
+   * 
+   * @throws DomainModelException
+   */
+  @Test
+  public void testGetAll() throws DomainModelException {
+    
+    
+    
+    
+    List<Element> elements = new ElementDataMapper().getAll();
   }
 
 }
