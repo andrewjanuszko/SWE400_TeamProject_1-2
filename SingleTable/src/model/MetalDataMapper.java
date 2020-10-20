@@ -6,6 +6,7 @@ import dataDTO.ChemicalDTO;
 import dataDTO.ElementCompoundDTO;
 import dataENUM.ChemicalEnum;
 import datasource.ChemicalRowDataGatewayRDS;
+import datasource.ChemicalTableDataGateway;
 import datasource.ChemicalTableDataGatewayRDS;
 import datasource.DatabaseException;
 import datasource.ElementCompoundTableDataGatewayRDS;
@@ -18,7 +19,8 @@ import datasource.ElementCompoundTableDataGatewayRDS;
  */
 public class MetalDataMapper implements MetalDataMapperInterface {
 
-  private ChemicalTableDataGatewayRDS chemicalTableDataGateway;
+  private ChemicalTableDataGateway chemicalTableDataGateway = ChemicalTableDataGatewayRDS.getSingletonInstance();
+
   private ElementCompoundTableDataGatewayRDS ecTableDataGateway;
 
   /**
