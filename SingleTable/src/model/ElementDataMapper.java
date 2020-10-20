@@ -92,7 +92,8 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> getAll() throws DomainModelException {
     try {
-      return convertToElement(chemicalTableDataGateway.getElements().executeQuery());
+      List<ChemicalDTO> chemicals = chemicalTableDataGateway.getElements().executeQuery();
+      return convertToElement(chemicals);
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements.", e);
     }
@@ -220,9 +221,10 @@ public class ElementDataMapper implements ElementDataMapperInterface {
    */
   private List<Element> convertToElement(List<ChemicalDTO> chemicals) throws DomainModelException {
     List<Element> elements = new ArrayList<>();
-    for (ChemicalDTO dto : chemicals) {
+    for (ChemicalDTO chemical : chemicals) {
+      System.out.println(chemical.getID() + " : " + chemical.getName() + " | CHEMICAL DTO");
       elements
-          .add(new Element(dto.getID(), dto.getName(), dto.getInventory(), dto.getAtomicNumber(), dto.getAtomicMass()));
+          .add(new Element(chemical.getID(), chemical.getName(), chemical.getInventory(), chemical.getAtomicNumber(), chemical.getAtomicMass()));
     }
     return elements;
   }
