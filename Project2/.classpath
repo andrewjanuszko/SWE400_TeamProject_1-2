@@ -8,9 +8,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-<<<<<<< HEAD
+	<classpathentry kind="lib" path="/swe400_project1_group6/libs/mysql-connector-java-5.1.16.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/DataMapperInterfaces"/>
-=======
->>>>>>> branch 'Gui' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
 	<classpathentry kind="output" path="bin"/>
 </classpath>
