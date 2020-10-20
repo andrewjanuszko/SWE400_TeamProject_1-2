@@ -1,12 +1,12 @@
 package datasource;
 
-class ChemicalTDGTest extends ChemicalTDGRDSTest {
+public class ChemicalTableDataGatewayRDSTest extends ChemicalTableDataGatewayTest {
 
 	/**
 	 * Gets a singleton.
 	 */
 	@Override
-	protected ChemicalTableDataGateway getSingletonInstance() {
+	public ChemicalTableDataGateway getGateway() {
 		return ChemicalTableDataGatewayRDS.getSingletonInstance();
 	}
 

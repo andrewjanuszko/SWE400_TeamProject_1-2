@@ -6,6 +6,7 @@ import java.util.List;
 import dataDTO.ChemicalDTO;
 import dataENUM.ChemicalEnum;
 import datasource.ChemicalRowDataGatewayRDS;
+import datasource.ChemicalTableDataGateway;
 import datasource.ChemicalTableDataGatewayRDS;
 import datasource.DatabaseException;
 import datasource.ElementCompoundTableDataGatewayRDS;
@@ -18,7 +19,7 @@ import datasource.ElementCompoundTableDataGatewayRDS;
  */
 public class ElementDataMapper implements ElementDataMapperInterface {
 
-  private ChemicalTableDataGatewayRDS chemicalTableDataGateway;
+  private ChemicalTableDataGateway chemicalTableDataGateway = ChemicalTableDataGatewayRDS.getSingletonInstance();
   private ElementCompoundTableDataGatewayRDS ecTableDataGateway;
 
   /**
@@ -222,7 +223,6 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   private List<Element> convertToElement(List<ChemicalDTO> chemicals) throws DomainModelException {
     List<Element> elements = new ArrayList<>();
     for (ChemicalDTO chemical : chemicals) {
-      System.out.println(chemical.getID() + " : " + chemical.getName() + " | CHEMICAL DTO");
       elements
           .add(new Element(chemical.getID(), chemical.getName(), chemical.getInventory(), chemical.getAtomicNumber(), chemical.getAtomicMass()));
     }
