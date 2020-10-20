@@ -1,30 +1,36 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import datasource.ChemicalRowDataGatewayRDS;
 import datasource.DatabaseException;
+import datasource.ElementCompoundTableDataGateway;
+import datasource.ElementCompoundTableDataGatewayRDS;
 
 public class ElementDataMapperTest {
   
   /**
-   * 
-   * @throws Exception
+   * Create the tables for the test.
+   * @throws Exception when things to wrong.
    */
   @BeforeEach
   public void beforeEach() throws DatabaseException {
     ChemicalRowDataGatewayRDS.createTable();
+    ElementCompoundTableDataGatewayRDS.createTable();
   }
 
   /**
-   * 
-   * @throws Exception
+   * Drop the tables when the test is done.
+   * @throws Exception when things to wrong.
    */
   @AfterEach
   public void afterEach() throws DatabaseException {
+    ElementCompoundTableDataGatewayRDS.dropTable();
     ChemicalRowDataGatewayRDS.dropTable();
   }
 
@@ -179,6 +185,10 @@ public class ElementDataMapperTest {
     assertEquals(2, elements.size());
   }
   
+  /**
+   * 
+   * @throws DomainModelException
+   */
   @Test
   public void testInventorySpecificAndRange() throws DomainModelException {
     Element hydrogen = new ElementDataMapper().create("Hydrogen",34, 1, 1.008);
@@ -199,7 +209,69 @@ public class ElementDataMapperTest {
     
     elements = new ElementDataMapper().filterByInventoryBetween(70, 75);
     assertEquals(2, elements.size());
-    
   }
+  
+  /**
+   * 
+   * @throws DomainModelException
+   */
+  @Test
+  public void testAtomicNumberSpecificAndRange() throws DomainModelException {
+    Element hydrogen = new ElementDataMapper().create("Hydrogen",34, 1, 1.008);
+    assertEquals("Hydrogen", hydrogen.getName());
+    Element lead = new ElementDataMapper().create("Lead", 621, 82, 207.2);
+    assertEquals("Lead", lead.getName());
+    Element nitrogen = new ElementDataMapper().create("Nitrogen", 75, 7, 14.0067);
+    assertEquals("Nitrogen", nitrogen.getName());
+    Element oxygen = new ElementDataMapper().create("Oxygen", 70, 8, 15.999);
+    assertEquals("Oxygen", oxygen.getName());
+    Element carbon = new ElementDataMapper().create("Carbon", 50, 6, 12.0096);
+    assertEquals("Carbon", carbon.getName());
+    Element carbon13 = new ElementDataMapper().create("Carbon-13", 10, 6, 13.0033);
+    assertEquals("Carbon-13", carbon13.getName());
+    
+    List<Element> elements = new ElementDataMapper().filterByAtomicNumber(6);
+    assertEquals(2, elements.size());
+    
+    elements = new ElementDataMapper().filterByAtomicNumberBetween(6, 8);
+    assertEquals(4, elements.size());
+  }
+  
+  /**
+   * 
+   * @throws DomainModelException
+   */
+  @Test
+  public void testAtomicMassSpecificAndRange() throws DomainModelException {
+    Element hydrogen = new ElementDataMapper().create("Hydrogen",34, 1, 1.008);
+    assertEquals("Hydrogen", hydrogen.getName());
+    Element lead = new ElementDataMapper().create("Lead", 621, 82, 207.2);
+    assertEquals("Lead", lead.getName());
+    Element nitrogen = new ElementDataMapper().create("Nitrogen", 75, 7, 14.0067);
+    assertEquals("Nitrogen", nitrogen.getName());
+    Element oxygen = new ElementDataMapper().create("Oxygen", 70, 8, 15.999);
+    assertEquals("Oxygen", oxygen.getName());
+    Element carbon = new ElementDataMapper().create("Carbon", 50, 6, 12.0096);
+    assertEquals("Carbon", carbon.getName());
+    Element carbon13 = new ElementDataMapper().create("Carbon-13", 10, 6, 13.0033);
+    assertEquals("Carbon-13", carbon13.getName());
+    
+    List<Element> elements = new ElementDataMapper().filterByAtomicMass(207.2);
+    assertEquals(1, elements.size());
+    
+    elements = new ElementDataMapper().filterByAtomicMassBetween(10, 20);
+    assertEquals(4, elements.size());
+  }
+  
+  @Test
+  public void testElementsInCompound() throws DomainModelException {
+    List<Element> madeOf = new ArrayList<>();
+    madeOf.add(new ElementDataMapper().create("Hydrogen",34, 1, 1.008));
+    madeOf.add(new ElementDataMapper().create("Oxygen", 70, 8, 15.999));
+    Compound water = new CompoundDataMapper().create("Water", 90, madeOf);
+    List<Element> inWater = new ElementDataMapper().filterByPartOfCompound(water.getID());
+    assertEquals(2, inWater.size());
+  }
+
 
 }

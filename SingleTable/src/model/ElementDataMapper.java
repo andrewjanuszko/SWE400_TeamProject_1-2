@@ -9,6 +9,7 @@ import datasource.ChemicalRowDataGatewayRDS;
 import datasource.ChemicalTableDataGateway;
 import datasource.ChemicalTableDataGatewayRDS;
 import datasource.DatabaseException;
+import datasource.ElementCompoundTableDataGateway;
 import datasource.ElementCompoundTableDataGatewayRDS;
 
 /**
@@ -20,7 +21,7 @@ import datasource.ElementCompoundTableDataGatewayRDS;
 public class ElementDataMapper implements ElementDataMapperInterface {
 
   private ChemicalTableDataGateway chemicalTableDataGateway = ChemicalTableDataGatewayRDS.getSingletonInstance();
-  private ElementCompoundTableDataGatewayRDS ecTableDataGateway;
+  private ElementCompoundTableDataGateway elementCompoundTableDataGateway = ElementCompoundTableDataGatewayRDS.getSingletonInstance();
 
   /**
    * An empty Constructor for ElementDataMapper.
@@ -195,7 +196,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByPartOfCompound(int compoundID) throws DomainModelException {
     try {
-      return convertToElement(ecTableDataGateway.findElementsByCompoundID(compoundID).getRelations());
+      return convertToElement(elementCompoundTableDataGateway.findElementsByCompoundID(compoundID).getRelations());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get Elements in Compound with ID '" + compoundID + "'.", e);
     }
