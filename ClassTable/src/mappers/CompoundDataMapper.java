@@ -32,6 +32,70 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
         read.getCompound().getInventory(), DTOToElement(read.getCompound().getElements()));
   }
 
+  @Override
+  public void update(Compound compound) throws DomainModelException {
+    CompoundRDG update = new CompoundRDGRDS(compound.getID());
+    update.update(CompoundToDTO(compound));
+  }
+
+  @Override
+  public void delete(Compound compound) throws DomainModelException {
+    CompoundRDG delete = new CompoundRDGRDS(compound.getID());
+    delete.delete(compound.getID());
+
+  }
+
+  @Override
+  public List<Compound> getAll() throws DomainModelException {
+    CompoundTDG tdg = new CompoundTDGRDS();
+    try {
+      return ListDTOToListCompound(tdg.getAllCompounds().executeQuery());
+    } catch (DatabaseException e) {
+      throw new DomainModelException("Failed getAll()", e);
+    }
+  }
+
+  @Override
+  public List<Compound> filterByWildCardName(String wildCard) throws DomainModelException {
+    CompoundTDG tdg = new CompoundTDGRDS();
+    try {
+      return ListDTOToListCompound(tdg.getAllCompounds().filterByName(wildCard).executeQuery());
+    } catch (DatabaseException e) {
+      throw new DomainModelException("Failed filterByWildCardName()", e);
+    }
+  }
+
+  @Override
+  public List<Compound> filterByInventory(double inventory) throws DomainModelException {
+    CompoundTDG tdg = new CompoundTDGRDS();
+    try {
+      return ListDTOToListCompound(tdg.getAllCompounds().getAllCompounds().filterByInventory(inventory).executeQuery());
+    } catch (DatabaseException e) {
+      throw new DomainModelException("Failed filterByInventory()", e);
+    }
+  }
+
+  @Override
+  public List<Compound> filterByInventoryRange(double min, double max) throws DomainModelException {
+    CompoundTDG tdg = new CompoundTDGRDS();
+    try {
+      return ListDTOToListCompound(
+          tdg.getAllCompounds().getAllCompounds().filterByInventoryRange(max, min).executeQuery());
+    } catch (DatabaseException e) {
+      throw new DomainModelException("Failed filterByInventoryRange()", e);
+    }
+  }
+
+  @Override
+  public List<Compound> filterByMadeOf(int elementID) throws DomainModelException {
+    CompoundTDG tdg = new CompoundTDGRDS();
+    try {
+      return ListDTOToListCompound(tdg.getAllCompounds().getAllCompounds().filterByElements(elementID).executeQuery());
+    } catch (DatabaseException e) {
+      throw new DomainModelException("Failed filterByMadeOf()", e);
+    }
+  }
+
   /**
    * Convert a DTO to an Element
    * 
@@ -76,79 +140,18 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     return new CompoundDTO(c.getID(), ElementToDTO(c.getMadeOf()), c.getName(), c.getInventory());
   }
 
+  /**
+   * Convert a list of CompoundDTOs to a list of Compounds
+   * 
+   * @param listCompoundDTOs list of compound DTOs to convert
+   * @return converted list of compounds
+   */
   private List<Compound> ListDTOToListCompound(List<CompoundDTO> listCompoundDTOs) {
-    List<Compound> listCompounds = new ArrayList<>(); 
-    for(CompoundDTO c : listCompoundDTOs) {
-      listCompounds.add(new Compound(c.getCompoundId(), c.getName(),c.getInventory(), DTOToElement(c.getElements())));
+    List<Compound> listCompounds = new ArrayList<>();
+    for (CompoundDTO c : listCompoundDTOs) {
+      listCompounds.add(new Compound(c.getCompoundId(), c.getName(), c.getInventory(), DTOToElement(c.getElements())));
     }
     return listCompounds;
-  }
-  
-  /**
-   * Update a compound
-   * 
-   * @param compound Compound to update
-   */
-  public void update(Compound compound) throws DomainModelException {
-    CompoundRDG update = new CompoundRDGRDS(compound.getID());
-    update.update(CompoundToDTO(compound));
-  }
-
-  @Override
-  public void delete(Compound compound) throws DomainModelException {
-    CompoundRDG delete = new CompoundRDGRDS(compound.getID()); 
-    delete.delete(compound.getID());
-
-  }
-
-  @Override
-  public List<Compound> getAll() throws DomainModelException {
-    CompoundTDG tdg = new CompoundTDGRDS(); 
-    try {
-      return ListDTOToListCompound(tdg.getAllCompounds().executeQuery());
-    } catch (DatabaseException e) {
-      throw new DomainModelException("Failed getAll()", e);
-    }
-  }
-
-  @Override
-  public List<Compound> filterByWildCardName(String wildCard) throws DomainModelException {
-    CompoundTDG tdg = new CompoundTDGRDS(); 
-    try {
-      return ListDTOToListCompound(tdg.getAllCompounds().filterByName(wildCard).executeQuery());
-    } catch (DatabaseException e) {
-      throw new DomainModelException("Failed filterByWildCardName()", e);
-    }
-  }
-
-  @Override
-  public List<Compound> filterByInventory(double inventory) throws DomainModelException {
-    CompoundTDG tdg = new CompoundTDGRDS(); 
-    try {
-      return ListDTOToListCompound(tdg.getAllCompounds().getAllCompounds().filterByInventory(inventory).executeQuery());
-    } catch (DatabaseException e) {
-      throw new DomainModelException("Failed filterByInventory()", e);
-    }
-  }
-
-  @Override
-  public List<Compound> filterByInventoryRange(double min, double max) throws DomainModelException {
-    CompoundTDG tdg = new CompoundTDGRDS(); 
-    try {
-      return ListDTOToListCompound(tdg.getAllCompounds().getAllCompounds().filterByInventoryRange(max, min).executeQuery());
-    } catch (DatabaseException e) {
-      throw new DomainModelException("Failed filterByInventoryRange()", e);
-    }
-  }
-
-  @Override
-  public List<Compound> filterByMadeOf(int elementID) throws DomainModelException {
-    CompoundTDG tdg = new CompoundTDGRDS(); 
-    try {
-      return ListDTOToListCompound(tdg.getAllCompounds().getAllCompounds().filterByElements(elementID).executeQuery());
-    } catch (DatabaseException e) {
-      throw new DomainModelException("Failed filterByMadeOf()", e);
-    }
   }
 
 }
