@@ -8,11 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import dataDTO.ChemicalDTO;
 
-public abstract class ChemicalTDGRDSTest extends DatabaseTest {
+public abstract class ChemicalTableDataGatewayTest extends DatabaseTest {
 
-  protected ChemicalTableDataGateway gateway = getSingletonInstance();
+  protected ChemicalTableDataGateway gateway = getGateway();
 
-  protected abstract ChemicalTableDataGateway getSingletonInstance();
+  public abstract ChemicalTableDataGateway getGateway();
 
   /**
    * Fills the database with entries to test on.

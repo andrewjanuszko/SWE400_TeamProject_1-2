@@ -14,9 +14,9 @@ import java.util.List;
  * 
  * @author andrewjanuszko
  */
-public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
+public class ChemicalTableDataGatewayRDS extends ChemicalTableDataGateway {
 
-  private static ChemicalTableDataGatewayRDS singletonInstance;
+  private static ChemicalTableDataGateway singletonInstance;
 
   private static String querySQL = "";
 
@@ -26,7 +26,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
    * 
    * @return a Singleton instance of ChemicalTableDataGateway.
    */
-  public static synchronized ChemicalTableDataGatewayRDS getSingletonInstance() {
+  public static synchronized ChemicalTableDataGateway getSingletonInstance() {
     if (singletonInstance == null) {
       singletonInstance = new ChemicalTableDataGatewayRDS();
     }
@@ -73,7 +73,7 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
    * @see datasource.ChemicalTableDataGateWay#getAll().
    */
   @Override
-  public ChemicalTableDataGatewayRDS getAll() {
+  public ChemicalTableDataGateway getAll() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type <> 0)";
     return getSingletonInstance();
   }
@@ -82,144 +82,144 @@ public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
    * @see datasource.ChemicalTableDataGateWay#getElements().
    */
   @Override
-  public ChemicalTableDataGatewayRDS getElements() {
+  public ChemicalTableDataGateway getElements() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.ELEMENT.getIntValue() + " OR Chemical.type = " + ChemicalEnum.METAL.getIntValue() + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#getMetals().
    */
   @Override
-  public ChemicalTableDataGatewayRDS getMetals() {
+  public ChemicalTableDataGateway getMetals() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.METAL.getIntValue() + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#getCompounds().
    */
   @Override
-  public ChemicalTableDataGatewayRDS getCompounds() {
+  public ChemicalTableDataGateway getCompounds() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.COMPOUND.getIntValue() + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#getBases().
    */
   @Override
-  public ChemicalTableDataGatewayRDS getBases() {
+  public ChemicalTableDataGateway getBases() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.BASE.getIntValue() + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#getAcids().
    */
   @Override
-  public ChemicalTableDataGatewayRDS getAcids() {
+  public ChemicalTableDataGateway getAcids() {
     querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.ACID.getIntValue() + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#filterByNameLike(String nameLike).
    */
   @Override
-  public ChemicalTableDataGatewayRDS filterByNameLike(String nameLike) {
+  public ChemicalTableDataGateway filterByNameLike(String nameLike) {
     querySQL += " AND (Chemical.name LIKE '%" + nameLike + "%')";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#filterByInventory(double inventory).
    */
   @Override
-  public ChemicalTableDataGatewayRDS filterByInventory(double inventory) {
+  public ChemicalTableDataGateway filterByInventory(double inventory) {
     querySQL += " AND (Chemical.inventory = " + inventory + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#filterByInventoryBetween(double min, double max).
    */
   @Override
-  public ChemicalTableDataGatewayRDS filterByInventoryBetween(double min, double max) {
+  public ChemicalTableDataGateway filterByInventoryBetween(double min, double max) {
     querySQL += " AND (Chemical.inventory BETWEEN " + min + " AND " + max + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#filterByAtomicNumber(int atomicNumber).
    */
   @Override
-  public ChemicalTableDataGatewayRDS filterByAtomicNumber(int atomicNumber) {
+  public ChemicalTableDataGateway filterByAtomicNumber(int atomicNumber) {
     querySQL += " AND (Chemical.atomicNumber = " + atomicNumber + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#filterByAtomicNumberBetween(int min, int max).
    */
   @Override
-  public ChemicalTableDataGatewayRDS filterByAtomicNumberBetween(int min, int max) {
+  public ChemicalTableDataGateway filterByAtomicNumberBetween(int min, int max) {
     querySQL += " AND (Chemical.atomicNumber BETWEEN " + min + " AND " + max + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay# filterByAtomicMass(double atomicMass).
    */
   @Override
-  public ChemicalTableDataGatewayRDS filterByAtomicMass(double atomicMass) {
+  public ChemicalTableDataGateway filterByAtomicMass(double atomicMass) {
     querySQL += " AND (Chemical.atomicMass = " + atomicMass + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#filterByAtomicMassBetween(double min, double max).
    */
   @Override
-  public ChemicalTableDataGatewayRDS filterByAtomicMassBetween(double min, double max) {
+  public ChemicalTableDataGateway filterByAtomicMassBetween(double min, double max) {
     querySQL += " AND (Chemical.atomicMass BETWEEN " + min + " AND " + max + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#filterByDissolvedBy(int acidID).
    */
   @Override
-  public ChemicalTableDataGatewayRDS filterByDissolvedBy(int acidID) {
+  public ChemicalTableDataGateway filterByDissolvedBy(int acidID) {
     querySQL += " AND (Chemical.dissolvedBy = " + acidID + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#filterByAcidAmount(double acidAmount).
    */
   @Override
-  public ChemicalTableDataGatewayRDS filterByAcidAmount(double acidAmount) {
+  public ChemicalTableDataGateway filterByAcidAmount(double acidAmount) {
     querySQL += " AND (Chemical.acidAmount = " + acidAmount + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#filterByAcidAmountBetween(double min, double max).
    */
   @Override
-  public ChemicalTableDataGatewayRDS filterByAcidAmountBetween(double min, double max) {
+  public ChemicalTableDataGateway filterByAcidAmountBetween(double min, double max) {
     querySQL += " AND (Chemical.acidAmount BETWEEN " + min + " AND " + max + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
    * @see datasource.ChemicalTableDataGateWay#filterBySolute(int soluteID).
    */
   @Override
-  public ChemicalTableDataGatewayRDS filterBySolute(int soluteID) {
+  public ChemicalTableDataGateway filterBySolute(int soluteID) {
     querySQL += " AND (Chemical.solute = " + soluteID + ")";
-    return this;
+    return getSingletonInstance();
   }
 
   /**
