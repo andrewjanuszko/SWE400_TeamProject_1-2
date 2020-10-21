@@ -1,6 +1,10 @@
-package model;
+package command;
 
 import mappers.ElementDataMapper;
+import model.Command;
+import model.DomainModelException;
+import model.Element;
+import model.ElementDataMapperInterface;
 import reports.ReportObserverConnector;
 import reports.ValidEntryReport;
 
