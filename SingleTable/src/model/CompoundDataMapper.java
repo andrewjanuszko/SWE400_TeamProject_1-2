@@ -8,7 +8,10 @@ import dataENUM.ChemicalEnum;
 import datasource.ChemicalRowDataGatewayRDS;
 import datasource.ChemicalTableDataGatewayRDS;
 import datasource.DatabaseException;
+<<<<<<< HEAD
 import datasource.ElementCompoundTableDataGateway;
+=======
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
 import datasource.ElementCompoundTableDataGatewayRDS;
 
 /**
@@ -19,6 +22,12 @@ import datasource.ElementCompoundTableDataGatewayRDS;
  */
 public class CompoundDataMapper implements CompoundDataMapperInterface {
 
+<<<<<<< HEAD
+=======
+  private ChemicalTableDataGatewayRDS chemicalTableDataGateway;
+  private ElementCompoundTableDataGatewayRDS ecTableDataGateway;
+
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
   /**
    * Empty constructor for CompoundDataMapper.
    */
@@ -37,9 +46,15 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
       final int compoundID = row.getID();
       for (Element element : madeOf) {
         row = new ChemicalRowDataGatewayRDS(element.getID());
+<<<<<<< HEAD
         ElementCompoundTableDataGatewayRDS.getSingletonInstance().create(compoundID, row.getID());
       }
       return new Compound(compoundID, name, inventory, madeOf);
+=======
+        ecTableDataGateway.createRow(compoundID, row.getID());
+      }
+      return new Compound(row.getID(), name, inventory, madeOf);
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to create Compound.", e);
     }
@@ -52,7 +67,11 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   public Compound read(int id) throws DomainModelException {
     try {
       ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(id);
+<<<<<<< HEAD
       List<ChemicalDTO> elements = ElementCompoundTableDataGatewayRDS.getSingletonInstance().readElementsFromCompound(id).getRelations();
+=======
+      List<ChemicalDTO> elements = ecTableDataGateway.findElementsByCompoundID(id).getRelations();
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
       List<Element> madeOf = new ArrayList<>();
       for (ChemicalDTO element : elements) {
         madeOf.add(new Element(element.getID(), element.getName(), element.getInventory(), element.getAtomicNumber(),
@@ -72,10 +91,17 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     try {
       List<Element> elements = new ElementDataMapper().filterByPartOfCompound(compound.getID());
       for (Element element : elements) {
+<<<<<<< HEAD
         ElementCompoundTableDataGatewayRDS.getSingletonInstance().delete(compound.getID(), element.getID());
       }
       for (Element element : compound.getMadeOf()) {
         ElementCompoundTableDataGatewayRDS.getSingletonInstance().create(compound.getID(), element.getID());
+=======
+        ecTableDataGateway.delete(compound.getID(), element.getID());
+      }
+      for (Element element : compound.getMadeOf()) {
+        ecTableDataGateway.createRow(compound.getID(), element.getID());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
       }
       ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(compound.getID());
       row.setName(compound.getName());
@@ -93,7 +119,11 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     try {
       List<Element> elements = new ElementDataMapper().filterByPartOfCompound(compound.getID());
       for (Element element : elements) {
+<<<<<<< HEAD
         ElementCompoundTableDataGatewayRDS.getSingletonInstance().delete(compound.getID(), element.getID());
+=======
+        ecTableDataGateway.delete(compound.getID(), element.getID());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
       }
       ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(compound.getID());
       row.delete();
@@ -108,7 +138,11 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   @Override
   public List<Compound> getAll() throws DomainModelException {
     try {
+<<<<<<< HEAD
       return convertToCompound(ChemicalTableDataGatewayRDS.getSingletonInstance().getCompounds().executeQuery());
+=======
+      return convertToCompound(chemicalTableDataGateway.getCompounds().executeQuery());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Compounds.", e);
     }
@@ -120,7 +154,11 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   @Override
   public List<Compound> filterByNameLike(String nameLike) throws DomainModelException {
     try {
+<<<<<<< HEAD
       return convertToCompound(ChemicalTableDataGatewayRDS.getSingletonInstance().getCompounds().filterByNameLike(nameLike).executeQuery());
+=======
+      return convertToCompound(chemicalTableDataGateway.getCompounds().filterByNameLike(nameLike).executeQuery());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Compounds with a partial name of '" + nameLike + "'.", e);
     }
@@ -132,7 +170,11 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   @Override
   public List<Compound> filterByInventory(double inventory) throws DomainModelException {
     try {
+<<<<<<< HEAD
       return convertToCompound(ChemicalTableDataGatewayRDS.getSingletonInstance().getCompounds().filterByInventory(inventory).executeQuery());
+=======
+      return convertToCompound(chemicalTableDataGateway.getCompounds().filterByInventory(inventory).executeQuery());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Compounds with an inventory of '" + inventory + "'.", e);
     }
@@ -146,7 +188,11 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   public List<Compound> filterByInventoryBetween(double min, double max) throws DomainModelException {
     try {
       return convertToCompound(
+<<<<<<< HEAD
           ChemicalTableDataGatewayRDS.getSingletonInstance().getCompounds().filterByInventoryBetween(min, max).executeQuery());
+=======
+          chemicalTableDataGateway.getCompounds().filterByInventoryBetween(min, max).executeQuery());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Compounds with an inventory between  '" + min + "' < x < '" + max + "'.", e);
@@ -159,7 +205,11 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   @Override
   public List<Compound> filterByMadeOf(int elementID) throws DomainModelException {
     try {
+<<<<<<< HEAD
       return convertToCompound(ElementCompoundTableDataGatewayRDS.getSingletonInstance().readCompoundsWithElement(elementID).getRelations());
+=======
+      return convertToCompound(ecTableDataGateway.findCompoundsByElementID(elementID).getRelations());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Compounds that contain Element '" + elementID + "'.", e);
     }

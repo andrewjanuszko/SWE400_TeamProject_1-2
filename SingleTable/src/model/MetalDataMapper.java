@@ -20,10 +20,25 @@ import datasource.ElementCompoundTableDataGatewayRDS;
 public class MetalDataMapper implements MetalDataMapperInterface {
 
   private ChemicalTableDataGateway chemicalTableDataGateway = ChemicalTableDataGatewayRDS.getSingletonInstance();
+<<<<<<< HEAD
+=======
 
+  private ElementCompoundTableDataGatewayRDS ecTableDataGateway;
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+
+<<<<<<< HEAD
   private ElementCompoundTableDataGatewayRDS ecTableDataGateway = ElementCompoundTableDataGatewayRDS.getSingletonInstance();
+=======
+  /**
+   * Empty constructor for MetalDataMapper.
+   */
+  public MetalDataMapper() {
+    // EMPTY
+  }
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
 
   /**
+<<<<<<< HEAD
    * Empty constructor for MetalDataMapper.
    */
   public MetalDataMapper() {
@@ -31,6 +46,8 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
 
   /**
+=======
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
    * @see model.MetalDataMapperInterface#create(String, double, int, double,
    *      double).
    */

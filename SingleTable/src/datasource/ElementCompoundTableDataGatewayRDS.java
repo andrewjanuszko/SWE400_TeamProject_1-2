@@ -41,7 +41,15 @@ public class ElementCompoundTableDataGatewayRDS implements ElementCompoundTableD
    * @return
    * @throws DatabaseException
    */
+<<<<<<< HEAD
   private static Connection getConnection() throws DatabaseException {
+=======
+  public void createTable() throws DatabaseException {
+    
+    String createTableSQL = "CREATE TABLE IF NOT EXISTS ElementCompound (" + "compoundID INTEGER NOT NULL, "
+        + "elementID INTEGER NOT NULL, " + "FOREIGN KEY (compoundID) REFERENCES Chemical(id), "
+        + "FOREIGN KEY (elementID) REFERENCES Chemical(id));";
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     try {
       return DatabaseManager.getSingleton().getConnection();
     } catch (DatabaseException e) {
@@ -61,10 +69,19 @@ public class ElementCompoundTableDataGatewayRDS implements ElementCompoundTableD
         + "FOREIGN KEY (elementID) REFERENCES Chemical(id));";
     PreparedStatement statement;
     try {
+<<<<<<< HEAD
       statement = getConnection().prepareStatement(createTable);
       statement.execute();
     } catch (SQLException | DatabaseException e) {
       throw new DatabaseException("Failed to create table 'ElementCompound'.", e);
+=======
+      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertSQL);
+      statement.setInt(1, compoundID);
+      statement.setInt(2, elementID); 
+      statement.executeUpdate();
+    } catch (SQLException e) {
+      throw new DatabaseException("Failed to create row in CompoundMadeFromElement table.", e);
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     }
   }
   
@@ -191,12 +208,49 @@ public class ElementCompoundTableDataGatewayRDS implements ElementCompoundTableD
         int dissolvedBy = results.getInt("dissolvedBy");
         double acidAmount = results.getDouble("acidAmount");
         int solute = results.getInt("solute");
+<<<<<<< HEAD
         chemicals.add(new ChemicalDTO(id, type, name, inventory, atomicNumber, atomicMass, dissolvedBy, acidAmount, solute));
+=======
+        ChemicalDTO chemical = new ChemicalDTO(id, type, name, inventory, atomicNumber, atomicMass, dissolvedBy,
+        		acidAmount, solute);
+        listDTO.add(chemical);
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
       }
       return chemicals;
     } catch (SQLException e) {
       throw new DatabaseException("Failed to convert PreparedStatement to List<ChemicalDTO>.", e);
     }
+<<<<<<< HEAD
+=======
+    return listDTO;
+  }
+
+  /**
+   * Delete a row from the table.
+   */
+  @Override
+  public void delete(int compoundID, int elementID) throws DatabaseException {
+    String deleteSQL = "DELETE FROM ElementCompound WHERE compoundID = ? and elementID = ?;";
+    try {
+      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteSQL);
+      statement.setInt(1, compoundID);
+      statement.setInt(2, elementID);
+      statement.execute();
+    } catch (SQLException e) {
+      throw new DatabaseException("Could not delete compound " + compoundID + " with element " + elementID + ".", e);
+    }
+  }
+
+  /**
+   * this is for testing only.
+   * 
+   * @throws DatabaseException
+   */
+  @Override
+  public void resetData() throws DatabaseException {
+    singletonInstance = null;
+    dropTable();
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
   }
 
 }

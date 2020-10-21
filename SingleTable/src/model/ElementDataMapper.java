@@ -6,6 +6,7 @@ import java.util.List;
 import dataDTO.ChemicalDTO;
 import dataENUM.ChemicalEnum;
 import datasource.ChemicalRowDataGatewayRDS;
+import datasource.ChemicalTableDataGateway;
 import datasource.ChemicalTableDataGatewayRDS;
 import datasource.DatabaseException;
 import datasource.ElementCompoundTableDataGatewayRDS;
@@ -18,7 +19,21 @@ import datasource.ElementCompoundTableDataGatewayRDS;
  */
 public class ElementDataMapper implements ElementDataMapperInterface {
 
+<<<<<<< HEAD
   /**
+   * An empty Constructor for ElementDataMapper.
+   */
+  public ElementDataMapper() {
+    // EMPTY
+  }
+=======
+  private ChemicalTableDataGateway chemicalTableDataGateway = ChemicalTableDataGatewayRDS.getSingletonInstance();
+  private ElementCompoundTableDataGatewayRDS ecTableDataGateway;
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+
+  /**
+<<<<<<< HEAD
+=======
    * An empty Constructor for ElementDataMapper.
    */
   public ElementDataMapper() {
@@ -26,6 +41,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   }
 
   /**
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
    * @see model.ElementDataMapperInterface#create(String, double, int, double).
    */
   @Override
@@ -89,7 +105,11 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> getAll() throws DomainModelException {
     try {
+<<<<<<< HEAD
       List<ChemicalDTO> chemicals = ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().executeQuery();
+=======
+      List<ChemicalDTO> chemicals = chemicalTableDataGateway.getElements().executeQuery();
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
       return convertToElement(chemicals);
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements.", e);
@@ -102,7 +122,11 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByNameLike(String nameLike) throws DomainModelException {
     try {
+<<<<<<< HEAD
       return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByNameLike(nameLike).executeQuery());
+=======
+      return convertToElement(chemicalTableDataGateway.getElements().filterByNameLike(nameLike).executeQuery());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with a partial name match of '" + nameLike + "'.", e);
     }
@@ -114,7 +138,11 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByInventory(double inventory) throws DomainModelException {
     try {
+<<<<<<< HEAD
       return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByInventory(inventory).executeQuery());
+=======
+      return convertToElement(chemicalTableDataGateway.getElements().filterByInventory(inventory).executeQuery());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with an inventory value of '" + inventory + "'.", e);
     }
@@ -126,7 +154,11 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByInventoryBetween(double min, double max) throws DomainModelException {
     try {
+<<<<<<< HEAD
       return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByInventoryBetween(min, max).executeQuery());
+=======
+      return convertToElement(chemicalTableDataGateway.getElements().filterByInventoryBetween(min, max).executeQuery());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Elements with inventory between '" + min + "' < x < '" + max + "'.", e);
@@ -140,7 +172,11 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   public List<Element> filterByAtomicNumber(int atomicNumber) throws DomainModelException {
     try {
       return convertToElement(
+<<<<<<< HEAD
           ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByAtomicNumber(atomicNumber).executeQuery());
+=======
+          chemicalTableDataGateway.getElements().filterByAtomicNumber(atomicNumber).executeQuery());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with atomic number of '" + atomicNumber + "'.", e);
     }
@@ -152,7 +188,11 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByAtomicNumberBetween(int min, int max) throws DomainModelException {
     try {
+<<<<<<< HEAD
       return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByAtomicNumberBetween(min, max).executeQuery());
+=======
+      return convertToElement(chemicalTableDataGateway.getElements().filterByAtomicNumberBetween(min, max).executeQuery());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Element with atomic number between '" + min + "' < x < '" + max + "'.", e);
     }
@@ -165,7 +205,11 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   public List<Element> filterByAtomicMass(double atomicMass) throws DomainModelException {
     try {
       return convertToElement(
+<<<<<<< HEAD
           ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByAtomicMass(atomicMass).executeQuery());
+=======
+          chemicalTableDataGateway.getElements().filterByAtomicMass(atomicMass).executeQuery());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with atomic mass of '" + atomicMass + "'.", e);
     }
@@ -178,7 +222,11 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByAtomicMassBetween(double min, double max) throws DomainModelException {
     try {
+<<<<<<< HEAD
       return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByAtomicMassBetween(min, max).executeQuery());
+=======
+      return convertToElement(chemicalTableDataGateway.getElements().filterByAtomicMassBetween(min, max).executeQuery());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Element with atomic mass between '" + min + "' < x < '" + max + "'.", e);
@@ -203,7 +251,11 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByLowInventory() throws DomainModelException {
     try {
+<<<<<<< HEAD
       return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElementsWithLowInventory());
+=======
+      return convertToElement(chemicalTableDataGateway.getElementsWithLowInventory());
+>>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with low inventory.", e);
     }
