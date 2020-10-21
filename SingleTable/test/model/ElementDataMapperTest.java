@@ -14,6 +14,7 @@ import datasource.ElementCompoundTableDataGatewayRDS;
 
 public class ElementDataMapperTest {
   
+  
   /**
    * Create the tables for the test.
    * @throws Exception when things to wrong.
@@ -21,7 +22,8 @@ public class ElementDataMapperTest {
   @BeforeEach
   public void beforeEach() throws DatabaseException {
     ChemicalRowDataGatewayRDS.createTable();
-    ElementCompoundTableDataGatewayRDS.createTable();
+    ElementCompoundTableDataGatewayRDS elementCompoundTableDataGateway = ElementCompoundTableDataGatewayRDS.getSingletonInstance();
+    elementCompoundTableDataGateway.createTable();
   }
 
   /**
@@ -30,7 +32,8 @@ public class ElementDataMapperTest {
    */
   @AfterEach
   public void afterEach() throws DatabaseException {
-    ElementCompoundTableDataGatewayRDS.dropTable();
+    ElementCompoundTableDataGatewayRDS elementCompoundTableDataGateway = ElementCompoundTableDataGatewayRDS.getSingletonInstance();
+    elementCompoundTableDataGateway.dropTable();
     ChemicalRowDataGatewayRDS.dropTable();
   }
 

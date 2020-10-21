@@ -21,7 +21,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
 
   private ChemicalTableDataGateway chemicalTableDataGateway = ChemicalTableDataGatewayRDS.getSingletonInstance();
 
-  private ElementCompoundTableDataGatewayRDS ecTableDataGateway;
+  private ElementCompoundTableDataGatewayRDS ecTableDataGateway = ElementCompoundTableDataGatewayRDS.getSingletonInstance();
 
   /**
    * Empty constructor for MetalDataMapper.
@@ -236,7 +236,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   public List<Metal> filterByPartOfCompound(int compoundID) throws DomainModelException {
     try {
       List<ChemicalDTO> temp = new ArrayList<>();
-      ElementCompoundDTO compound = ecTableDataGateway.findElementsByCompoundID(compoundID);
+      ElementCompoundDTO compound = ecTableDataGateway.readElementsFromCompound(compoundID);
       for (ChemicalDTO element : compound.getRelations()) {
         if (element.getType() == ChemicalEnum.METAL.getIntValue()) {
           temp.add(element);

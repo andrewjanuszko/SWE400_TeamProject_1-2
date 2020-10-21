@@ -6,7 +6,7 @@ public class CompoundElementTDGTest extends CompoundElementTDGRDSTest {
 	 * Gets a singleton.
 	 */
 	@Override
-	protected ElementCompoundTableDataGateway getSingletonInstance() {
+	protected ElementCompoundTableDataGatewayRDS getSingletonInstance() {
 		return ElementCompoundTableDataGatewayRDS.getSingletonInstance();
 	}
 

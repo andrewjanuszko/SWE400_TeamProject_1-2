@@ -8,6 +8,7 @@ import dataENUM.ChemicalEnum;
 import datasource.ChemicalRowDataGatewayRDS;
 import datasource.ChemicalTableDataGatewayRDS;
 import datasource.DatabaseException;
+import datasource.ElementCompoundTableDataGateway;
 import datasource.ElementCompoundTableDataGatewayRDS;
 
 /**
@@ -17,9 +18,6 @@ import datasource.ElementCompoundTableDataGatewayRDS;
  *
  */
 public class CompoundDataMapper implements CompoundDataMapperInterface {
-
-  private ChemicalTableDataGatewayRDS chemicalTableDataGateway;
-  private ElementCompoundTableDataGatewayRDS ecTableDataGateway;
 
   /**
    * Empty constructor for CompoundDataMapper.
@@ -39,9 +37,9 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
       final int compoundID = row.getID();
       for (Element element : madeOf) {
         row = new ChemicalRowDataGatewayRDS(element.getID());
-        ecTableDataGateway.createRow(compoundID, row.getID());
+        ElementCompoundTableDataGatewayRDS.getSingletonInstance().create(compoundID, row.getID());
       }
-      return new Compound(row.getID(), name, inventory, madeOf);
+      return new Compound(compoundID, name, inventory, madeOf);
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to create Compound.", e);
     }
@@ -54,7 +52,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   public Compound read(int id) throws DomainModelException {
     try {
       ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(id);
-      List<ChemicalDTO> elements = ecTableDataGateway.findElementsByCompoundID(id).getRelations();
+      List<ChemicalDTO> elements = ElementCompoundTableDataGatewayRDS.getSingletonInstance().readElementsFromCompound(id).getRelations();
       List<Element> madeOf = new ArrayList<>();
       for (ChemicalDTO element : elements) {
         madeOf.add(new Element(element.getID(), element.getName(), element.getInventory(), element.getAtomicNumber(),
@@ -74,10 +72,10 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     try {
       List<Element> elements = new ElementDataMapper().filterByPartOfCompound(compound.getID());
       for (Element element : elements) {
-        ecTableDataGateway.delete(compound.getID(), element.getID());
+        ElementCompoundTableDataGatewayRDS.getSingletonInstance().delete(compound.getID(), element.getID());
       }
       for (Element element : compound.getMadeOf()) {
-        ecTableDataGateway.createRow(compound.getID(), element.getID());
+        ElementCompoundTableDataGatewayRDS.getSingletonInstance().create(compound.getID(), element.getID());
       }
       ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(compound.getID());
       row.setName(compound.getName());
@@ -95,7 +93,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     try {
       List<Element> elements = new ElementDataMapper().filterByPartOfCompound(compound.getID());
       for (Element element : elements) {
-        ecTableDataGateway.delete(compound.getID(), element.getID());
+        ElementCompoundTableDataGatewayRDS.getSingletonInstance().delete(compound.getID(), element.getID());
       }
       ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(compound.getID());
       row.delete();
@@ -110,7 +108,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   @Override
   public List<Compound> getAll() throws DomainModelException {
     try {
-      return convertToCompound(chemicalTableDataGateway.getCompounds().executeQuery());
+      return convertToCompound(ChemicalTableDataGatewayRDS.getSingletonInstance().getCompounds().executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Compounds.", e);
     }
@@ -122,7 +120,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   @Override
   public List<Compound> filterByNameLike(String nameLike) throws DomainModelException {
     try {
-      return convertToCompound(chemicalTableDataGateway.getCompounds().filterByNameLike(nameLike).executeQuery());
+      return convertToCompound(ChemicalTableDataGatewayRDS.getSingletonInstance().getCompounds().filterByNameLike(nameLike).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Compounds with a partial name of '" + nameLike + "'.", e);
     }
@@ -134,7 +132,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   @Override
   public List<Compound> filterByInventory(double inventory) throws DomainModelException {
     try {
-      return convertToCompound(chemicalTableDataGateway.getCompounds().filterByInventory(inventory).executeQuery());
+      return convertToCompound(ChemicalTableDataGatewayRDS.getSingletonInstance().getCompounds().filterByInventory(inventory).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Compounds with an inventory of '" + inventory + "'.", e);
     }
@@ -148,7 +146,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   public List<Compound> filterByInventoryBetween(double min, double max) throws DomainModelException {
     try {
       return convertToCompound(
-          chemicalTableDataGateway.getCompounds().filterByInventoryBetween(min, max).executeQuery());
+          ChemicalTableDataGatewayRDS.getSingletonInstance().getCompounds().filterByInventoryBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Compounds with an inventory between  '" + min + "' < x < '" + max + "'.", e);
@@ -161,7 +159,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   @Override
   public List<Compound> filterByMadeOf(int elementID) throws DomainModelException {
     try {
-      return convertToCompound(ecTableDataGateway.findCompoundsByElementID(elementID).getRelations());
+      return convertToCompound(ElementCompoundTableDataGatewayRDS.getSingletonInstance().readCompoundsWithElement(elementID).getRelations());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Compounds that contain Element '" + elementID + "'.", e);
     }

@@ -14,9 +14,9 @@ import java.util.List;
  * 
  * @author andrewjanuszko
  */
-public class ChemicalTableDataGatewayRDS extends ChemicalTableDataGateway {
+public class ChemicalTableDataGatewayRDS implements ChemicalTableDataGateway {
 
-  private static ChemicalTableDataGateway singletonInstance;
+  private static ChemicalTableDataGateway singletonInstance = null;
 
   private static String querySQL = "";
 

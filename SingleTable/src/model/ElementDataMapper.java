@@ -6,10 +6,8 @@ import java.util.List;
 import dataDTO.ChemicalDTO;
 import dataENUM.ChemicalEnum;
 import datasource.ChemicalRowDataGatewayRDS;
-import datasource.ChemicalTableDataGateway;
 import datasource.ChemicalTableDataGatewayRDS;
 import datasource.DatabaseException;
-import datasource.ElementCompoundTableDataGateway;
 import datasource.ElementCompoundTableDataGatewayRDS;
 
 /**
@@ -19,9 +17,6 @@ import datasource.ElementCompoundTableDataGatewayRDS;
  *
  */
 public class ElementDataMapper implements ElementDataMapperInterface {
-
-  private ChemicalTableDataGateway chemicalTableDataGateway = ChemicalTableDataGatewayRDS.getSingletonInstance();
-  private ElementCompoundTableDataGateway elementCompoundTableDataGateway = ElementCompoundTableDataGatewayRDS.getSingletonInstance();
 
   /**
    * An empty Constructor for ElementDataMapper.
@@ -94,7 +89,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> getAll() throws DomainModelException {
     try {
-      List<ChemicalDTO> chemicals = chemicalTableDataGateway.getElements().executeQuery();
+      List<ChemicalDTO> chemicals = ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().executeQuery();
       return convertToElement(chemicals);
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements.", e);
@@ -107,7 +102,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByNameLike(String nameLike) throws DomainModelException {
     try {
-      return convertToElement(chemicalTableDataGateway.getElements().filterByNameLike(nameLike).executeQuery());
+      return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByNameLike(nameLike).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with a partial name match of '" + nameLike + "'.", e);
     }
@@ -119,7 +114,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByInventory(double inventory) throws DomainModelException {
     try {
-      return convertToElement(chemicalTableDataGateway.getElements().filterByInventory(inventory).executeQuery());
+      return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByInventory(inventory).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with an inventory value of '" + inventory + "'.", e);
     }
@@ -131,7 +126,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByInventoryBetween(double min, double max) throws DomainModelException {
     try {
-      return convertToElement(chemicalTableDataGateway.getElements().filterByInventoryBetween(min, max).executeQuery());
+      return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByInventoryBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Elements with inventory between '" + min + "' < x < '" + max + "'.", e);
@@ -145,7 +140,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   public List<Element> filterByAtomicNumber(int atomicNumber) throws DomainModelException {
     try {
       return convertToElement(
-          chemicalTableDataGateway.getElements().filterByAtomicNumber(atomicNumber).executeQuery());
+          ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByAtomicNumber(atomicNumber).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with atomic number of '" + atomicNumber + "'.", e);
     }
@@ -157,7 +152,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByAtomicNumberBetween(int min, int max) throws DomainModelException {
     try {
-      return convertToElement(chemicalTableDataGateway.getElements().filterByAtomicNumberBetween(min, max).executeQuery());
+      return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByAtomicNumberBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Element with atomic number between '" + min + "' < x < '" + max + "'.", e);
     }
@@ -170,7 +165,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   public List<Element> filterByAtomicMass(double atomicMass) throws DomainModelException {
     try {
       return convertToElement(
-          chemicalTableDataGateway.getElements().filterByAtomicMass(atomicMass).executeQuery());
+          ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByAtomicMass(atomicMass).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with atomic mass of '" + atomicMass + "'.", e);
     }
@@ -183,7 +178,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByAtomicMassBetween(double min, double max) throws DomainModelException {
     try {
-      return convertToElement(chemicalTableDataGateway.getElements().filterByAtomicMassBetween(min, max).executeQuery());
+      return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByAtomicMassBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Element with atomic mass between '" + min + "' < x < '" + max + "'.", e);
@@ -196,7 +191,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByPartOfCompound(int compoundID) throws DomainModelException {
     try {
-      return convertToElement(elementCompoundTableDataGateway.findElementsByCompoundID(compoundID).getRelations());
+      return convertToElement(ElementCompoundTableDataGatewayRDS.getSingletonInstance().readElementsFromCompound(compoundID).getRelations());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get Elements in Compound with ID '" + compoundID + "'.", e);
     }
@@ -208,7 +203,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByLowInventory() throws DomainModelException {
     try {
-      return convertToElement(chemicalTableDataGateway.getElementsWithLowInventory());
+      return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElementsWithLowInventory());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with low inventory.", e);
     }

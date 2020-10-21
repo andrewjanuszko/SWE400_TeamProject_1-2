@@ -1,9 +1,9 @@
 package datasource;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import dataDTO.ChemicalDTO;
@@ -15,138 +15,170 @@ import dataDTO.ElementCompoundDTO;
  * @author andrewjanuszko
  */
 public class ElementCompoundTableDataGatewayRDS implements ElementCompoundTableDataGateway {
-
-  private static ElementCompoundTableDataGateway singletonInstance;
-
+  
+  private static ElementCompoundTableDataGatewayRDS singletonInstance;
+  
   /**
-   * Get the singleton instance of the RDS gateway.
    * 
-   * @return the singleton instance.
    */
-  public static synchronized ElementCompoundTableDataGateway getSingletonInstance() {
+  private ElementCompoundTableDataGatewayRDS() {
+    System.out.println("Loading instance of ElementCompoundTableDataGatewayRDS");
+  }
+  
+  /**
+   * 
+   * @return
+   */
+  public static synchronized ElementCompoundTableDataGatewayRDS getSingletonInstance() {
     if (singletonInstance == null) {
       singletonInstance = new ElementCompoundTableDataGatewayRDS();
     }
     return singletonInstance;
   }
   
-  private ElementCompoundTableDataGatewayRDS() {
-    try {
-      createTable();
-    } catch (DatabaseException e) {
-      e.printStackTrace();
-    }
-  }
-
   /**
-   * Drop the CompoundMadeFromElement table if it already exists, then recreate it
-   * as an empty table.
    * 
-   * @throws DatabaseException when something goes really wrong.
+   * @return
+   * @throws DatabaseException
    */
-  public void createTable() throws DatabaseException {
-    
-    String createTableSQL = "CREATE TABLE IF NOT EXISTS ElementCompound (" + "compoundID INTEGER NOT NULL, "
-        + "elementID INTEGER NOT NULL, " + "FOREIGN KEY (compoundID) REFERENCES Chemical(id), "
-        + "FOREIGN KEY (elementID) REFERENCES Chemical(id));";
+  private static Connection getConnection() throws DatabaseException {
     try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate(createTableSQL);
-    } catch (SQLException e) {
-      throw new DatabaseException("Failed to create ElementCompound table.", e);
+      return DatabaseManager.getSingleton().getConnection();
+    } catch (DatabaseException e) {
+      throw new DatabaseException("Failed to get connection to database.", e);
     }
   }
   
-  public void dropTable() throws DatabaseException {
-    String dropTableSQL = "DROP TABLE IF EXISTS ElementCompound";
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate(dropTableSQL);
-    } catch (SQLException e) {
-      throw new DatabaseException("Failed to drop ElementCompound table.", e);
-    }
-  }
-
   /**
-   * Creates a new row in the CompoundMadeFromElement table.
    * 
-   * @param compoundID the id of the compound.
-   * @param elementID  the id of the element.
-   * @throws DatabaseException when insertion fails.
+   * @throws DatabaseException
    */
-  public void createRow(int compoundID, int elementID) throws DatabaseException {
-    String insertSQL = "INSERT INTO ElementCompound SET compoundID = ?, elementID = ?;";
+  public void createTable() throws DatabaseException {
+    final String createTable = "CREATE TABLE IF NOT EXISTS ElementCompound("
+        + "compoundID INTEGER NOT NULL, "
+        + "elementID INTEGER NOT NULL, "
+        + "FOREIGN KEY (compoundID) REFERENCES Chemical(id), "
+        + "FOREIGN KEY (elementID) REFERENCES Chemical(id));";
+    PreparedStatement statement;
     try {
-      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(insertSQL);
-      statement.setInt(1, compoundID);
-      statement.setInt(2, elementID); 
-      statement.executeUpdate();
-    } catch (SQLException e) {
-      throw new DatabaseException("Failed to create row in CompoundMadeFromElement table.", e);
+      statement = getConnection().prepareStatement(createTable);
+      statement.execute();
+    } catch (SQLException | DatabaseException e) {
+      throw new DatabaseException("Failed to create table 'ElementCompound'.", e);
     }
   }
-
+  
   /**
-   * @see datasource.CompoundMadeFromElementTableDataGateway#updateRow(long,
-   *      long).
+   * 
+   * @throws DatabaseException
+   */
+  public void dropTable() throws DatabaseException {
+    final String dropTable = "DROP TABLE IF EXISTS ElementCompound;";
+    PreparedStatement statement;
+    try {
+      statement = getConnection().prepareStatement(dropTable);
+      statement.execute();
+    } catch (SQLException | DatabaseException e) {
+      throw new DatabaseException("Failed to drop table 'ElementCompound'.", e);
+    }
+  }
+  
+  /**
+   * 
    */
   @Override
-  public void updateRow(int oldCompoundID, int oldElementID, int newCompoundID, int newElementID)
-      throws DatabaseException {
-    String updateSQL = "UPDATE ElementCompound SET compoundID = ?, elementID = ? WHERE compoundID = ? and elementID = ?;";
+  public void create(int compoundID, int elementID) throws DatabaseException {
+    final String create = "INSERT INTO ElementCompound VALUES (?, ?);";
+    PreparedStatement statement;
     try {
-      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(updateSQL);
+      statement = getConnection().prepareStatement(create);
+      statement.setInt(1, compoundID);
+      statement.setInt(2, elementID);
+      statement.execute();
+    } catch (SQLException | DatabaseException e) {
+      throw new DatabaseException("Failed to insert into table 'ElementCompound'.", e);
+    }
+  }
+
+  /**
+   * 
+   */
+  @Override
+  public void update(int oldCompoundID, int oldElementID, int newCompoundID, int newElementID)
+      throws DatabaseException {
+    final String update = "UPDATE ElementCompound SET compoundID = ?, elementID = ? WHERE compoundID = ? AND elementID = ?;";
+    PreparedStatement statement;
+    try {
+      statement = getConnection().prepareStatement(update);
       statement.setInt(1, newCompoundID);
       statement.setInt(2, newElementID);
       statement.setInt(3, oldCompoundID);
       statement.setInt(4, oldElementID);
-      statement.executeUpdate();
-    } catch (SQLException e) {
-      throw new DatabaseException("Failed to update row in CompoundMadeFromElement table.", e);
+      statement.execute();
+    } catch (SQLException | DatabaseException e) {
+      throw new DatabaseException("Failed to update in table 'ElementCompound'.", e);
     }
   }
 
   /**
-   * @see datasource.findElementsByCompoundID(int compoundID).
-   */
-  @Override
-  public ElementCompoundDTO findElementsByCompoundID(int compoundID) throws DatabaseException {
-    try {
-      String selectSQL = "SELECT * FROM Chemical WHERE Chemical.id IN (SELECT elementID FROM ElementCompound WHERE ElementCompound.compoundID = ?);";
-      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-      statement.setInt(1, compoundID);
-      List<ChemicalDTO> elements = convertToDTO(statement);
-      return new ElementCompoundDTO(compoundID, elements);
-    } catch (SQLException e) {
-      throw new DatabaseException("Failed to convert query to DTO.", e);
-    }
-  }
-
-  /**
-   * @see datasource.findCompoundsByElementID(int elementID).
-   */
-  @Override
-  public ElementCompoundDTO findCompoundsByElementID(int elementID) throws DatabaseException {
-    try {
-      String selectSQL = "SELECT * FROM Chemical WHERE Chemical.id IN (SELECT compoundID FROM ElementCompound WHERE ElementCompound.elementID = ?);";
-      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(selectSQL);
-      statement.setInt(1, elementID);
-      List<ChemicalDTO> compounds = convertToDTO(statement);
-      return new ElementCompoundDTO(elementID, compounds);
-    } catch (SQLException e) {
-      throw new DatabaseException("Failed to convert query to DTO.", e);
-    }
-  }
-
-  /**
-   * Converts a query to a list of ChemicalDTOs.
    * 
-   * @param statement the query on the database.
-   * @return a list of ChemicalDTOs.
-   * @throws DatabaseException when things go wrong.
    */
-  private List<ChemicalDTO> convertToDTO(PreparedStatement statement) throws DatabaseException {
-    List<ChemicalDTO> listDTO = new ArrayList<>();
+  @Override
+  public void delete(int compoundID, int elementID) throws DatabaseException {
+    final String delete = "DELETE FROM ElementCompound WHERE compoundID = ? AND elementID = ?;";
+    PreparedStatement statement;
+    try {
+      statement = getConnection().prepareStatement(delete);
+      statement.setInt(1, compoundID);
+      statement.setInt(2, elementID);
+      statement.execute();
+    } catch (SQLException | DatabaseException e) {
+      throw new DatabaseException("Failed to delete from table 'ElementCompound'.", e);
+    }
+  }
+
+  /**
+   * 
+   */
+  @Override
+  public ElementCompoundDTO readElementsFromCompound(int compoundID) throws DatabaseException {
+    final String read = "SELECT * FROM Chemical WHERE Chemical.id IN (SELECT elementID FROM ElementCompound WHERE ElementCompound.compoundID = ?);";
+    PreparedStatement statement;
+    try {
+      statement = getConnection().prepareStatement(read);
+      statement.setInt(1, compoundID);
+      List<ChemicalDTO> relations = convertQueryToDTO(statement);
+      return new ElementCompoundDTO(compoundID, relations);
+    } catch (SQLException | DatabaseException e) {
+      throw new DatabaseException("Failed to get all Elements in Compound '" + compoundID + "'.", e);
+    }
+  }
+
+  /**
+   * 
+   */
+  @Override
+  public ElementCompoundDTO readCompoundsWithElement(int elementID) throws DatabaseException {
+    final String read = "SELECT * FROM Chemical WHERE Chemical.id IN (SELECT compoundID FROM ElementCompound WHERE ElementCompound.elementID = ?);";
+    PreparedStatement statement;
+    try {
+      statement = getConnection().prepareStatement(read);
+      statement.setInt(1, elementID);
+      List<ChemicalDTO> relations = convertQueryToDTO(statement);
+      return new ElementCompoundDTO(elementID, relations);
+    } catch (SQLException | DatabaseException e) {
+      throw new DatabaseException("Failed to get all Compounds with Element '" + elementID + "'.", e);
+    }
+  }
+  
+  /**
+   * 
+   * @param statement
+   * @return
+   * @throws DatabaseException
+   */
+  private List<ChemicalDTO> convertQueryToDTO(PreparedStatement statement) throws DatabaseException {
+    List<ChemicalDTO> chemicals = new ArrayList<>();
     try {
       ResultSet results = statement.executeQuery();
       while (results.next()) {
@@ -159,41 +191,12 @@ public class ElementCompoundTableDataGatewayRDS implements ElementCompoundTableD
         int dissolvedBy = results.getInt("dissolvedBy");
         double acidAmount = results.getDouble("acidAmount");
         int solute = results.getInt("solute");
-        ChemicalDTO chemical = new ChemicalDTO(id, type, name, inventory, atomicNumber, atomicMass, dissolvedBy,
-        		acidAmount, solute);
-        listDTO.add(chemical);
+        chemicals.add(new ChemicalDTO(id, type, name, inventory, atomicNumber, atomicMass, dissolvedBy, acidAmount, solute));
       }
+      return chemicals;
     } catch (SQLException e) {
-      throw new DatabaseException("Failed to convert query to DTO.", e);
+      throw new DatabaseException("Failed to convert PreparedStatement to List<ChemicalDTO>.", e);
     }
-    return listDTO;
-  }
-
-  /**
-   * Delete a row from the table.
-   */
-  @Override
-  public void delete(int compoundID, int elementID) throws DatabaseException {
-    String deleteSQL = "DELETE FROM ElementCompound WHERE compoundID = ? and elementID = ?;";
-    try {
-      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(deleteSQL);
-      statement.setInt(1, compoundID);
-      statement.setInt(2, elementID);
-      statement.execute();
-    } catch (SQLException e) {
-      throw new DatabaseException("Could not delete compound " + compoundID + " with element " + elementID + ".", e);
-    }
-  }
-
-  /**
-   * this is for testing only.
-   * 
-   * @throws DatabaseException
-   */
-  @Override
-  public void resetData() throws DatabaseException {
-    singletonInstance = null;
-    dropTable();
   }
 
 }
