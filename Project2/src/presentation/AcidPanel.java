@@ -38,6 +38,7 @@ public class AcidPanel extends JPanel{
 	Color labelColor = new Color(30,30,30);
 	List<Acid> acidList;
 	//AcidDataMapper acidMapper = new AcidDataMapper();
+	String filter;
 	
 	public AcidPanel() {
 		this.setLayout(new GridBagLayout());
@@ -133,15 +134,15 @@ public class AcidPanel extends JPanel{
 	}
 	
 	private void filterAcid() {
-		if(selected != null) {
-			//brings up new window based on selected acid
-			new FilterAcidFrame().addWindowListener(new WindowAdapter() {
+			
+			FilterAcidFrame faf = new FilterAcidFrame();
+			    faf.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent arg0) {
-					//reset the view
+					filter = faf.getFilter();
+					System.out.println(filter);
 				}
 			});
-		}
 	}
 	
 	private void getDetailsAcid() {
