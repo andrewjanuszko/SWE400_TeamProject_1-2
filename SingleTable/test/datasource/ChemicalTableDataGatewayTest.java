@@ -10,9 +10,9 @@ import dataDTO.ChemicalDTO;
 
 public abstract class ChemicalTableDataGatewayTest extends DatabaseTest {
 
-  protected ChemicalTableDataGateway gateway = getGateway();
+  protected ChemicalTableDataGatewayInterface gateway = getGateway();
 
-  public abstract ChemicalTableDataGateway getGateway();
+  public abstract ChemicalTableDataGatewayInterface getGateway();
 
   /**
    * Fills the database with entries to test on.
@@ -22,20 +22,20 @@ public abstract class ChemicalTableDataGatewayTest extends DatabaseTest {
   @SuppressWarnings("unused")
   @BeforeEach
   public void fillDatabase() throws DatabaseException {
-    ChemicalRowDataGatewayRDS.createTable();
-    ChemicalRowDataGatewayRDS aquaRegia = new ChemicalRowDataGatewayRDS(5, "Aqua Regia", 123.4, 0, 0, 0, 0, 0);
-    ChemicalRowDataGatewayRDS gold = new ChemicalRowDataGatewayRDS(2, "Gold", 923, 0, 0, 1, 170.0, 0);
-    ChemicalRowDataGatewayRDS platinum = new ChemicalRowDataGatewayRDS(2, "Platinum", 923, 0, 0, 1, 17.0, 0);
-    ChemicalRowDataGatewayRDS palladium = new ChemicalRowDataGatewayRDS(2, "Palladium", 923, 0, 0, 1, 17.0, 0);
-    ChemicalRowDataGatewayRDS unknown = new ChemicalRowDataGatewayRDS(1, "Unknown", 123.0, 0, 0, 0, 0, 0);
-    ChemicalRowDataGatewayRDS funky = new ChemicalRowDataGatewayRDS(1, "Funky", 9.0, 17, 9.810, 0, 0, 0);
-    ChemicalRowDataGatewayRDS carbon = new ChemicalRowDataGatewayRDS(1, "Carbon", 1.0, 6, 12.011, 0, 0, 0);
-    ChemicalRowDataGatewayRDS cmpd1 = new ChemicalRowDataGatewayRDS(3, "Compound #1", 66.6, 0, 0, 0, 0, 0);
-    ChemicalRowDataGatewayRDS cmpd4 = new ChemicalRowDataGatewayRDS(3, "Compound #4", 213.6, 0, 0, 0, 0, 0);
-    ChemicalRowDataGatewayRDS cmpd2 = new ChemicalRowDataGatewayRDS(3, "Compound #2", 621, 0, 0, 0, 0, 0);
-    ChemicalRowDataGatewayRDS cmpd3 = new ChemicalRowDataGatewayRDS(3, "Compound #3", 24.2, 0, 0, 0, 0, 0);
-    ChemicalRowDataGatewayRDS element1 = new ChemicalRowDataGatewayRDS(1, "element1", 777, 7, 14,5, 0, 0);
-    ChemicalRowDataGatewayRDS base = new ChemicalRowDataGatewayRDS(4, "base", 36.6, 0, 0, 0, 0, 2);
+    ChemicalRowDataGateway.createTable();
+    ChemicalRowDataGateway aquaRegia = new ChemicalRowDataGateway(5, "Aqua Regia", 123.4, 0, 0, 0, 0, 0);
+    ChemicalRowDataGateway gold = new ChemicalRowDataGateway(2, "Gold", 923, 0, 0, 1, 170.0, 0);
+    ChemicalRowDataGateway platinum = new ChemicalRowDataGateway(2, "Platinum", 923, 0, 0, 1, 17.0, 0);
+    ChemicalRowDataGateway palladium = new ChemicalRowDataGateway(2, "Palladium", 923, 0, 0, 1, 17.0, 0);
+    ChemicalRowDataGateway unknown = new ChemicalRowDataGateway(1, "Unknown", 123.0, 0, 0, 0, 0, 0);
+    ChemicalRowDataGateway funky = new ChemicalRowDataGateway(1, "Funky", 9.0, 17, 9.810, 0, 0, 0);
+    ChemicalRowDataGateway carbon = new ChemicalRowDataGateway(1, "Carbon", 1.0, 6, 12.011, 0, 0, 0);
+    ChemicalRowDataGateway cmpd1 = new ChemicalRowDataGateway(3, "Compound #1", 66.6, 0, 0, 0, 0, 0);
+    ChemicalRowDataGateway cmpd4 = new ChemicalRowDataGateway(3, "Compound #4", 213.6, 0, 0, 0, 0, 0);
+    ChemicalRowDataGateway cmpd2 = new ChemicalRowDataGateway(3, "Compound #2", 621, 0, 0, 0, 0, 0);
+    ChemicalRowDataGateway cmpd3 = new ChemicalRowDataGateway(3, "Compound #3", 24.2, 0, 0, 0, 0, 0);
+    ChemicalRowDataGateway element1 = new ChemicalRowDataGateway(1, "element1", 777, 7, 14,5, 0, 0);
+    ChemicalRowDataGateway base = new ChemicalRowDataGateway(4, "base", 36.6, 0, 0, 0, 0, 2);
   }
 
   /**
@@ -44,7 +44,7 @@ public abstract class ChemicalTableDataGatewayTest extends DatabaseTest {
    */
   @AfterEach
   public void dropDatabase() throws DatabaseException {
-    ChemicalRowDataGatewayRDS.dropTable();
+    ChemicalRowDataGateway.dropTable();
   }
 
   /**

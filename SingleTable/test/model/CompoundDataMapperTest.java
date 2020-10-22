@@ -6,23 +6,23 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import datasource.ChemicalRowDataGatewayRDS;
-import datasource.ElementCompoundTableDataGatewayRDS;
+import datasource.ChemicalRowDataGateway;
+import datasource.ElementCompoundTableDataGateway;
 
 class CompoundDataMapperTest {
   
-  private static ElementCompoundTableDataGatewayRDS elementCompoundTableDataGateway;
+  private static ElementCompoundTableDataGateway elementCompoundTableDataGateway;
 
   @BeforeAll
   static void setUpBeforeClass() throws Exception {
-    ChemicalRowDataGatewayRDS.createTable();
+    ChemicalRowDataGateway.createTable();
     elementCompoundTableDataGateway.createTable();
   }
 
   @AfterAll
   static void tearDownAfterClass() throws Exception {
     elementCompoundTableDataGateway.dropTable();
-    ChemicalRowDataGatewayRDS.dropTable();
+    ChemicalRowDataGateway.dropTable();
   }
 
   @Test

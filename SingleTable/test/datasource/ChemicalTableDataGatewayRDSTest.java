@@ -6,8 +6,8 @@ public class ChemicalTableDataGatewayRDSTest extends ChemicalTableDataGatewayTes
 	 * Gets a singleton.
 	 */
 	@Override
-	public ChemicalTableDataGateway getGateway() {
-		return ChemicalTableDataGatewayRDS.getSingletonInstance();
+	public ChemicalTableDataGatewayInterface getGateway() {
+		return ChemicalTableDataGateway.getSingletonInstance();
 	}
 
 }

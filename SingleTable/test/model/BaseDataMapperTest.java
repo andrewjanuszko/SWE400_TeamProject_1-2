@@ -10,14 +10,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import datasource.ChemicalRowDataGatewayRDS;
+import datasource.ChemicalRowDataGateway;
 import datasource.DatabaseException;
 
 class BaseDataMapperTest {
 
   @BeforeEach
   public void setUpBeforeClass() throws DatabaseException, DomainModelException {
-	  ChemicalRowDataGatewayRDS.createTable();
+	  ChemicalRowDataGateway.createTable();
 	  Base calciumHydroxide = new BaseDataMapper().create("Calcium Hydroxide", 52.3, 0);
 	  Base potassiumHydroxide = new BaseDataMapper().create("Potassium Hydroxide", 47.0, 0);
 	  Base rubidiumHydroxide = new BaseDataMapper().create("Rubidium Hydroxide", 32.0, 0);
@@ -25,7 +25,7 @@ class BaseDataMapperTest {
 
   @AfterEach
   public void tearDownAfterClass() throws DatabaseException {
-	  ChemicalRowDataGatewayRDS.dropTable();
+	  ChemicalRowDataGateway.dropTable();
   }
 
   @Test

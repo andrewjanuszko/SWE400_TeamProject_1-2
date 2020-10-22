@@ -2,12 +2,10 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import dataDTO.ChemicalDTO;
 import dataENUM.ChemicalEnum;
-import datasource.ChemicalRowDataGatewayRDS;
+import datasource.ChemicalRowDataGateway;
 import datasource.ChemicalTableDataGateway;
-import datasource.ChemicalTableDataGatewayRDS;
 import datasource.DatabaseException;
 
 /**
@@ -17,8 +15,6 @@ import datasource.DatabaseException;
  *
  */
 public class BaseDataMapper implements BaseDataMapperInterface {
-
-	private ChemicalTableDataGateway chemicalTableDataGateway = ChemicalTableDataGatewayRDS.getSingletonInstance();
 
   /**
    * Empty constructor for BaseDataMapper.
@@ -33,8 +29,8 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   @Override
   public Base create(String name, double inventory, int solute) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(ChemicalEnum.BASE.getIntValue(), name, inventory, 0,
-          0, 0, 0, solute);
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), name, inventory, 0, 0, 0,
+          0, solute);
       return new Base(row.getID(), name, inventory, solute);
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to create a Base.", e);
@@ -47,7 +43,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   @Override
   public Base read(int id) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(id);
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(id);
       return new Base(row.getID(), row.getName(), row.getInventory(), row.getSolute());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to read a Base with ID '" + id + "'.", e);
@@ -60,7 +56,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   @Override
   public void update(Base base) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(base.getID());
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(base.getID());
       row.setName(base.getName());
       row.setInventory(base.getInventory());
       row.setSolute(base.getSolute());
@@ -76,7 +72,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   @Override
   public void delete(Base base) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(base.getID());
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(base.getID());
       row.delete();
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to delete a Base with ID '" + base.getID() + "'.", e);
@@ -89,7 +85,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   @Override
   public List<Base> getAll() throws DomainModelException {
     try {
-      return convertToBase(chemicalTableDataGateway.getBases().executeQuery());
+      return convertToBase(ChemicalTableDataGateway.getSingletonInstance().getBases().executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Bases.", e);
     }
@@ -101,7 +97,8 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   @Override
   public List<Base> filterByNameLike(String nameLike) throws DomainModelException {
     try {
-      return convertToBase(chemicalTableDataGateway.getBases().filterByNameLike(nameLike).executeQuery());
+      return convertToBase(
+          ChemicalTableDataGateway.getSingletonInstance().getBases().filterByNameLike(nameLike).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Bases with name '" + nameLike + "'.", e);
     }
@@ -113,7 +110,8 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   @Override
   public List<Base> filterByInventory(double inventory) throws DomainModelException {
     try {
-      return convertToBase(chemicalTableDataGateway.getBases().filterByInventory(inventory).executeQuery());
+      return convertToBase(
+          ChemicalTableDataGateway.getSingletonInstance().getBases().filterByInventory(inventory).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Bases with inventory of '" + inventory + "'.", e);
     }
@@ -125,7 +123,8 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   @Override
   public List<Base> filterByInventoryBetween(double min, double max) throws DomainModelException {
     try {
-      return convertToBase(chemicalTableDataGateway.getBases().filterByInventoryBetween(min, max).executeQuery());
+      return convertToBase(
+          ChemicalTableDataGateway.getSingletonInstance().getBases().filterByInventoryBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Bases with inventory between '" + min + "' < x < '" + max + "'.", e);
@@ -138,19 +137,20 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   @Override
   public List<Base> filterBySolute(int chemicalID) throws DomainModelException {
     try {
-      return convertToBase(chemicalTableDataGateway.getBases().filterBySolute(chemicalID).executeQuery());
+      return convertToBase(
+          ChemicalTableDataGateway.getSingletonInstance().getBases().filterBySolute(chemicalID).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Bases with solute '" + chemicalID + "'.", e);
     }
   }
-  
+
   /**
    * @see model.BaseDataMapperInterface#filterByLowInventory().
    */
   @Override
   public List<Base> filterByLowInventory() throws DomainModelException {
     try {
-      return convertToBase(chemicalTableDataGateway.getBasesWithLowInventory());
+      return convertToBase(ChemicalTableDataGateway.getSingletonInstance().getBasesWithLowInventory());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Bases with low inventory.", e);
     }

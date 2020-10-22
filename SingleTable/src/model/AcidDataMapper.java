@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import dataDTO.ChemicalDTO;
 import dataENUM.ChemicalEnum;
-import datasource.ChemicalRowDataGatewayRDS;
-import datasource.ChemicalTableDataGatewayRDS;
+import datasource.ChemicalRowDataGateway;
+import datasource.ChemicalTableDataGateway;
 import datasource.DatabaseException;
 
 /**
@@ -15,8 +15,6 @@ import datasource.DatabaseException;
  *
  */
 public class AcidDataMapper implements AcidDataMapperInterface {
-
-  private ChemicalTableDataGatewayRDS chemicalTableDataGateway;
 
   /**
    * Empty constructor for AcidDataMapper.
@@ -31,11 +29,11 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   @Override
   public Acid create(String name, double inventory, List<Metal> dissolves, int solute) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(ChemicalEnum.ACID.getIntValue(), name, inventory, 0,
-          0, 0, 0, solute);
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), name, inventory, 0, 0, 0,
+          0, solute);
       final int acidID = row.getID();
       for (Metal metal : dissolves) {
-        row = new ChemicalRowDataGatewayRDS(metal.getID());
+        row = new ChemicalRowDataGateway(metal.getID());
         row.setDissolvedBy(acidID);
         row.update();
       }
@@ -52,7 +50,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   @Override
   public Acid read(int id) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(id);
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(id);
       List<Metal> dissolves = new MetalDataMapper().filterByDissolvedBy(id);
       return new Acid(row.getID(), row.getName(), row.getInventory(), dissolves, row.getSolute());
     } catch (DatabaseException e) {
@@ -68,16 +66,16 @@ public class AcidDataMapper implements AcidDataMapperInterface {
     try {
       List<Metal> dissolvedBy = new MetalDataMapper().filterByDissolvedBy(acid.getID());
       for (Metal metal : dissolvedBy) {
-        ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(metal.getID());
+        ChemicalRowDataGateway row = new ChemicalRowDataGateway(metal.getID());
         row.setDissolvedBy(0);
         row.update();
       }
       for (Metal metal : acid.getDissolves()) {
-        ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(metal.getID());
+        ChemicalRowDataGateway row = new ChemicalRowDataGateway(metal.getID());
         row.setDissolvedBy(acid.getID());
         row.update();
       }
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(acid.getID());
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(acid.getID());
       row.setName(acid.getName());
       row.setInventory(acid.getInventory());
       row.setSolute(acid.getSolute());
@@ -93,10 +91,10 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   @Override
   public void delete(Acid acid) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(acid.getID());
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(acid.getID());
       List<Metal> dissolves = new MetalDataMapper().filterByDissolvedBy(acid.getID());
       for (Metal metal : dissolves) {
-        row = new ChemicalRowDataGatewayRDS(metal.getID());
+        row = new ChemicalRowDataGateway(metal.getID());
         row.setDissolvedBy(0);
         row.update();
       }
@@ -112,7 +110,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   @Override
   public List<Acid> getAll() throws DomainModelException {
     try {
-      return convertToAcid(chemicalTableDataGateway.getAcids().executeQuery());
+      return convertToAcid(ChemicalTableDataGateway.getSingletonInstance().getAcids().executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Acids.", e);
     }
@@ -124,7 +122,8 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   @Override
   public List<Acid> filterByNameLike(String nameLike) throws DomainModelException {
     try {
-      return convertToAcid(chemicalTableDataGateway.getAcids().filterByNameLike(nameLike).executeQuery());
+      return convertToAcid(
+          ChemicalTableDataGateway.getSingletonInstance().getAcids().filterByNameLike(nameLike).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Acids with name '" + nameLike + "'.", e);
     }
@@ -136,7 +135,8 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   @Override
   public List<Acid> filterByInventory(double inventory) throws DomainModelException {
     try {
-      return convertToAcid(chemicalTableDataGateway.getAcids().filterByInventory(inventory).executeQuery());
+      return convertToAcid(
+          ChemicalTableDataGateway.getSingletonInstance().getAcids().filterByInventory(inventory).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Acids with inventory of '" + inventory + "'.", e);
     }
@@ -148,7 +148,8 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   @Override
   public List<Acid> filterByInventoryBetween(double min, double max) throws DomainModelException {
     try {
-      return convertToAcid(chemicalTableDataGateway.getAcids().filterByInventoryBetween(min, max).executeQuery());
+      return convertToAcid(
+          ChemicalTableDataGateway.getSingletonInstance().getAcids().filterByInventoryBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Acids with inventory between '" + min + "' < x < '" + max + "'.", e);
@@ -161,19 +162,20 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   @Override
   public List<Acid> filterBySolute(int chemicalID) throws DomainModelException {
     try {
-      return convertToAcid(chemicalTableDataGateway.getAcids().filterBySolute(chemicalID).executeQuery());
+      return convertToAcid(
+          ChemicalTableDataGateway.getSingletonInstance().getAcids().filterBySolute(chemicalID).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Acids with solute '" + chemicalID + "'.", e);
     }
   }
-  
+
   /**
    * @see model.AcidDataMapperInterface#filterByLowInventory().
    */
   @Override
   public List<Acid> filterByLowInventory() throws DomainModelException {
     try {
-      return convertToAcid(chemicalTableDataGateway.getAcidsWithLowInventory());
+      return convertToAcid(ChemicalTableDataGateway.getSingletonInstance().getAcidsWithLowInventory());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Acids with low inventory.", e);
     }

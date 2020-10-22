@@ -5,11 +5,10 @@ import java.util.List;
 import dataDTO.ChemicalDTO;
 import dataDTO.ElementCompoundDTO;
 import dataENUM.ChemicalEnum;
-import datasource.ChemicalRowDataGatewayRDS;
+import datasource.ChemicalRowDataGateway;
 import datasource.ChemicalTableDataGateway;
-import datasource.ChemicalTableDataGatewayRDS;
 import datasource.DatabaseException;
-import datasource.ElementCompoundTableDataGatewayRDS;
+import datasource.ElementCompoundTableDataGateway;
 
 /**
  * A mapper for Metal objects.
@@ -19,35 +18,14 @@ import datasource.ElementCompoundTableDataGatewayRDS;
  */
 public class MetalDataMapper implements MetalDataMapperInterface {
 
-  private ChemicalTableDataGateway chemicalTableDataGateway = ChemicalTableDataGatewayRDS.getSingletonInstance();
-<<<<<<< HEAD
-=======
-
-  private ElementCompoundTableDataGatewayRDS ecTableDataGateway;
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-
-<<<<<<< HEAD
-  private ElementCompoundTableDataGatewayRDS ecTableDataGateway = ElementCompoundTableDataGatewayRDS.getSingletonInstance();
-=======
   /**
    * Empty constructor for MetalDataMapper.
    */
   public MetalDataMapper() {
     // EMPTY
   }
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
 
   /**
-<<<<<<< HEAD
-   * Empty constructor for MetalDataMapper.
-   */
-  public MetalDataMapper() {
-    // EMPTY
-  }
-
-  /**
-=======
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
    * @see model.MetalDataMapperInterface#create(String, double, int, double,
    *      double).
    */
@@ -55,7 +33,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   public Metal create(String name, double inventory, int atomicNumber, double atomicMass, double acidAmount)
       throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(ChemicalEnum.METAL.getIntValue(), name, inventory,
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), name, inventory,
           atomicNumber, atomicMass, 0, acidAmount, 0);
       return new Metal(row.getID(), name, inventory, atomicNumber, atomicMass, acidAmount);
     } catch (DatabaseException e) {
@@ -69,7 +47,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public Metal read(int id) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(id);
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(id);
       return new Metal(id, row.getName(), row.getInventory(), row.getAtomicNumber(), row.getAtomicMass(),
           row.getAcidAmount());
     } catch (DatabaseException e) {
@@ -83,7 +61,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public void update(Metal metal) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(metal.getID());
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(metal.getID());
       row.setName(metal.getName());
       row.setInventory(metal.getInventory());
       row.setAtomicNumber(metal.getAtomicNumber());
@@ -101,7 +79,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public void delete(Metal metal) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(metal.getID());
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(metal.getID());
       row.delete();
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to delete Metal with ID '" + metal.getID() + "'.", e);
@@ -114,7 +92,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public ArrayList<Metal> getAll() throws DomainModelException {
     try {
-      return convertToMetal(chemicalTableDataGateway.getMetals().executeQuery());
+      return convertToMetal(ChemicalTableDataGateway.getSingletonInstance().getMetals().executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to find all Metals.", e);
     }
@@ -126,7 +104,8 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public ArrayList<Metal> filterByNameLike(String nameLike) throws DomainModelException {
     try {
-      return convertToMetal(chemicalTableDataGateway.getMetals().filterByNameLike(nameLike).executeQuery());
+      return convertToMetal(
+          ChemicalTableDataGateway.getSingletonInstance().getMetals().filterByNameLike(nameLike).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Metals with name '" + nameLike + "'.", e);
     }
@@ -138,7 +117,8 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public ArrayList<Metal> filterByInventory(double inventory) throws DomainModelException {
     try {
-      return convertToMetal(chemicalTableDataGateway.getMetals().filterByInventory(inventory).executeQuery());
+      return convertToMetal(
+          ChemicalTableDataGateway.getSingletonInstance().getMetals().filterByInventory(inventory).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Metals with inventory of '" + inventory + "'.", e);
     }
@@ -150,7 +130,8 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public ArrayList<Metal> filterByInventoryBetween(double min, double max) throws DomainModelException {
     try {
-      return convertToMetal(chemicalTableDataGateway.getMetals().filterByInventoryBetween(min, max).executeQuery());
+      return convertToMetal(ChemicalTableDataGateway.getSingletonInstance().getMetals()
+          .filterByInventoryBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Metals with inventory between '" + min + "' < x < '" + max + "'.", e);
@@ -163,20 +144,22 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public ArrayList<Metal> filterByAtomicNumber(int atomicNumber) throws DomainModelException {
     try {
-      return convertToMetal(
-          chemicalTableDataGateway.getMetals().filterByAtomicNumber(atomicNumber).executeQuery());
+      return convertToMetal(ChemicalTableDataGateway.getSingletonInstance().getMetals()
+          .filterByAtomicNumber(atomicNumber).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Metals with atomic number of '" + atomicNumber + "'.", e);
     }
   }
-  
+
   /**
-   * @see model.MetalDataMapperInterface#filterByAtomicNumberBetween(int min, int max).
+   * @see model.MetalDataMapperInterface#filterByAtomicNumberBetween(int min, int
+   *      max).
    */
   @Override
   public List<Metal> filterByAtomicNumberBetween(int min, int max) throws DomainModelException {
     try {
-      return convertToMetal(chemicalTableDataGateway.getMetals().filterByAtomicNumberBetween(min, max).executeQuery());
+      return convertToMetal(ChemicalTableDataGateway.getSingletonInstance().getMetals()
+          .filterByAtomicNumberBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Metals with atomic number between '" + min + "' < x < '" + max + "'.", e);
@@ -189,7 +172,8 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public ArrayList<Metal> filterByAtomicMass(double atomicMass) throws DomainModelException {
     try {
-      return convertToMetal(chemicalTableDataGateway.getMetals().filterByAtomicMass(atomicMass).executeQuery());
+      return convertToMetal(
+          ChemicalTableDataGateway.getSingletonInstance().getMetals().filterByAtomicMass(atomicMass).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Metals with atomic mass of '" + atomicMass + "'.", e);
     }
@@ -201,7 +185,8 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public ArrayList<Metal> filterByAtomicMassBetween(double min, double max) throws DomainModelException {
     try {
-      return convertToMetal(chemicalTableDataGateway.getMetals().filterByAtomicMassBetween(min, max).executeQuery());
+      return convertToMetal(ChemicalTableDataGateway.getSingletonInstance().getMetals()
+          .filterByAtomicMassBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Metals with atomic mass between '" + min + "' < x < '" + max + "'.", e);
@@ -214,7 +199,8 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public ArrayList<Metal> filterByAcidAmount(double acidAmount) throws DomainModelException {
     try {
-      return convertToMetal(chemicalTableDataGateway.getMetals().filterByAcidAmount(acidAmount).executeQuery());
+      return convertToMetal(
+          ChemicalTableDataGateway.getSingletonInstance().getMetals().filterByAcidAmount(acidAmount).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Metals with an acid amount of '" + acidAmount + "'.", e);
     }
@@ -227,7 +213,8 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public ArrayList<Metal> filterByAcidAmountBetween(double min, double max) throws DomainModelException {
     try {
-      return convertToMetal(chemicalTableDataGateway.getMetals().filterByAcidAmountBetween(min, max).executeQuery());
+      return convertToMetal(ChemicalTableDataGateway.getSingletonInstance().getMetals()
+          .filterByAcidAmountBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Metals with acid amount between '" + min + "' < x < '" + max + "'.", e);
@@ -240,20 +227,22 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public ArrayList<Metal> filterByDissolvedBy(int acidID) throws DomainModelException {
     try {
-      return convertToMetal(chemicalTableDataGateway.getMetals().filterByDissolvedBy(acidID).executeQuery());
+      return convertToMetal(
+          ChemicalTableDataGateway.getSingletonInstance().getMetals().filterByDissolvedBy(acidID).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to find Metals dissolved by ID '" + acidID + "'.", e);
     }
   }
 
   /**
-   *  @see model.MetalDataMapperInterface#filterByPartOfCompound(int compoundID).
+   * @see model.MetalDataMapperInterface#filterByPartOfCompound(int compoundID).
    */
   @Override
   public List<Metal> filterByPartOfCompound(int compoundID) throws DomainModelException {
     try {
       List<ChemicalDTO> temp = new ArrayList<>();
-      ElementCompoundDTO compound = ecTableDataGateway.readElementsFromCompound(compoundID);
+      ElementCompoundDTO compound = ElementCompoundTableDataGateway.getSingletonInstance()
+          .readElementsFromCompound(compoundID);
       for (ChemicalDTO element : compound.getRelations()) {
         if (element.getType() == ChemicalEnum.METAL.getIntValue()) {
           temp.add(element);
@@ -264,14 +253,14 @@ public class MetalDataMapper implements MetalDataMapperInterface {
       throw new DomainModelException("Failed to get Metals in Compound with ID '" + compoundID + "'.", e);
     }
   }
-  
+
   /**
    * @see model.MetalDataMapperInterface#filterByLowInventory().
    */
   @Override
   public List<Metal> filterByLowInventory() throws DomainModelException {
     try {
-      return convertToMetal(chemicalTableDataGateway.getMetalsWithLowInventory());
+      return convertToMetal(ChemicalTableDataGateway.getSingletonInstance().getMetalsWithLowInventory());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Metals with low inventory.", e);
     }
@@ -279,6 +268,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
 
   /**
    * Converts a list of chemicalDTOs to a list of metal
+   * 
    * @param chemicals
    * @return a list of metals
    */

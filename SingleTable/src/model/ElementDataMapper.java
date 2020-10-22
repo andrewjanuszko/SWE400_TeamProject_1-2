@@ -5,11 +5,10 @@ import java.util.List;
 
 import dataDTO.ChemicalDTO;
 import dataENUM.ChemicalEnum;
-import datasource.ChemicalRowDataGatewayRDS;
+import datasource.ChemicalRowDataGateway;
 import datasource.ChemicalTableDataGateway;
-import datasource.ChemicalTableDataGatewayRDS;
 import datasource.DatabaseException;
-import datasource.ElementCompoundTableDataGatewayRDS;
+import datasource.ElementCompoundTableDataGateway;
 
 /**
  * A mapper for Element objects.
@@ -19,21 +18,7 @@ import datasource.ElementCompoundTableDataGatewayRDS;
  */
 public class ElementDataMapper implements ElementDataMapperInterface {
 
-<<<<<<< HEAD
   /**
-   * An empty Constructor for ElementDataMapper.
-   */
-  public ElementDataMapper() {
-    // EMPTY
-  }
-=======
-  private ChemicalTableDataGateway chemicalTableDataGateway = ChemicalTableDataGatewayRDS.getSingletonInstance();
-  private ElementCompoundTableDataGatewayRDS ecTableDataGateway;
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-
-  /**
-<<<<<<< HEAD
-=======
    * An empty Constructor for ElementDataMapper.
    */
   public ElementDataMapper() {
@@ -41,14 +26,13 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   }
 
   /**
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
    * @see model.ElementDataMapperInterface#create(String, double, int, double).
    */
   @Override
   public Element create(String name, double inventory, int atomicNumber, double atomicMass)
       throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(ChemicalEnum.ELEMENT.getIntValue(), name, inventory,
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(ChemicalEnum.ELEMENT.getIntValue(), name, inventory,
           atomicNumber, atomicMass, 0, 0, 0);
       return new Element(row.getID(), name, inventory, atomicNumber, atomicMass);
     } catch (DatabaseException e) {
@@ -62,7 +46,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public Element read(int id) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(id);
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(id);
       return new Element(row.getID(), row.getName(), row.getInventory(), row.getAtomicNumber(), row.getAtomicMass());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to find an Element with ID '" + id + "'.", e);
@@ -75,7 +59,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public void update(Element element) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(element.getID());
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(element.getID());
       row.setName(element.getName());
       row.setInventory(element.getInventory());
       row.setAtomicNumber(element.getAtomicNumber());
@@ -92,7 +76,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public void delete(Element element) throws DomainModelException {
     try {
-      ChemicalRowDataGatewayRDS row = new ChemicalRowDataGatewayRDS(element.getID());
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(element.getID());
       row.delete();
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to delete an Element with ID '" + element.getID() + "'.", e);
@@ -105,11 +89,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> getAll() throws DomainModelException {
     try {
-<<<<<<< HEAD
-      List<ChemicalDTO> chemicals = ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().executeQuery();
-=======
-      List<ChemicalDTO> chemicals = chemicalTableDataGateway.getElements().executeQuery();
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+      List<ChemicalDTO> chemicals = ChemicalTableDataGateway.getSingletonInstance().getElements().executeQuery();
       return convertToElement(chemicals);
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements.", e);
@@ -122,11 +102,8 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByNameLike(String nameLike) throws DomainModelException {
     try {
-<<<<<<< HEAD
-      return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByNameLike(nameLike).executeQuery());
-=======
-      return convertToElement(chemicalTableDataGateway.getElements().filterByNameLike(nameLike).executeQuery());
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+      return convertToElement(
+          ChemicalTableDataGateway.getSingletonInstance().getElements().filterByNameLike(nameLike).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with a partial name match of '" + nameLike + "'.", e);
     }
@@ -138,11 +115,8 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByInventory(double inventory) throws DomainModelException {
     try {
-<<<<<<< HEAD
-      return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByInventory(inventory).executeQuery());
-=======
-      return convertToElement(chemicalTableDataGateway.getElements().filterByInventory(inventory).executeQuery());
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+      return convertToElement(
+          ChemicalTableDataGateway.getSingletonInstance().getElements().filterByInventory(inventory).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with an inventory value of '" + inventory + "'.", e);
     }
@@ -154,11 +128,8 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByInventoryBetween(double min, double max) throws DomainModelException {
     try {
-<<<<<<< HEAD
-      return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByInventoryBetween(min, max).executeQuery());
-=======
-      return convertToElement(chemicalTableDataGateway.getElements().filterByInventoryBetween(min, max).executeQuery());
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+      return convertToElement(ChemicalTableDataGateway.getSingletonInstance().getElements()
+          .filterByInventoryBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Elements with inventory between '" + min + "' < x < '" + max + "'.", e);
@@ -171,30 +142,24 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByAtomicNumber(int atomicNumber) throws DomainModelException {
     try {
-      return convertToElement(
-<<<<<<< HEAD
-          ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByAtomicNumber(atomicNumber).executeQuery());
-=======
-          chemicalTableDataGateway.getElements().filterByAtomicNumber(atomicNumber).executeQuery());
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+      return convertToElement(ChemicalTableDataGateway.getSingletonInstance().getElements()
+          .filterByAtomicNumber(atomicNumber).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with atomic number of '" + atomicNumber + "'.", e);
     }
   }
-  
+
   /**
    * 
    */
   @Override
   public List<Element> filterByAtomicNumberBetween(int min, int max) throws DomainModelException {
     try {
-<<<<<<< HEAD
-      return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByAtomicNumberBetween(min, max).executeQuery());
-=======
-      return convertToElement(chemicalTableDataGateway.getElements().filterByAtomicNumberBetween(min, max).executeQuery());
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+      return convertToElement(ChemicalTableDataGateway.getSingletonInstance().getElements()
+          .filterByAtomicNumberBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
-      throw new DomainModelException("Failed to get all Element with atomic number between '" + min + "' < x < '" + max + "'.", e);
+      throw new DomainModelException(
+          "Failed to get all Element with atomic number between '" + min + "' < x < '" + max + "'.", e);
     }
   }
 
@@ -205,11 +170,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   public List<Element> filterByAtomicMass(double atomicMass) throws DomainModelException {
     try {
       return convertToElement(
-<<<<<<< HEAD
-          ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByAtomicMass(atomicMass).executeQuery());
-=======
-          chemicalTableDataGateway.getElements().filterByAtomicMass(atomicMass).executeQuery());
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+          ChemicalTableDataGateway.getSingletonInstance().getElements().filterByAtomicMass(atomicMass).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with atomic mass of '" + atomicMass + "'.", e);
     }
@@ -222,11 +183,8 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByAtomicMassBetween(double min, double max) throws DomainModelException {
     try {
-<<<<<<< HEAD
-      return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElements().filterByAtomicMassBetween(min, max).executeQuery());
-=======
-      return convertToElement(chemicalTableDataGateway.getElements().filterByAtomicMassBetween(min, max).executeQuery());
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+      return convertToElement(ChemicalTableDataGateway.getSingletonInstance().getElements()
+          .filterByAtomicMassBetween(min, max).executeQuery());
     } catch (DatabaseException e) {
       throw new DomainModelException(
           "Failed to get all Element with atomic mass between '" + min + "' < x < '" + max + "'.", e);
@@ -239,23 +197,20 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByPartOfCompound(int compoundID) throws DomainModelException {
     try {
-      return convertToElement(ElementCompoundTableDataGatewayRDS.getSingletonInstance().readElementsFromCompound(compoundID).getRelations());
+      return convertToElement(
+          ElementCompoundTableDataGateway.getSingletonInstance().readElementsFromCompound(compoundID).getRelations());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get Elements in Compound with ID '" + compoundID + "'.", e);
     }
   }
-  
+
   /**
    * @see model.ElementDataMapperInterface#filterByLowInventory().
    */
   @Override
   public List<Element> filterByLowInventory() throws DomainModelException {
     try {
-<<<<<<< HEAD
-      return convertToElement(ChemicalTableDataGatewayRDS.getSingletonInstance().getElementsWithLowInventory());
-=======
-      return convertToElement(chemicalTableDataGateway.getElementsWithLowInventory());
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+      return convertToElement(ChemicalTableDataGateway.getSingletonInstance().getElementsWithLowInventory());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to get all Elements with low inventory.", e);
     }
@@ -271,8 +226,8 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   private List<Element> convertToElement(List<ChemicalDTO> chemicals) throws DomainModelException {
     List<Element> elements = new ArrayList<>();
     for (ChemicalDTO chemical : chemicals) {
-      elements
-          .add(new Element(chemical.getID(), chemical.getName(), chemical.getInventory(), chemical.getAtomicNumber(), chemical.getAtomicMass()));
+      elements.add(new Element(chemical.getID(), chemical.getName(), chemical.getInventory(),
+          chemical.getAtomicNumber(), chemical.getAtomicMass()));
     }
     return elements;
   }

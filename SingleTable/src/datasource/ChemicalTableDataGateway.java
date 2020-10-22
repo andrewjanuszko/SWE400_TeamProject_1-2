@@ -1,279 +1,293 @@
 package datasource;
 
 import dataDTO.ChemicalDTO;
+import dataENUM.ChemicalEnum;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Table Data Gateway for Chemical.
+ * Implements a ChemicalTableDataGateway.
  * 
  * @author andrewjanuszko
  */
-public abstract class ChemicalTableDataGateway {
+public class ChemicalTableDataGateway implements ChemicalTableDataGatewayInterface {
+
+  private static ChemicalTableDataGatewayInterface singletonInstance = null;
+
+  private static String querySQL = "";
 
   /**
-   * Get all Chemicals.
-   * @return all Chemicals.
+   * Retrieves a Singleton instance of ChemicalTableDataGateway. Creates a new one
+   * if it does not exist.
+   * 
+   * @return a Singleton instance of ChemicalTableDataGateway.
    */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway getAll();
-=======
-  public abstract ChemicalTableDataGateway getAll();
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+  public static synchronized ChemicalTableDataGatewayInterface getSingletonInstance() {
+    if (singletonInstance == null) {
+      singletonInstance = new ChemicalTableDataGateway();
+    }
+    return singletonInstance;
+  }
   
-  /**
-   * Get all Elements.
-   * @return all Elements.
-   */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway getElements();
-=======
-  public abstract ChemicalTableDataGateway getElements();
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
-  /**
-   * Get all Metals.
-   * @return all Metals.
-   */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway getMetals();
-=======
-  public abstract ChemicalTableDataGateway getMetals();
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
-  /**
-   * Get all Compounds.
-   * @return all Compounds.
-   */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway getCompounds();
-=======
-  public abstract ChemicalTableDataGateway getCompounds();
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
-  /**
-   * Get all Bases.
-   * @return all Bases.
-   */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway getBases();
-=======
-  public abstract ChemicalTableDataGateway getBases();
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
-  /**
-   * Get all Acids.
-   * @return all Acids.
-   */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway getAcids();
-=======
-  public abstract ChemicalTableDataGateway getAcids();
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
-  /**
-   * Get all Chemicals with a name like String.
-   * @param nameLike the name we are looking for.
-   * @return all Chemicals with a name like String.
-   */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway filterByNameLike(String nameLike);
-=======
-  public abstract ChemicalTableDataGateway filterByNameLike(String nameLike);
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
-  /**
-   * Get all Chemicals with a given inventoryValue.
-   * @param inventoryValue the amount of a chemical in stock.
-   * @return all chemical with a given inventory
-   */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway filterByInventory(double inventoryValue);
-=======
-  public abstract ChemicalTableDataGateway filterByInventory(double inventoryValue);
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+  private ChemicalTableDataGateway() {
+    
+  }
 
   /**
-   * Get all Chemicals with an inventoryValue between the given range.
-   * @param min the minimum amount of a chemical.
-   * @param max the maximum amount of a chemical.
-   * @return all chemical in a given inventory range
+   * Converts a query to a list of ChemicalDTOs.
+   * 
+   * @param statement the query on the database.
+   * @return a list of ChemicalDTOs.
+   * @throws DatabaseException when things go wrong.
    */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway filterByInventoryBetween(double min, double max);
-=======
-  public abstract ChemicalTableDataGateway filterByInventoryBetween(double min, double max);
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
+  private List<ChemicalDTO> convertToDTO(PreparedStatement statement) throws DatabaseException {
+    List<ChemicalDTO> listDTO = new ArrayList<>();
+    try {
+      ResultSet results = statement.executeQuery();
+      querySQL = "";
+      while (results.next()) {
+        int id = results.getInt("id");
+        int type = results.getInt("type");
+        String name = results.getString("name");
+        double inventory = results.getDouble("inventory");
+        int atomicNumber = results.getInt("atomicNumber");
+        double atomicMass = results.getDouble("atomicMass");
+        int dissolvedBy = results.getInt("dissolvedBy");
+        double acidAmount = results.getDouble("acidAmount");
+        int solute = results.getInt("solute");
+        ChemicalDTO chemical = new ChemicalDTO(id, type, name, inventory, atomicNumber, atomicMass, dissolvedBy,
+            acidAmount, solute);
+        listDTO.add(chemical);
+      }
+    } catch (SQLException e) {
+      throw new DatabaseException("Failed to convert query to DTO.", e);
+    }
+    return listDTO;
+  }
+
   /**
-   * Get all Chemicals with an atomicNumberValue.
-   * @param atomicNumberValue the atomic number you are looking for.
-   * @return all chemical with a given atomic number
+   * @see datasource.ChemicalTableDataGateWay#getAll().
    */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway filterByAtomicNumber(int atomicNumberValue);
-=======
-  public abstract ChemicalTableDataGateway filterByAtomicNumber(int atomicNumberValue);
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
+  @Override
+  public ChemicalTableDataGatewayInterface getAll() {
+    querySQL += "SELECT * FROM Chemical WHERE (Chemical.type <> 0)";
+    return getSingletonInstance();
+  }
+
   /**
-   * Get all Chemicals with an atomic number between the given range.
-   * @param min the minimum amount for the atomic number range.
-   * @param max the maximum amount the atomic number range.
-   * @return all chemical in a given atomic number range
+   * @see datasource.ChemicalTableDataGateWay#getElements().
    */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway filterByAtomicNumberBetween(int min, int max);
-=======
-  public abstract ChemicalTableDataGateway filterByAtomicNumberBetween(int min, int max);
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
+  @Override
+  public ChemicalTableDataGatewayInterface getElements() {
+    querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.ELEMENT.getIntValue() + " OR Chemical.type = " + ChemicalEnum.METAL.getIntValue() + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   * Get all Chemicals with a given atomicMassValue.
-   * @param atomicMassValue the atomic mass you are searching by.
-   * @return
+   * @see datasource.ChemicalTableDataGateWay#getMetals().
    */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway filterByAtomicMass(double atomicMassValue);
-=======
-  public abstract ChemicalTableDataGateway filterByAtomicMass(double atomicMassValue);
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
+  @Override
+  public ChemicalTableDataGatewayInterface getMetals() {
+    querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.METAL.getIntValue() + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   * Get all Chemicals with an atomic mass between the given range.
-   * @param min the minimum amount for the atomic mass range.
-   * @param max the maximum amount the atomic mass range.
-   * @return all chemical in a given atomic mass reange.
+   * @see datasource.ChemicalTableDataGateWay#getCompounds().
    */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway filterByAtomicMassBetween(double min, double max);
-=======
-  public abstract ChemicalTableDataGateway filterByAtomicMassBetween(double min, double max);
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
+  @Override
+  public ChemicalTableDataGatewayInterface getCompounds() {
+    querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.COMPOUND.getIntValue() + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   * Get all chemical with a given dissolvedByID.
-   * @param dissolvedByID the id of an acid the dissolves the a metal.
-   * @return all chemical that are dissolved by a the given id.
+   * @see datasource.ChemicalTableDataGateWay#getBases().
    */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway filterByDissolvedBy(int dissolvedByID);
-=======
-  public abstract ChemicalTableDataGateway filterByDissolvedBy(int dissolvedByID);
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
+  @Override
+  public ChemicalTableDataGatewayInterface getBases() {
+    querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.BASE.getIntValue() + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   * Get all chemical that need a given acidAmount to be dissolved.
-   * @param acidAmount the amount of acid needed to dissolve a chemical.
-   * @return all chemical with that need the given acid amount to be dissolved.
+   * @see datasource.ChemicalTableDataGateWay#getAcids().
    */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway filterByAcidAmount(double acidAmount);
-=======
-  public abstract ChemicalTableDataGateway filterByAcidAmount(double acidAmount);
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
+  @Override
+  public ChemicalTableDataGatewayInterface getAcids() {
+    querySQL += "SELECT * FROM Chemical WHERE (Chemical.type = " + ChemicalEnum.ACID.getIntValue() + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   * Get all chemicals in a given acid amount range.
-   * @param min the minimum amount for the acid amount range.
-   * @param max the maximum amount for the acid amount range.
-   * @return all chemical in the given acid amount range.
+   * @see datasource.ChemicalTableDataGateWay#filterByNameLike(String nameLike).
    */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway filterByAcidAmountBetween(double min, double max);
-=======
-  public abstract ChemicalTableDataGateway filterByAcidAmountBetween(double min, double max);
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
+  @Override
+  public ChemicalTableDataGatewayInterface filterByNameLike(String nameLike) {
+    querySQL += " AND (Chemical.name LIKE '%" + nameLike + "%')";
+    return getSingletonInstance();
+  }
+
   /**
-   * Get all chemicals with given soluteId.
-   * @param soluteID the id of a solute.
-   * @return all chemicals with the given soluteId.
+   * @see datasource.ChemicalTableDataGateWay#filterByInventory(double inventory).
    */
-<<<<<<< HEAD
-  public ChemicalTableDataGateway filterBySolute(int soluteID);
-=======
-  public abstract ChemicalTableDataGateway filterBySolute(int soluteID);
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
-  
+  @Override
+  public ChemicalTableDataGatewayInterface filterByInventory(double inventory) {
+    querySQL += " AND (Chemical.inventory = " + inventory + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   * Runs the query
-   * @return the results of the constructed query
-   * @throws DatabaseException
+   * @see datasource.ChemicalTableDataGateWay#filterByInventoryBetween(double min, double max).
    */
-<<<<<<< HEAD
-  public List<ChemicalDTO> executeQuery() throws DatabaseException;
-  
+  @Override
+  public ChemicalTableDataGatewayInterface filterByInventoryBetween(double min, double max) {
+    querySQL += " AND (Chemical.inventory BETWEEN " + min + " AND " + max + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   * Gets all the chemicals that are low inventory.
-   * @return
-   * @throws DatabaseException
+   * @see datasource.ChemicalTableDataGateWay#filterByAtomicNumber(int atomicNumber).
    */
-  public List<ChemicalDTO> getAllWithLowInventory() throws DatabaseException;
-  
+  @Override
+  public ChemicalTableDataGatewayInterface filterByAtomicNumber(int atomicNumber) {
+    querySQL += " AND (Chemical.atomicNumber = " + atomicNumber + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   * Gets all the elements that are low inventory.
-   * @return
-   * @throws DatabaseException
+   * @see datasource.ChemicalTableDataGateWay#filterByAtomicNumberBetween(int min, int max).
    */
-  public List<ChemicalDTO> getElementsWithLowInventory() throws DatabaseException;
-  
+  @Override
+  public ChemicalTableDataGatewayInterface filterByAtomicNumberBetween(int min, int max) {
+    querySQL += " AND (Chemical.atomicNumber BETWEEN " + min + " AND " + max + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   * Gets all the metals that are low inventory
-   * @return
-   * @throws DatabaseException
+   * @see datasource.ChemicalTableDataGateWay# filterByAtomicMass(double atomicMass).
    */
-  public List<ChemicalDTO> getMetalsWithLowInventory() throws DatabaseException;
-  
+  @Override
+  public ChemicalTableDataGatewayInterface filterByAtomicMass(double atomicMass) {
+    querySQL += " AND (Chemical.atomicMass = " + atomicMass + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   *  Gets all the bases that are low inventory
-   * @return
-   * @throws DatabaseException
+   * @see datasource.ChemicalTableDataGateWay#filterByAtomicMassBetween(double min, double max).
    */
-  public List<ChemicalDTO> getBasesWithLowInventory() throws DatabaseException;
-  
+  @Override
+  public ChemicalTableDataGatewayInterface filterByAtomicMassBetween(double min, double max) {
+    querySQL += " AND (Chemical.atomicMass BETWEEN " + min + " AND " + max + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   *  Gets all the acids that are low inventory
-   * @return
-   * @throws DatabaseException
+   * @see datasource.ChemicalTableDataGateWay#filterByDissolvedBy(int acidID).
    */
-  public List<ChemicalDTO> getAcidsWithLowInventory() throws DatabaseException;
-=======
-  public abstract List<ChemicalDTO> executeQuery() throws DatabaseException;
-  
+  @Override
+  public ChemicalTableDataGatewayInterface filterByDissolvedBy(int acidID) {
+    querySQL += " AND (Chemical.dissolvedBy = " + acidID + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   * Gets all the chemicals that are low inventory.
-   * @return
-   * @throws DatabaseException
+   * @see datasource.ChemicalTableDataGateWay#filterByAcidAmount(double acidAmount).
    */
-  public abstract List<ChemicalDTO> getAllWithLowInventory() throws DatabaseException;
-  
+  @Override
+  public ChemicalTableDataGatewayInterface filterByAcidAmount(double acidAmount) {
+    querySQL += " AND (Chemical.acidAmount = " + acidAmount + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   * Gets all the elements that are low inventory.
-   * @return
-   * @throws DatabaseException
+   * @see datasource.ChemicalTableDataGateWay#filterByAcidAmountBetween(double min, double max).
    */
-  public abstract List<ChemicalDTO> getElementsWithLowInventory() throws DatabaseException;
-  
+  @Override
+  public ChemicalTableDataGatewayInterface filterByAcidAmountBetween(double min, double max) {
+    querySQL += " AND (Chemical.acidAmount BETWEEN " + min + " AND " + max + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   * Gets all the metals that are low inventory
-   * @return
-   * @throws DatabaseException
+   * @see datasource.ChemicalTableDataGateWay#filterBySolute(int soluteID).
    */
-  public abstract List<ChemicalDTO> getMetalsWithLowInventory() throws DatabaseException;
-  
+  @Override
+  public ChemicalTableDataGatewayInterface filterBySolute(int soluteID) {
+    querySQL += " AND (Chemical.solute = " + soluteID + ")";
+    return getSingletonInstance();
+  }
+
   /**
-   *  Gets all the bases that are low inventory
-   * @return
-   * @throws DatabaseException
+   * @see datasource.ChemicalTableDataGateWay#executeQuery().
    */
-  public abstract List<ChemicalDTO> getBasesWithLowInventory() throws DatabaseException;
-  
+  @Override
+  public List<ChemicalDTO> executeQuery() throws DatabaseException {
+    try {
+      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(querySQL + ";");
+      return convertToDTO(statement);
+    } catch (SQLException e) {
+      throw new DatabaseException("Failed to execute query.", e);
+    }
+  }
+
   /**
-   *  Gets all the acids that are low inventory
-   * @return
-   * @throws DatabaseException
+   * @see datasource.ChemicalTableDataGateWay#getAllWithLowInventory().
    */
-  public abstract List<ChemicalDTO> getAcidsWithLowInventory() throws DatabaseException;
->>>>>>> branch '84-single-table-data-mapper-implementations' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
+  @Override
+  public List<ChemicalDTO> getAllWithLowInventory() throws DatabaseException {
+    List<ChemicalDTO> lowChemicals = new ArrayList<>();
+    lowChemicals.addAll(getElementsWithLowInventory());
+    lowChemicals.addAll(getBasesWithLowInventory());
+    lowChemicals.addAll(getAcidsWithLowInventory());
+    return lowChemicals;
+  }
+
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getElementsWithLowInventory().
+   */
+  @Override
+  public List<ChemicalDTO> getElementsWithLowInventory() throws DatabaseException {
+    return getElements().filterByInventoryBetween(0, 20).executeQuery();
+  }
+
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getMetalsWithLowInventory().
+   */
+  @Override
+  public List<ChemicalDTO> getMetalsWithLowInventory() throws DatabaseException {
+    return getMetals().filterByInventoryBetween(0, 20).executeQuery();
+  }
+
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getBasesWithLowInventory().
+   */
+  @Override
+  public List<ChemicalDTO> getBasesWithLowInventory() throws DatabaseException {
+    return getBases().filterByInventoryBetween(0, 40).executeQuery();
+  }
+
+  /**
+   * @see datasource.ChemicalTableDataGateWay#getAcidsWithLowInventory().
+   */
+  @Override
+  public List<ChemicalDTO> getAcidsWithLowInventory() throws DatabaseException {
+    List<ChemicalDTO> acids = getAcids().executeQuery();
+    for (ChemicalDTO acid : acids) {
+      int acidAmountNeeded = 0;
+      List<ChemicalDTO> metals = getMetals().filterByDissolvedBy(acid.getID()).executeQuery();
+      for (ChemicalDTO metal : metals) {
+        acidAmountNeeded += metal.getAcidAmount();
+      }
+      if (acid.getInventory() >= acidAmountNeeded) {
+        acids.remove(acid);
+      }
+    }
+    return acids;
+  }
 
 }

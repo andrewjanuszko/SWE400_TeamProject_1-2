@@ -10,13 +10,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import datasource.ChemicalRowDataGatewayRDS;
+import datasource.ChemicalRowDataGateway;
 
 class MetalDataMapperTest {
 
   @BeforeEach
   public void setUpBeforeClass() throws Exception {
-	  ChemicalRowDataGatewayRDS.createTable();
+	  ChemicalRowDataGateway.createTable();
 	  Metal Iron = new MetalDataMapper().create("Iron", 50.0, 26, 55.8, 4);
 	  Metal Gold = new MetalDataMapper().create("Gold", 40.0, 79, 197.0, 5);
 	  Metal Copper = new MetalDataMapper().create("Copper", 34.0, 29, 63.5, 8);
@@ -24,7 +24,7 @@ class MetalDataMapperTest {
 
   @AfterEach
   public void tearDownAfterClass() throws Exception {
-	 ChemicalRowDataGatewayRDS.dropTable();
+	 ChemicalRowDataGateway.dropTable();
   }
 
   @Test
