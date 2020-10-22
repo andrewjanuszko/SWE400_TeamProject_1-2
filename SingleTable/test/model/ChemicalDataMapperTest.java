@@ -1,25 +1,58 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class ChemicalDataMapperTest {
+import datasource.DatabaseTest;
 
-  @BeforeAll
-  static void setUpBeforeClass() throws Exception {
-    
+/**
+ * Test cases for ChemicalDataMapper().
+ * @author andrewjanuszko
+ *
+ */
+class ChemicalDataMapperTest extends DatabaseTest {
+  
+  /**
+   * Run all the tests in ChemicalDataMapperTest.
+   * @throws DomainModelException when things go wrong.
+   */
+  public void runAllTests() throws DomainModelException {
+    testGetAll();
+    testNameLike();
+    testInventory();
   }
 
-  @AfterAll
-  static void tearDownAfterClass() throws Exception {
-  }
-
+  /**
+   * Get all Chemicals.
+   * @throws DomainModelException when things go wrong.
+   */
   @Test
-  void test() {
-    fail("Not yet implemented");
+  void testGetAll() throws DomainModelException {
+      List<Chemical> chemicals = new ChemicalDataMapper().getAll();
+      assertEquals(30, chemicals.size());
+  }
+  
+  /**
+   * Get all Chemicals with name like.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  void testNameLike() throws DomainModelException {
+    List<Chemical> chemicals = new ChemicalDataMapper().filterByNameLike("Sodium");
+    assertEquals(3, chemicals.size());
+  }
+ 
+  /**
+   * Get all Chemicals with specific and ranged inventory.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  void testInventory() throws DomainModelException {
+    List<Chemical> chemicals = new ChemicalDataMapper().filterByInventory(10);
+    assertEquals(6, chemicals.size());
+    chemicals = new ChemicalDataMapper().filterByInventoryBetween(10, 50);
+    assertEquals(26, chemicals.size());
   }
 
 }
