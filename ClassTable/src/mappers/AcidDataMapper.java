@@ -158,9 +158,21 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   public List<Acid> filterByLowInventory() {
+    List<AcidDTO> dtos;
+    List<Acid> acids = new ArrayList<>();
+    try {
+      dtos = AcidTDGRDS.getSingleton().getAllAcids().executeQuery();
+      for(AcidDTO d : dtos) {
+        Acid a = convertFromDTO(d);
+        if(a.getInventory() < a.getThreshold()) {
+          acids.add(a);
+        }
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
     
-    
-    return null;
+    return acids;
   }
 
 }

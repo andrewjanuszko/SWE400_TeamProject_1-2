@@ -28,6 +28,7 @@ public class Acid extends Chemical {
     super(id, name, inventory);
     setDissolves(dissolves);
     setSolute(solute);
+    setThreshold(); 
   }
 
   /**
@@ -66,15 +67,18 @@ public class Acid extends Chemical {
     this.solute = solute;
   }
 
-  public void setThreshold(double threshold) {
+  public void setThreshold() {
     List<Metal> list = new MetalDataMapper().filterByDissolvedBy(getID());
 
     threshold = 0;
     for (Metal m : list) {
       threshold += m.getAcidAmount();
     }
-
-    this.threshold = threshold;
+    
+  }
+  
+  public double getThreshold() {
+    return this.threshold;
   }
 
 }
