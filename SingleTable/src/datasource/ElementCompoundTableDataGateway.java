@@ -22,7 +22,7 @@ public class ElementCompoundTableDataGateway implements ElementCompoundTableData
    * 
    */
   private ElementCompoundTableDataGateway() {
-    System.out.println("Loading instance of ElementCompoundTableDataGatewayRDS");
+    
   }
   
   /**

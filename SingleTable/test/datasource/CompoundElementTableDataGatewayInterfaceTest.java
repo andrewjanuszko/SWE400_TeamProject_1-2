@@ -1,6 +1,6 @@
 package datasource;
 
-public class CompoundElementTDGTest extends CompoundElementTDGRDSTest {
+public class CompoundElementTableDataGatewayInterfaceTest extends CompoundElementTableDataGatewayTest {
 
 	/**
 	 * Gets a singleton.

@@ -3,37 +3,14 @@ package model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import datasource.ChemicalRowDataGateway;
-import datasource.DatabaseException;
 
 class BaseDataMapperTest {
 
-  @BeforeEach
-  public void setUpBeforeClass() throws DatabaseException, DomainModelException {
-	  ChemicalRowDataGateway.createTable();
-	  Base calciumHydroxide = new BaseDataMapper().create("Calcium Hydroxide", 52.3, 0);
-	  Base potassiumHydroxide = new BaseDataMapper().create("Potassium Hydroxide", 47.0, 0);
-	  Base rubidiumHydroxide = new BaseDataMapper().create("Rubidium Hydroxide", 32.0, 0);
-  }
-
-  @AfterEach
-  public void tearDownAfterClass() throws DatabaseException {
-	  ChemicalRowDataGateway.dropTable();
-  }
-
   @Test
   void testCreate() throws DomainModelException {
-	  Base lithiumHydroxide = new BaseDataMapper().create("Lithium Hydroxide", 20.0, 0);
-	  assertEquals("Lithium Hydroxide", lithiumHydroxide.getName());
-	  assertEquals(20.0, lithiumHydroxide.getInventory());
-	  assertEquals(0, lithiumHydroxide.getSolute());
+	  Base lithiumHydroxide = new BaseDataMapper().read(29);
+	  assertEquals("Lithium Hydroxide", lithiumHydroxide.getName()); 
   }
   
   @Test

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import dataDTO.ElementCompoundDTO;
 import dataENUM.ChemicalEnum;
 
-public abstract class CompoundElementTDGRDSTest extends DatabaseTest {
+public abstract class CompoundElementTableDataGatewayTest extends DatabaseTest {
 
   protected ElementCompoundTableDataGateway gateway;
 

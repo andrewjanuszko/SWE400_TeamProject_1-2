@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import dataENUM.ChemicalEnum;
 
-public class ChemicalRDGRDSTest extends DatabaseTest {
+public class ChemicalRowDataGatewayTest extends DatabaseTest {
 
   /**
    * Test the creation of a table and inserting into it.
