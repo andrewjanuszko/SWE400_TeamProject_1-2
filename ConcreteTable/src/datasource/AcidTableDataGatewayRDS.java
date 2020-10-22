@@ -76,7 +76,7 @@ public abstract class AcidTableDataGatewayRDS {
         String name = rs.getString("name");
         int solute = rs.getInt("solute");
         double inventory = rs.getDouble("inventory");
-        AcidDTO a = new AcidDTO(acidID, solute, name, inventory);
+        AcidDTO a = new AcidDTO(acidID, name, inventory, solute);
         acidDTOs.add(a);
         return acidDTOs;
       }

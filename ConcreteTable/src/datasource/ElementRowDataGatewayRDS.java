@@ -27,8 +27,6 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 				"UNIQUE(name)," +
 			  "PRIMARY KEY(elementID));";
 		
-		Connection conn = DatabaseManager.getSingleton().getConnection();
-
 		try
 		{
 			// drop table

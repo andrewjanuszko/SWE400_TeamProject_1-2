@@ -12,7 +12,7 @@ public class AcidDTO {
    * @param name String
    * @param inventory double
    */
-  public AcidDTO(int acidID, int soluteID, String name, double inventory) {
+  public AcidDTO(int acidID, String name,double inventory, int soluteID) {
     this.acidID = acidID;
     this.soluteID = soluteID;
     this.name = name;

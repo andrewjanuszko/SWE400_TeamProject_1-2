@@ -1,5 +1,6 @@
 package mappers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import datasource.DatabaseException;
@@ -20,6 +21,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
       Metal m = new Metal(id, name, inventory, atomicNumber, atomicMass, acidAmount);
       
       // HOW DO I GET THE DISOLVED BY???? can it just be null?
+      @SuppressWarnings("unused")
       MetalRowDataGateway gateway = new MetalRowDataGatewayRDS(id, name, inventory, atomicNumber, atomicMass,
           acidAmount, 0);
       return m;
@@ -143,7 +145,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
 //      dissolvedMetals.add(metal);
 //      MetalDataMapper.metalMap.add(metal);
 //    }
-    return null;
+    return new ArrayList<Metal>();
   }
 
   @Override

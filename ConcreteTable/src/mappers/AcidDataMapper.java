@@ -23,7 +23,15 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   public Acid create(String name, double inventory, List<Metal> dissolves, int solute) throws DomainModelException {
 
     int id = 12; // FIGURE OUT HOW TO GET ID!!!
+    //TODO distribute dissolves
     Acid a = new Acid(id, name, inventory, dissolves, solute);
+    try {
+      @SuppressWarnings("unused")
+      AcidRowDataGateway gateway = new AcidRowDataGatewayRDS(id, name, inventory, solute);
+    } catch (DatabaseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     return a;
   }
 
@@ -45,7 +53,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
 
     } catch (DatabaseException e) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+      //e.printStackTrace();
     }
     return null;
   }
