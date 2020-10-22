@@ -17,10 +17,10 @@ import javax.swing.JTextField;
 public class FilterAcidFrame extends JFrame{
 	
 	int filterType;
-	JRadioButton idFilter = new JRadioButton();          //filterType 1
-	JRadioButton nameFilter = new JRadioButton();        //filterType 2
-	JRadioButton soluteFilter = new JRadioButton();      //filterType 3
-	JRadioButton inventoryFilter = new JRadioButton();   //filterType 4
+	JRadioButton idFilter = new JRadioButton();          
+	JRadioButton nameFilter = new JRadioButton();        //filterType 1
+	JRadioButton soluteFilter = new JRadioButton();      //filterType 2
+	JRadioButton inventoryFilter = new JRadioButton();   //filterType 3
 	GridBagConstraints gbc = new GridBagConstraints();
 	JButton filterButton = new JButton("Filter");
 	JButton clearButton = new JButton("Clear Filter");
@@ -44,13 +44,7 @@ public class FilterAcidFrame extends JFrame{
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.fill = GridBagConstraints.BOTH;
-		/*
-		idFilter.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-		        filterType = 1;
-		      }
-		});
-		*/
+
 		nameFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 		        filterType = 1;
@@ -163,7 +157,7 @@ public class FilterAcidFrame extends JFrame{
 		try {
 			switch(filterType) {
 				case 0:
-					filter = null;
+					filter = "" + 0;
 					break;
 				case 1:
 					filter = filter + " " + jtfName.getText();
@@ -176,7 +170,7 @@ public class FilterAcidFrame extends JFrame{
 			}
 		} catch(NumberFormatException e) {
 			new FailureFrame("Could not Filter Acid");
-			return null;
+			return "" + 0;
 		}
 		return filter;
 	}
