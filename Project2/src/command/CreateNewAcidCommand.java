@@ -3,7 +3,6 @@ package command;
 import mappers.AcidDataMapper;
 import model.Acid;
 import model.AcidDataMapperInterface;
-import model.Command;
 import model.DomainModelException;
 import reports.ReportObserverConnector;
 import reports.ValidEntryReport;
