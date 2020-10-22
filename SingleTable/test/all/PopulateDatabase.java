@@ -1,11 +1,22 @@
-package datasource;
+package all;
 
 import dataENUM.ChemicalEnum;
+import datasource.ChemicalRowDataGateway;
+import datasource.DatabaseException;
+import datasource.ElementCompoundTableDataGateway;
 
+/**
+ * Fill the database with sample data.
+ * @author andrewjanuszko
+ *
+ */
 public class PopulateDatabase {
 
   @SuppressWarnings("unused")
   public static void main(String[] args) throws DatabaseException {
+    
+    System.out.println("Populating database, please wait...");
+    
     ChemicalRowDataGateway.createTable();
     ElementCompoundTableDataGateway.getSingletonInstance().createTable();
     
@@ -32,12 +43,12 @@ public class PopulateDatabase {
     /**
      * Insert Compounds into the table.
      */
-    ChemicalRowDataGateway hydrogenDioxide = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Hydrogen Dioxide", 0, 0, 0, 0, 0, 0);
-    ChemicalRowDataGateway carbonMonoxide = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Carbon Monoxide", 0, 0, 0, 0, 0, 0);
-    ChemicalRowDataGateway sodiumChloride = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Sodium Chloride", 0, 0, 0, 0, 0, 0);
-    ChemicalRowDataGateway sucrose = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Sucrose", 0, 0, 0, 0, 0, 0);
-    ChemicalRowDataGateway silverChloride = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Silver Chloride", 0, 0, 0, 0, 0, 0);
-    ChemicalRowDataGateway nitrate = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Nitrate", 0, 0, 0, 0, 0, 0);
+    ChemicalRowDataGateway hydrogenDioxide = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Hydrogen Dioxide", 10, 0, 0, 0, 0, 0);
+    ChemicalRowDataGateway carbonMonoxide = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Carbon Monoxide", 20, 0, 0, 0, 0, 0);
+    ChemicalRowDataGateway sodiumChloride = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Sodium Chloride", 30, 0, 0, 0, 0, 0);
+    ChemicalRowDataGateway sucrose = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Sucrose", 15, 0, 0, 0, 0, 0);
+    ChemicalRowDataGateway silverChloride = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Silver Chloride", 25, 0, 0, 0, 0, 0);
+    ChemicalRowDataGateway nitrate = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Nitrate", 35, 0, 0, 0, 0, 0);
     
     /**
      * Insert Acids into the table.
@@ -95,6 +106,8 @@ public class PopulateDatabase {
      */
     ElementCompoundTableDataGateway.getSingletonInstance().create(silverChloride.getID(), silver.getID());
     ElementCompoundTableDataGateway.getSingletonInstance().create(silverChloride.getID(), chlorine.getID());
+    
+    System.out.println("Database populated. Have a good day!");
   }
   
 }

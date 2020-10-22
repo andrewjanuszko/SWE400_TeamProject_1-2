@@ -168,25 +168,6 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   }
 
   /**
-   * model.CompoundDataMapperInterface#filterByLowInventory().
-   */
-  @Override
-  public List<Compound> filterByLowInventory() throws DomainModelException {
-    List<Compound> compounds = getAll();
-    for (Compound compound : compounds) {
-      int elementInventoryNeeded = 0;
-      List<Element> elements = new ElementDataMapper().filterByPartOfCompound(compound.getID());
-      for (Element element : elements) {
-        elementInventoryNeeded += element.getInventory();
-      }
-      if (compound.getInventory() >= elementInventoryNeeded) {
-        compounds.remove(compound);
-      }
-    }
-    return compounds;
-  }
-
-  /**
    * Converts ChemicalDTOs to a List of Compounds.
    * 
    * @param chemicals the ChemicalDTOs to convert.

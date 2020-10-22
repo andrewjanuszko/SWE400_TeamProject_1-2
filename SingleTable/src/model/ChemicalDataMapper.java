@@ -76,7 +76,6 @@ public class ChemicalDataMapper implements ChemicalDataMapperInterface {
     List<Chemical> chemicals = new ArrayList<>();
     chemicals.addAll(new ElementDataMapper().filterByLowInventory());
     chemicals.addAll(new MetalDataMapper().filterByLowInventory());
-    chemicals.addAll(new CompoundDataMapper().filterByLowInventory());
     chemicals.addAll(new BaseDataMapper().filterByLowInventory());
     chemicals.addAll(new AcidDataMapper().filterByLowInventory());
     return chemicals;

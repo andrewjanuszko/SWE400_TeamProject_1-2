@@ -45,15 +45,13 @@ public class ChemicalRowDataGatewayTest extends DatabaseTest {
    */
   @Test
   public void testDeleteChemical() throws DatabaseException {
-    ChemicalRowDataGateway carbon = new ChemicalRowDataGateway(3);
-    assertEquals("Carbon", carbon.getName());
-    assertEquals(6, carbon.getAtomicNumber());
-    assertEquals(12.011, carbon.getAtomicMass());
-    carbon.delete();
+    ChemicalRowDataGateway helium = new ChemicalRowDataGateway(2);
+    assertEquals("Helium", helium.getName());
+    helium.delete();
 
     try {
       @SuppressWarnings("unused")
-      ChemicalRowDataGateway carbon2 = new ChemicalRowDataGateway(3);
+      ChemicalRowDataGateway helium2 = new ChemicalRowDataGateway(2);
       fail();
     } catch (DatabaseException e) {
       assertTrue(true);

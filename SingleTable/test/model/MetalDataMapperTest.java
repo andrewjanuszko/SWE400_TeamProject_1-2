@@ -1,196 +1,196 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import java.util.List;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import datasource.ChemicalRowDataGateway;
+import datasource.DatabaseTest;
 
-class MetalDataMapperTest {
-
-  @BeforeEach
-  public void setUpBeforeClass() throws Exception {
-	  ChemicalRowDataGateway.createTable();
-	  Metal Iron = new MetalDataMapper().create("Iron", 50.0, 26, 55.8, 4);
-	  Metal Gold = new MetalDataMapper().create("Gold", 40.0, 79, 197.0, 5);
-	  Metal Copper = new MetalDataMapper().create("Copper", 34.0, 29, 63.5, 8);
-  }
-
-  @AfterEach
-  public void tearDownAfterClass() throws Exception {
-	 ChemicalRowDataGateway.dropTable();
-  }
-
-  @Test
-  void testCreate() throws DomainModelException {
-	  Metal Gallium = new MetalDataMapper().create("Gallium", 80.0, 31, 69.7, 10);
-	  assertEquals("Gallium", Gallium.getName());
-	  assertEquals(80.0, Gallium.getInventory());
-	  assertEquals(31,Gallium.getAtomicNumber());
-	  assertEquals(69.7,Gallium.getAtomicMass());
-	  assertEquals(10, Gallium.getAcidAmount());
-  }
+/**
+ * Test cases for MetalDataMapper().
+ * @author andrewjanuszko
+ *
+ */
+public class MetalDataMapperTest extends DatabaseTest {
   
-  @Test
-  void testCreateDuplicate() throws DomainModelException{
-	  try {
-		  Metal iron2 = new MetalDataMapper().create("Iron", 50.0, 26, 55.8, 4);
-	      assertEquals("Iron", iron2.getName());
-	      fail();
-	    } catch (DomainModelException e) {
-	      assertTrue(true);
-	    }
-  }
-  
-  @Test
-  void testRead() throws DomainModelException{
-	  Metal gold =  new MetalDataMapper().read(2);
-	  assertEquals("Gold", gold.getName());
-	  assertEquals(40.0, gold.getInventory());
-	  assertEquals(79, gold.getAtomicNumber());
-	  assertEquals(197.0, gold.getAtomicMass());
-	  assertEquals(5, gold.getAcidAmount());
-  }
-  
-  @Test
-  void testUpdate() throws DomainModelException {
-	  Metal unknownMetal = new MetalDataMapper().create("???", 100.0, 1, 2, 1);
-	  unknownMetal.setName("Silver");
-	  unknownMetal.setInventory(80.0);
-	  unknownMetal.setAtomicNumber(47);
-	  unknownMetal.setAtomicMass(107.9);
-	  unknownMetal.setAcidAmount(6);
-	  new MetalDataMapper().update(unknownMetal);
-	  Metal silver = new MetalDataMapper().read(unknownMetal.getID());
-	  assertEquals("Silver", silver.getName());
-	  assertEquals(80.0, silver.getInventory());
-	  assertEquals(47, silver.getAtomicNumber());
-	  assertEquals(107.9, silver.getAtomicMass());
-	  assertEquals(6, silver.getAcidAmount());
-
-  }
-  
-  @Test
-  void testDelete() throws DomainModelException {
-	  try {
-		  Metal Iron = new MetalDataMapper().read(1);
-		  assertEquals("Iron", Iron.getName());
-		  new MetalDataMapper().delete(Iron);
-		  Iron = new MetalDataMapper().read(1);
-		  fail();
-	    } catch (DomainModelException e) {
-	      assertTrue(true);
-	    }
-  }
-  
-  @Test
-  void testGetAll() throws DomainModelException {
-	  List<Metal> metals = new MetalDataMapper().getAll();
-	  assertEquals(3, metals.size());
-  }
-  
-  @Test
-  void testNameLike() throws DomainModelException {
-	  List<Metal> metals = new MetalDataMapper().filterByNameLike("Gold");
-	  assertEquals(1, metals.size());
-	  assertEquals("Gold", metals.get(0).getName());
-	  assertEquals(40.0, metals.get(0).getInventory());
-	  assertEquals(79, metals.get(0).getAtomicNumber());
-	  assertEquals(197.0, metals.get(0).getAtomicMass());
-	  assertEquals(5, metals.get(0).getAcidAmount());
-  
-	  metals = new MetalDataMapper().filterByNameLike("o");
-	  assertEquals(3, metals.size()); // all metals have an 'o' in them
-  }
- 
-  @Test
-  void testInventory() throws DomainModelException {
-	  List<Metal> metals = new MetalDataMapper().filterByInventory(40);
-	  assertEquals(1, metals.size());
-	  assertEquals("Gold", metals.get(0).getName());
-	  assertEquals(40.0, metals.get(0).getInventory());
-	  assertEquals(79, metals.get(0).getAtomicNumber());
-	  assertEquals(197.0, metals.get(0).getAtomicMass());
-	  assertEquals(5, metals.get(0).getAcidAmount());
-	  
-	  metals = new MetalDataMapper().filterByInventoryBetween(0, 45);
-	  assertEquals(2, metals.size());
-	  assertEquals("Gold", metals.get(0).getName());
-	  assertEquals("Copper", metals.get(1).getName());
-  }
-  
-  @Test
-  void testAtomicNumber() throws DomainModelException {
-	  List<Metal> metals = new MetalDataMapper().filterByAtomicNumber(26);
-	  assertEquals(1, metals.size());
-	  assertEquals("Iron", metals.get(0).getName());
-	  assertEquals(50.0, metals.get(0).getInventory());
-	  assertEquals(26, metals.get(0).getAtomicNumber());
-	  assertEquals(55.8, metals.get(0).getAtomicMass());
-	  assertEquals(4, metals.get(0).getAcidAmount());
-	  
-	  metals = new MetalDataMapper().filterByAtomicNumberBetween(25, 30);
-	  assertEquals(2, metals.size());
-	  assertEquals("Iron", metals.get(0).getName());
-	  assertEquals("Copper", metals.get(1).getName());
-  }
-  
-  @Test
-  void testAtomicMass() throws DomainModelException {
-	  List<Metal> metals = new MetalDataMapper().filterByAtomicMass(63.5);
-	  assertEquals(1, metals.size());
-	  assertEquals("Copper", metals.get(0).getName());
-	  assertEquals(34.0, metals.get(0).getInventory());
-	  assertEquals(29, metals.get(0).getAtomicNumber());
-	  assertEquals(63.5, metals.get(0).getAtomicMass());
-	  assertEquals(8, metals.get(0).getAcidAmount());
-	  
-	  metals = new MetalDataMapper().filterByAtomicMassBetween(0, 100);
-	  assertEquals(2, metals.size());
-	  assertEquals("Iron", metals.get(0).getName());
-	  assertEquals("Copper", metals.get(1).getName());
-  }
-  
-  @Test
-  void testAcidAmount() throws DomainModelException {
-	  List<Metal> metals = new MetalDataMapper().filterByAcidAmount(8);
-	  assertEquals(1, metals.size());
-	  assertEquals("Copper", metals.get(0).getName());
-	  assertEquals(34.0, metals.get(0).getInventory());
-	  assertEquals(29, metals.get(0).getAtomicNumber());
-	  assertEquals(63.5, metals.get(0).getAtomicMass());
-	  assertEquals(8, metals.get(0).getAcidAmount());
-	  
-	  metals = new MetalDataMapper().filterByAcidAmountBetween(5, 10);
-	  assertEquals("Gold", metals.get(0).getName());
-	  assertEquals("Copper", metals.get(1).getName());
-  }
-  
-  @Test
-  void testDissolvedBy() throws DomainModelException {
-	 
-  }
-  
-  @Test
-  void testPartOfCompund() throws DomainModelException {
-	 
+  /**
+   * Run all the tests in MetalDataMapperTest.
+   * @throws DomainModelException when things go wrong.
+   */
+  public void runAllTests() throws DomainModelException {
+    testCreateDuplicate();
+    testRead();
+    testUpdate();
+    testDelete();
+    testGetAll();
+    testNameLike();
+    testInventorySpecificAndRange();
+    testAtomicNumberSpecificAndRange();
+    testAtomicMassSpecificAndRange();
+    testAcidAmountSpecificAndRange();
+    testDissolvedBy();
+    testPartOfCompund();
+    testLowInventory();
   }
 
+  /**
+   * Test creating a duplicate Metal
+   * @throws DomainModelException when things go wrong.
+   */
   @Test
-  void testLowInventory() throws DomainModelException {
-	  Metal gold =  new MetalDataMapper().read(2);
-	  gold.setInventory(10);
-	  new MetalDataMapper().update(gold);
-	  
-	  List<Metal> metals = new MetalDataMapper().filterByLowInventory();
-	  assertEquals(1, metals.size());
-	  assertEquals("Gold", metals.get(0).getName());
+  public void testCreateDuplicate() throws DomainModelException {
+    Metal iron = new MetalDataMapper().read(8);
+    assertEquals("Iron", iron.getName());
+    try {
+      iron = new MetalDataMapper().create("Iron", 50.0, 26, 55.8, 4);
+      assertEquals("Iron", iron.getName());
+      fail();
+    } catch (DomainModelException e) {
+      assertTrue(true);
+    }
+  }
+
+  /**
+   * Test reading Metals from the database.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testRead() throws DomainModelException {
+    Metal zinc = new MetalDataMapper().read(11);
+    assertEquals("Zinc", zinc.getName());
+  }
+
+  /**
+   * Test updating a Metal in the database.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testUpdate() throws DomainModelException {
+    Metal zinc = new MetalDataMapper().read(11);
+    assertEquals("Zinc", zinc.getName());
+    
+    zinc.setName("Whacky Zinc");
+    new MetalDataMapper().update(zinc);
+    
+    zinc = new MetalDataMapper().read(11);
+    assertEquals("Whacky Zinc", zinc.getName());
+  }
+
+  /**
+   * Test deleting a Metal from the database.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testDelete() throws DomainModelException {
+    Metal Iron = new MetalDataMapper().read(8);
+    assertEquals("Iron", Iron.getName());
+    try {
+      new MetalDataMapper().delete(Iron);
+      Iron = new MetalDataMapper().read(8);
+      fail();
+    } catch (DomainModelException e) {
+      assertTrue(true);
+    }
+  }
+
+  /**
+   * Test getting all Metals from the database.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testGetAll() throws DomainModelException {
+    List<Metal> metals = new MetalDataMapper().getAll();
+    assertEquals(6, metals.size());
+  }
+
+  /**
+   * Test getting all Metals with a name like from the database.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testNameLike() throws DomainModelException {
+    List<Metal> metals = new MetalDataMapper().filterByNameLike("o");
+    assertEquals(3, metals.size());
+  }
+
+  /**
+   * Test getting Metals with specific and ranged inventory.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testInventorySpecificAndRange() throws DomainModelException {
+    List<Metal> metals = new MetalDataMapper().filterByInventory(28.26);
+    assertEquals(1, metals.size());
+    metals = new MetalDataMapper().filterByInventoryBetween(20, 40);
+    assertEquals(6, metals.size());
+  }
+
+  /**
+   * Test getting Metals with specific and ranged atomic number.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testAtomicNumberSpecificAndRange() throws DomainModelException {
+    List<Metal> metals = new MetalDataMapper().filterByAtomicNumber(47);
+    assertEquals(1, metals.size());
+    metals = new MetalDataMapper().filterByAtomicNumberBetween(20, 30);
+    assertEquals(3, metals.size());
+  }
+
+  /**
+   * Test getting Metals with specific and ranged atomic masses.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testAtomicMassSpecificAndRange() throws DomainModelException {
+    List<Metal> metals = new MetalDataMapper().filterByAtomicMass(107.87);
+    assertEquals(1, metals.size());
+    metals = new MetalDataMapper().filterByAtomicMassBetween(50, 70);
+    assertEquals(3, metals.size());
+  }
+
+  /**
+   * Test getting Metals with specific and ranged acid amount.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testAcidAmountSpecificAndRange() throws DomainModelException {
+    List<Metal> metals = new MetalDataMapper().filterByAcidAmount(2);
+    assertEquals(1, metals.size());
+    metals = new MetalDataMapper().filterByAcidAmountBetween(10, 15);
+    assertEquals(3, metals.size());
+  }
+
+  /**
+   * Test getting Metals with specific dissolved by.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testDissolvedBy() throws DomainModelException {
+    List<Metal> metals = new MetalDataMapper().filterByDissolvedBy(20);
+    assertEquals(1, metals.size());
+  }
+
+  /**
+   * Test getting Metals that are in a Compound.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testPartOfCompund() throws DomainModelException {
+    List<Metal> metals = new MetalDataMapper().filterByPartOfCompound(17);
+    assertEquals(1, metals.size());
+  }
+
+  /**
+   * Test getting Metals with low inventory.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testLowInventory() throws DomainModelException {
+    List<Metal> metals = new MetalDataMapper().filterByLowInventory();
+    assertEquals(0, metals.size());
   }
 
 }

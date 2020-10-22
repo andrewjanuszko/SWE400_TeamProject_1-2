@@ -1,11 +1,34 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import datasource.DatabaseTest;
 
-public class ElementDataMapperTest {
+/**
+ * Test cases for ElementDataMapper().
+ * @author andrewjanuszko
+ *
+ */
+public class ElementDataMapperTest extends DatabaseTest {
+  
+  /**
+   * Run all the tests in ElementDataMapperTest.
+   * @throws DomainModelException when things go wrong.
+   */
+  public void runAllTests() throws DomainModelException {
+    testCreateDuplicate();
+    testRead();
+    testUpdate();
+    testDelete();
+    testGetAll();
+    testNameLike();
+    testInventorySpecificAndRange();
+    testAtomicNumberSpecificAndRange();
+    testAtomicMassSpecificAndRange();
+    testElementsInCompound();
+    testGetLowInventory();
+  }
   
   /**
    * Test creating duplicate Elements.
@@ -138,6 +161,16 @@ public class ElementDataMapperTest {
   public void testElementsInCompound() throws DomainModelException {
     List<Element> inWater = new ElementDataMapper().filterByPartOfCompound(13);
     assertEquals(2, inWater.size());
+  }
+  
+  /**
+   * Test getting all Elements with low inventory.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testGetLowInventory() throws DomainModelException {
+    List<Element> elements = new ElementDataMapper().filterByLowInventory();
+    assertEquals(6, elements.size());
   }
   
 }

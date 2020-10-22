@@ -99,12 +99,5 @@ public interface CompoundDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Compound> filterByMadeOf(int elementID) throws DomainModelException;
-  
-  /**
-   * Gets all compounds with low inventory
-   * @return all compounds that are low inventory.
-   * @throws DomainModelException when things go wrong.
-   */
-  public List<Compound> filterByLowInventory() throws DomainModelException;
 
 }

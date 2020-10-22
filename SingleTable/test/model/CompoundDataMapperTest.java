@@ -1,33 +1,117 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Test;
+import datasource.DatabaseTest;
 
-import datasource.ChemicalRowDataGateway;
-import datasource.ElementCompoundTableDataGateway;
-
-class CompoundDataMapperTest {
+/**
+ * Test cases for CompoundDataMapper().
+ * @author andrewjanuszko
+ *
+ */
+public class CompoundDataMapperTest extends DatabaseTest {
   
-  private static ElementCompoundTableDataGateway elementCompoundTableDataGateway;
-
-  @BeforeAll
-  static void setUpBeforeClass() throws Exception {
-    ChemicalRowDataGateway.createTable();
-    elementCompoundTableDataGateway.createTable();
+  /**
+   * Run all the tests in CompoundDataMapperTest.
+   * @throws DomainModelException when things go wrong.
+   */
+  public void runAllTests() throws DomainModelException {
+    testRead();
+    testUpdate();
+    testDelete();
+    testGetAll();
+    testNameLike();
+    testInventorySpecificAndRange();
+    testMadeOf();
   }
-
-  @AfterAll
-  static void tearDownAfterClass() throws Exception {
-    elementCompoundTableDataGateway.dropTable();
-    ChemicalRowDataGateway.dropTable();
-  }
-
+  
+  /**
+   * Test reading a Compound.
+   * @throws DomainModelException when things go wrong.
+   */
   @Test
-  void test() {
-    fail("Not yet implemented");
+  public void testRead() throws DomainModelException {
+    Compound hydrogenDioxide = new CompoundDataMapper().read(13);
+    assertEquals("Hydrogen Dioxide", hydrogenDioxide.getName());
+    assertEquals(2, hydrogenDioxide.getMadeOf().size());
+  }
+  
+  /**
+   * Test updating a Compound.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testUpdate() throws DomainModelException {
+    Compound hydrogenDioxide = new CompoundDataMapper().read(13);
+    assertEquals("Hydrogen Dioxide", hydrogenDioxide.getName());
+    assertEquals(2, hydrogenDioxide.getMadeOf().size());
+    List<Element> madeOf = Arrays.asList(new ElementDataMapper().read(4), new ElementDataMapper().read(1), new ElementDataMapper().read(2));
+    hydrogenDioxide.setMadeOf(madeOf);
+    new CompoundDataMapper().update(hydrogenDioxide);
+    hydrogenDioxide = new CompoundDataMapper().read(13);
+    assertEquals(3, hydrogenDioxide.getMadeOf().size());   
+  }
+  
+  /**
+   * Test deleting a Compound.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testDelete() throws DomainModelException {
+    Compound sucrose = new CompoundDataMapper().read(16);
+    assertEquals("Sucrose", sucrose.getName());
+    assertEquals(3, sucrose.getMadeOf().size());
+    new CompoundDataMapper().delete(sucrose);
+    try {
+      sucrose = new CompoundDataMapper().read(16);
+      fail();
+    } catch (DomainModelException e) {
+      assertTrue(true);
+    }
+  }
+  
+  /**
+   * Test getting all Compounds.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testGetAll() throws DomainModelException {
+    List<Compound> compounds = new CompoundDataMapper().getAll();
+    assertEquals(6, compounds.size());
+  }
+  
+  /**
+   * Test getting all Compounds with a name like.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testNameLike() throws DomainModelException {
+    List<Compound> compounds = new CompoundDataMapper().filterByNameLike("o");
+    assertEquals(5, compounds.size());
+  }
+  
+  /**
+   * Test getting Compound with specific and ranged inventory.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testInventorySpecificAndRange() throws DomainModelException {
+    List<Compound> compounds = new CompoundDataMapper().filterByInventory(10);
+    assertEquals(1, compounds.size());
+    compounds = new CompoundDataMapper().filterByInventoryBetween(20, 30);
+    assertEquals(3, compounds.size());
+  }
+  
+  /**
+   * Test getting the Compounds that contain the same Element.
+   * @throws DomainModelException when things go wrong.
+   */
+  @Test
+  public void testMadeOf() throws DomainModelException {
+    List<Compound> compounds = new CompoundDataMapper().filterByMadeOf(5);
+    assertEquals(4, compounds.size());
   }
 
 }
