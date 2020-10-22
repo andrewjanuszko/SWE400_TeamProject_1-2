@@ -50,6 +50,9 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   public Compound read(int id) throws DomainModelException {
     try {
       ChemicalRowDataGateway row = new ChemicalRowDataGateway(id);
+      if (row.getType() != ChemicalEnum.COMPOUND.getIntValue()) {
+        throw new DatabaseException("ID '" + id + "' does not belong to a Compound.");
+      }
       List<ChemicalDTO> elements = ElementCompoundTableDataGateway.getSingletonInstance().readElementsFromCompound(id)
           .getRelations();
       List<Element> madeOf = new ArrayList<>();

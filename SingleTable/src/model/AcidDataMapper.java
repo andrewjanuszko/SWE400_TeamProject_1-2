@@ -51,6 +51,9 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   public Acid read(int id) throws DomainModelException {
     try {
       ChemicalRowDataGateway row = new ChemicalRowDataGateway(id);
+      if (row.getType() != ChemicalEnum.ACID.getIntValue()) {
+        throw new DatabaseException("ID '" + id + "' does not belong to an Acid.");
+      }
       List<Metal> dissolves = new MetalDataMapper().filterByDissolvedBy(id);
       return new Acid(row.getID(), row.getName(), row.getInventory(), dissolves, row.getSolute());
     } catch (DatabaseException e) {

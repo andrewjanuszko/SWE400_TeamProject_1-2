@@ -48,6 +48,9 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   public Metal read(int id) throws DomainModelException {
     try {
       ChemicalRowDataGateway row = new ChemicalRowDataGateway(id);
+      if (row.getType() != ChemicalEnum.METAL.getIntValue()) {
+        throw new DatabaseException("ID '" + id + "' does not belong to a Metal.");
+      }
       return new Metal(id, row.getName(), row.getInventory(), row.getAtomicNumber(), row.getAtomicMass(),
           row.getAcidAmount());
     } catch (DatabaseException e) {

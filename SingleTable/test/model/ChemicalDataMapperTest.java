@@ -12,16 +12,6 @@ import datasource.DatabaseTest;
  *
  */
 class ChemicalDataMapperTest extends DatabaseTest {
-  
-  /**
-   * Run all the tests in ChemicalDataMapperTest.
-   * @throws DomainModelException when things go wrong.
-   */
-  public void runAllTests() throws DomainModelException {
-    testGetAll();
-    testNameLike();
-    testInventory();
-  }
 
   /**
    * Get all Chemicals.

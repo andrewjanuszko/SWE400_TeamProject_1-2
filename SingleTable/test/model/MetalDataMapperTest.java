@@ -14,26 +14,6 @@ import datasource.DatabaseTest;
  *
  */
 public class MetalDataMapperTest extends DatabaseTest {
-  
-  /**
-   * Run all the tests in MetalDataMapperTest.
-   * @throws DomainModelException when things go wrong.
-   */
-  public void runAllTests() throws DomainModelException {
-    testCreateDuplicate();
-    testRead();
-    testUpdate();
-    testDelete();
-    testGetAll();
-    testNameLike();
-    testInventorySpecificAndRange();
-    testAtomicNumberSpecificAndRange();
-    testAtomicMassSpecificAndRange();
-    testAcidAmountSpecificAndRange();
-    testDissolvedBy();
-    testPartOfCompund();
-    testLowInventory();
-  }
 
   /**
    * Test creating a duplicate Metal

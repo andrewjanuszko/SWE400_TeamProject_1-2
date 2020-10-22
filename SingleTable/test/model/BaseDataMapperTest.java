@@ -5,102 +5,98 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class BaseDataMapperTest {
+import datasource.DatabaseTest;
 
+class BaseDataMapperTest extends DatabaseTest {
+
+  /**
+   * Test reading Bases from the database.
+   * @throws DomainModelException when things go wrong.
+   */
   @Test
-  void testCreate() throws DomainModelException {
-	  Base lithiumHydroxide = new BaseDataMapper().read(29);
-	  assertEquals("Lithium Hydroxide", lithiumHydroxide.getName()); 
+  public void testRead() throws DomainModelException {
+    Base potassiumHydroxide = new BaseDataMapper().read(25);
+    assertEquals("Potassium Hydroxide", potassiumHydroxide.getName());
   }
   
+  /**
+   * Test updating Bases from the database.
+   * @throws DomainModelException when things go wrong.
+   */
   @Test
-  void testCreateDuplicate() throws DomainModelException{
-	  try {
-		  Base calciumHydroxide2 = new BaseDataMapper().create("Calcium Hydroxide", 52.3, 0);
-	      assertEquals("Calcium Hydroxide", calciumHydroxide2.getName());
-	      fail();
-	    } catch (DomainModelException e) {
-	      assertTrue(true);
-	    }
+  public void testUpdate() throws DomainModelException {
+    try {
+      Base potassiumHydroxide = new BaseDataMapper().read(25);
+      assertEquals("Potassium Hydroxide", potassiumHydroxide.getName());
+      potassiumHydroxide.setName("Potassium OwO");
+      new BaseDataMapper().update(potassiumHydroxide);
+      potassiumHydroxide = new BaseDataMapper().read(25);
+      assertEquals("Potassium OwO", potassiumHydroxide.getName());
+    } catch (DomainModelException e) {
+      fail();
+    }
   }
   
+  /**
+   * Test deleting Bases from the database.
+   * @throws DomainModelException when things go wrong.
+   */
   @Test
-  void testRead() throws DomainModelException{
-	  Base potassiumHydroxide =  new BaseDataMapper().read(2);
-	  assertEquals("Potassium Hydroxide", potassiumHydroxide.getName());
-	  assertEquals(47.0, potassiumHydroxide.getInventory());
-	  assertEquals(0, potassiumHydroxide.getSolute());
+  public void testDelete() throws DomainModelException {
+    try {
+      Base potassiumHydroxide = new BaseDataMapper().read(25);
+      assertEquals("Potassium Hydroxide", potassiumHydroxide.getName());
+      
+      new BaseDataMapper().delete(potassiumHydroxide);
+      
+      potassiumHydroxide = new BaseDataMapper().read(potassiumHydroxide.getID());
+      assertEquals("Potassium Hydroxide", potassiumHydroxide.getName());
+      fail();
+    } catch (DomainModelException e) {
+      assertTrue(true);
+    }
   }
   
+  /**
+   * Test getting all Bases.
+   * @throws DomainModelException when things go wrong.
+   */
   @Test
-  void testUpdate() throws DomainModelException {
-	  Base unknownBase = new BaseDataMapper().create("???", 50, 0);
-	  unknownBase.setInventory(45);
-	  unknownBase.setName("Basic Base");
-	  unknownBase.setSolute(9);
-	  new BaseDataMapper().update(unknownBase);
-	  unknownBase = new BaseDataMapper().read(unknownBase.getID());
-	  
-	  assertEquals("Basic Base", unknownBase.getName());
-	  assertEquals(45, unknownBase.getInventory());
-	  assertEquals(9,unknownBase.getSolute());
+  public void testGetAll() throws DomainModelException {
+    List<Base> bases = new BaseDataMapper().getAll();
+    assertEquals(6, bases.size());
   }
   
+  /**
+   * Test getting Bases with names like.
+   * @throws DomainModelException when things go wrong.
+   */
   @Test
-  void testDelete() throws DomainModelException {
-	  try {
-		  Base calciumHydroxide = new BaseDataMapper().read(1);
-		  assertEquals("Calcium Hydroxide", calciumHydroxide.getName());
-		  new BaseDataMapper().delete(calciumHydroxide);
-		  calciumHydroxide = new BaseDataMapper().read(1);
-		  fail();
-	    } catch (DomainModelException e) {
-	      assertTrue(true);
-	    }
+  public void testNameLike() throws DomainModelException {
+    List<Base> bases = new BaseDataMapper().filterByNameLike("Hydroxide");
+    assertEquals(6, bases.size());
   }
   
+  /**
+   * Test getting Bases with specific and ranged inventories.
+   * @throws DomainModelException when things go wrong.
+   */
   @Test
-  void testGetAll() throws DomainModelException {
-	  List<Base> bases = new BaseDataMapper().getAll();
-	  assertEquals(3, bases.size());
+  public void testInventorySpecificAndRange() throws DomainModelException {
+    List<Base> bases = new BaseDataMapper().filterByInventory(18);
+    assertEquals(1, bases.size());
+    
+    bases = new BaseDataMapper().filterByInventoryBetween(10, 30);
+    assertEquals(5, bases.size());
   }
   
+  /**
+   * Test getting all Bases.
+   * @throws DomainModelException when things go wrong.
+   */
   @Test
-  void testNameLike() throws DomainModelException {
-	  List<Base> bases = new BaseDataMapper().filterByNameLike("Potassium Hydroxide");
-	  assertEquals(1, bases.size());
-	  assertEquals("Potassium Hydroxide", bases.get(0).getName());
-	  assertEquals(47.0, bases.get(0).getInventory());
-	  assertEquals(0, bases.get(0).getSolute());
-	  bases = new BaseDataMapper().filterByNameLike("xide");
-	  assertEquals(3, bases.size());
-  }
- 
-  @Test
-  void testInventory() throws DomainModelException {
-	  List<Base> bases = new BaseDataMapper().filterByInventory(52.3);
-	  assertEquals(1, bases.size());
-	  assertEquals("Calcium Hydroxide", bases.get(0).getName());
-	  
-	  bases = new BaseDataMapper().filterByInventoryBetween(0, 50);
-	  assertEquals(2, bases.size());
-	  assertEquals("Potassium Hydroxide", bases.get(0).getName());
-	  assertEquals("Rubidium Hydroxide", bases.get(1).getName());
-  }
-  
-  @Test
-  void testSolute() throws DomainModelException {
-	  List<Base> bases = new BaseDataMapper().filterBySolute(0);
-	  assertEquals(3, bases.size());
-	  assertEquals("Calcium Hydroxide", bases.get(0).getName());
-	  assertEquals("Potassium Hydroxide", bases.get(1).getName());
-	  assertEquals("Rubidium Hydroxide", bases.get(2).getName());
-  }
-  
-  @Test
-  void testLowInventory() throws DomainModelException {
-	  List<Base> bases = new BaseDataMapper().filterByLowInventory();
-	  assertEquals(1, bases.size());
-	  assertEquals("Rubidium Hydroxide", bases.get(0).getName());
+  public void testGetSolute() throws DomainModelException {
+    List<Base> bases = new BaseDataMapper().filterBySolute(24);
+    assertEquals(1, bases.size());
   }
 }

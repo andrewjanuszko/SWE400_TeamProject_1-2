@@ -44,6 +44,9 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   public Base read(int id) throws DomainModelException {
     try {
       ChemicalRowDataGateway row = new ChemicalRowDataGateway(id);
+      if (row.getType() != ChemicalEnum.BASE.getIntValue()) {
+        throw new DatabaseException("ID '" + id + "' does not belong to a Base.");
+      }
       return new Base(row.getID(), row.getName(), row.getInventory(), row.getSolute());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to read a Base with ID '" + id + "'.", e);

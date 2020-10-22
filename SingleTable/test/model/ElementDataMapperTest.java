@@ -11,25 +11,7 @@ import datasource.DatabaseTest;
  *
  */
 public class ElementDataMapperTest extends DatabaseTest {
-  
-  /**
-   * Run all the tests in ElementDataMapperTest.
-   * @throws DomainModelException when things go wrong.
-   */
-  public void runAllTests() throws DomainModelException {
-    testCreateDuplicate();
-    testRead();
-    testUpdate();
-    testDelete();
-    testGetAll();
-    testNameLike();
-    testInventorySpecificAndRange();
-    testAtomicNumberSpecificAndRange();
-    testAtomicMassSpecificAndRange();
-    testElementsInCompound();
-    testGetLowInventory();
-  }
-  
+
   /**
    * Test creating duplicate Elements.
    * @throws DomainModelException when things go wrong.
@@ -66,7 +48,7 @@ public class ElementDataMapperTest extends DatabaseTest {
       assertEquals("Iron", iron.getName());
       iron.setName("Wacky Iron");
       new ElementDataMapper().update(iron);
-      iron = new ElementDataMapper().read(iron.getID());
+      iron = new ElementDataMapper().read(8);
       assertEquals("Wacky Iron", iron.getName());
     } catch (DomainModelException e) {
       System.out.println(e);

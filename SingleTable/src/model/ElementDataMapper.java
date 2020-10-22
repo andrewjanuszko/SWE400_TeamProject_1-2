@@ -47,6 +47,9 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   public Element read(int id) throws DomainModelException {
     try {
       ChemicalRowDataGateway row = new ChemicalRowDataGateway(id);
+      if (row.getType() != ChemicalEnum.ELEMENT.getIntValue() && row.getType() != ChemicalEnum.METAL.getIntValue()) {
+        throw new DatabaseException("ID '" + id + "' does not belong to an Element.");
+      }
       return new Element(row.getID(), row.getName(), row.getInventory(), row.getAtomicNumber(), row.getAtomicMass());
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to find an Element with ID '" + id + "'.", e);

@@ -12,21 +12,7 @@ import datasource.DatabaseTest;
  *
  */
 public class CompoundDataMapperTest extends DatabaseTest {
-  
-  /**
-   * Run all the tests in CompoundDataMapperTest.
-   * @throws DomainModelException when things go wrong.
-   */
-  public void runAllTests() throws DomainModelException {
-    testRead();
-    testUpdate();
-    testDelete();
-    testGetAll();
-    testNameLike();
-    testInventorySpecificAndRange();
-    testMadeOf();
-  }
-  
+ 
   /**
    * Test reading a Compound.
    * @throws DomainModelException when things go wrong.
