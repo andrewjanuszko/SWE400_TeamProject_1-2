@@ -158,7 +158,8 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   public List<Acid> filterByLowInventory() {
-    // TODO Auto-generated method stub
+    
+    
     return null;
   }
 

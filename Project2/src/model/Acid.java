@@ -2,6 +2,8 @@ package model;
 
 import java.util.List;
 
+import mappers.MetalDataMapper;
+
 /**
  * Class for creating an Acid.
  * 
@@ -11,6 +13,7 @@ public class Acid extends Chemical {
 
   private List<Metal> dissolves;
   private int solute;
+  private double threshold;
 
   /**
    * Constructor for creating an Acid object.
@@ -61,6 +64,17 @@ public class Acid extends Chemical {
    */
   public void setSolute(int solute) {
     this.solute = solute;
+  }
+
+  public void setThreshold(double threshold) {
+    List<Metal> list = new MetalDataMapper().filterByDissolvedBy(getID());
+
+    threshold = 0;
+    for (Metal m : list) {
+      threshold += m.getAcidAmount();
+    }
+
+    this.threshold = threshold;
   }
 
 }
