@@ -30,7 +30,7 @@ public class ElementTDGRDS implements ElementTDG {
     return getSingleton();
   }
 
-  public ElementDTO getDTO(int id) {
+  public ElementDTO getDTO(int id) throws DatabaseException {
     String sql = "SELECT * FROM Element INNER JOIN Chemical ON Element.elementId = Chemical.chemicalId AND elementId = "
         + id + ";";
 
@@ -45,8 +45,8 @@ public class ElementTDGRDS implements ElementTDG {
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("No entry with id " + id);
+      throw new DatabaseException("No entry with id " + id, e); 
     }
-    return null;
   }
 
   public ElementTDGRDS filterByName(String name) {
@@ -119,5 +119,10 @@ public class ElementTDGRDS implements ElementTDG {
       e.printStackTrace();
       System.out.println("Problem deleting Element with id " + i);
     }
+  }
+
+  public ElementTDGRDS filterByLowInventory(double filter) {
+    sql += " AND (Chemical.inventory < " + filter + ") ";
+    return null;
   }
 }

@@ -175,8 +175,19 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     return new Element(dto.getElementId(), dto.getName(), dto.getInventory(), dto.getAtomicNumber(), dto.getAtomicMass());
   }
 
-  public List<Element> filterByLowInventory() {
-    // TODO Auto-generated method stub
-    return null;
+  public List<Element> filterByLowInventory(double filter) {
+    List<ElementDTO> dtos;
+    List<Element> elements = new ArrayList<>(); 
+    
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByLowInventory(filter).executeQuery();
+      
+      for(ElementDTO e : dtos) {
+        elements.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return elements;
   }
 }

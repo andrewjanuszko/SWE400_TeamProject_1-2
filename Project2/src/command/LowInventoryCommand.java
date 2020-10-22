@@ -28,10 +28,9 @@ public class LowInventoryCommand implements Command {
 
   private void getInput() {
     List<Acid> acids = new AcidDataMapper().filterByLowInventory();
-    List<Base> bases = new BaseDataMapper().filterByLowInventory();
+    List<Base> bases = new BaseDataMapper().filterByLowInventory(40);
     List<Compound> compounds = new CompoundDataMapper().filterByLowInventory();
-    List<Element> elements = new ElementDataMapper().filterByLowInventory();
-    List<Metal> metals = new MetalDataMapper().filterByLowInventory();
+    List<Element> elements = new ElementDataMapper().filterByLowInventory(20);
 
     for (Acid a : acids) {
       input.add("Acid\t id: " + a.getID() + ", name: " + a.getName() + ", inventory: " + a.getInventory());
@@ -44,9 +43,6 @@ public class LowInventoryCommand implements Command {
     }
     for (Element e : elements) {
       input.add("Element\t id: " + e.getID() + ", name: " + e.getName() + ", inventory: " + e.getInventory());
-    }
-    for (Metal m : metals) {
-      input.add("Metals\t id: " + m.getID() + ", name: " + m.getName() + ", inventory: " + m.getInventory());
     }
   }
 
