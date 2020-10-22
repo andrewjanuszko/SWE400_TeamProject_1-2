@@ -5,16 +5,22 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+//import model.AcidDataMapperInterface;
+import model.DomainModelException;
+import model.Metal;
+
 public class AddAcidFrame extends JFrame{
 	
 	GridBagConstraints gbc = new GridBagConstraints(); 
 	int height = 450, width = 300;
+	
 	
 	public AddAcidFrame() {
 		setLayout(new GridBagLayout());
@@ -31,75 +37,70 @@ public class AddAcidFrame extends JFrame{
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		
+
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		JLabel idLabel = new JLabel("Id: ");
-		add(idLabel,gbc);
-		
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		JTextField jtfId = new JTextField("Id");
-		add(jtfId,gbc);
-		
-		gbc.gridx = 0;
-		gbc.gridy = 1;
 		JLabel nameLabel = new JLabel("Name: ");
 		add(nameLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 1;
+		gbc.gridy = 0;
 		JTextField jtfName = new JTextField("Name");
 		add(jtfName,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		JLabel inventoryLabel = new JLabel("Inventory: ");
 		add(inventoryLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		JTextField jtfInventory = new JTextField("Inventory");
 		add(jtfInventory,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		JLabel soluteLabel = new JLabel("Solute: ");
 		add(soluteLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		JTextField jtfSolute = new JTextField("Solute");
 		add(jtfSolute,gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		JLabel dissolvesLabel = new JLabel("Dissolves: ");
+		add(dissolvesLabel,gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 3;
+		JTextField jtfDissolves = new JTextField("Dissolves");
+		add(jtfDissolves,gbc);
+		
+		
 		
 		JButton add = new JButton("Add");
 		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int id;
+				
 				double inventory;
-				String solute, name;
-<<<<<<< HEAD
+				String name;
+				int solute;
 				try {
-					id = Integer.parseInt(jtfId.getText());
+					List<Metal> dissolves = null;
 					inventory = Double.parseDouble(jtfInventory.getText());
-					solute = jtfSolute.getText();
+					solute = Integer.parseInt(jtfSolute.getText());
 					name = jtfName.getText();
+
+					//dissolves list
 					
-					System.out.println(id + "\n" + name + "\n" + inventory + "\n" + solute);
-					
+					System.out.println("\n" + name + "\n" + inventory + "\n" + solute);
 					dispose();
 				} catch (NumberFormatException e1) {
 					new FailureFrame("Failed to create Acid");
 				}
-=======
-				id = Integer.parseInt(jtfId.getText());
-				inventory = Double.parseDouble(jtfInventory.getText());
-				solute = jtfSolute.getText();
-				name = jtfName.getText();
-				System.out.println(id + "\n" + name + "\n" + inventory + "\n" + solute);
-						
-				dispose();
->>>>>>> branch 'Gui' of https://gitlab.engr.ship.edu/ko1568/swe400_project1_group6.git
 			}
 		});
 		
