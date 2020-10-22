@@ -26,7 +26,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public Metal create(String name, double inventory, int atomicNumber, double atomicMass, double acidAmount)
       throws DomainModelException {
-    MetalRDG row = new MetalRDGRDS(0, acidAmount, atomicNumber, atomicMass, name, inventory);
+    MetalRDG row = new MetalRDGRDS(acidAmount, atomicNumber, atomicMass, name, inventory);
     return convertFromDTO(row.getMetal());
   }
 
@@ -215,6 +215,11 @@ public class MetalDataMapper implements MetalDataMapperInterface {
 
   @Override
   public List<Metal> filterByPartOfCompound(int compoundID) throws DomainModelException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Metal> filterByLowInventory() {
     // TODO Auto-generated method stub
     return null;
   }

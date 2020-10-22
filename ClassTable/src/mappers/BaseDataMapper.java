@@ -163,4 +163,9 @@ public class BaseDataMapper implements BaseDataMapperInterface {
     return new Base(dto.getBaseId(), dto.getName(), dto.getInventory(), dto.getSoluteId()); 
   }
 
+  public List<Base> filterByLowInventory() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
 }

@@ -174,4 +174,9 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   public Element convertFromDTO(ElementDTO dto) {
     return new Element(dto.getElementId(), dto.getName(), dto.getInventory(), dto.getAtomicNumber(), dto.getAtomicMass());
   }
+
+  public List<Element> filterByLowInventory() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

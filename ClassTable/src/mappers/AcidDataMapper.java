@@ -19,17 +19,17 @@ import model.Metal;
 
 public class AcidDataMapper implements AcidDataMapperInterface {
 
-
   @Override
-  public Acid create(String name, double inventory, List<Metal> dissolves,int solute) throws DomainModelException {
+  public Acid create(String name, double inventory, List<Metal> dissolves, int solute) throws DomainModelException {
     AcidRDG row = new AcidRDGRDS(solute, name, inventory);
     Acid a = convertFromDTO(row.getAcid());
-    for(Metal m : dissolves) {
+    for (Metal m : dissolves) {
       MetalRDG metal = new MetalRDGRDS(m.getID());
       metal.setDissolvedById(a.getID());
     }
     return a;
   }
+
   @Override
   public Acid read(int id) {
     Acid acid = null;
@@ -146,16 +146,20 @@ public class AcidDataMapper implements AcidDataMapperInterface {
 
     return acids;
   }
-  
+
   public Acid convertFromDTO(AcidDTO dto) {
     ArrayList<MetalDTO> metals = AcidTDGRDS.getMetals(dto.getAcidId());
     ArrayList<Metal> betterMetals = new ArrayList<>();
     for (MetalDTO m : metals) {
-      betterMetals.add(new Metal(m.getMetalId(), m.getName(), m.getInventory(), m.getAtomicNumber(),
-          m.getAtomicMass(), m.getMoles()));
+      betterMetals.add(new Metal(m.getMetalId(), m.getName(), m.getInventory(), m.getAtomicNumber(), m.getAtomicMass(),
+          m.getMoles()));
     }
-    return new Acid(dto.getAcidId(), dto.getName(), dto.getInventory(), betterMetals, dto.getSoluteId()); 
+    return new Acid(dto.getAcidId(), dto.getName(), dto.getInventory(), betterMetals, dto.getSoluteId());
   }
 
+  public List<Acid> filterByLowInventory() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
 }

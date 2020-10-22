@@ -154,4 +154,9 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     return listCompounds;
   }
 
+  public List<Compound> filterByLowInventory() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
 }
