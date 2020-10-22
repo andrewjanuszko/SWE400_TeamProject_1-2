@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 /**
  * Row Data Gateway for Base.
  * @author Chase
@@ -26,8 +25,6 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 				"UNIQUE(name), " +
 				"PRIMARY KEY(baseID)) ;";
 		
-		Connection conn = DatabaseManager.getSingleton().getConnection();
-
 		try
 		{
 			// drop table

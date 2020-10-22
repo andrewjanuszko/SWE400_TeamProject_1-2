@@ -6,16 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import datadto.AcidDTO;
+import datadto.BaseDTO;
 
-/**
- * Table Data Gateway for the Acid table
- * 
- * @author jeol
- *
- */
-public abstract class AcidTableDataGatewayRDS {
-  // TODO maybe make singleton.
+public class BaseTableDataGatewayRDS {
   /**
    * Creates table in database.
    * 
@@ -45,6 +38,7 @@ public abstract class AcidTableDataGatewayRDS {
   /**
    * Only drop the table.
    * 
+   * @return
    * @throws DatabaseException
    */
   public static void dropTable() throws DatabaseException {
@@ -58,44 +52,43 @@ public abstract class AcidTableDataGatewayRDS {
     } catch (SQLException e) {
       throw new DatabaseException("Unable to drop Acid table", e);
     }
-
   }
 
   /**
    * Converts a result set that is assumed to contain a collection of acids from
    * the database.
    * 
-   * @param rs the result set, contains a collection of acids.
-   * @return  a list of AcidDTOs.
+   * @param rs the result set, contains a collection of bases.
+   * @return a list of BaseDTOs.
    */
-  private static List<AcidDTO> toDTOList(ResultSet rs) {
-    List<AcidDTO> acidDTOs = new ArrayList<AcidDTO>();
+  private static List<BaseDTO> toDTOList(ResultSet rs) {
+    List<BaseDTO> baseDTOs = new ArrayList<BaseDTO>();
     try {
       while (rs.next()) {
-        int acidID = rs.getInt("acidID");
+        int baseID = rs.getInt("baseID");
         String name = rs.getString("name");
         int solute = rs.getInt("solute");
         double inventory = rs.getDouble("inventory");
-        AcidDTO a = new AcidDTO(acidID, solute, name, inventory);
-        acidDTOs.add(a);
-        return acidDTOs;
+        BaseDTO a = new BaseDTO(baseID, solute, name, inventory);
+        baseDTOs.add(a);
+        return baseDTOs;
       }
 
     } catch (SQLException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    return acidDTOs;
+    return baseDTOs;
   }
 
   /**
-   * Gets all Acids.
+   * Gets all Bases.
    * 
-   * @return A list of all rows in Acid.
+   * @return A list of all rows in Base.
    */
-  public static List<AcidDTO> getAll() {
+  public static List<BaseDTO> getAll() {
     try {
-      PreparedStatement stmt = DatabaseManager.getSingleton().getConnection().prepareStatement("SELECT * FROM Acid;");
+      PreparedStatement stmt = DatabaseManager.getSingleton().getConnection().prepareStatement("SELECT * FROM Base;");
       stmt.execute();
       ResultSet rs = stmt.executeQuery();
       return toDTOList(rs);
@@ -107,14 +100,15 @@ public abstract class AcidTableDataGatewayRDS {
   }
 
   /**
-   * Filters the acid table by a String.
+   * Filters the base table by a String.
+   * 
    * @param wildCard String that is used in filter.
-   * @return  List of filtered AcidDTOs.
+   * @return List of filtered BaseDTOs.
    */
-  public static List<AcidDTO> filterByWildCardName(String wildCard) {
+  public static List<BaseDTO> filterByWildCardName(String wildCard) {
     try {
       PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("SELECT * FROM Acid WHERE name LIKE '%" + wildCard + "%'");
+          .prepareStatement("SELECT * FROM Base WHERE name LIKE '%" + wildCard + "%'");
       ResultSet rs = stmt.executeQuery();
       return toDTOList(rs);
 
@@ -126,14 +120,15 @@ public abstract class AcidTableDataGatewayRDS {
   }
 
   /**
-   * Filters the acid table by inventory.
+   * Filters the Base table by inventory.
+   * 
    * @param inventory Given amount.
-   * @return  List of filtered AcidDTOs.
+   * @return List of filtered BaseDTOs.
    */
-  public static List<AcidDTO> filterByInventory(double inventory) {
+  public static List<BaseDTO> filterByInventory(double inventory) {
     try {
       PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("SELECT * FROM Acid WHERE inventory = " + inventory);
+          .prepareStatement("SELECT * FROM Base WHERE inventory = " + inventory);
       ResultSet rs = stmt.executeQuery();
       return toDTOList(rs);
 
@@ -145,15 +140,16 @@ public abstract class AcidTableDataGatewayRDS {
   }
 
   /**
-   * Filters the acid table by a range of inventory.
+   * Filters the Base table by a range of inventory.
+   * 
    * @param min Lower limit for filter.
    * @param max Upper limit for filter.
-   * @return  List of filtered AcidDTOs.
+   * @return List of filtered BaseDTOs.
    */
-  public static List<AcidDTO> filterByInventoryRange(double min, double max) {
+  public static List<BaseDTO> filterByInventoryRange(double min, double max) {
     try {
       PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("SELECT * FROM Acid WHERE inventory BETWEEN " + min + " AND " + max);
+          .prepareStatement("SELECT * FROM Base WHERE inventory BETWEEN " + min + " AND " + max);
       ResultSet rs = stmt.executeQuery();
       return toDTOList(rs);
 
@@ -166,13 +162,14 @@ public abstract class AcidTableDataGatewayRDS {
 
   /**
    * Filters by a given solute.
+   * 
    * @param chemicalID ID of the solute.
-   * @return  List of filtered AcidDTOs.
+   * @return List of filtered BaseDTOs.
    */
-  public static List<AcidDTO> filterBySolute(int chemicalID) {
+  public static List<BaseDTO> filterBySolute(int chemicalID) {
     try {
       PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("SELECT * FROM Acid WHERE solute = " + chemicalID);
+          .prepareStatement("SELECT * FROM Base WHERE solute = " + chemicalID);
       ResultSet rs = stmt.executeQuery();
       return toDTOList(rs);
 
