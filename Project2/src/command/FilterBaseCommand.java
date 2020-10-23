@@ -3,16 +3,10 @@ package command;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.AcidDataMapper;
 import model.BaseDataMapper;
-import model.Acid;
-import model.AcidDataMapper;
-import model.AcidDataMapperInterface;
 import model.Base;
-import model.BaseDataMapper;
 import model.BaseDataMapperInterface;
 import model.DomainModelException;
-import reports.FilterAcidReport;
 import reports.FilterBaseReport;
 import reports.ReportObserverConnector;
 

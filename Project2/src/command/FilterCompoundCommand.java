@@ -5,7 +5,6 @@ import java.util.List;
 
 import model.CompoundDataMapper;
 import model.Compound;
-import model.CompoundDataMapper;
 import model.CompoundDataMapperInterface;
 import model.DomainModelException;
 import reports.FilterCompoundReport;

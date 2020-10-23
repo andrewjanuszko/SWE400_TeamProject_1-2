@@ -5,12 +5,10 @@ import java.util.List;
 
 import model.AcidDataMapper;
 import model.Acid;
-import model.AcidDataMapper;
 import model.AcidDataMapperInterface;
 import model.DomainModelException;
 import reports.FilterAcidReport;
 import reports.ReportObserverConnector;
-import reports.ValidEntryReport;
 
 public class FilterAcidCommand implements Command {
   String[] filter;

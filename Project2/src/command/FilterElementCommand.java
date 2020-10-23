@@ -5,7 +5,6 @@ import java.util.List;
 
 import model.ElementDataMapper;
 import model.Element;
-import model.ElementDataMapper;
 import model.ElementDataMapperInterface;
 import model.DomainModelException;
 import reports.FilterElementReport;
