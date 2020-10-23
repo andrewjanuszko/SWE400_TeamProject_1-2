@@ -16,9 +16,6 @@ public class PopulateDatabase {
   public static void main(String[] args) throws DatabaseException {
     
     System.out.println("Populating database, please wait...");
-    
-    //ChemicalRowDataGateway.dropTable();
-    //ElementCompoundTableDataGateway.getSingletonInstance().dropTable();
     ChemicalRowDataGateway.createTable();
     ElementCompoundTableDataGateway.getSingletonInstance().createTable();
     
