@@ -173,18 +173,6 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   /**
-   * @see model.AcidDataMapperInterface#filterByLowInventory().
-   */
-  @Override
-  public List<Acid> filterByLowInventory() throws DomainModelException {
-    try {
-      return convertToAcid(ChemicalTableDataGateway.getSingletonInstance().getAcidsWithLowInventory());
-    } catch (DatabaseException e) {
-      throw new DomainModelException("Failed to get all Acids with low inventory.", e);
-    }
-  }
-
-  /**
    * Converts ChemicalDTO to Acid object.
    * 
    * @param chemicals the ChemicalDTOs to convert.

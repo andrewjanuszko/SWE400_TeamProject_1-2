@@ -12,7 +12,7 @@ public class FilterBaseReport implements Report {
     this.bases = bases;
   }
   
-  public List<Base> getFilterAcidsReport() {
+  public List<Base> getFilterBasesReport() {
     return bases;
   }
 }

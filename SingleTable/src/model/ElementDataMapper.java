@@ -208,18 +208,6 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   }
 
   /**
-   * @see model.ElementDataMapperInterface#filterByLowInventory().
-   */
-  @Override
-  public List<Element> filterByLowInventory() throws DomainModelException {
-    try {
-      return convertToElement(ChemicalTableDataGateway.getSingletonInstance().getElementsWithLowInventory());
-    } catch (DatabaseException e) {
-      throw new DomainModelException("Failed to get all Elements with low inventory.", e);
-    }
-  }
-
-  /**
    * Converts ChemicalDTOs to a List of Elements.
    * 
    * @param chemicals the ChemicalDTOs.

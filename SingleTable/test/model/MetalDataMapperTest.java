@@ -163,14 +163,5 @@ public class MetalDataMapperTest extends DatabaseTest {
     assertEquals(1, metals.size());
   }
 
-  /**
-   * Test getting Metals with low inventory.
-   * @throws DomainModelException when things go wrong.
-   */
-  @Test
-  public void testLowInventory() throws DomainModelException {
-    List<Metal> metals = new MetalDataMapper().filterByLowInventory();
-    assertEquals(0, metals.size());
-  }
 
 }

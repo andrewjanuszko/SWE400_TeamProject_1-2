@@ -145,14 +145,5 @@ public class ElementDataMapperTest extends DatabaseTest {
     assertEquals(2, inWater.size());
   }
   
-  /**
-   * Test getting all Elements with low inventory.
-   * @throws DomainModelException when things go wrong.
-   */
-  @Test
-  public void testGetLowInventory() throws DomainModelException {
-    List<Element> elements = new ElementDataMapper().filterByLowInventory();
-    assertEquals(6, elements.size());
-  }
   
 }
