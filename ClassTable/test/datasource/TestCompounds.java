@@ -48,24 +48,8 @@ class TestCompoundsMadeOf extends DatabaseTest {
    * Run all tests in TestCompounds
    */
   static void testAll() {
-    insertCompounds();
     testGetName();
     testGetInventory();
   }
-
-  /**
-   * Insert data into database to modify
-   */
-  private static void insertCompounds() {
-    List<Integer> madeOf1 = new ArrayList<Integer>(), madeOf2 = new ArrayList<Integer>();
-    madeOf1.add(24);
-    madeOf1.add(25);
-    madeOf2.add(26);
-    madeOf2.add(27);
-
-    CompoundRDG RDG1 = new CompoundRDGRDS(madeOf1, "compoundname1", 1.1); 
-    CompoundRDG RDG2 = new CompoundRDGRDS(madeOf2, "compoundname2", 1.2); 
-  }
-  
   
 }

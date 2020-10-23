@@ -186,7 +186,6 @@ class TestMetal {
    * Run all tests in TestMetal
    */
   static void testAll() {
-    insertMetals();
     testGetName();
     testGetInventory();
     testGetDissolvedBy();
@@ -197,14 +196,5 @@ class TestMetal {
     testFilterByDissolvedBy();
     testFilterByMoles();
   }
-
-  /**
-   * Insert data into the database to test metal.
-   */
-  private static void insertMetals() {
-    MetalRDG metal = new MetalRDGRDS(1, 1, 1.1, 11.1, "metalname1", 41.1);
-    metal = new MetalRDGRDS(2, 2, 2.1, 12.2, "metalname2", 42.1);
-    metal = new MetalRDGRDS(3, 3, 3.1, 13.3, "metalname3", 43.1);
-    metal = new MetalRDGRDS(4, 4, 4.1, 14.4, "metalname4", 44.1);
-  }
+  
 }

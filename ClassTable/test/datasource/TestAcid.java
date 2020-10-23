@@ -219,7 +219,6 @@ class TestAcid extends DatabaseTest {
    */
   static void testAll() {
     try {
-      insertAcids();
       testGetName();
       testGetInventory();
       testGetSolute();
@@ -235,17 +234,4 @@ class TestAcid extends DatabaseTest {
     }
   }
 
-  /**
-   * Insert acids into the database
-   */
-  private static void insertAcids() {
-    AcidRDG acid = new AcidRDGRDS(51, "acidname1", 1.1);
-    acid = new AcidRDGRDS(52, "acidname2", 1.2);
-    acid = new AcidRDGRDS(53, "acidname3", 1.3);
-    acid = new AcidRDGRDS(54, "acidname4", 1.4);
-    acid = new AcidRDGRDS(55, "acidname5", 1.5);
-    acid = new AcidRDGRDS(55, "acidname6", 1.6);
-    acid = new AcidRDGRDS(12, "funkyacid1", 41.2); 
-    acid = new AcidRDGRDS(15, "funkyacid2", 42.4); 
-  }
 }

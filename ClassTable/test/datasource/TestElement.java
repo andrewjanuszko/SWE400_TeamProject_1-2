@@ -182,7 +182,6 @@ class TestElement extends DatabaseTest {
    * Run all tests in TestElement
    */
   static void testAll() {
-    insertElements();
     testGetAtomicNumber();
     testGetAtomicMass();
     testGetName();
@@ -194,9 +193,4 @@ class TestElement extends DatabaseTest {
     testFilterByAtomicMass();
   }
 
-  /**
-   * Insert elements into the database to test
-   */
-  private static void insertElements() {
-  }
 }

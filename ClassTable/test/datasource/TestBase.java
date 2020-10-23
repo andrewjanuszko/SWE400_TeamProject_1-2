@@ -217,7 +217,6 @@ class TestBase extends DatabaseTest {
    */
   static void testAll() {
     try {
-      insertBases();
       testGetName();
       testGetInventory();
       testGetSolute();
@@ -233,18 +232,4 @@ class TestBase extends DatabaseTest {
     }
   }
 
-  /**
-   * Insert bases into the database 
-   */
-  private static void insertBases() {
-    BaseRDG base = new BaseRDGRDS(51, "basename1", 1.1);
-    base = new BaseRDGRDS(52, "basename2", 1.2);
-    base = new BaseRDGRDS(53, "basename3", 1.3);
-    base = new BaseRDGRDS(54, "basename4", 1.4);
-    base = new BaseRDGRDS(55, "basename5", 1.5);
-    base = new BaseRDGRDS(55, "basename6", 1.6);
-    base = new BaseRDGRDS(12, "funkybase1", 41.2); 
-    base = new BaseRDGRDS(15, "funkybase2", 42.4); 
-
-  }
 }
