@@ -62,7 +62,7 @@ public interface AcidDataMapperInterface {
    * @return all Acids that have a partial match.
    * @throws DomainModelException when things go wrong.
    */
-  public List<Acid> filterByWildCardName(String wildCard) throws DomainModelException;
+  public List<Acid> filterByNameLike(String nameLike) throws DomainModelException;
 
   /**
    * Get all Acids with a set inventory value.
@@ -81,7 +81,7 @@ public interface AcidDataMapperInterface {
    * @return all Acids with inventory in the provided range.
    * @throws DomainModelException when things go wrong.
    */
-  public List<Acid> filterByInventoryRange(double min, double max) throws DomainModelException;
+  public List<Acid> filterByInventoryBetween(double min, double max) throws DomainModelException;
 
   /**
    * Get all Acids that have the provided solute.
@@ -91,5 +91,12 @@ public interface AcidDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Acid> filterBySolute(int chemicalID) throws DomainModelException;
+  
+  /**
+   * Get all acids with low inventory.
+   * @return all acids that have a low inverntory.
+   * @throws DomainModelExceptionwhen things go wrong.
+   */
+  public List<Acid> filterByLowInventory() throws DomainModelException;
 
 }

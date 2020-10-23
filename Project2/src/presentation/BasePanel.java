@@ -1,11 +1,15 @@
 package presentation;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
@@ -15,141 +19,92 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 
+import model.AcidDataMapper;
+import model.BaseDataMapper;
 import model.Base;
 
-public class BasePanel extends JPanel{
-	
-	JScrollPane bases = new JScrollPane(); 
-	GridBagConstraints gbc = new GridBagConstraints(); 
-	JButton addButton = new JButton("Add");
-	JButton deleteButton = new JButton("Delete");
-	JButton filterButton = new JButton("Filter");
-	JButton detailsButton = new JButton("Details");
-	JLabel selected = null;
-	Color labelColor = new Color(30,30,30);
-	List<Base> baseList;
-	
-	public BasePanel() {
-		this.setLayout(new GridBagLayout());
-		addScrollPane();
-		setButtons();
-	}
-	
-	private JLabel Labels() {
-		JLabel label = new JLabel();
-		label.setBackground(Color.WHITE);
-	    label.setOpaque(true);
-	    label.setPreferredSize(new Dimension(100,20));
-		return label;
-	}
-	
-	private void addScrollPane() {
-		bases.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		bases.add(bases.createVerticalScrollBar());
-		
-		bases.setViewportView(Labels());
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 1;
-		gbc.weighty = Integer.MAX_VALUE;
-		gbc.fill = GridBagConstraints.BOTH;
-		add(bases,gbc);
-	}
-	
-	private void setButtons() {
-		addButton.addActionListener( new ActionListener() {
-		      @Override
-		      public void actionPerformed(ActionEvent ae) {
-		        addBase();
-		      }
-		    });
-		deleteButton.addActionListener( new ActionListener() {
-		      @Override
-		      public void actionPerformed(ActionEvent ae) {
-		        deleteBase();
-		      }
-		    });
-		filterButton.addActionListener( new ActionListener() {
-		      @Override
-		      public void actionPerformed(ActionEvent ae) {
-		        filterBase();
-		      }
-		    });
-		detailsButton.addActionListener( new ActionListener() {
-		      @Override
-		      public void actionPerformed(ActionEvent ae) {
-		        getDetailsBase();
-		      }
-		    });
-		JPanel buttons = new JPanel(new GridBagLayout());
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-	    gbc.weightx = 0;
-	    gbc.gridx = 0;
-	    gbc.gridy = 0;
-	    buttons.add(addButton, gbc);
-	    
-	    gbc.gridx = 1;
-	    buttons.add(deleteButton, gbc);
-	    
-	    gbc.gridx = 2;
-	    buttons.add(filterButton, gbc);
-	    
-	    gbc.gridx = 3;
-	    buttons.add(detailsButton, gbc);
-	    
-	    gbc.gridx = 0;
-	    gbc.gridy = 1;
-	    gbc.anchor = GridBagConstraints.SOUTHWEST;
-	    gbc.weighty = 1;
-	    buttons.setBackground(Color.GRAY);
-	    
-	    add(buttons, gbc);
+public class BasePanel extends JPanel {
 
-	}
-	
-	private void addBase() {
-		new AddBaseFrame().addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosed(WindowEvent arg0) {
-				bases.setViewportView(buildLabels());
-			}
-		});
-	}
-	
-	private void deleteBase() {
-		if(selected != null) {
-			//deletes selected base
-		}
-	}
-	
-	private void filterBase() {
-		if(selected != null) {
-			//brings up new window based on selected base
-			new FilterBaseFrame().addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosed(WindowEvent arg0) {
-					//reset the view
-				}
-			});
-		}
-	}
-	
-	private void getDetailsBase() {
-		if(selected == null) {
-			return;
-		}
-	}
-	
-	private void removeSelectedBackground() {
-	    if(selected != null)
-	      selected.setBackground(labelColor);
-	  }
-	
-	private JPanel buildLabels() {
-		JPanel labels = new JPanel();
-		
-		return labels;
-	}
+  JScrollPane bases = new JScrollPane();
+  GridBagConstraints gbc = new GridBagConstraints();
+  JLabel selected = null;
+  Base selectedBase = null;
+  List<Base> baseList;
+  JPanel basePanel = null;
+
+  public BasePanel() {
+    setBackground(Color.DARK_GRAY);
+    setLayout(new GridLayout(1, 2)); 
+    
+    basePanel = genBasePanel(); 
+    add(basePanel); 
+  }
+  
+  private JPanel genBasePanel() {
+    JPanel panel = new JPanel(); // Entire panel, holding header, panel of bases, buttons
+    panel.setBackground(Color.DARK_GRAY);
+    panel.setLayout(new BorderLayout()); // Borderlayout bc im lazy
+    
+    // set dimensions
+    Dimension d = new Dimension(450, 650);
+    panel.setMinimumSize(d);
+    panel.setPreferredSize(d);
+    panel.setMaximumSize(d);
+    
+    // scrollbar
+    JScrollPane scroll = new JScrollPane(); 
+    scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+    scroll.add(scroll.createVerticalScrollBar());
+    scroll.getVerticalScrollBar().setUnitIncrement(20);
+    
+    // Panel of bases
+    JPanel bases = new JPanel();
+    bases.setBackground(Color.LIGHT_GRAY);
+    bases.setLayout(new GridLayout(baseList.size(), 1));
+    
+    // refresh list
+    baseList = new BaseDataMapper().getAll(); 
+    
+    // header
+    panel.add(new JLabel("Bases: ")); 
+    
+    // add all labels of bases
+    for(int i = 0; i < baseList.size(); i++) {
+      final int x = i; 
+      
+      JLabel label = new JLabel(baseList.get(i).getName(), SwingConstants.CENTER);
+      label.setOpaque(true);
+      label.setBackground(Color.LIGHT_GRAY);
+      label.addMouseListener(new MouseAdapter() {
+        public void mouseClicked(MouseEvent e) {
+          removeSelectedBackground(); // Remove old selected
+          label.setBackground(Color.yellow); // Indiciate it was selected
+          selected = label; // Store JLabel for changing later
+          selectedBase = baseList.get(x); // Store to pass into functions
+          refresh(); // show changes
+        }
+      });
+      bases.add(label);
+    }
+    
+    // Add scrollbar
+    scroll.setViewportView(bases);
+    panel.add(bases, BorderLayout.CENTER);
+//    panel.add(addButtons(), BorderLayout.SOUTH);
+   
+    return null;
+  }
+  
+  private void refresh() {
+    
+  }
+
+
+  private void removeSelectedBackground() {
+    if (selected != null)
+      selected.setBackground(Color.LIGHT_GRAY);
+  }
 
 }
