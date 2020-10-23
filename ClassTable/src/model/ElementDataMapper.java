@@ -187,7 +187,6 @@ public class ElementDataMapper implements ElementDataMapperInterface {
    * @return
    */
   public List<Element> filterByLowInventory(double filter) {
-    // less than 20 moles
     List<ElementDTO> dtos;
     List<Element> elements = new ArrayList<>();
 

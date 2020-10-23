@@ -13,6 +13,7 @@ import model.Compound;
 import model.CompoundDataMapper;
 import model.DomainModelException;
 import model.Element;
+import model.ElementDataMapper;
 
 public class LowInventoryCommand implements Command {
   String fileoutput;
@@ -27,7 +28,7 @@ public class LowInventoryCommand implements Command {
   private void getInput() throws DomainModelException {
     List<Acid> acids = new AcidDataMapper().filterByLowInventory();
     List<Base> bases = new BaseDataMapper().filterByLowInventory(40);
-    List<Element> elements = yes();
+    List<Element> elements = getLowElements();
 
     for (Acid a : acids) {
       input.add("Acid\t id: " + a.getID() + ", name: " + a.getName() + ", inventory: " + a.getInventory());
@@ -40,28 +41,33 @@ public class LowInventoryCommand implements Command {
     }
   }
 
-  private List<Element> yes() throws DomainModelException {
+  /**
+   * Get low elements
+   * 
+   * @return all elements that are low
+   * @throws DomainModelException
+   */
+  private List<Element> getLowElements() throws DomainModelException {
+    List<Element> returnList = new ArrayList<>();
+
     try {
-      List<Element> elements = new ArrayList<>();
-      List<Compound> compounds = new CompoundDataMapper().getAll();
+      List<Element> elements = new ElementDataMapper().getAll();
 
-      for (Compound c : compounds) {
-        int madeOfSum = 0;
-        List<Element> madeOf = c.getMadeOf();
-        for (Element e : madeOf) {
-          madeOfSum += e.getInventory();
+      for (Element e : elements) {
+        int compoundSize = 0;
+        List<Compound> compoundz = new CompoundDataMapper().filterByMadeOf(e.getID());
+
+        for (Compound c : compoundz) {
+          compoundSize += c.getInventory();
         }
 
-        if (c.getInventory() >= madeOfSum) {
-          for (Element e : madeOf) {
-            if (e.getInventory() > 20) {
-              elements.add(e);
-            }
-          }
+        if ((compoundSize > e.getInventory()) || (e.getInventory() < 20)) {
+          returnList.add(e);
         }
+
       }
 
-      return elements;
+      return returnList;
 
     } catch (DomainModelException e) {
       throw new DomainModelException("yes()", e);
