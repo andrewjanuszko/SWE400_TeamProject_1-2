@@ -1,8 +1,7 @@
 package datasource;
 
 /**
- * Data transfer object for acid, holds int acidId, int soluteId, String name,
- * double inventory
+ * Acid data transfer object
  * 
  * @author Isabella Boone, Kim O'Neill
  *

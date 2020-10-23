@@ -1,7 +1,11 @@
 package datasource;
 
-import java.util.List;
-
+/**
+ * MetalTDG interface. 
+ * 
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public interface MetalTDG {
   
   public MetalTDGRDS getAllMetals();

@@ -5,7 +5,7 @@ import java.util.List;
 import database.DatabaseException;
 
 /**
- * BaseTDG
+ * BaseTDG interface
  * 
  * @author Isabella Boone, Kim O'Neill
  *

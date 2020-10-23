@@ -11,7 +11,8 @@ import database.DatabaseException;
 import database.DatabaseManager;
 
 /**
- * AcidRowDataGatewayRDS 
+ * AcidRowDataGatewayRDS used to access rows in the Acid table.
+ * 
  * @author Isabella Boone, Kim O'Neill
  */
 public class AcidRDGRDS implements AcidRDG {
@@ -92,6 +93,7 @@ public class AcidRDGRDS implements AcidRDG {
       statement.executeUpdate(deleteChemical);
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
       
+      acid = null;
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Error deleting acid " + acid.getAcidId());

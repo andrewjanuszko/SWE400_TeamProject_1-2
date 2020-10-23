@@ -3,7 +3,7 @@ package datasource;
 import java.util.List;
 
 /**
- * Compound DTO
+ * Compound data transfer object
  * 
  * @author Isabella Boone, Kim O'Neill
  *

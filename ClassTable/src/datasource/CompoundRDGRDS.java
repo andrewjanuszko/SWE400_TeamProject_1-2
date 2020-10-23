@@ -202,6 +202,7 @@ public class CompoundRDGRDS implements CompoundRDG {
       PreparedStatement sql = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("DELETE FROM Compound WHERE compoundId = " + id + ";");
       sql.execute();
+      compound = null;
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }

@@ -11,12 +11,14 @@ import database.DatabaseException;
 import database.DatabaseManager;
 
 /**
- * Table data gateway for accessing Chemical table
- * @author Isabella
+ * Table data gateway for accessing Chemical table.
+ * 
+ * @author Isabella Boone, Kim O'Neill
  *
  */
 public class ChemicalTDGRDS implements ChemicalTDG {
   String sql = "SELECT * FROM Chemical";
+  
   private static ChemicalTDGRDS singleton;
 
   public ChemicalTDGRDS() {

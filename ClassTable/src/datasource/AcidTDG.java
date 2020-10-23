@@ -5,7 +5,7 @@ import java.util.List;
 import database.DatabaseException;
 
 /**
- * AcidTDG
+ * AcidTDG interface
  * 
  * @author Isabella Boone, Kim O'Neill
  *

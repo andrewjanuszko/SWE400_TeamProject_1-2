@@ -9,7 +9,7 @@ import database.DatabaseException;
 import database.DatabaseManager;
 
 /**
- * ChemicalRowDataGatewayRDS
+ * ChemicalRowDataGatewayRDS used to access rows in the Chemical table.
  * 
  * @author Isabella Boone, Kim O'Neill
  *
@@ -76,7 +76,8 @@ public class ChemicalRDGRDS implements ChemicalRDG {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
 
       statement.executeUpdate(deleteChemical);
-
+      
+      chemical = null;
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Error deleting chemical " + chemical.getChemicalId());

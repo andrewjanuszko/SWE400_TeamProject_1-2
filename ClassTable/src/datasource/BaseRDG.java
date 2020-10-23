@@ -3,7 +3,7 @@ package datasource;
 import java.util.List;
 
 /**
- * BaseRowDataGateway
+ * BaseRDG interface 
  * 
  * @author Isabella Boone, Kim O'Neill
  */

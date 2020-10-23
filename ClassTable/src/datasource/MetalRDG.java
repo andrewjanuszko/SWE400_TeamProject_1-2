@@ -3,8 +3,9 @@ package datasource;
 import java.util.List;
 
 /**
+ * MetalRDG interface 
  * 
- * @author kimberlyoneill
+ * @author Isabella Boone, Kim O'Neill
  *
  */
 public interface MetalRDG {

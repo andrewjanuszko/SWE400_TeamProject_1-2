@@ -10,7 +10,7 @@ import database.DatabaseException;
 import database.DatabaseManager;
 
 /**
- * Table Data Gateway for access Base
+ * Table Data Gateway for accessing Base table.
  * 
  * @author Isabella Boone, Kim O'Neill
  *
@@ -65,6 +65,12 @@ public class BaseTDGRDS implements BaseTDG {
     sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
     return getSingleton();
   }
+  
+  @Override
+  public BaseTDGRDS getAllBases() {
+    sql = "SELECT * FROM Base INNER JOIN Chemical WHERE (Base.baseId = Chemical.chemicalId)";
+    return getSingleton();
+  }
 
   /**
    * Execute query, get all baseDTOs that follow the SQL string.
@@ -97,14 +103,4 @@ public class BaseTDGRDS implements BaseTDG {
     return listDTO;
   }
 
-  @Override
-  public BaseTDGRDS getAllBases() {
-    sql = "SELECT * FROM Base INNER JOIN Chemical WHERE (Base.baseId = Chemical.chemicalId)";
-    return getSingleton();
-  }
-
-  public BaseTDGRDS filterByLowInventory(double filter) {
-    sql += " AND (Chemical.inventory < " + filter + ") ";
-    return getSingleton();
-  }
 }

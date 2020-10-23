@@ -11,26 +11,28 @@ import database.DatabaseException;
 import database.DatabaseManager;
 
 /**
+ * MetalRDGRDS used to access a row of the Metal table.
  * 
- * @author kimberlyoneill
+ * @author Isabella Boone, Kim O'Neill
  *
  */
 public class MetalRDGRDS implements MetalRDG {
-  MetalDTO metal; 
+  MetalDTO metal;
 
   /**
-   * finds a metal
+   * Constructor to find an existing metal
    * 
-   * @param id
+   * @param id to find
    */
   public MetalRDGRDS(int id) {
-    String sql = "SELECT * FROM Metal INNER JOIN Chemical ON chemicalId = Metal.metalId  INNER JOIN Element ON elementId = Metal.metalId AND Metal.metalId = " + id + ";";
+    String sql = "SELECT * FROM Metal INNER JOIN Chemical ON chemicalId = Metal.metalId  INNER JOIN Element ON elementId = Metal.metalId AND Metal.metalId = "
+        + id + ";";
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
       rs.next();
-      
-      metal = new MetalDTO(id, rs.getInt("dissolvedBy"), rs.getInt("atomicNumber"), rs.getDouble("atomicMass"), 
+
+      metal = new MetalDTO(id, rs.getInt("dissolvedBy"), rs.getInt("atomicNumber"), rs.getDouble("atomicMass"),
           rs.getDouble("moles"), rs.getString("name"), rs.getDouble("inventory"));
 
     } catch (SQLException | DatabaseException e) {
@@ -41,22 +43,24 @@ public class MetalRDGRDS implements MetalRDG {
 
   /**
    * Constructor to create a metal
-   * @param id int 
+   * 
+   * @param id            int
    * @param dissolvedById int
-   * @param atomicNumber int
-   * @param atomicMass double
-   * @param moles double
-   * @param name String
-   * @param inventory double
+   * @param atomicNumber  int
+   * @param atomicMass    double
+   * @param moles         double
+   * @param name          String
+   * @param inventory     double
    */
-  public MetalRDGRDS(int dissolvedById, int atomicNumber, double atomicMass, double moles, String name, double inventory) {
-    
+  public MetalRDGRDS(int dissolvedById, int atomicNumber, double atomicMass, double moles, String name,
+      double inventory) {
+
     try {
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (name, inventory)" + "VALUES (?, ?);");
       insertChemical.setString(1, name);
       insertChemical.setDouble(2, inventory);
-      
+
       String fetchId = ("SELECT LAST_INSERT_ID();");
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(fetchId);
@@ -68,7 +72,7 @@ public class MetalRDGRDS implements MetalRDG {
       insertElement.setInt(1, id);
       insertElement.setInt(2, atomicNumber);
       insertElement.setDouble(3, atomicMass);
-      
+
       PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Metal (metalId, dissolvedBy, moles)" + "VALUES (?, ?, ?);");
       insert.setInt(1, id);
@@ -78,7 +82,7 @@ public class MetalRDGRDS implements MetalRDG {
       insertChemical.execute();
       insertElement.execute();
       insert.execute();
-      
+
       metal = new MetalDTO(id, dissolvedById, atomicNumber, atomicMass, moles, name, inventory);
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -87,7 +91,7 @@ public class MetalRDGRDS implements MetalRDG {
   }
 
   /**
-   * Deletes the metal
+   * Delete a metal from the table.
    */
   @Override
   public void delete() {
@@ -101,14 +105,16 @@ public class MetalRDGRDS implements MetalRDG {
       statement.executeUpdate(sqlChem);
       statement.executeUpdate(sqlElement);
 
+      metal = null;
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Problem deleting Metal with id " + metal.getMetalId());
     }
+
   }
 
   /**
-   * updates metal with given values
+   * Updates metal with current values in metalDTO.
    */
   @Override
   public void update() {
@@ -124,7 +130,7 @@ public class MetalRDGRDS implements MetalRDG {
       updateMetal.setInt(1, metal.getAtomicNumber());
       updateMetal.setDouble(2, metal.getAtomicMass());
       updateMetal.setInt(3, metal.getMetalId());
-      
+
       PreparedStatement updateChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("UPDATE Chemical SET name = ?, inventory = ? WHERE chemicalId = ?;");
       updateChemical.setString(1, metal.getName());
@@ -141,10 +147,9 @@ public class MetalRDGRDS implements MetalRDG {
   }
 
   /**
-   * finds all the metals dissolved by an Acid
+   * Finds all the metals dissolved by an Acid
    * 
-   * @param dissolvedById
-   *          an Acid
+   * @param dissolvedById an Acid
    * @return list of MetalRowDataGatewayRDS that contain the metals dissolved by
    *         the given acid
    */
@@ -164,36 +169,65 @@ public class MetalRDGRDS implements MetalRDG {
     return results;
   }
 
-  @Override
+  /**
+   * Set dissolvedById
+   * 
+   * @param dissolvedById
+   */
   public void setDissolvedById(int dissolvedById) {
     metal.setDissolvedById(dissolvedById);
   }
 
-  @Override
+  /**
+   * Set name
+   * 
+   * @param name
+   */
   public void setName(String name) {
     metal.setName(name);
   }
 
-  @Override
+  /**
+   * Set inventory
+   * 
+   * @param inventory
+   */
   public void setInventory(double inventory) {
     metal.setInventory(inventory);
   }
-  
-  @Override
+
+  /**
+   * Set moles
+   * 
+   * @param moles
+   */
   public void setMoles(double moles) {
-    metal.setMoles(moles); 
+    metal.setMoles(moles);
   }
-  
-  @Override
+
+  /**
+   * Set atomic number
+   * 
+   * @param atomicNumber
+   */
   public void setAtomicNumber(int atomicNumber) {
     metal.setAtomicNumber(atomicNumber);
   }
-  
-  @Override
+
+  /**
+   * Set atomic mass
+   * 
+   * @param atomicMass
+   */
   public void setAtomicMass(double atomicMass) {
     metal.setAtomicMass(atomicMass);
   }
 
+  /**
+   * Get metalDTO
+   * 
+   * @return MetalDTO
+   */
   public MetalDTO getMetal() {
     return metal;
   }

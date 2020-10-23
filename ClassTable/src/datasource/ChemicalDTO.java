@@ -1,7 +1,7 @@
 package datasource;
 
 /**
- * Probably don't need this, but this is a DTO for chemical
+ * Probably don't need this, but this is a Chemical data transfer object
  * 
  * @author Isabella Boone, Kim O'Neill
  */

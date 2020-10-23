@@ -1,7 +1,7 @@
 package datasource;
 
 /**
- * ChemicalRowDataGateway
+ * ChemicalRDG interface
  * 
  * @author Isabella Boone, Kim O'Neill
  */

@@ -1,8 +1,7 @@
 package datasource;
 
 /**
- * Data Transfer Object for Base, holds int baseId, int soluteId, String name,
- * double inventory
+ * Base data transfer object
  * 
  * @author Isabella Boone, Kim O'Neill
  *

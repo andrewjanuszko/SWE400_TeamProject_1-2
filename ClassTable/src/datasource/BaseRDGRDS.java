@@ -11,7 +11,7 @@ import database.DatabaseException;
 import database.DatabaseManager;
 
 /**
- * BaseRowDataGatewayRDS
+ * BaseRDGRDS used to access rows in the Base table.
  * 
  * @author Isabella Boone, Kim O'Neill
  */
@@ -86,6 +86,7 @@ public class BaseRDGRDS implements BaseRDG {
       statement.executeUpdate(deleteBase);
       statement.executeUpdate(deleteChemical);
 
+      base = null;
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Error deleting base " + base.getBaseId());
@@ -123,7 +124,7 @@ public class BaseRDGRDS implements BaseRDG {
   }
 
   /**
-   * 
+   * Find all bases neutralized by a specific solute id.
    */
   public List<BaseRDGRDS> findSet(int solute) {
     List<BaseRDGRDS> results = new ArrayList<>();

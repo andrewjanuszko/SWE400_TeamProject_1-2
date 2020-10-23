@@ -3,7 +3,7 @@ package datasource;
 import java.util.List;
 
 /**
- * AcidRowDataGateway
+ * AcidRDG interface
  * 
  * @author Isabella Boone, Kim O'Neill
  */
