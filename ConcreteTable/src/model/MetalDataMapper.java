@@ -1,11 +1,16 @@
-package mappers;
+package model;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import datadto.AcidDTO;
+import datadto.MetalDTO;
+import datasource.AcidTableDataGatewayRDS;
 import datasource.DatabaseException;
 import datasource.MetalRowDataGateway;
 import datasource.MetalRowDataGatewayRDS;
+import datasource.MetalTableDataGatewayRDS;
+import model.Acid;
 import model.DomainModelException;
 import model.Metal;
 import model.MetalDataMapperInterface;
@@ -19,7 +24,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
     try {
       int id = 101010101;//// ohnooo
       Metal m = new Metal(id, name, inventory, atomicNumber, atomicMass, acidAmount);
-      
+
       // HOW DO I GET THE DISOLVED BY???? can it just be null?
       @SuppressWarnings("unused")
       MetalRowDataGateway gateway = new MetalRowDataGatewayRDS(id, name, inventory, atomicNumber, atomicMass,
@@ -52,7 +57,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
     }
     return null;
   }
-
+  
   @Override
   public void update(Metal metal) throws DomainModelException {
     try {
@@ -63,7 +68,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
       gateway.setAtomicMass(metal.getAtomicMass());
       gateway.setAcidAmount(metal.getAcidAmount());
 
-      // how to update dissolvedMetals???
+      // I think dissolved by is being updated in acidMapper
       gateway.persist();
       metalMap.replace(metal);
 
@@ -76,14 +81,41 @@ public class MetalDataMapper implements MetalDataMapperInterface {
 
   @Override
   public void delete(Metal metal) throws DomainModelException {
-    // TODO Auto-generated method stub
-
+    try {
+      MetalRowDataGateway gateway = new MetalRowDataGatewayRDS(metal.getID());
+      gateway.delete();
+      metalMap.remove(metal);
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
   }
-
+  
+  /**
+   * Converts a list of MetalDTOs to a list of Metals.
+   * @param metalDTOList the list of DTOs.
+   * @return the converted list of metals.
+   */
+  public List<Metal> DTOListToMetalList(List<MetalDTO> metalDTOList) {
+    List<Metal> metals = new ArrayList<Metal>();
+    for (MetalDTO dto : metalDTOList) {
+      int metalID = dto.getMetalID();
+      String name = dto.getName();
+      double inventory = dto.getInventory();
+      int atomicNumber = dto.getAtomicNumber();
+      double atomicMass = dto.getAtomicMass();
+      double acidAmount = dto.getAcidAmount();
+      
+      Metal metal = new Metal(metalID, name, inventory, atomicNumber, atomicMass, acidAmount);
+      metalMap.add(metal);
+      metals.add(metal);
+    }
+    return metals;
+  }
+  
   @Override
   public List<Metal> getAll() throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.getAll();
+    return DTOListToMetalList(DTOList);
   }
 
   @Override
@@ -136,7 +168,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
 
   @Override
   public List<Metal> filterByDissolvedBy(int acidID) throws DomainModelException {
- // possibly lazy load metals?
+    // possibly lazy load metals?
 //    ArrayList<MetalRowDataGatewayRDS> metalGateways = MetalRowDataGatewayRDS.findDissolves(id);
 //    ArrayList<Metal> dissolvedMetals = new ArrayList<Metal>();
 //    for (MetalRowDataGatewayRDS m : metalGateways) {

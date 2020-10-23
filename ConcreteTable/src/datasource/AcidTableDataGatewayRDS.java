@@ -16,6 +16,7 @@ import datadto.AcidDTO;
  */
 public abstract class AcidTableDataGatewayRDS {
   // TODO maybe make singleton.
+
   /**
    * Creates table in database.
    * 
@@ -66,7 +67,7 @@ public abstract class AcidTableDataGatewayRDS {
    * the database.
    * 
    * @param rs the result set, contains a collection of acids.
-   * @return  a list of AcidDTOs.
+   * @return a list of AcidDTOs.
    */
   private static List<AcidDTO> toDTOList(ResultSet rs) {
     List<AcidDTO> acidDTOs = new ArrayList<AcidDTO>();
@@ -108,8 +109,9 @@ public abstract class AcidTableDataGatewayRDS {
 
   /**
    * Filters the acid table by a String.
+   * 
    * @param wildCard String that is used in filter.
-   * @return  List of filtered AcidDTOs.
+   * @return List of filtered AcidDTOs.
    */
   public static List<AcidDTO> filterByWildCardName(String wildCard) {
     try {
@@ -127,8 +129,9 @@ public abstract class AcidTableDataGatewayRDS {
 
   /**
    * Filters the acid table by inventory.
+   * 
    * @param inventory Given amount.
-   * @return  List of filtered AcidDTOs.
+   * @return List of filtered AcidDTOs.
    */
   public static List<AcidDTO> filterByInventory(double inventory) {
     try {
@@ -146,9 +149,10 @@ public abstract class AcidTableDataGatewayRDS {
 
   /**
    * Filters the acid table by a range of inventory.
+   * 
    * @param min Lower limit for filter.
    * @param max Upper limit for filter.
-   * @return  List of filtered AcidDTOs.
+   * @return List of filtered AcidDTOs.
    */
   public static List<AcidDTO> filterByInventoryRange(double min, double max) {
     try {
@@ -166,8 +170,9 @@ public abstract class AcidTableDataGatewayRDS {
 
   /**
    * Filters by a given solute.
+   * 
    * @param chemicalID ID of the solute.
-   * @return  List of filtered AcidDTOs.
+   * @return List of filtered AcidDTOs.
    */
   public static List<AcidDTO> filterBySolute(int chemicalID) {
     try {

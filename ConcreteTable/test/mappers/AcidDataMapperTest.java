@@ -13,6 +13,7 @@ import datasource.AcidRowDataGatewayRDS;
 import datasource.DatabaseException;
 import datasource.MetalRowDataGatewayRDS;
 import model.Acid;
+import model.AcidDataMapper;
 import model.DomainModelException;
 import model.Metal;
 
