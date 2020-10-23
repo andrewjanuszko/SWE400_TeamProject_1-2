@@ -83,7 +83,7 @@ public class ElementTDGRDS implements ElementTDG {
     sql += " AND (Element.atomicNumber BETWEEN " + low + " AND " + high + ")";
     return getSingleton();
   }
-
+  
   public List<ElementDTO> executeQuery() throws DatabaseException {
     List<ElementDTO> listDTO = new ArrayList<>();
     try {
@@ -120,19 +120,6 @@ public class ElementTDGRDS implements ElementTDG {
       System.out.println("Problem deleting Element with id " + i);
     }
   }
-
-  /**
-   * We are low on an element if we could not currently replace our current
-   * inventory of compounds
-   * 
-   * @param filter
-   * @return
-   */
-  public ElementTDGRDS filterByLowInventory(double filter) {
-    
-    
-    
-    sql += " AND (Chemical.inventory < " + filter + ") ";
-    return null;
-  }
+  
+  
 }
