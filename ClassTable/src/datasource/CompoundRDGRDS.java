@@ -9,7 +9,6 @@ import java.util.List;
 
 import database.DatabaseException;
 import database.DatabaseManager;
-import model.Element;
 
 /**
  * CompoundRDGRDS, used to access rows of the compound table.
