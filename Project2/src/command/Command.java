@@ -4,9 +4,13 @@ package command;
 /**
  * All commands implement the Command Class and implement the execute method
  * 
- * @author michaelpermyashkin
+ * @author kim & isabella
  *
  */
 public interface Command {
-	public abstract void execute();
+  
+  /**
+   * Execute method for Commands.
+   */
+  public abstract void execute();
 }
