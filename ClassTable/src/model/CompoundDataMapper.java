@@ -20,7 +20,12 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
 
   @Override
   public Compound create(String name, double inventory, List<Element> madeOf) throws DomainModelException {
-    CompoundRDG create = new CompoundRDGRDS(madeOf, name, inventory);
+    List<Integer> madeOfIds = new ArrayList<>(); 
+    for(Element e : madeOf) {
+      madeOfIds.add(e.getID());
+    }
+    
+    CompoundRDG create = new CompoundRDGRDS(madeOfIds, name, inventory);
     // Create compound through RDG
 
     return new Compound(create.getCompound().getCompoundId(), name, inventory, madeOf);

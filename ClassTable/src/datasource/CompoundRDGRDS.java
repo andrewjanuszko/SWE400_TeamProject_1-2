@@ -47,19 +47,14 @@ public class CompoundRDGRDS implements CompoundRDG {
    * @param name      of the compound.
    * @param inventory of the compound
    */
-  public CompoundRDGRDS(List<Element> madeOf, String name, double inventory) {
+  public CompoundRDGRDS(List<Integer> madeOf, String name, double inventory) {
     try {
-      List<Integer> madeOfIds = new ArrayList<>();
-      for (Element e : madeOf) {
-        madeOfIds.add(e.getID());
-      }
-
-      compound = create(madeOfIds, name, inventory);
+      compound = create(madeOf, name, inventory);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
-
+  
   /**
    * Function to insert a compound into the database with its raw values.
    * 
