@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Compound extends Chemical {
 
-  List<Element> madeOf;
+  private List<Element> madeOf;
 
   /**
    * Constructor for creating a Compound.
