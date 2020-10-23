@@ -46,7 +46,7 @@ public class FilterMetalCommand implements Command {
         System.out.println("name");
         String name = filter[1];
         
-        metal = metalMapper.filterByWildCardName(name);
+        metal = metalMapper.filterByNameLike(name);
       }
       case ("2"): {
         System.out.println("inventory");
@@ -56,7 +56,7 @@ public class FilterMetalCommand implements Command {
       case("3"): {
         System.out.println("inventory range");
         
-        metal = metalMapper.filterByInventoryRange(Integer.parseInt(filter[1]), Integer.parseInt(filter[2]));
+        metal = metalMapper.filterByInventoryBetween(Integer.parseInt(filter[1]), Integer.parseInt(filter[2]));
       }
       case("4"): {
         System.out.println("atomic number");
@@ -71,17 +71,17 @@ public class FilterMetalCommand implements Command {
       case("6"): {
         System.out.println("atomic mass range");
 
-        metal = metalMapper.filterByAtomicMassRange(Double.parseDouble(filter[1]), Double.parseDouble(filter[2]));
+        metal = metalMapper.filterByAtomicMassBetween(Double.parseDouble(filter[1]), Double.parseDouble(filter[2]));
       }
       case("7"): {
         System.out.println("acid required");
 
-        metal = metalMapper.filterByAcidRequired(Double.parseDouble(filter[1]));
+        metal = metalMapper.filterByAcidAmount(Double.parseDouble(filter[1]));
       }
       case("8"): {
         System.out.println("acid required range");
 
-        metal = metalMapper.filterByAcidRequiredRange(Double.parseDouble(filter[1]), Double.parseDouble(filter[2]));
+        metal = metalMapper.filterByAcidAmountBetween(Double.parseDouble(filter[1]), Double.parseDouble(filter[2]));
       }
       case("9"): {
         System.out.println("dissolved by");

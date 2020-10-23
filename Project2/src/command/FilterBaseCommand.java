@@ -34,7 +34,7 @@ public class FilterBaseCommand implements Command {
         System.out.println("name");
         String name = filter[1];
         
-        bases = baseMapper.filterByWildCardName(name);
+        bases = baseMapper.filterByNameLike(name);
       }
       case ("2"): {
         System.out.println("solute");
@@ -49,7 +49,7 @@ public class FilterBaseCommand implements Command {
       case("4"): {
         System.out.println("inventory range");
         
-        bases = baseMapper.filterByInventoryRange(Integer.parseInt(filter[1]), Integer.parseInt(filter[2]));
+        bases = baseMapper.filterByInventoryBetween(Integer.parseInt(filter[1]), Integer.parseInt(filter[2]));
       }
       default: 
         System.out.println("getall");

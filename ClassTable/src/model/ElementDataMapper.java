@@ -86,7 +86,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   }
 
   @Override
-  public List<Element> filterByWildCardName(String wildCardName) {
+  public List<Element> filterByNameLike(String wildCardName) {
     ArrayList<Element> element = new ArrayList<>();
     try {
       List<ElementDTO> dtos = ElementTDGRDS.getSingleton().filterByName(wildCardName).executeQuery();
@@ -128,7 +128,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   }
 
   @Override
-  public List<Element> filterByInventoryRange(double min, double max) {
+  public List<Element> filterByInventoryBetween(double min, double max) {
     ArrayList<Element> element = new ArrayList<>();
     try {
       List<ElementDTO> dtos = ElementTDGRDS.getSingleton().filterByInventoryRange(max, min).executeQuery();
@@ -168,6 +168,12 @@ public class ElementDataMapper implements ElementDataMapperInterface {
 
     return element;
   }
+  
+  @Override
+  public List<Element> filterByAtomicNumberBetween(int min, int max) throws DomainModelException {
+    // yeah we dont need this
+    return null;
+  }
 
   @Override
   public List<Element> filterByAtomicMass(double atomicMass) {
@@ -191,7 +197,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   }
 
   @Override
-  public List<Element> filterByAtomicMassRange(double min, double max) {
+  public List<Element> filterByAtomicMassBetween(double min, double max) {
     ArrayList<Element> element = new ArrayList<>();
     try {
       List<ElementDTO> dtos = ElementTDGRDS.getSingleton().filterByAtomicMassRange(max, min).executeQuery();
@@ -211,6 +217,30 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     return element;
   }
 
+  @Override
+  public List<Element> filterByPartOfCompound(int compoundID) throws DomainModelException {
+    List<Element> elements = new ArrayList<>();
+
+    try {
+      // Get all compounds with this compound id
+      List<CompoundDTO> compounds = CompoundTDGRDS.getSingleton().filterByCompoundId(compoundID).executeQuery();
+
+      // For every compound in that list
+      for (CompoundDTO c : compounds) {
+        // For every elementDTO in the list of elements that the compound is made from
+        for (ElementDTO e : c.getElements()) {
+          // Convert to element and add to list.
+          elements.add(convertFromDTO(e));
+        }
+      }
+    } catch (DatabaseException e) {
+      // Problem with executeQuery()
+      e.printStackTrace();
+    }
+
+    return elements;
+  }
+
   /**
    * Convert a DTO to an element
    * 
@@ -222,27 +252,4 @@ public class ElementDataMapper implements ElementDataMapperInterface {
         dto.getAtomicMass());
   }
 
-  @Override
-  public List<Element> filterByPartOfCompound(int compoundID) throws DomainModelException {
-    List<Element> elements = new ArrayList<>();
-    
-    try {
-      // Get all compounds with this compound id
-      List<CompoundDTO> compounds = CompoundTDGRDS.getSingleton().filterByCompoundId(compoundID).executeQuery();
-      
-      // For every compound in that list
-      for(CompoundDTO c : compounds) {
-        // For every elementDTO in the list of elements that the compound is made from
-        for(ElementDTO e : c.getElements()) {
-          // Convert to element and add to list.
-          elements.add(convertFromDTO(e)); 
-        }
-      }
-    } catch (DatabaseException e) {
-      // Problem with executeQuery()
-      e.printStackTrace();
-    }
-
-    return elements;
-  }
 }

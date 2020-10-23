@@ -93,7 +93,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-  public ArrayList<Acid> filterByWildCardName(String wildCardName) {
+  public ArrayList<Acid> filterByNameLike(String wildCardName) {
     ArrayList<Acid> acids = new ArrayList<>();
     try {
       // Get all acids with specific name
@@ -129,7 +129,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-  public ArrayList<Acid> filterByInventoryRange(double min, double max) {
+  public ArrayList<Acid> filterByInventoryBetween(double min, double max) {
     ArrayList<Acid> acids = new ArrayList<>();
     try {
       // Get all acids with specific inventory range

@@ -159,11 +159,4 @@ public interface MetalDataMapperInterface {
    */
   public List<Metal> filterByPartOfCompound(int compoundID) throws DomainModelException;
   
-  /**
-   * Gets all metals with low inventory
-   * @return all metals that are low inventory.
-   * @throws DomainModelException when things go wrong.
-   */
-  public List<Metal> filterByLowInventory() throws DomainModelException;
-
 }

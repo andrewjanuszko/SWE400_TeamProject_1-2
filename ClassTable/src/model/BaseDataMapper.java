@@ -93,7 +93,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   @Override
-  public List<Base> filterByWildCardName(String wildCardName) {
+  public List<Base> filterByNameLike(String wildCardName) {
     ArrayList<Base> base = new ArrayList<>();
     try {
       // Get all bases with specific name
@@ -131,7 +131,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   @Override
-  public List<Base> filterByInventoryRange(double min, double max) {
+  public List<Base> filterByInventoryBetween(double min, double max) {
     ArrayList<Base> base = new ArrayList<>();
     try {
       // Get all bases with a specific inventory range

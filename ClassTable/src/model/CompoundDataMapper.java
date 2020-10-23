@@ -69,7 +69,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   }
 
   @Override
-  public List<Compound> filterByWildCardName(String wildCard) throws DomainModelException {
+  public List<Compound> filterByNameLike(String wildCard) throws DomainModelException {
     try {
       // Use CompoundTDG to get all compoundDTOs filtered by name, convert DTOs to
       // Compounds, and return that list
@@ -93,7 +93,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
   }
 
   @Override
-  public List<Compound> filterByInventoryRange(double min, double max) throws DomainModelException {
+  public List<Compound> filterByInventoryBetween(double min, double max) throws DomainModelException {
     try {
       // Use CompoundTDG to get all compounds, filter by inventory range, convert DTOs
       // to Compounds, return that list
