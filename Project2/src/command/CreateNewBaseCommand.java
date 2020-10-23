@@ -1,6 +1,6 @@
 package command;
 
-import mappers.BaseDataMapper;
+import model.BaseDataMapper;
 import model.Base;
 import model.BaseDataMapperInterface;
 import model.DomainModelException;

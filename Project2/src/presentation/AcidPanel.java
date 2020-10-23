@@ -22,7 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
-import mappers.AcidDataMapper;
+import model.AcidDataMapper;
 import model.Acid;
 
 public class AcidPanel extends JPanel {

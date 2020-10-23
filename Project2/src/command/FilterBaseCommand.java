@@ -3,8 +3,8 @@ package command;
 import java.util.ArrayList;
 import java.util.List;
 
-import mappers.AcidDataMapper;
-import mappers.BaseDataMapper;
+import model.AcidDataMapper;
+import model.BaseDataMapper;
 import model.Acid;
 import model.AcidDataMapperInterface;
 import model.Base;

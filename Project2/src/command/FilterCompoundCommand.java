@@ -3,7 +3,7 @@ package command;
 import java.util.ArrayList;
 import java.util.List;
 
-import mappers.CompoundDataMapper;
+import model.CompoundDataMapper;
 import model.Compound;
 import model.CompoundDataMapperInterface;
 import model.DomainModelException;

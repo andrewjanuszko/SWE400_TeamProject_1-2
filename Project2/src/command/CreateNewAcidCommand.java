@@ -1,6 +1,6 @@
 package command;
 
-import mappers.AcidDataMapper;
+import model.AcidDataMapper;
 import model.Acid;
 import model.AcidDataMapperInterface;
 import model.DomainModelException;

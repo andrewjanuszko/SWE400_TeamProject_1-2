@@ -1,6 +1,6 @@
 package command;
 
-import mappers.MetalDataMapper;
+import model.MetalDataMapper;
 import model.DomainModelException;
 import model.Metal;
 import model.MetalDataMapperInterface;
