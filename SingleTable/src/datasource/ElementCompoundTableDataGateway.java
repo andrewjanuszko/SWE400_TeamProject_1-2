@@ -58,7 +58,8 @@ public class ElementCompoundTableDataGateway implements ElementCompoundTableData
         + "compoundID INTEGER NOT NULL, "
         + "elementID INTEGER NOT NULL, "
         + "FOREIGN KEY (compoundID) REFERENCES Chemical(id), "
-        + "FOREIGN KEY (elementID) REFERENCES Chemical(id));";
+        + "FOREIGN KEY (elementID) REFERENCES Chemical(id), "
+        + "UNIQUE (compoundID, elementID));";
     PreparedStatement statement;
     try {
       statement = getConnection().prepareStatement(createTable);

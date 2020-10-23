@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import dataENUM.ChemicalEnum;
+
 /**
  * The RDS version of the gateway for Chemical.
  * 
@@ -59,6 +61,9 @@ public class ChemicalRowDataGateway implements ChemicalRowDataGatewayInterface {
   public ChemicalRowDataGateway(int type, String name, double inventory, int atomicNumber, double atomicMass,
       int dissolvedBy, double acidAmount, int solute) throws DatabaseException {
     try {
+      if (name.contains(" ") && (type == ChemicalEnum.ELEMENT.getIntValue() || type == ChemicalEnum.METAL.getIntValue())) {
+        throw new SQLException("Elements and Metals can only have one-word names. If it is a isotope use a hyphen.");
+      }
       String createSQL = "INSERT INTO Chemical (type, name, inventory, atomicNumber, atomicMass, dissolvedBy, acidAmount, solute)"
           + " VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(createSQL,
@@ -91,7 +96,7 @@ public class ChemicalRowDataGateway implements ChemicalRowDataGatewayInterface {
                                   + "dissolvedBy INTEGER, " 
                                   + "acidAmount DOUBLE, " 
                                   + "solute INTEGER, "
-                                  + "CHECK (inventory >= 0));";
+                                  + "CHECK (inventory >= 0 AND atomicNumber <= atomicMass));";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
       statement.executeUpdate(createTableSQL);
