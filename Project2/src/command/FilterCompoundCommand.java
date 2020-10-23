@@ -5,7 +5,6 @@ import java.util.List;
 
 import model.CompoundDataMapper;
 import model.Compound;
-import model.CompoundDataMapper;
 import model.CompoundDataMapperInterface;
 import model.DomainModelException;
 import reports.FilterCompoundReport;
@@ -36,7 +35,7 @@ public class FilterCompoundCommand implements Command {
         System.out.println("name");
         String name = filter[1];
         
-        compound = compoundMapper.filterByWildCardName(name);
+        compound = compoundMapper.filterByNameLike(name);
       }
       case ("2"): {
         System.out.println("inventory");
@@ -46,7 +45,7 @@ public class FilterCompoundCommand implements Command {
       case("3"): {
         System.out.println("inventory range");
         
-        compound = compoundMapper.filterByInventoryRange(Integer.parseInt(filter[1]), Integer.parseInt(filter[2]));
+        compound = compoundMapper.filterByInventoryBetween(Integer.parseInt(filter[1]), Integer.parseInt(filter[2]));
       }
       case("4"): {
         System.out.println("madeof");

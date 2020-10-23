@@ -10,20 +10,28 @@ import java.util.List;
 import database.DatabaseException;
 import database.DatabaseManager;
 
+/**
+ * Table Data Gateway used to access the Acid table. 
+ * 
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public class AcidTDGRDS implements AcidTDG {
   String sql = "SELECT * FROM Acid INNER JOIN Chemical WHERE Acid.acidId = Chemical.chemicalId";
+
   private static AcidTDGRDS singleton;
 
-  public AcidTDGRDS() {
-
-  }
-
+  /**
+   * Get singleton method
+   * 
+   * @return
+   */
   public static AcidTDGRDS getSingleton() {
     if (singleton == null) {
       singleton = new AcidTDGRDS();
     }
     return singleton;
-  } 
+  }
 
   public static ArrayList<MetalDTO> getMetals(int acidId) {
     String sqlMetal = "SELECT * FROM Metal INNER JOIN Chemical WHERE dissolvedBy = " + acidId + ";";
@@ -55,26 +63,41 @@ public class AcidTDGRDS implements AcidTDG {
     return getSingleton();
   }
 
+  /**
+   * Get all acids in database that have a similar name
+   */
   public AcidTDGRDS filterByName(String name) {
     sql += " AND (Chemical.name LIKE '%" + name + "%') ";
     return getSingleton();
   }
 
+  /**
+   * Get all acids in database that have a specific inventory value
+   */
   public AcidTDGRDS filterByInventory(double inventory) {
     sql += " AND (Chemical.inventory = " + inventory + ") ";
     return getSingleton();
   }
 
+  /**
+   * Get all acids in database that have a specific solute id
+   */
   public AcidTDGRDS filterBySolute(int solute) {
     sql += " AND (Acid.solute = " + solute + ") ";
     return singleton;
   }
 
+  /**
+   * Get all acids in database that have a specific inventory range
+   */
   public AcidTDGRDS filterByInventoryRange(double high, double low) {
     sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
     return getSingleton();
   }
 
+  /**
+   * Execute query using the current string sql. 
+   */
   public List<AcidDTO> executeQuery() throws DatabaseException {
     List<AcidDTO> listDTO = new ArrayList<>();
     try {

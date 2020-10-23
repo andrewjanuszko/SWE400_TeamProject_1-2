@@ -187,17 +187,11 @@ class TestChemical extends DatabaseTest {
       testDelete();
       testUpdate();
       testGetAll();
-      insert();
       testFilterByName(); 
       testFilterByInventory();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
-  }
-
-  private static void insert() {
-    ChemicalRDG gateway1 = new ChemicalRDGRDS("funkychem1", 41.2);
-    ChemicalRDG gateway2 = new ChemicalRDGRDS("funkychem2", 42.4);
   }
 
 }

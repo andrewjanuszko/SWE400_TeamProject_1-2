@@ -3,21 +3,27 @@ package datasource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseException;
 import database.DatabaseManager;
 
+/**
+ * ElementTDG used to acces the Element table.
+ * 
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public class ElementTDGRDS implements ElementTDG {
   String sql = "SELECT * FROM Element INNER JOIN Chemical WHERE (Element.elementId = Chemical.chemicalId)";
   private static ElementTDGRDS singleton;
 
-  public ElementTDGRDS() {
-    // TODO Auto-generated constructor stub
-  }
-
+  /**
+   * Get singleton instance
+   * 
+   * @return singleton
+   */
   public static ElementTDGRDS getSingleton() {
     if (singleton == null) {
       singleton = new ElementTDGRDS();
@@ -25,65 +31,76 @@ public class ElementTDGRDS implements ElementTDG {
     return singleton;
   }
 
+  /**
+   * Get all elements in the table
+   */
   public ElementTDGRDS getAllElements() {
     sql = "SELECT * FROM Element INNER JOIN Chemical WHERE (Element.elementId = Chemical.chemicalId)";
     return getSingleton();
   }
 
-  public ElementDTO getDTO(int id) throws DatabaseException {
-    String sql = "SELECT * FROM Element INNER JOIN Chemical ON Element.elementId = Chemical.chemicalId AND elementId = "
-        + id + ";";
-
-    try {
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      ResultSet rs = statement.executeQuery(sql);
-      rs.next();
-
-      return new ElementDTO(id, rs.getInt("atomicNum"), rs.getDouble("atomicMass"), rs.getString("name"),
-          rs.getDouble("inventory"));
-
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("No entry with id " + id);
-      throw new DatabaseException("No entry with id " + id, e);
-    }
-  }
-
+  /**
+   * Get all elements with a similar name
+   */
   public ElementTDGRDS filterByName(String name) {
     sql += " AND (Chemical.name LIKE '%" + name + "%') ";
     return getSingleton();
   }
 
+  /**
+   * Get all elements with a specific inventory amount
+   */
   public ElementTDGRDS filterByInventory(double inventory) {
     sql += " AND (Chemical.inventory = " + inventory + ")";
     return getSingleton();
   }
 
+  /**
+   * Get all elements with a specific inventory range
+   */
   public ElementTDGRDS filterByInventoryRange(double high, double low) {
     sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ")";
     return getSingleton();
   }
 
+  /**
+   * Get all elements with a specific atomic mass
+   */
   public ElementTDGRDS filterByAtomicMass(double atomicMass) {
     sql += " AND (Element.atomicMass = " + atomicMass + ")";
     return getSingleton();
   }
 
+  /**
+   * Get all elements with a specific atomic mass range
+   */
   public ElementTDGRDS filterByAtomicMassRange(double high, double low) {
     sql += " AND (Element.atomicMass BETWEEN " + low + " AND " + high + ")";
     return getSingleton();
   }
 
+  /**
+   * Get all elements with a specific atomic number
+   */
   public ElementTDGRDS filterByAtomicNumber(int atomicNumber) {
     sql += " AND (Element.atomicNumber = " + atomicNumber + ")";
     return getSingleton();
   }
 
+  /**
+   * Get all elements with a specific atomic number range
+   */
   public ElementTDGRDS filterByAtomicNumberRange(int high, int low) {
     sql += " AND (Element.atomicNumber BETWEEN " + low + " AND " + high + ")";
     return getSingleton();
   }
 
+  /**
+   * Execute SQL query and put results into dtos.
+   * 
+   * @return List of element DTOs that meet the SQL query's specifications
+   * @throws DatabaseException when things go wrong (Syntax) 
+   */
   public List<ElementDTO> executeQuery() throws DatabaseException {
     List<ElementDTO> listDTO = new ArrayList<>();
     try {
@@ -106,33 +123,4 @@ public class ElementTDGRDS implements ElementTDG {
     return listDTO;
   }
 
-  public static void delete(int i) {
-    String sqlElement = "DELETE FROM Element WHERE elementId = " + i + ";";
-    String sqlChem = "DELETE FROM Chemical WHERE chemicalId = " + i + ";";
-    try {
-
-      Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
-      statement.executeUpdate(sqlElement);
-      statement.executeUpdate(sqlChem);
-
-    } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("Problem deleting Element with id " + i);
-    }
-  }
-
-  /**
-   * We are low on an element if we could not currently replace our current
-   * inventory of compounds
-   * 
-   * @param filter
-   * @return
-   */
-  public ElementTDGRDS filterByLowInventory(double filter) {
-    
-    
-    
-    sql += " AND (Chemical.inventory < " + filter + ") ";
-    return null;
-  }
 }

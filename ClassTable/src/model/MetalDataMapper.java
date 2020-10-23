@@ -8,18 +8,14 @@ import datasource.MetalDTO;
 import datasource.MetalRDG;
 import datasource.MetalRDGRDS;
 import datasource.MetalTDGRDS;
-import model.Compound;
-import model.CompoundDataMapperInterface;
-import model.DomainModelException;
-import model.Element;
-import model.Metal;
-import model.MetalDataMapperInterface;
 
+/**
+ * Maps MetalDataMapperInterface functions to class table implementation.
+ *  
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public class MetalDataMapper implements MetalDataMapperInterface {
-
-  public MetalDataMapper() {
-    // TODO Auto-generated constructor stub
-  }
 
   @Override
   public Metal create(String name, double inventory, int atomicNumber, double atomicMass, double acidAmount)
@@ -72,7 +68,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
 
   @Override
-  public List<Metal> filterByWildCardName(String wildCardName) {
+  public List<Metal> filterByNameLike(String wildCardName) {
     List<MetalDTO> dtos;
     ArrayList<Metal> metal = new ArrayList<>();
     try {
@@ -102,7 +98,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
 
   @Override
-  public List<Metal> filterByInventoryRange(double min, double max) {
+  public List<Metal> filterByInventoryBetween(double min, double max) {
     List<MetalDTO> dtos;
     ArrayList<Metal> metal = new ArrayList<>();
     try {
@@ -147,7 +143,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
 
   @Override
-  public List<Metal> filterByAtomicMassRange(double min, double max) {
+  public List<Metal> filterByAtomicMassBetween(double min, double max) {
     List<MetalDTO> dtos;
     ArrayList<Metal> metal = new ArrayList<>();
     try {
@@ -162,7 +158,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
 
   @Override
-  public List<Metal> filterByAcidRequired(double acidRequired) {
+  public List<Metal> filterByAcidAmount(double acidRequired) {
     List<MetalDTO> dtos;
     ArrayList<Metal> metal = new ArrayList<>();
     try {
@@ -177,7 +173,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
 
   @Override
-  public List<Metal> filterByAcidRequiredRange(double min, double max) {
+  public List<Metal> filterByAcidAmountBetween(double min, double max) {
     List<MetalDTO> dtos;
     ArrayList<Metal> metal = new ArrayList<>();
     try {
@@ -223,6 +219,12 @@ public class MetalDataMapper implements MetalDataMapperInterface {
       }
     }
     return filtered;
+  }
+
+  @Override
+  public List<Metal> filterByAtomicNumberBetween(int min, int max) throws DomainModelException {
+    // we dont need this 
+    return null;
   }
 
 }

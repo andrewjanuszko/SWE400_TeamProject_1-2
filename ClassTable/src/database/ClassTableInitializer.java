@@ -2,6 +2,19 @@ package database;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import datasource.AcidRDG;
+import datasource.AcidRDGRDS;
+import datasource.BaseRDG;
+import datasource.BaseRDGRDS;
+import datasource.ChemicalRDG;
+import datasource.ChemicalRDGRDS;
+import datasource.CompoundRDG;
+import datasource.CompoundRDGRDS;
+import datasource.MetalRDG;
+import datasource.MetalRDGRDS;
 
 public class ClassTableInitializer {
   
@@ -64,4 +77,50 @@ public class ClassTableInitializer {
     }
   }
   
+  @SuppressWarnings("unused")
+  public static void populateTables() {
+    
+    // Acids
+    AcidRDG acid = new AcidRDGRDS(51, "acidname1", 1.1);
+    acid = new AcidRDGRDS(52, "acidname2", 1.2);
+    acid = new AcidRDGRDS(53, "acidname3", 1.3);
+    acid = new AcidRDGRDS(54, "acidname4", 1.4);
+    acid = new AcidRDGRDS(55, "acidname5", 1.5);
+    acid = new AcidRDGRDS(55, "acidname6", 1.6);
+    acid = new AcidRDGRDS(12, "funkyacid1", 41.2); 
+    acid = new AcidRDGRDS(15, "funkyacid2", 42.4); 
+    
+    // Bases
+    BaseRDG base = new BaseRDGRDS(51, "basename1", 1.1);
+    base = new BaseRDGRDS(52, "basename2", 1.2);
+    base = new BaseRDGRDS(53, "basename3", 1.3);
+    base = new BaseRDGRDS(54, "basename4", 1.4);
+    base = new BaseRDGRDS(55, "basename5", 1.5);
+    base = new BaseRDGRDS(55, "basename6", 1.6);
+    base = new BaseRDGRDS(12, "funkybase1", 41.2); 
+    base = new BaseRDGRDS(15, "funkybase2", 42.4); 
+    
+    // Chemicals
+    ChemicalRDG gateway1 = new ChemicalRDGRDS("funkychem1", 41.2);
+    ChemicalRDG gateway2 = new ChemicalRDGRDS("funkychem2", 42.4);
+    
+    // Compounds
+    List<Integer> madeOf1 = new ArrayList<Integer>(), madeOf2 = new ArrayList<Integer>();
+    madeOf1.add(24);
+    madeOf1.add(25);
+    madeOf2.add(26);
+    madeOf2.add(27);
+
+    CompoundRDG RDG1 = new CompoundRDGRDS(madeOf1, "compoundname1", 1.1); 
+    CompoundRDG RDG2 = new CompoundRDGRDS(madeOf2, "compoundname2", 1.2); 
+    
+    // Elements
+    
+    
+    // Metals
+    MetalRDG metal = new MetalRDGRDS(1, 1, 1.1, 11.1, "metalname1", 41.1);
+    metal = new MetalRDGRDS(2, 2, 2.1, 12.2, "metalname2", 42.1);
+    metal = new MetalRDGRDS(3, 3, 3.1, 13.3, "metalname3", 43.1);
+    metal = new MetalRDGRDS(4, 4, 4.1, 14.4, "metalname4", 44.1);
+  }
 }

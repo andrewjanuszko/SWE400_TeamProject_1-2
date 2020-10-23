@@ -1,7 +1,6 @@
 package datasource;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
@@ -182,7 +181,6 @@ class TestElement extends DatabaseTest {
    * Run all tests in TestElement
    */
   static void testAll() {
-    insertElements();
     testGetAtomicNumber();
     testGetAtomicMass();
     testGetName();
@@ -194,9 +192,4 @@ class TestElement extends DatabaseTest {
     testFilterByAtomicMass();
   }
 
-  /**
-   * Insert elements into the database to test
-   */
-  private static void insertElements() {
-  }
 }

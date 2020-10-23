@@ -1,10 +1,24 @@
 package datasource;
 
+/**
+ * Element data transfer object
+ * 
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public class ElementDTO {
   int elementId, atomicNumber;
   double atomicMass, inventory;
   String name;
 
+  /**
+   * Initialize an ElementDTO 
+   * @param elementId of the element
+   * @param atomicNumber of the element
+   * @param atomicMass of the element
+   * @param name of the element
+   * @param inventory of the element
+   */
   public ElementDTO(int elementId, int atomicNumber, double atomicMass, String name, double inventory) {
     this.elementId = elementId;
     this.atomicNumber = atomicNumber;
@@ -12,43 +26,75 @@ public class ElementDTO {
     this.name = name;
     this.inventory = inventory;
   }
-
+  
+  /**
+   * Get element id of the dto
+   * @return element id
+   */
   public int getElementId() {
     return elementId;
   }
 
+  /**
+   * Get atomic number
+   * @return atomic number
+   */
   public int getAtomicNumber() {
     return atomicNumber;
   }
 
+  /**
+   * Get atomic mass
+   * @return atomic mass
+   */
   public double getAtomicMass() {
     return atomicMass;
   }
 
+  /**
+   * Get inventory
+   * @return inventory
+   */
   public double getInventory() {
     return inventory;
   }
 
+  /**
+   * Get name
+   * @return name
+   */
   public String getName() {
     return name;
   }
 
-  public void setElementId(int elementId) {
-    this.elementId = elementId;
-  }
-
+  /**
+   * Set atomic number
+   * @param atomicNumber
+   */
   public void setAtomicNumber(int atomicNumber) {
     this.atomicNumber = atomicNumber;
   }
 
+  /**
+   * Set atomic mass
+   * @param atomicMass
+   */
   public void setAtomicMass(double atomicMass) {
     this.atomicMass = atomicMass;
   }
 
+  /**
+   * Set inventory
+   * @param inventory
+   */
   public void setInventory(double inventory) {
     this.inventory = inventory;
   }
 
+  /**
+   * Set name
+   * @param name
+   */
   public void setName(String name) {
     this.name = name;
   }

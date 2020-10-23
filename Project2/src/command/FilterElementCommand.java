@@ -5,7 +5,6 @@ import java.util.List;
 
 import model.ElementDataMapper;
 import model.Element;
-import model.ElementDataMapper;
 import model.ElementDataMapperInterface;
 import model.DomainModelException;
 import reports.FilterElementReport;
@@ -39,7 +38,7 @@ public class FilterElementCommand implements Command {
         System.out.println("name");
         String name = filter[1];
         
-        element = elementMapper.filterByWildCardName(name);
+        element = elementMapper.filterByNameLike(name);
       }
       case ("2"): {
         System.out.println("inventory");
@@ -49,7 +48,7 @@ public class FilterElementCommand implements Command {
       case("3"): {
         System.out.println("inventory range");
         
-        element = elementMapper.filterByInventoryRange(Integer.parseInt(filter[1]), Integer.parseInt(filter[2]));
+        element = elementMapper.filterByInventoryBetween(Integer.parseInt(filter[1]), Integer.parseInt(filter[2]));
       }
       case("4"): {
         System.out.println("atomic number");
@@ -64,7 +63,7 @@ public class FilterElementCommand implements Command {
       case("6"): {
         System.out.println("atomic mass range");
 
-        element = elementMapper.filterByAtomicMassRange(Double.parseDouble(filter[1]), Double.parseDouble(filter[2]));
+        element = elementMapper.filterByAtomicMassBetween(Double.parseDouble(filter[1]), Double.parseDouble(filter[2]));
       }
       case("7"): {
         System.out.println("part of compound");

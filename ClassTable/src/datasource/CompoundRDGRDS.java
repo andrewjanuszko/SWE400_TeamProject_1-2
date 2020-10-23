@@ -9,11 +9,28 @@ import java.util.List;
 
 import database.DatabaseException;
 import database.DatabaseManager;
-import model.Element;
 
+/**
+ * CompoundRDGRDS, used to access rows of the compound table.
+ * 
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public class CompoundRDGRDS implements CompoundRDG {
   CompoundDTO compound;
 
+  /**
+   * Empty constructor
+   */
+  public CompoundRDGRDS() {
+    
+  }
+  
+  /**
+   * Initialize the RDG by reading in a compound.
+   * 
+   * @param id to read
+   */
   public CompoundRDGRDS(int id) {
     try {
       compound = read(id);
@@ -22,19 +39,29 @@ public class CompoundRDGRDS implements CompoundRDG {
     }
   }
 
-  public CompoundRDGRDS(List<Element> madeOf, String name, double inventory) {
+  /**
+   * Initialize the RDG by creating a compound.
+   * 
+   * @param madeOf    List of elements that the compound is made of.
+   * @param name      of the compound.
+   * @param inventory of the compound
+   */
+  public CompoundRDGRDS(List<Integer> madeOf, String name, double inventory) {
     try {
-      List<Integer> madeOfIds = new ArrayList<>();
-      for(Element e : madeOf) {
-        madeOfIds.add(e.getID());
-      }
-      
-      compound = create(madeOfIds, name, inventory);
+      compound = create(madeOf, name, inventory);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
-
+  
+  /**
+   * Function to insert a compound into the database with its raw values.
+   * 
+   * @param madeOf    list of element ids (ints) that the compound is made of
+   * @param name      of the compound
+   * @param inventory of the compound
+   * @return CompoundDTO of the compound inserted into the database.
+   */
   public CompoundDTO create(List<Integer> madeOf, String name, double inventory) throws Exception {
     try {
       List<ElementDTO> elements = new ArrayList<>();
@@ -76,9 +103,14 @@ public class CompoundRDGRDS implements CompoundRDG {
     }
   }
 
+  /**
+   * Insert a compound into the database with a compoundDTO.
+   * 
+   * @param compound to insert
+   * @throws Exception when things go wrong.
+   */
   public void create(CompoundDTO compound) throws Exception {
     try {
-      List<ElementDTO> elements = new ArrayList<>();
       // Insert compound
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Chemical (chemicalId, name, inventory) VALUES (?, ?, ?);");
@@ -103,23 +135,30 @@ public class CompoundRDGRDS implements CompoundRDG {
   }
 
   /**
+   * Convert an element id to an ElementDTO
    * 
-   * @param id
-   * @return
+   * @param id of element
+   * @return ElementDTO
    */
   private ElementDTO elementIdToDTO(int id) {
     ElementRDG element = new ElementRDGRDS(id);
     return element.getElement();
   }
 
+  /**
+   * Read in a compound though the id.
+   * 
+   * @param id int
+   * @return CompoundDTO of id
+   */
   public CompoundDTO read(int id) throws Exception {
     try {
       String sql = "SELECT * FROM Compound INNER JOIN Chemical WHERE Compound.compoundId = Chemical.chemicalId AND Compound.compoundId = "
           + id + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
-      String name = null ;
-      double inv = 0 ;
+      String name = null;
+      double inv = 0;
       // Get all elements connected to compound
       List<ElementDTO> elements = new ArrayList<>();
       while (rs.next()) {
@@ -138,6 +177,13 @@ public class CompoundRDGRDS implements CompoundRDG {
     }
   }
 
+  /**
+   * Update a compound in the database. For this many to many relationship, we
+   * delete all occurrences of the compound id and then re-add the compound to the
+   * database.
+   * 
+   * @param compound to update to
+   */
   public CompoundDTO update(CompoundDTO compound) {
     // Note: This might get slow when we get a compound with a LOT of elements
     try {
@@ -149,16 +195,23 @@ public class CompoundRDGRDS implements CompoundRDG {
     return this.compound;
   }
 
+  /**
+   * Delete a compound from the database.
+   */
   public void delete(int id) {
     try {
       PreparedStatement sql = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("DELETE FROM Compound WHERE compoundId = " + id + ";");
       sql.execute();
+      compound = null;
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
   }
 
+  /**
+   * Get the compound that the RDG is currently holding.
+   */
   public CompoundDTO getCompound() {
     return compound;
   }

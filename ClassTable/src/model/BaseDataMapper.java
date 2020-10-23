@@ -5,55 +5,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseException;
-import datasource.AcidDTO;
-import datasource.AcidTDGRDS;
 import datasource.BaseDTO;
 import datasource.BaseRDG;
 import datasource.BaseRDGRDS;
 import datasource.BaseTDGRDS;
-import datasource.MetalDTO;
-import model.Acid;
-import model.Base;
-import model.BaseDataMapperInterface;
-import model.DomainModelException;
-import model.Metal;
 
+/**
+ * Maps BaseDataMapperInterface functions to class table implementation.
+ * 
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public class BaseDataMapper implements BaseDataMapperInterface {
-
-  public BaseDataMapper() {
-    // TODO Auto-generated constructor stub
-  }
-
   @Override
   public Base create(String name, double inventory, int solute) throws DomainModelException {
     BaseRDG row = new BaseRDGRDS(solute, name, inventory);
+    // Use BaseRDG to create base
+
     return convertFromDTO(row.getBase());
+    // Convert DTO to Base and return it
   }
 
   @Override
-  public Base read(int id) {
-    Base base = null;
+  public Base read(int id) throws DomainModelException {
     try {
       BaseRDG row = new BaseRDGRDS(id);
-      BaseDTO dto = row.getBase();
+      // Use BaseRDG to fetch base
 
-      base = convertFromDTO(dto);
-    
-    } catch (DatabaseException | SQLException e) {
-      e.printStackTrace();
+      return convertFromDTO(row.getBase());
+      // Convert DTO to Base and return it
+    } catch (SQLException | DatabaseException e) {
+      throw new DomainModelException("Failed to fetch Base with id = " + id, e);
     }
-    return base;
   }
 
   @Override
   public void update(Base base) {
     try {
       BaseRDG row = new BaseRDGRDS(base.getID());
+      // Use BaseRDG to fetch Base
+
+      // Set new values with setters
       row.setName(base.getName());
       row.setInventory(base.getInventory());
       row.setSolute(base.getSolute());
+
+      // Update
       row.update();
     } catch (SQLException | DatabaseException e) {
+      System.out.println("Failed to update");
       e.printStackTrace();
     }
 
@@ -63,7 +63,10 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   public void delete(Base base) {
     try {
       BaseRDG row = new BaseRDGRDS(base.getID());
+      // Use BaseRDG to fetch Base
+
       row.delete();
+      // Delete it
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
@@ -72,16 +75,17 @@ public class BaseDataMapper implements BaseDataMapperInterface {
 
   @Override
   public List<Base> getAll() {
-    List<BaseDTO> dtos;
     ArrayList<Base> base = new ArrayList<>();
     try {
-      dtos = BaseTDGRDS.getSingleton().executeQuery();
+      // Get all bases
+      List<BaseDTO> dtos = BaseTDGRDS.getSingleton().executeQuery();
 
+      // For every basedto, convert it to a base and add it to list of bases
       for (BaseDTO b : dtos) {
         base.add(convertFromDTO(b));
       }
     } catch (DatabaseException e) {
-      // TODO Auto-generated catch block
+      // Problem with executeQuery()
       e.printStackTrace();
     }
 
@@ -89,17 +93,18 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   @Override
-  public List<Base> filterByWildCardName(String wildCardName) {
-    List<BaseDTO> dtos;
+  public List<Base> filterByNameLike(String wildCardName) {
     ArrayList<Base> base = new ArrayList<>();
     try {
-      dtos = BaseTDGRDS.getSingleton().filterByName(wildCardName).executeQuery();
+      // Get all bases with specific name
+      List<BaseDTO> dtos = BaseTDGRDS.getSingleton().filterByName(wildCardName).executeQuery();
 
+      // For every BaseDTO, convert it to a base and add it to the list of bases
       for (BaseDTO b : dtos) {
         base.add(convertFromDTO(b));
       }
     } catch (DatabaseException e) {
-      // TODO Auto-generated catch block
+      // Problem with executeQuery
       e.printStackTrace();
     }
 
@@ -108,16 +113,17 @@ public class BaseDataMapper implements BaseDataMapperInterface {
 
   @Override
   public List<Base> filterByInventory(double inventory) {
-    List<BaseDTO> dtos;
     ArrayList<Base> base = new ArrayList<>();
     try {
-      dtos = BaseTDGRDS.getSingleton().filterByInventory(inventory).executeQuery();
+      // Get all bases with speicfic inventory amount
+      List<BaseDTO> dtos = BaseTDGRDS.getSingleton().filterByInventory(inventory).executeQuery();
 
+      // For every BaseDTO, convert it to a base and add it to the list of bases
       for (BaseDTO b : dtos) {
         base.add(convertFromDTO(b));
       }
     } catch (DatabaseException e) {
-      // TODO Auto-generated catch block
+      // Problem with executeQuery
       e.printStackTrace();
     }
 
@@ -125,17 +131,18 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   @Override
-  public List<Base> filterByInventoryRange(double min, double max) {
-    List<BaseDTO> dtos;
+  public List<Base> filterByInventoryBetween(double min, double max) {
     ArrayList<Base> base = new ArrayList<>();
     try {
-      dtos = BaseTDGRDS.getSingleton().filterByInventoryRange(max, min).executeQuery();
+      // Get all bases with a specific inventory range
+      List<BaseDTO> dtos = BaseTDGRDS.getSingleton().filterByInventoryRange(max, min).executeQuery();
 
+      // For every BaseDTO, convert it to a base and add it to the list of bases
       for (BaseDTO b : dtos) {
         base.add(convertFromDTO(b));
       }
     } catch (DatabaseException e) {
-      // TODO Auto-generated catch block
+      // Problem with executeQuery
       e.printStackTrace();
     }
 
@@ -144,38 +151,31 @@ public class BaseDataMapper implements BaseDataMapperInterface {
 
   @Override
   public List<Base> filterBySolute(int chemicalID) {
-    List<BaseDTO> dtos;
     List<Base> base = new ArrayList<>();
     try {
-      dtos = BaseTDGRDS.getSingleton().filterBySolute(chemicalID).executeQuery();
+      // Get all bases with specific solute id
+      List<BaseDTO> dtos = BaseTDGRDS.getSingleton().filterBySolute(chemicalID).executeQuery();
+
+      // For every BaseDTO, convert it to a base and add it to the list of bases
       for (BaseDTO b : dtos) {
         base.add(convertFromDTO(b));
       }
     } catch (DatabaseException e) {
+      // Problem with executeQuery
       e.printStackTrace();
     }
 
     return base;
   }
-  
-  public Base convertFromDTO(BaseDTO dto) {
-    return new Base(dto.getBaseId(), dto.getName(), dto.getInventory(), dto.getSoluteId()); 
-  }
 
-  public List<Base> filterByLowInventory(double filter) {
-    List<BaseDTO> dtos;
-    List<Base> base = new ArrayList<>(); 
-    
-    try {
-      dtos = BaseTDGRDS.getSingleton().filterByLowInventory(filter).executeQuery();
-      
-      for(BaseDTO b : dtos) {
-        base.add(convertFromDTO(b));
-      }
-    } catch (DatabaseException e) {
-      e.printStackTrace();
-    }
-    return base;
+  /**
+   * Convert a dto to a base
+   * 
+   * @param dto to convert
+   * @return converted Base
+   */
+  private Base convertFromDTO(BaseDTO dto) {
+    return new Base(dto.getBaseId(), dto.getName(), dto.getInventory(), dto.getSoluteId());
   }
 
 }

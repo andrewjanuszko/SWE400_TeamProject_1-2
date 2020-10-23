@@ -4,14 +4,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import database.DatabaseException;
 import database.DatabaseManager;
 
 /**
- * ChemicalRowDataGatewayRDS
+ * ChemicalRowDataGatewayRDS used to access rows in the Chemical table.
  * 
  * @author Isabella Boone, Kim O'Neill
  *
@@ -19,6 +17,13 @@ import database.DatabaseManager;
 public class ChemicalRDGRDS implements ChemicalRDG {
   ChemicalDTO chemical;
 
+  /**
+   * Empty constructor
+   */
+  public ChemicalRDGRDS() {
+    
+  }
+  
   /**
    * Constructor ChemicalRowDataGatewayRDS, search for existing chemical.
    * 
@@ -61,7 +66,7 @@ public class ChemicalRDGRDS implements ChemicalRDG {
       rs.next();
 
       chemical = new ChemicalDTO(rs.getInt("LAST_INSERT_ID()"), name, inventory);
-      
+
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert chemical through constructor");
@@ -78,7 +83,8 @@ public class ChemicalRDGRDS implements ChemicalRDG {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
 
       statement.executeUpdate(deleteChemical);
-
+      
+      chemical = null;
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Error deleting chemical " + chemical.getChemicalId());

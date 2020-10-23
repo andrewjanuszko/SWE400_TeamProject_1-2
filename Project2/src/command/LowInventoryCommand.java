@@ -14,20 +14,29 @@ import model.CompoundDataMapper;
 import model.DomainModelException;
 import model.Element;
 import model.ElementDataMapper;
+import reports.ReportObserverConnector;
+import reports.ValidEntryReport;
 
 public class LowInventoryCommand implements Command {
   String fileoutput;
   List<String> input = new ArrayList<>();
 
+  /**
+   * @param fileoutput specified by user
+   * @throws DomainModelException when things go wrong
+   */
   public LowInventoryCommand(String fileoutput) throws DomainModelException {
     this.fileoutput = fileoutput;
-
     getInput();
   }
 
+  /**
+   * Get input
+   * @throws DomainModelException
+   */
   private void getInput() throws DomainModelException {
-    List<Acid> acids = new AcidDataMapper().filterByLowInventory();
-    List<Base> bases = new BaseDataMapper().filterByLowInventory(40);
+    List<Acid> acids = getLowAcids();
+    List<Base> bases = new BaseDataMapper().filterByInventoryBetween(0, 40);
     List<Element> elements = getLowElements();
 
     for (Acid a : acids) {
@@ -39,6 +48,22 @@ public class LowInventoryCommand implements Command {
     for (Element e : elements) {
       input.add("Element\t id: " + e.getID() + ", name: " + e.getName() + ", inventory: " + e.getInventory());
     }
+  }
+
+  /**
+   * Get low acids
+   * 
+   * @return all acids that are low
+   */
+  private List<Acid> getLowAcids() {
+    List<Acid> acids = new ArrayList<>(), allAcids = new AcidDataMapper().getAll();
+
+    for (Acid a : allAcids) {
+      if (a.getInventory() < a.getThreshold()) {
+        acids.add(a);
+      }
+    }
+    return acids;
   }
 
   /**
@@ -70,18 +95,17 @@ public class LowInventoryCommand implements Command {
       return returnList;
 
     } catch (DomainModelException e) {
-      throw new DomainModelException("yes()", e);
+      throw new DomainModelException("getLowElements()", e);
     }
   }
 
   @Override
   public void execute() {
     if (writeInput()) {
-
+      ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(true));
     } else {
-
+      ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
     }
-
   }
 
   private boolean writeInput() {
