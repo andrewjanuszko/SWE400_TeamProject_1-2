@@ -21,6 +21,13 @@ public class CompoundRDGRDS implements CompoundRDG {
   CompoundDTO compound;
 
   /**
+   * Empty constructor
+   */
+  public CompoundRDGRDS() {
+    
+  }
+  
+  /**
    * Initialize the RDG by reading in a compound.
    * 
    * @param id to read

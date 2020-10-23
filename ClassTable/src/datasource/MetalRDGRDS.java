@@ -20,6 +20,13 @@ public class MetalRDGRDS implements MetalRDG {
   MetalDTO metal;
 
   /**
+   * Empty constructor
+   */
+  public MetalRDGRDS() {
+    
+  }
+  
+  /**
    * Constructor to find an existing metal
    * 
    * @param id to find

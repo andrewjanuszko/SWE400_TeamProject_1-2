@@ -18,6 +18,13 @@ public class ElementRDGRDS implements ElementRDG {
   ElementDTO element;
 
   /**
+   * Empty constructor
+   */
+  public ElementRDGRDS() {
+    
+  }
+  
+  /**
    * Constructor to search for an element
    * @param id
    */

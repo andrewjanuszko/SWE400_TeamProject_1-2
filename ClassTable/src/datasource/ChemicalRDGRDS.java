@@ -18,6 +18,13 @@ public class ChemicalRDGRDS implements ChemicalRDG {
   ChemicalDTO chemical;
 
   /**
+   * Empty constructor
+   */
+  public ChemicalRDGRDS() {
+    
+  }
+  
+  /**
    * Constructor ChemicalRowDataGatewayRDS, search for existing chemical.
    * 
    * @param id to search for
