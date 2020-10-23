@@ -7,6 +7,7 @@ import javax.swing.SwingConstants;
 
 import model.AcidDataMapper;
 import model.Acid;
+import model.AcidDataMapper;
 import model.AcidDataMapperInterface;
 
 public class FilterAcidFrame extends JFrame {

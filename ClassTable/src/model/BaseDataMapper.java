@@ -1,4 +1,4 @@
-package mappers;
+package model;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -145,14 +145,13 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   @Override
   public List<Base> filterBySolute(int chemicalID) {
     List<BaseDTO> dtos;
-    ArrayList<Base> base = new ArrayList<>();
+    List<Base> base = new ArrayList<>();
     try {
       dtos = BaseTDGRDS.getSingleton().filterBySolute(chemicalID).executeQuery();
       for (BaseDTO b : dtos) {
         base.add(convertFromDTO(b));
       }
     } catch (DatabaseException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
@@ -161,6 +160,22 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   
   public Base convertFromDTO(BaseDTO dto) {
     return new Base(dto.getBaseId(), dto.getName(), dto.getInventory(), dto.getSoluteId()); 
+  }
+
+  public List<Base> filterByLowInventory(double filter) {
+    List<BaseDTO> dtos;
+    List<Base> base = new ArrayList<>(); 
+    
+    try {
+      dtos = BaseTDGRDS.getSingleton().filterByLowInventory(filter).executeQuery();
+      
+      for(BaseDTO b : dtos) {
+        base.add(convertFromDTO(b));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    return base;
   }
 
 }

@@ -2,6 +2,7 @@ package command;
 
 import model.BaseDataMapper;
 import model.Base;
+import model.BaseDataMapper;
 import model.BaseDataMapperInterface;
 import model.DomainModelException;
 import reports.ReportObserverConnector;

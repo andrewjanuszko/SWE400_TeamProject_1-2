@@ -3,6 +3,7 @@ package command;
 import model.MetalDataMapper;
 import model.DomainModelException;
 import model.Metal;
+import model.MetalDataMapper;
 import model.MetalDataMapperInterface;
 import reports.ReportObserverConnector;
 import reports.ValidEntryReport;

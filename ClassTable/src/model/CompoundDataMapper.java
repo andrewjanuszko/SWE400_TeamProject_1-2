@@ -1,4 +1,4 @@
-package mappers;
+package model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,6 +152,11 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
       listCompounds.add(new Compound(c.getCompoundId(), c.getName(), c.getInventory(), DTOToElement(c.getElements())));
     }
     return listCompounds;
+  }
+
+  public List<Compound> filterByLowInventory() {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

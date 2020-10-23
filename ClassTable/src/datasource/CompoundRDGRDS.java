@@ -35,7 +35,7 @@ public class CompoundRDGRDS implements CompoundRDG {
     }
   }
 
-  public CompoundDTO create(List<Integer> madeOfIds, String name, double inventory) throws Exception {
+  public CompoundDTO create(List<Integer> madeOf, String name, double inventory) throws Exception {
     try {
       List<ElementDTO> elements = new ArrayList<>();
       // Insert compound

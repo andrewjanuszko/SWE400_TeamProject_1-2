@@ -1,13 +1,16 @@
-package mappers;
+package model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseException;
+import datasource.CompoundDTO;
+import datasource.CompoundTDGRDS;
 import datasource.ElementDTO;
 import datasource.ElementRDG;
 import datasource.ElementRDGRDS;
 import datasource.ElementTDGRDS;
+import model.Compound;
 import model.DomainModelException;
 import model.Element;
 import model.ElementDataMapperInterface;
@@ -16,7 +19,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
 
   public ElementDataMapper() {
   }
-  
+
   @Override
   public Element create(String name, double inventory, int atomicNumber, double atomicMass)
       throws DomainModelException {
@@ -40,14 +43,14 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     row.setAtomicNumber(element.getAtomicNumber());
     row.setAtomicMass(element.getAtomicMass());
     row.update();
-    
+
   }
 
   @Override
   public void delete(Element element) {
     ElementRDG row = new ElementRDGRDS(element.getID());
     row.delete();
-    
+
   }
 
   @Override
@@ -56,8 +59,8 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     List<Element> element = new ArrayList<>();
     try {
       dtos = ElementTDGRDS.getSingleton().executeQuery();
-      
-      for(ElementDTO e : dtos) {
+
+      for (ElementDTO e : dtos) {
         element.add(convertFromDTO(e));
       }
     } catch (DatabaseException e) {
@@ -72,7 +75,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     ArrayList<Element> element = new ArrayList<>();
     try {
       dtos = ElementTDGRDS.getSingleton().filterByName(wildCardName).executeQuery();
-      for(ElementDTO e : dtos) {
+      for (ElementDTO e : dtos) {
         element.add(convertFromDTO(e));
       }
     } catch (DatabaseException e) {
@@ -87,7 +90,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     ArrayList<Element> element = new ArrayList<>();
     try {
       dtos = ElementTDGRDS.getSingleton().filterByInventory(inventory).executeQuery();
-      for(ElementDTO e : dtos) {
+      for (ElementDTO e : dtos) {
         element.add(convertFromDTO(e));
       }
     } catch (DatabaseException e) {
@@ -102,7 +105,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     ArrayList<Element> element = new ArrayList<>();
     try {
       dtos = ElementTDGRDS.getSingleton().filterByInventoryRange(max, min).executeQuery();
-      for(ElementDTO e : dtos) {
+      for (ElementDTO e : dtos) {
         element.add(convertFromDTO(e));
       }
     } catch (DatabaseException e) {
@@ -117,7 +120,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     ArrayList<Element> element = new ArrayList<>();
     try {
       dtos = ElementTDGRDS.getSingleton().filterByAtomicNumber(atomicNumber).executeQuery();
-      for(ElementDTO e : dtos) {
+      for (ElementDTO e : dtos) {
         element.add(convertFromDTO(e));
       }
     } catch (DatabaseException e) {
@@ -132,7 +135,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     ArrayList<Element> element = new ArrayList<>();
     try {
       dtos = ElementTDGRDS.getSingleton().filterByAtomicMass(atomicMass).executeQuery();
-      for(ElementDTO e : dtos) {
+      for (ElementDTO e : dtos) {
         element.add(convertFromDTO(e));
       }
     } catch (DatabaseException e) {
@@ -147,7 +150,7 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     ArrayList<Element> element = new ArrayList<>();
     try {
       dtos = ElementTDGRDS.getSingleton().filterByAtomicMassRange(max, min).executeQuery();
-      for(ElementDTO e : dtos) {
+      for (ElementDTO e : dtos) {
         element.add(convertFromDTO(e));
       }
     } catch (DatabaseException e) {
@@ -161,8 +164,8 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     List<ElementDTO> dtos;
     ArrayList<Element> element = new ArrayList<>();
     try {
-      dtos = ElementTDGRDS.getSingleton().executeQuery(); //this isnt done but like isabella is slow
-      for(ElementDTO e : dtos) {
+      dtos = ElementTDGRDS.getSingleton().executeQuery(); // this isnt done but like isabella is slow
+      for (ElementDTO e : dtos) {
         element.add(convertFromDTO(e));
       }
     } catch (DatabaseException e) {
@@ -172,6 +175,34 @@ public class ElementDataMapper implements ElementDataMapperInterface {
   }
 
   public Element convertFromDTO(ElementDTO dto) {
-    return new Element(dto.getElementId(), dto.getName(), dto.getInventory(), dto.getAtomicNumber(), dto.getAtomicMass());
+    return new Element(dto.getElementId(), dto.getName(), dto.getInventory(), dto.getAtomicNumber(),
+        dto.getAtomicMass());
+  }
+
+  /**
+   * We are low on an element if we could not completely replace our currently
+   * inventory of compounds OR we have less than 20 moles. 
+   * 
+   * @param filter
+   * @return
+   */
+  public List<Element> filterByLowInventory(double filter) {
+    List<ElementDTO> dtos;
+    List<Element> elements = new ArrayList<>();
+
+    try {
+      dtos = ElementTDGRDS.getSingleton().filterByLowInventory(filter).executeQuery();
+
+      for (ElementDTO e : dtos) {
+        elements.add(convertFromDTO(e));
+      }
+    } catch (DatabaseException e) {
+      e.printStackTrace();
+    }
+    
+    // if we could not replace current inventory of compounds
+    
+    
+    return elements;
   }
 }

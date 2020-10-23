@@ -2,10 +2,12 @@ package datasource;
 
 import java.util.List;
 
+import database.DatabaseException;
+
 public interface ElementTDG {
   public ElementTDGRDS getAllElements();
   
-  public ElementDTO getDTO(int id);
+  public ElementDTO getDTO(int id) throws DatabaseException;
 
   public ElementTDGRDS filterByName(String name);
 

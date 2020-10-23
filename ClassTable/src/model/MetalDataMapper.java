@@ -1,17 +1,15 @@
-package mappers;
+package model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseException;
-import datasource.ElementDTO;
-import datasource.ElementRDG;
-import datasource.ElementRDGRDS;
-import datasource.ElementTDGRDS;
 import datasource.MetalDTO;
 import datasource.MetalRDG;
 import datasource.MetalRDGRDS;
 import datasource.MetalTDGRDS;
+import model.Compound;
+import model.CompoundDataMapperInterface;
 import model.DomainModelException;
 import model.Element;
 import model.Metal;
@@ -26,7 +24,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   @Override
   public Metal create(String name, double inventory, int atomicNumber, double atomicMass, double acidAmount)
       throws DomainModelException {
-    MetalRDG row = new MetalRDGRDS(0, acidAmount, atomicNumber, atomicMass, name, inventory);
+    MetalRDG row = new MetalRDGRDS(-1, atomicNumber, atomicMass, acidAmount, name, inventory);
     return convertFromDTO(row.getMetal());
   }
 
@@ -215,7 +213,16 @@ public class MetalDataMapper implements MetalDataMapperInterface {
 
   @Override
   public List<Metal> filterByPartOfCompound(int compoundID) throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
+    CompoundDataMapperInterface compoundMapper = new CompoundDataMapper();
+    Compound compound = compoundMapper.read(compoundID);
+    List<Element> madeOf = compound.getMadeOf();
+    List<Metal> filtered = new ArrayList<>();
+    for(Element e : madeOf) {
+      if(e.getClass() == Metal.class) {
+        filtered.add((Metal) e);
+      }
+    }
+    return filtered;
   }
+
 }

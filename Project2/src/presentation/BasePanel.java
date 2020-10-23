@@ -24,6 +24,7 @@ import javax.swing.SwingConstants;
 import model.AcidDataMapper;
 import model.BaseDataMapper;
 import model.Base;
+import model.BaseDataMapper;
 
 public class BasePanel extends JPanel {
 

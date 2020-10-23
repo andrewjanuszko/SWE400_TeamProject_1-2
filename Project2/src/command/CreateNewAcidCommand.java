@@ -2,6 +2,7 @@ package command;
 
 import model.AcidDataMapper;
 import model.Acid;
+import model.AcidDataMapper;
 import model.AcidDataMapperInterface;
 import model.DomainModelException;
 import reports.ReportObserverConnector;

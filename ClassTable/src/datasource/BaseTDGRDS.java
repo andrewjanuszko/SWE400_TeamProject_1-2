@@ -82,4 +82,9 @@ public class BaseTDGRDS implements BaseTDG {
     sql = "SELECT * FROM Base INNER JOIN Chemical WHERE (Base.baseId = Chemical.chemicalId)";
     return getSingleton();
   }
+
+  public BaseTDGRDS filterByLowInventory(double filter) {
+    sql += " AND (Chemical.inventory < " + filter + ") ";
+    return getSingleton();
+  }
 }
