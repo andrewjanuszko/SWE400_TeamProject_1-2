@@ -16,19 +16,6 @@ public abstract class CompoundElementTableDataGatewayTest extends DatabaseTest {
    */
   protected abstract ElementCompoundTableDataGateway getSingletonInstance();
 
-  @BeforeEach
-  public void buildDB() throws DatabaseException {
-    ChemicalRowDataGateway.createTable();
-    gateway = getSingletonInstance();
-    gateway.createTable();
-  }
-  
-  @AfterEach
-  public void deconstructDB() throws DatabaseException {
-    gateway.dropTable();
-    ChemicalRowDataGateway.dropTable();
-  }
-  
   @Test
   public void isSingleton() throws DatabaseException {
     ElementCompoundTableDataGatewayInterface gateway1 = getSingletonInstance();
@@ -39,20 +26,27 @@ public abstract class CompoundElementTableDataGatewayTest extends DatabaseTest {
   }
   
   @Test
-  public void createCompound() throws DatabaseException {
-    ChemicalRowDataGateway hydrogen = new ChemicalRowDataGateway(ChemicalEnum.ELEMENT.getIntValue(), "Hydrogen", 90, 1, 1.007, 0, 0, 0);
-    ChemicalRowDataGateway oxygen = new ChemicalRowDataGateway(ChemicalEnum.ELEMENT.getIntValue(), "Oxygen", 90, 8, 15.999, 0, 0, 0);
-    
-    ChemicalRowDataGateway hydrogenDioxide = new ChemicalRowDataGateway(ChemicalEnum.COMPOUND.getIntValue(), "Hydrogen Dioxide", 90, 0, 0, 0, 0, 0);
-    
-    assertEquals(1, hydrogen.getID());
-    assertEquals(2, oxygen.getID());
-    assertEquals(3, hydrogenDioxide.getID());
-    
-    gateway.create(3, 1);
-    gateway.create(3, 2);
-    
-    ElementCompoundDTO water = gateway.readElementsFromCompound(3);
-    assertEquals(2, water.getRelations().size());
+  public void readWithCompoundID() throws DatabaseException {
+    ElementCompoundDTO sodiumChloride = ElementCompoundTableDataGateway.getSingletonInstance().readElementsFromCompound(15);
+    assertEquals(2, sodiumChloride.getRelations().size());
+    assertEquals("Sodium", sodiumChloride.getRelations().get(0).getName());
+    assertEquals("Chlorine", sodiumChloride.getRelations().get(1).getName());
+  }
+  
+  @Test
+  public void createUpdate() throws DatabaseException {
+	  ElementCompoundTableDataGateway.getSingletonInstance().update(15, 7, 15, 1);
+	  ElementCompoundDTO sodiumChloride = ElementCompoundTableDataGateway.getSingletonInstance().readElementsFromCompound(15);
+	  assertEquals(2, sodiumChloride.getRelations().size());
+	  assertEquals("Hydrogen", sodiumChloride.getRelations().get(0).getName());
+	  assertEquals("Chlorine", sodiumChloride.getRelations().get(1).getName());
+  }
+  
+  @Test
+  public void createDelete() throws DatabaseException {
+	  ElementCompoundTableDataGateway.getSingletonInstance().delete(15, 7);
+	  ElementCompoundDTO sodiumChloride = ElementCompoundTableDataGateway.getSingletonInstance().readElementsFromCompound(15);
+	  assertEquals(1, sodiumChloride.getRelations().size());
+	  assertEquals("Chlorine", sodiumChloride.getRelations().get(0).getName());
   }
 }

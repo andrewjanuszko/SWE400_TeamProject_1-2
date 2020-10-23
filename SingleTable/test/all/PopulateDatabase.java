@@ -17,8 +17,8 @@ public class PopulateDatabase {
     
     System.out.println("Populating database, please wait...");
     
-    ChemicalRowDataGateway.dropTable();
-    ElementCompoundTableDataGateway.getSingletonInstance().dropTable();
+    //ChemicalRowDataGateway.dropTable();
+    //ElementCompoundTableDataGateway.getSingletonInstance().dropTable();
     ChemicalRowDataGateway.createTable();
     ElementCompoundTableDataGateway.getSingletonInstance().createTable();
     

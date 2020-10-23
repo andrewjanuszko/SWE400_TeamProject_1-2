@@ -191,7 +191,8 @@ public class ElementCompoundTableDataGateway implements ElementCompoundTableData
         int dissolvedBy = results.getInt("dissolvedBy");
         double acidAmount = results.getDouble("acidAmount");
         int solute = results.getInt("solute");
-        chemicals.add(new ChemicalDTO(id, type, name, inventory, atomicNumber, atomicMass, dissolvedBy, acidAmount, solute));
+        ChemicalDTO add = new ChemicalDTO(id, type, name, inventory, atomicNumber, atomicMass, dissolvedBy, acidAmount, solute);
+        chemicals.add(add);
       }
       return chemicals;
     } catch (SQLException e) {
