@@ -22,6 +22,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import model.AcidDataMapper;
+import model.BaseDataMapper;
 import model.Base;
 import model.BaseDataMapper;
 

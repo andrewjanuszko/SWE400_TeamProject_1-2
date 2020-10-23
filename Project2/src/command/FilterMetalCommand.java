@@ -3,6 +3,8 @@ package command;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.ElementDataMapper;
+import model.MetalDataMapper;
 import model.DomainModelException;
 import model.Element;
 import model.ElementDataMapper;
