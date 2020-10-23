@@ -3,12 +3,12 @@ package command;
 import java.util.ArrayList;
 import java.util.List;
 
-import mappers.ElementDataMapper;
-import mappers.MetalDataMapper;
 import model.DomainModelException;
 import model.Element;
+import model.ElementDataMapper;
 import model.ElementDataMapperInterface;
 import model.Metal;
+import model.MetalDataMapper;
 import model.MetalDataMapperInterface;
 import reports.FilterElementReport;
 import reports.FilterMetalReport;

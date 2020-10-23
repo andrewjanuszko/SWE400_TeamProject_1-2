@@ -2,7 +2,7 @@ package model;
 
 import java.util.List;
 
-import mappers.MetalDataMapper;
+import model.MetalDataMapper;
 
 /**
  * Class for creating an Acid.
@@ -69,7 +69,7 @@ public class Acid extends Chemical {
 
   public void setThreshold() {
     List<Metal> list = new MetalDataMapper().filterByDissolvedBy(getID());
-
+    
     threshold = 0;
     for (Metal m : list) {
       threshold += m.getAcidAmount();

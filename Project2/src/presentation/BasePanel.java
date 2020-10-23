@@ -21,9 +21,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
-import mappers.AcidDataMapper;
-import mappers.BaseDataMapper;
+import model.AcidDataMapper;
 import model.Base;
+import model.BaseDataMapper;
 
 public class BasePanel extends JPanel {
 

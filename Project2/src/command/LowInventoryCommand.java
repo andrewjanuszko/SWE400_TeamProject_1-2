@@ -5,32 +5,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import mappers.AcidDataMapper;
-import mappers.BaseDataMapper;
-import mappers.CompoundDataMapper;
-import mappers.ElementDataMapper;
-import mappers.MetalDataMapper;
 import model.Acid;
+import model.AcidDataMapper;
 import model.Base;
+import model.BaseDataMapper;
 import model.Compound;
+import model.CompoundDataMapper;
+import model.DomainModelException;
 import model.Element;
-import model.Metal;
 
 public class LowInventoryCommand implements Command {
   String fileoutput;
   List<String> input = new ArrayList<>();
 
-  public LowInventoryCommand(String fileoutput) {
+  public LowInventoryCommand(String fileoutput) throws DomainModelException {
     this.fileoutput = fileoutput;
 
     getInput();
   }
 
-  private void getInput() {
+  private void getInput() throws DomainModelException {
     List<Acid> acids = new AcidDataMapper().filterByLowInventory();
     List<Base> bases = new BaseDataMapper().filterByLowInventory(40);
-    List<Compound> compounds = new CompoundDataMapper().filterByLowInventory();
-    List<Element> elements = new ElementDataMapper().filterByLowInventory(20);
+    List<Element> elements = yes();
 
     for (Acid a : acids) {
       input.add("Acid\t id: " + a.getID() + ", name: " + a.getName() + ", inventory: " + a.getInventory());
@@ -38,11 +35,36 @@ public class LowInventoryCommand implements Command {
     for (Base b : bases) {
       input.add("Base\t id: " + b.getID() + ", name: " + b.getName() + ", inventory: " + b.getInventory());
     }
-    for (Compound c : compounds) {
-      input.add("Compound\t id: " + c.getID() + ", name: " + c.getName() + ", inventory: " + c.getInventory());
-    }
     for (Element e : elements) {
       input.add("Element\t id: " + e.getID() + ", name: " + e.getName() + ", inventory: " + e.getInventory());
+    }
+  }
+
+  private List<Element> yes() throws DomainModelException {
+    try {
+      List<Element> elements = new ArrayList<>();
+      List<Compound> compounds = new CompoundDataMapper().getAll();
+
+      for (Compound c : compounds) {
+        int madeOfSum = 0;
+        List<Element> madeOf = c.getMadeOf();
+        for (Element e : madeOf) {
+          madeOfSum += e.getInventory();
+        }
+
+        if (c.getInventory() >= madeOfSum) {
+          for (Element e : madeOf) {
+            if (e.getInventory() > 20) {
+              elements.add(e);
+            }
+          }
+        }
+      }
+
+      return elements;
+
+    } catch (DomainModelException e) {
+      throw new DomainModelException("yes()", e);
     }
   }
 
@@ -53,9 +75,6 @@ public class LowInventoryCommand implements Command {
     } else {
 
     }
-    // Write to file
-    writeInput();
-    // Report
 
   }
 

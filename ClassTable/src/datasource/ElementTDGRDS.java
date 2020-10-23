@@ -45,7 +45,7 @@ public class ElementTDGRDS implements ElementTDG {
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("No entry with id " + id);
-      throw new DatabaseException("No entry with id " + id, e); 
+      throw new DatabaseException("No entry with id " + id, e);
     }
   }
 
@@ -89,7 +89,7 @@ public class ElementTDGRDS implements ElementTDG {
     try {
       PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(this.sql + ";");
       ResultSet results = statement.executeQuery();
-      
+
       while (results.next()) {
         int id = results.getInt("chemicalId");
         int atomicNum = results.getInt("atomicNumber");
@@ -121,7 +121,17 @@ public class ElementTDGRDS implements ElementTDG {
     }
   }
 
+  /**
+   * We are low on an element if we could not currently replace our current
+   * inventory of compounds
+   * 
+   * @param filter
+   * @return
+   */
   public ElementTDGRDS filterByLowInventory(double filter) {
+    
+    
+    
     sql += " AND (Chemical.inventory < " + filter + ") ";
     return null;
   }
