@@ -1,5 +1,6 @@
 package command;
 
+import model.ElementDataMapper;
 import model.DomainModelException;
 import model.Element;
 import model.ElementDataMapper;

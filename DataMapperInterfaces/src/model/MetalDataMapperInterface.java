@@ -64,7 +64,7 @@ public interface MetalDataMapperInterface {
    * @return all Metals that have a partial name match.
    * @throws DomainModelException when things go wrong.
    */
-  public List<Metal> filterByWildCardName(String wildCard) throws DomainModelException;
+  public List<Metal> filterByNameLike(String nameLike) throws DomainModelException;
 
   /**
    * Get all Metals that have a specific inventory value.
@@ -83,7 +83,7 @@ public interface MetalDataMapperInterface {
    * @return all Metals that have an inventory in a given range.
    * @throws DomainModelException when things go wrong.
    */
-  public List<Metal> filterByInventoryRange(double min, double max) throws DomainModelException;
+  public List<Metal> filterByInventoryBetween(double min, double max) throws DomainModelException;
 
   /**
    * Get all Metals with a given atomic number.
@@ -93,6 +93,15 @@ public interface MetalDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Metal> filterByAtomicNumber(int atomicNumber) throws DomainModelException;
+  
+  /**
+   * 
+   * @param min
+   * @param max
+   * @return
+   * @throws DomainModelException
+   */
+  public List<Metal> filterByAtomicNumberBetween(int min, int max) throws DomainModelException;
 
   /**
    * Get all Metals with a specific atomic mass.
@@ -111,7 +120,7 @@ public interface MetalDataMapperInterface {
    * @return all Metals with an atomic mass in a given range.
    * @throws DomainModelException when things go wrong.
    */
-  public List<Metal> filterByAtomicMassRange(double min, double max) throws DomainModelException;
+  public List<Metal> filterByAtomicMassBetween(double min, double max) throws DomainModelException;
 
   /**
    * Get all Metals with a specific acid required value.
@@ -120,7 +129,7 @@ public interface MetalDataMapperInterface {
    * @return all Metals with a specific acid required value.
    * @throws DomainModelException when things go wrong.
    */
-  public List<Metal> filterByAcidRequired(double acidRequired) throws DomainModelException;
+  public List<Metal> filterByAcidAmount(double acidAmount) throws DomainModelException;
 
   /**
    * Get all Metals with an acid required value in a range.
@@ -130,7 +139,7 @@ public interface MetalDataMapperInterface {
    * @return all Metals with an acid required value in a range.
    * @throws DomainModelException when things go wrong.
    */
-  public List<Metal> filterByAcidRequiredRange(double min, double max) throws DomainModelException;
+  public List<Metal> filterByAcidAmountBetween(double min, double max) throws DomainModelException;
 
   /**
    * Get all Metals dissolved by an Acid.
@@ -149,5 +158,12 @@ public interface MetalDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Metal> filterByPartOfCompound(int compoundID) throws DomainModelException;
+  
+  /**
+   * Gets all metals with low inventory
+   * @return all metals that are low inventory.
+   * @throws DomainModelException when things go wrong.
+   */
+  public List<Metal> filterByLowInventory() throws DomainModelException;
 
 }

@@ -67,7 +67,7 @@ public interface CompoundDataMapperInterface {
    * 
    * @throws DomainModelException when things go wrong.
    */
-  public List<Compound> filterByWildCardName(String wildCard) throws DomainModelException;
+  public List<Compound> filterByNameLike(String nameLike) throws DomainModelException;
 
   /**
    * Get all Compounds with a specific inventory value.
@@ -88,7 +88,7 @@ public interface CompoundDataMapperInterface {
    * 
    * @throws DomainModelException when things go wrong.
    */
-  public List<Compound> filterByInventoryRange(double min, double max) throws DomainModelException;
+  public List<Compound> filterByInventoryBetween(double min, double max) throws DomainModelException;
 
   /**
    * Get all compounds that contain an Element.

@@ -1,5 +1,6 @@
 package command;
 
+import model.MetalDataMapper;
 import model.DomainModelException;
 import model.Metal;
 import model.MetalDataMapper;
