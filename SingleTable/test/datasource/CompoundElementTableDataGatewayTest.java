@@ -26,8 +26,8 @@ public abstract class CompoundElementTableDataGatewayTest extends DatabaseTest {
   public void readWithCompoundID() throws DatabaseException {
     ElementCompoundDTO sodiumChloride = ElementCompoundTableDataGateway.getSingletonInstance().readElementsFromCompound(15);
     assertEquals(2, sodiumChloride.getRelations().size());
-    assertEquals("Sodium", sodiumChloride.getRelations().get(0).getName());
-    assertEquals("Chlorine", sodiumChloride.getRelations().get(1).getName());
+    assertEquals("Chlorine", sodiumChloride.getRelations().get(0).getName());
+    assertEquals("Sodium", sodiumChloride.getRelations().get(1).getName());
   }
   
   @Test

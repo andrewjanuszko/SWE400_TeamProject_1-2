@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 
 import dataENUM.ChemicalEnum;
 
@@ -173,9 +174,20 @@ public class ChemicalRowDataGateway implements ChemicalRowDataGatewayInterface {
       statement.setDouble(3, inventory);
       statement.setInt(4, atomicNumber);
       statement.setDouble(5, atomicMass);
-      statement.setInt(6, dissolvedBy);
+      
+      if (dissolvedBy <= 0) {
+        statement.setNull(6, Types.INTEGER);
+      } else {
+        statement.setInt(6, dissolvedBy);
+      }
+      
       statement.setDouble(7, acidAmount);
-      statement.setInt(8, solute);
+      
+      if (solute <= 0) {
+        statement.setNull(8, Types.INTEGER);
+      } else {
+        statement.setInt(8, solute);
+      }
     } catch (SQLException e) {
       throw new DatabaseException("Failed to load prepared statment.", e);
     }
