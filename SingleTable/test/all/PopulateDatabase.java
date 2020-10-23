@@ -32,12 +32,12 @@ public class PopulateDatabase {
     /**
      * Insert Metals into the table.
      */
-    ChemicalRowDataGateway sodium = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Sodium", 21.98, 11, 22.990, 20, 5, 0);
-    ChemicalRowDataGateway iron = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Iron", 25.12, 26, 55.938, 22, 10, 0);
-    ChemicalRowDataGateway copper = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Copper", 28.26, 29, 63.546, 19, 15, 0);
-    ChemicalRowDataGateway mercury = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Mercury", 31.40, 80, 200.59, 24, 6, 0);
-    ChemicalRowDataGateway zinc = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Zinc", 34.54, 30, 65.38, 21, 2, 0);
-    ChemicalRowDataGateway silver = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Silver", 37.68, 47, 107.87, 23, 12, 0);
+    ChemicalRowDataGateway sodium = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Sodium", 21.98, 11, 22.990, 0, 5, 0);
+    ChemicalRowDataGateway iron = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Iron", 25.12, 26, 55.938, 0, 10, 0);
+    ChemicalRowDataGateway copper = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Copper", 28.26, 29, 63.546, 0, 15, 0);
+    ChemicalRowDataGateway mercury = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Mercury", 31.40, 80, 200.59, 0, 6, 0);
+    ChemicalRowDataGateway zinc = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Zinc", 34.54, 30, 65.38, 0, 2, 0);
+    ChemicalRowDataGateway silver = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Silver", 37.68, 47, 107.87, 0, 12, 0);
     
     /**
      * Insert Compounds into the table.
@@ -58,6 +58,19 @@ public class PopulateDatabase {
     ChemicalRowDataGateway carbonicAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Carbonic Acid", 40, 0, 0, 0, 0, 27);
     ChemicalRowDataGateway formicAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Formic Acid", 10, 0, 0, 0, 0, 26);
     ChemicalRowDataGateway citricAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Citric Acid", 10, 0, 0, 0, 0, 25);
+    
+    sodium.setDissolvedBy(nitricAcid.getID());
+    sodium.update();
+    iron.setDissolvedBy(carbonicAcid.getID());
+    iron.update();
+    copper.setDissolvedBy(hydrochloricAcid.getID());
+    copper.update();
+    mercury.setDissolvedBy(citricAcid.getID());
+    mercury.update();
+    zinc.setDissolvedBy(sulfuricAcid.getID());
+    zinc.update();
+    silver.setDissolvedBy(formicAcid.getID());
+    silver.update();
     
     /**
      * Insert Bases into the table.
