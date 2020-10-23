@@ -1,11 +1,8 @@
 package datasource;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import dataDTO.ElementCompoundDTO;
-import dataENUM.ChemicalEnum;
 
 public abstract class CompoundElementTableDataGatewayTest extends DatabaseTest {
 
