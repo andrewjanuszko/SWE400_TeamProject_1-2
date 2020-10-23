@@ -257,17 +257,6 @@ public class MetalDataMapper implements MetalDataMapperInterface {
     }
   }
 
-  /**
-   * @see model.MetalDataMapperInterface#filterByLowInventory().
-   */
-  @Override
-  public List<Metal> filterByLowInventory() throws DomainModelException {
-    try {
-      return convertToMetal(ChemicalTableDataGateway.getSingletonInstance().getMetalsWithLowInventory());
-    } catch (DatabaseException e) {
-      throw new DomainModelException("Failed to get all Metals with low inventory.", e);
-    }
-  }
 
   /**
    * Converts a list of chemicalDTOs to a list of metal
