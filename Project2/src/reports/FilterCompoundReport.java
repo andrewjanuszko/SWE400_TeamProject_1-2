@@ -12,7 +12,7 @@ public class FilterCompoundReport implements Report {
     this.compounds = compounds;
   }
   
-  public List<Compound> getFilterAcidsReport() {
+  public List<Compound> getFilterCompoundsReport() {
     return compounds;
   }
 }

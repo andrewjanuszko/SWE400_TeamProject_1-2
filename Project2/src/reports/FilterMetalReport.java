@@ -11,7 +11,7 @@ List<Metal> metals;
     this.metals = metals;
   }
   
-  public List<Metal> getFilterAcidsReport() {
+  public List<Metal> getFilterMetalsReport() {
     return metals;
   }
 }

@@ -11,7 +11,7 @@ List<Element> elements;
     this.elements = compounds;
   }
   
-  public List<Element> getFilterAcidsReport() {
+  public List<Element> getFilterElementsReport() {
     return elements;
   }
 }
