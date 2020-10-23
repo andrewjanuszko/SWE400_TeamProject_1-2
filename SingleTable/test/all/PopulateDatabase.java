@@ -17,6 +17,8 @@ public class PopulateDatabase {
     
     System.out.println("Populating database, please wait...");
     
+    ChemicalRowDataGateway.dropTable();
+    ElementCompoundTableDataGateway.getSingletonInstance().dropTable();
     ChemicalRowDataGateway.createTable();
     ElementCompoundTableDataGateway.getSingletonInstance().createTable();
     
@@ -35,7 +37,7 @@ public class PopulateDatabase {
      */
     ChemicalRowDataGateway sodium = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Sodium", 21.98, 11, 22.990, 20, 5, 0);
     ChemicalRowDataGateway iron = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Iron", 25.12, 26, 55.938, 22, 10, 0);
-    ChemicalRowDataGateway copper = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Copper", 28.26, 29, 63.546, 25, 15, 0);
+    ChemicalRowDataGateway copper = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Copper", 28.26, 29, 63.546, 19, 15, 0);
     ChemicalRowDataGateway mercury = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Mercury", 31.40, 80, 200.59, 24, 6, 0);
     ChemicalRowDataGateway zinc = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Zinc", 34.54, 30, 65.38, 21, 2, 0);
     ChemicalRowDataGateway silver = new ChemicalRowDataGateway(ChemicalEnum.METAL.getIntValue(), "Silver", 37.68, 47, 107.87, 23, 12, 0);
@@ -69,7 +71,6 @@ public class PopulateDatabase {
     ChemicalRowDataGateway lithiumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Lithium Hydroxide", 30, 0, 0, 0, 0, 22);
     ChemicalRowDataGateway bariumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Barium Hydroxide", 10, 0, 0, 0, 0, 23);
     ChemicalRowDataGateway strontiumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Strontium Hydroxide",20, 0, 0, 0, 0, 24);
-    
     /**
      * Create link Elements to Compound 'hydrogenDioxide'
      */

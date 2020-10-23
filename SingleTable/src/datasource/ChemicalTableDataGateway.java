@@ -277,6 +277,7 @@ public class ChemicalTableDataGateway implements ChemicalTableDataGatewayInterfa
   @Override
   public List<ChemicalDTO> getAcidsWithLowInventory() throws DatabaseException {
     List<ChemicalDTO> acids = getAcids().executeQuery();
+    List<ChemicalDTO> lowAcids = new ArrayList<ChemicalDTO>();
     for (ChemicalDTO acid : acids) {
       int acidAmountNeeded = 0;
       List<ChemicalDTO> metals = getMetals().filterByDissolvedBy(acid.getID()).executeQuery();
@@ -284,10 +285,10 @@ public class ChemicalTableDataGateway implements ChemicalTableDataGatewayInterfa
         acidAmountNeeded += metal.getAcidAmount();
       }
       if (acid.getInventory() >= acidAmountNeeded) {
-        acids.remove(acid);
+        lowAcids.add(acid);
       }
     }
-    return acids;
+    return lowAcids;
   }
 
 }
