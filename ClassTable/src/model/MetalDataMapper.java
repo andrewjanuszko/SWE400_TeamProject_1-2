@@ -8,18 +8,14 @@ import datasource.MetalDTO;
 import datasource.MetalRDG;
 import datasource.MetalRDGRDS;
 import datasource.MetalTDGRDS;
-import model.Compound;
-import model.CompoundDataMapperInterface;
-import model.DomainModelException;
-import model.Element;
-import model.Metal;
-import model.MetalDataMapperInterface;
 
+/**
+ * Maps MetalDataMapperInterface functions to class table implementation.
+ *  
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public class MetalDataMapper implements MetalDataMapperInterface {
-
-  public MetalDataMapper() {
-    // TODO Auto-generated constructor stub
-  }
 
   @Override
   public Metal create(String name, double inventory, int atomicNumber, double atomicMass, double acidAmount)

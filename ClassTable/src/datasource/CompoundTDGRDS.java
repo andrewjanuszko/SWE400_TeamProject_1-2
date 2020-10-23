@@ -104,8 +104,14 @@ public class CompoundTDGRDS implements CompoundTDG {
 
   @Override
   public CompoundTDGRDS filterByElements(int elementId) {
-    sql += " AND Compound.elementId = " + elementId;
+    sql += " AND Compound.elementId = " + elementId + ")";
     return getSingleton();
+  }
+
+  public CompoundTDGRDS filterByCompoundId(int compoundId) {
+    sql += "AND Compound.compoundId = " + compoundId + ")";
+    return getSingleton();
+
   }
 
 }

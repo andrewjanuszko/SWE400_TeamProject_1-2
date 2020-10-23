@@ -12,46 +12,50 @@ import datasource.AcidTDGRDS;
 import datasource.MetalDTO;
 import datasource.MetalRDG;
 import datasource.MetalRDGRDS;
-import model.Acid;
-import model.AcidDataMapperInterface;
-import model.DomainModelException;
-import model.Metal;
 
 public class AcidDataMapper implements AcidDataMapperInterface {
 
   @Override
   public Acid create(String name, double inventory, List<Metal> dissolves, int solute) throws DomainModelException {
+    // Create acid using AcidRDG
     AcidRDG row = new AcidRDGRDS(solute, name, inventory);
+
+    // Set dissolvedById for metals
     Acid a = convertFromDTO(row.getAcid());
     for (Metal m : dissolves) {
       MetalRDG metal = new MetalRDGRDS(m.getID());
       metal.setDissolvedById(a.getID());
     }
+
     return a;
   }
 
   @Override
-  public Acid read(int id) {
-    Acid acid = null;
+  public Acid read(int id) throws DomainModelException {
     try {
+      // Use AcidRDG to read acid
       AcidRDGRDS row = new AcidRDGRDS(id);
-      AcidDTO dto = row.getAcid();
-      acid = convertFromDTO(dto);
+      return convertFromDTO(row.getAcid());
     } catch (DatabaseException | SQLException e) {
-      e.printStackTrace();
+      throw new DomainModelException("Problem reading acid id = " + id, e);
     }
-    return acid;
   }
 
   @Override
   public void update(Acid acid) {
     try {
+      // Use AcidRDG to fetch acid
       AcidRDG row = new AcidRDGRDS(acid.getID());
+
+      // Use setters to update values
       row.setName(acid.getName());
       row.setInventory(acid.getInventory());
       row.setSolute(acid.getSolute());
+
+      // Update the acid
       row.update();
     } catch (SQLException | DatabaseException e) {
+      System.out.println("Problem updating Acid " + acid.getID());
       e.printStackTrace();
     }
 
@@ -61,22 +65,27 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   public void delete(Acid acid) {
     try {
       AcidRDG row = new AcidRDGRDS(acid.getID());
+      // Use AcidRDG to fetch acid
       row.delete();
+      // Delete acid
     } catch (SQLException | DatabaseException e) {
+      System.out.println("Failed to delete Acid " + acid.getID());
       e.printStackTrace();
     }
   }
 
   @Override
   public ArrayList<Acid> getAll() {
-    List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
-      dtos = AcidTDGRDS.getSingleton().executeQuery();
+      // Get all acids 
+      List<AcidDTO> dtos = AcidTDGRDS.getSingleton().executeQuery();
+      // For all acids, convert dto to acid and add to list
       for (AcidDTO a : dtos) {
         acids.add(convertFromDTO(a));
       }
     } catch (DatabaseException e) {
+      // Problem with executeQuery()
       e.printStackTrace();
     }
 
@@ -85,14 +94,16 @@ public class AcidDataMapper implements AcidDataMapperInterface {
 
   @Override
   public ArrayList<Acid> filterByWildCardName(String wildCardName) {
-    List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
-      dtos = AcidTDGRDS.getSingleton().filterByName(wildCardName).executeQuery();
+      // Get all acids with specific name
+      List<AcidDTO> dtos = AcidTDGRDS.getSingleton().filterByName(wildCardName).executeQuery();
+      // For all acids, convert dto to acid and add to list
       for (AcidDTO a : dtos) {
         acids.add(convertFromDTO(a));
       }
     } catch (DatabaseException e) {
+      // Problem with executeQuery()
       e.printStackTrace();
     }
 
@@ -101,14 +112,16 @@ public class AcidDataMapper implements AcidDataMapperInterface {
 
   @Override
   public ArrayList<Acid> filterByInventory(double inventory) {
-    List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
-      dtos = AcidTDGRDS.getSingleton().filterByInventory(inventory).executeQuery();
+      // Get all acids with specific inventory value
+      List<AcidDTO> dtos = AcidTDGRDS.getSingleton().filterByInventory(inventory).executeQuery();
+      // For all acids, convert dto to acid and add to list
       for (AcidDTO a : dtos) {
         acids.add(convertFromDTO(a));
       }
     } catch (DatabaseException e) {
+      // Problem with executeQuery()
       e.printStackTrace();
     }
 
@@ -117,14 +130,16 @@ public class AcidDataMapper implements AcidDataMapperInterface {
 
   @Override
   public ArrayList<Acid> filterByInventoryRange(double min, double max) {
-    List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
-      dtos = AcidTDGRDS.getSingleton().filterByInventoryRange(max, min).executeQuery();
+      // Get all acids with specific inventory range
+      List<AcidDTO> dtos = AcidTDGRDS.getSingleton().filterByInventoryRange(max, min).executeQuery();
+      // For all acids, convert dto to acid and add to list
       for (AcidDTO a : dtos) {
         acids.add(convertFromDTO(a));
       }
     } catch (DatabaseException e) {
+      // Problem with executeQuery()
       e.printStackTrace();
     }
 
@@ -133,21 +148,28 @@ public class AcidDataMapper implements AcidDataMapperInterface {
 
   @Override
   public ArrayList<Acid> filterBySolute(int chemicalID) {
-    List<AcidDTO> dtos;
     ArrayList<Acid> acids = new ArrayList<>();
     try {
-      dtos = AcidTDGRDS.getSingleton().filterBySolute(chemicalID).executeQuery();
+      // Get all acids  with specific solute id
+      List<AcidDTO> dtos = AcidTDGRDS.getSingleton().filterBySolute(chemicalID).executeQuery();
+      // Get all acids 
       for (AcidDTO a : dtos) {
         acids.add(convertFromDTO(a));
       }
     } catch (DatabaseException e) {
+      // Problem with executeQuery()
       e.printStackTrace();
     }
 
     return acids;
   }
 
-  public Acid convertFromDTO(AcidDTO dto) {
+  /**
+   * Convert dto to acid
+   * @param dto to convert
+   * @return converted acid
+   */
+  private Acid convertFromDTO(AcidDTO dto) {
     ArrayList<MetalDTO> metals = AcidTDGRDS.getMetals(dto.getAcidId());
     ArrayList<Metal> betterMetals = new ArrayList<>();
     for (MetalDTO m : metals) {
@@ -155,24 +177,6 @@ public class AcidDataMapper implements AcidDataMapperInterface {
           m.getMoles()));
     }
     return new Acid(dto.getAcidId(), dto.getName(), dto.getInventory(), betterMetals, dto.getSoluteId());
-  }
-
-  public List<Acid> filterByLowInventory() {
-    List<AcidDTO> dtos;
-    List<Acid> acids = new ArrayList<>();
-    try {
-      dtos = AcidTDGRDS.getSingleton().getAllAcids().executeQuery();
-      for(AcidDTO d : dtos) {
-        Acid a = convertFromDTO(d);
-        if(a.getInventory() < a.getThreshold()) {
-          acids.add(a);
-        }
-      }
-    } catch (DatabaseException e) {
-      e.printStackTrace();
-    }
-    
-    return acids;
   }
 
 }
