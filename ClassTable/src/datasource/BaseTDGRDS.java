@@ -3,52 +3,72 @@ package datasource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseException;
 import database.DatabaseManager;
 
+/**
+ * Table Data Gateway for access Base
+ * 
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public class BaseTDGRDS implements BaseTDG {
-  
+
   String sql = "SELECT * FROM Base INNER JOIN Chemical WHERE (Base.BaseId = Chemical.chemicalId)";
   private static BaseTDGRDS singleton;
-  
+
   public BaseTDGRDS() {
     sql = "(SELECT * FROM Base INNER JOIN Chemical WHERE Base.BaseId = Chemical.chemicalId)";
   }
-  
+
   public static BaseTDGRDS getSingleton() {
-    if(singleton == null) {
+    if (singleton == null) {
       singleton = new BaseTDGRDS();
     }
     return singleton;
   }
-  
+
+  /**
+   * Get all bases with a similar name
+   */
   public BaseTDGRDS filterByName(String name) {
-    sql +=  " AND (Chemical.name LIKE '%" + name + "%') ";
+    sql += " AND (Chemical.name LIKE '%" + name + "%') ";
     return getSingleton();
   }
 
+  /**
+   * Get all bases with a specific inventory amount
+   */
   @Override
   public BaseTDGRDS filterByInventory(double inventory) {
     sql += " AND (Chemical.inventory = " + inventory + ") ";
     return getSingleton();
   }
 
+  /**
+   * Get all bases with a specific solute value
+   */
   @Override
   public BaseTDGRDS filterBySolute(int solute) {
     sql += " AND (Base.solute = " + solute + ") ";
     return getSingleton();
   }
 
+  /**
+   * Get all bases with a specific inventory range
+   */
   @Override
   public BaseTDGRDS filterByInventoryRange(double high, double low) {
     sql += " AND (Chemical.inventory BETWEEN " + low + " AND " + high + ") ";
     return getSingleton();
   }
 
+  /**
+   * Execute query, get all baseDTOs that follow the SQL string.
+   */
   @Override
   public List<BaseDTO> executeQuery() throws DatabaseException {
     List<BaseDTO> listDTO = new ArrayList<>();
@@ -65,7 +85,7 @@ public class BaseTDGRDS implements BaseTDG {
           BaseDTO base = new BaseDTO(baseId, soluteId, name, inventory);
           listDTO.add(base);
         }
-        
+
         // Reset sql string
         sql = "SELECT * FROM Base INNER JOIN Chemical WHERE (Base.baseId = Chemical.chemicalId)";
       } catch (SQLException e) {

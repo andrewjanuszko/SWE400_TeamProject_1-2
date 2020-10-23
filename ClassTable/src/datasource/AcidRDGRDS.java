@@ -180,6 +180,10 @@ public class AcidRDGRDS implements AcidRDG {
     acid.setInventory(inventory);
   }
   
+  /**
+   * Get acid
+   * @return AcidDTO acid 
+   */
   public AcidDTO getAcid() {
     return acid;
   }

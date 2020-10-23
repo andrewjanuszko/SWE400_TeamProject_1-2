@@ -4,8 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import database.DatabaseException;
 import database.DatabaseManager;
@@ -61,7 +59,7 @@ public class ChemicalRDGRDS implements ChemicalRDG {
       rs.next();
 
       chemical = new ChemicalDTO(rs.getInt("LAST_INSERT_ID()"), name, inventory);
-      
+
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert chemical through constructor");

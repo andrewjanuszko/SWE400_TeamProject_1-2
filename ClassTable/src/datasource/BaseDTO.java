@@ -1,10 +1,25 @@
 package datasource;
 
+/**
+ * Data Transfer Object for Base, holds int baseId, int soluteId, String name,
+ * double inventory
+ * 
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public class BaseDTO {
   private int baseId, soluteId;
   private String name;
   private double inventory;
 
+  /**
+   * Initialize a base DTO
+   * 
+   * @param baseId    of the base
+   * @param soluteId  of the base
+   * @param name      of the base
+   * @param inventory of the base
+   */
   public BaseDTO(int baseId, int soluteId, String name, double inventory) {
     this.baseId = baseId;
     this.soluteId = soluteId;
@@ -12,34 +27,65 @@ public class BaseDTO {
     this.inventory = inventory;
   }
 
+  /**
+   * Get base id of dto
+   * 
+   * @return baseID
+   */
   public int getBaseId() {
     return baseId;
   }
 
+  /**
+   * Get solute id of the dto
+   * 
+   * @return soluteId
+   */
   public int getSoluteId() {
     return soluteId;
   }
 
+  /**
+   * Get name of the dto
+   * 
+   * @return name
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Get inventory of dto
+   * 
+   * @return inventory
+   */
   public double getInventory() {
     return inventory;
   }
 
-  public void setBaseId(int baseId) {
-    this.baseId = baseId;
-  }
-
+  /**
+   * Set solute id
+   * 
+   * @param soluteId
+   */
   public void setSoluteId(int soluteId) {
     this.soluteId = soluteId;
   }
 
+  /**
+   * Set name
+   * 
+   * @param name
+   */
   public void setName(String name) {
     this.name = name;
   }
 
+  /**
+   * Set inventory
+   * 
+   * @param inventory
+   */
   public void setInventory(double inventory) {
     this.inventory = inventory;
   }

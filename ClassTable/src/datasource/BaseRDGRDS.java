@@ -19,13 +19,6 @@ public class BaseRDGRDS implements BaseRDG {
   BaseDTO base;
 
   /**
-   * Empty constructor
-   */
-  public BaseRDGRDS() {
-
-  }
-
-  /**
    * Constructor BaseRowDataGateway, search for existing Base via id
    * 
    * @param id

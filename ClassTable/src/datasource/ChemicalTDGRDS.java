@@ -10,6 +10,11 @@ import java.util.List;
 import database.DatabaseException;
 import database.DatabaseManager;
 
+/**
+ * Table data gateway for accessing Chemical table
+ * @author Isabella
+ *
+ */
 public class ChemicalTDGRDS implements ChemicalTDG {
   String sql = "SELECT * FROM Chemical";
   private static ChemicalTDGRDS singleton;

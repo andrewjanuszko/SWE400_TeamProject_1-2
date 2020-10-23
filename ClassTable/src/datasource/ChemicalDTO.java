@@ -1,44 +1,78 @@
 package datasource;
 
 /**
- * Okay, theoretically we don't need this BUT I thought if you
- * wanted to get all chemicals from the database, regardless of
- * type, it might be useful. (like seeing inventory of ALL
- * chemicals)
+ * Probably don't need this, but this is a DTO for chemical
  * 
- * @author Isabella Boone
+ * @author Isabella Boone, Kim O'Neill
  */
 public class ChemicalDTO {
   int chemicalId;
   String name;
   double inventory;
-  
+
+  /**
+   * Initialize a Chemical DTO
+   * 
+   * @param chemicalId
+   * @param name
+   * @param inventory
+   */
   public ChemicalDTO(int chemicalId, String name, double inventory) {
     this.chemicalId = chemicalId;
     this.name = name;
-    this.inventory = inventory; 
+    this.inventory = inventory;
   }
-  
+
+  /**
+   * Get chemical id
+   * 
+   * @return chemicalId
+   */
   public int getChemicalId() {
     return chemicalId;
   }
-  
+
+  /**
+   * Get name
+   * 
+   * @return name
+   */
   public String getName() {
     return name;
   }
-  
+
+  /**
+   * Get inventory
+   * 
+   * @return inventory
+   */
   public double getInventory() {
     return inventory;
   }
-  
+
+  /**
+   * Set chemical id
+   * 
+   * @param chemicalId
+   */
   public void setChemicalId(int chemicalId) {
     this.chemicalId = chemicalId;
   }
-  
+
+  /**
+   * Set name
+   * 
+   * @param name
+   */
   public void setName(String name) {
-    this.name = name; 
+    this.name = name;
   }
-  
+
+  /**
+   * Set inventory
+   * 
+   * @param inventory
+   */
   public void setInventory(double inventory) {
     this.inventory = inventory;
   }
@@ -75,6 +109,5 @@ public class ChemicalDTO {
       return false;
     return true;
   }
-  
-  
+
 }

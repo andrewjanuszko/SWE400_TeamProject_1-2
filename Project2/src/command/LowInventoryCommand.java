@@ -14,14 +14,19 @@ import model.CompoundDataMapper;
 import model.DomainModelException;
 import model.Element;
 import model.ElementDataMapper;
+import reports.ReportObserverConnector;
+import reports.ValidEntryReport;
 
 public class LowInventoryCommand implements Command {
   String fileoutput;
   List<String> input = new ArrayList<>();
 
+  /**
+   * @param fileoutput specified by user
+   * @throws DomainModelException when things go wrong
+   */
   public LowInventoryCommand(String fileoutput) throws DomainModelException {
     this.fileoutput = fileoutput;
-
     getInput();
   }
 
@@ -31,7 +36,7 @@ public class LowInventoryCommand implements Command {
    */
   private void getInput() throws DomainModelException {
     List<Acid> acids = getLowAcids();
-    List<Base> bases = new BaseDataMapper().filterByInventoryRange(0, 40);
+    List<Base> bases = new BaseDataMapper().filterByInventoryBetween(0, 40);
     List<Element> elements = getLowElements();
 
     for (Acid a : acids) {
@@ -97,11 +102,10 @@ public class LowInventoryCommand implements Command {
   @Override
   public void execute() {
     if (writeInput()) {
-
+      ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(true));
     } else {
-
+      ReportObserverConnector.getSingleton().sendReport(new ValidEntryReport(false));
     }
-
   }
 
   private boolean writeInput() {
