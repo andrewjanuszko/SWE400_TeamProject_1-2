@@ -154,7 +154,7 @@ public class FirstWindow extends JFrame {
     gbc.fill = GridBagConstraints.BOTH;
 
     add(currentDisplay, gbc);
-//    SwingUtilities.updateComponentTreeUI(this);
+    SwingUtilities.updateComponentTreeUI(this);
 
   }
 
