@@ -1,3 +1,2 @@
-# Project 1 & 2
-## Group 6
+# Group 6, Project 1 & 2
 ---
