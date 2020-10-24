@@ -95,7 +95,7 @@ public class BasePanel extends JPanel {
     panel.add(bases, BorderLayout.CENTER);
 //    panel.add(addButtons(), BorderLayout.SOUTH);
    
-    return null;
+    return panel;
   }
   
   private void refresh() {
