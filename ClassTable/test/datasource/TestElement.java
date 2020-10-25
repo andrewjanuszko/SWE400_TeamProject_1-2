@@ -63,7 +63,7 @@ class TestElement extends DatabaseTest {
     ElementRDG elementGet4 = new ElementRDGRDS(27);
 
     // Test getName
-    assertEquals("funkychem2", elementGet1.getElement().getName());
+    assertEquals("compoundname2", elementGet1.getElement().getName());
     assertEquals("metalname1", elementGet2.getElement().getName());
     assertEquals("metalname2", elementGet3.getElement().getName());
     assertEquals("metalname3", elementGet4.getElement().getName());
@@ -81,7 +81,7 @@ class TestElement extends DatabaseTest {
     ElementRDG elementGet4 = new ElementRDGRDS(27);
 
     // Test getInventory
-    assertEquals(42.4, elementGet1.getElement().getInventory(), 0.1);
+    assertEquals(1.2, elementGet1.getElement().getInventory(), 0.1);
     assertEquals(41.1, elementGet2.getElement().getInventory(), 0.1);
     assertEquals(42.1, elementGet3.getElement().getInventory(), 0.1);
     assertEquals(43.1, elementGet4.getElement().getInventory(), 0.1);
@@ -95,11 +95,17 @@ class TestElement extends DatabaseTest {
     try {
       List<ElementDTO> get = new ElementTDGRDS().getAllElements().executeQuery();
       
-      assertEquals(4, get.size());
-      assertEquals(24, get.get(0).getElementId());
-      assertEquals(25, get.get(1).getElementId());
-      assertEquals(26, get.get(2).getElementId());
-      assertEquals(27, get.get(3).getElementId());
+      assertEquals(9, get.size());
+      assertEquals(17, get.get(0).getElementId());
+      assertEquals(18, get.get(1).getElementId());
+      assertEquals(19, get.get(2).getElementId());
+      assertEquals(20, get.get(3).getElementId());
+      assertEquals(24, get.get(4).getElementId());
+      assertEquals(25, get.get(5).getElementId());
+      assertEquals(26, get.get(6).getElementId());
+      assertEquals(27, get.get(7).getElementId());
+      assertEquals(28, get.get(8).getElementId());
+
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -109,10 +115,10 @@ class TestElement extends DatabaseTest {
   @Test
   public static void testFilterByName() {
     try {
-      List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByName("funky").executeQuery();
+      List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByName("elementname1").executeQuery();
       
       assertEquals(1, get.size());
-      assertEquals(24, get.get(0).getElementId());
+      assertEquals(17, get.get(0).getElementId());
       
     } catch(DatabaseException e) {
       e.printStackTrace();
@@ -122,17 +128,17 @@ class TestElement extends DatabaseTest {
   @Test
   public static void testFilterByInventory() {
     try {
-      List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByInventory(42.4).executeQuery();
+      List<ElementDTO> get = new ElementTDGRDS().getAllElements().filterByInventory(49.2).executeQuery();
       
-      assertEquals(24, get.get(0).getElementId());
+      assertEquals(19, get.get(0).getElementId());
       
       get = new ElementTDGRDS().getAllElements().filterByInventoryRange(42, 40).executeQuery();
     
-      assertEquals(25, get.get(0).getElementId());
+      assertEquals(18, get.get(0).getElementId());
       
       get = new ElementTDGRDS().getAllElements().filterByInventoryRange(43, 40).executeQuery();
       
-      assertEquals(24, get.get(0).getElementId());
+      assertEquals(18, get.get(0).getElementId());
       assertEquals(25, get.get(1).getElementId());
       assertEquals(26, get.get(2).getElementId());
       
