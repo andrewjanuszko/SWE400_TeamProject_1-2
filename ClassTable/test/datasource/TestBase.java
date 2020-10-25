@@ -26,8 +26,8 @@ class TestBase extends DatabaseTest {
   @Test
   static void testGetName() throws SQLException, DatabaseException {
     // Fetch bases
-    BaseRDG base1 = new BaseRDGRDS(11), base2 = new BaseRDGRDS(12), base3 = new BaseRDGRDS(13),
-        base4 = new BaseRDGRDS(14);
+    BaseRDG base1 = new BaseRDGRDS(9), base2 = new BaseRDGRDS(10), base3 = new BaseRDGRDS(11),
+        base4 = new BaseRDGRDS(12);
 
     // Tests
     assertEquals("basename1", base1.getBase().getName());
@@ -45,8 +45,8 @@ class TestBase extends DatabaseTest {
   @Test
   static void testGetInventory() throws SQLException, DatabaseException {
     // Fetch bases
-    BaseRDG base1 = new BaseRDGRDS(11), base2 = new BaseRDGRDS(12), base3 = new BaseRDGRDS(13),
-        base4 = new BaseRDGRDS(14);
+    BaseRDG base1 = new BaseRDGRDS(9), base2 = new BaseRDGRDS(10), base3 = new BaseRDGRDS(11),
+        base4 = new BaseRDGRDS(12);
 
     // Tests
     assertEquals(1.1, base1.getBase().getInventory(), 0.1);
@@ -64,8 +64,8 @@ class TestBase extends DatabaseTest {
   @Test
   static void testGetSolute() throws SQLException, DatabaseException {
     // Fetch bases
-    BaseRDG base1 = new BaseRDGRDS(11), base2 = new BaseRDGRDS(12), base3 = new BaseRDGRDS(13),
-        base4 = new BaseRDGRDS(14);
+    BaseRDG base1 = new BaseRDGRDS(9), base2 = new BaseRDGRDS(10), base3 = new BaseRDGRDS(11),
+        base4 = new BaseRDGRDS(12);
 
     // Tests
     assertEquals(51, base1.getBase().getSoluteId());
@@ -83,7 +83,7 @@ class TestBase extends DatabaseTest {
   @Test
   static void testUpdate() throws SQLException, DatabaseException {
     // Create a new base and getter for the base
-    BaseRDG base_setter = new BaseRDGRDS(59, "basename9", 1.9), base_getter = new BaseRDGRDS(20);
+    BaseRDG base_setter = new BaseRDGRDS(59, "basename9", 1.9), base_getter = new BaseRDGRDS(33);
 
     // Ensure the base has been added properly
     assertEquals("basename9", base_getter.getBase().getName());
@@ -95,7 +95,7 @@ class TestBase extends DatabaseTest {
     base_setter.setInventory(1.8);
     base_setter.setSolute(56);
     base_setter.update();
-    base_getter = new BaseRDGRDS(20);
+    base_getter = new BaseRDGRDS(33);
 
     // Ensure update method changed our values
     assertEquals("basename6", base_getter.getBase().getName());
@@ -153,12 +153,12 @@ class TestBase extends DatabaseTest {
       
       // Assert that we have 6 bases, and that they are the right ids. 
       assertEquals(8, getAll.size());
-      assertEquals(11, getAll.get(0).getBaseId());
-      assertEquals(12, getAll.get(1).getBaseId());
-      assertEquals(13, getAll.get(2).getBaseId());
-      assertEquals(14, getAll.get(3).getBaseId());
-      assertEquals(15, getAll.get(4).getBaseId());
-      assertEquals(16, getAll.get(5).getBaseId());
+      assertEquals(9, getAll.get(0).getBaseId());
+      assertEquals(10, getAll.get(1).getBaseId());
+      assertEquals(11, getAll.get(2).getBaseId());
+      assertEquals(12, getAll.get(3).getBaseId());
+      assertEquals(13, getAll.get(4).getBaseId());
+      assertEquals(14, getAll.get(5).getBaseId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -171,8 +171,8 @@ class TestBase extends DatabaseTest {
       List<BaseDTO> get = new BaseTDGRDS().getAllBases().filterByName("funky").executeQuery();
       
       assertEquals(2, get.size());
-      assertEquals(17, get.get(0).getBaseId());
-      assertEquals(18, get.get(1).getBaseId());
+      assertEquals(15, get.get(0).getBaseId());
+      assertEquals(16, get.get(1).getBaseId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -184,16 +184,16 @@ class TestBase extends DatabaseTest {
     try {
       List<BaseDTO> get = new BaseTDGRDS().getAllBases().filterByInventory(41.2).executeQuery();
       
-      assertEquals(17, get.get(0).getBaseId());
+      assertEquals(15, get.get(0).getBaseId());
       
       get = new BaseTDGRDS().getAllBases().filterByInventoryRange(42, 40).executeQuery();
       
-      assertEquals(17, get.get(0).getBaseId());
+      assertEquals(15, get.get(0).getBaseId());
       
       get = new BaseTDGRDS().getAllBases().filterByInventoryRange(43, 40).executeQuery();
       
-      assertEquals(17, get.get(0).getBaseId());
-      assertEquals(18, get.get(1).getBaseId());
+      assertEquals(15, get.get(0).getBaseId());
+      assertEquals(16, get.get(1).getBaseId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();

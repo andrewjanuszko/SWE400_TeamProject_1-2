@@ -141,6 +141,7 @@ public class CompoundRDGRDS implements CompoundRDG {
    * @return ElementDTO
    */
   private ElementDTO elementIdToDTO(int id) {
+    
     ElementRDG element = new ElementRDGRDS(id);
     return element.getElement();
   }

@@ -89,7 +89,7 @@ class TestAcid extends DatabaseTest {
 
     // Retrieving this acid should now result in a failure
     try {
-      acid = new AcidRDGRDS(9);
+      acid = new AcidRDGRDS(29);
     } catch (DatabaseException | SQLException e) {
       assertTrue(true);
     }
@@ -104,7 +104,8 @@ class TestAcid extends DatabaseTest {
   @Test
   static void testUpdate() throws SQLException, DatabaseException {
     // Create acid and getter for that acid
-    AcidRDG acid_setter = new AcidRDGRDS(59, "acidname9", 1.9), acid_getter = new AcidRDGRDS(10);
+    AcidRDG acid_setter = new AcidRDGRDS(59, "acidname9", 1.9), 
+        acid_getter = new AcidRDGRDS(31);
 
     // Ensure that acid has been added and fetches the right information
     assertEquals("acidname9", acid_getter.getAcid().getName());
@@ -116,7 +117,7 @@ class TestAcid extends DatabaseTest {
     acid_setter.setInventory(1.8);
     acid_setter.setSolute(56);
     acid_setter.update();
-    acid_getter = new AcidRDGRDS(10);
+    acid_getter = new AcidRDGRDS(31);
 
     // Test that the new information has been updated
     assertEquals("acidname6", acid_getter.getAcid().getName());

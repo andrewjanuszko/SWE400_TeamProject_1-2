@@ -13,6 +13,8 @@ import datasource.ChemicalRDG;
 import datasource.ChemicalRDGRDS;
 import datasource.CompoundRDG;
 import datasource.CompoundRDGRDS;
+import datasource.ElementRDG;
+import datasource.ElementRDGRDS;
 import datasource.MetalRDG;
 import datasource.MetalRDGRDS;
 
@@ -100,27 +102,32 @@ public class ClassTableInitializer {
     base = new BaseRDGRDS(12, "funkybase1", 41.2); 
     base = new BaseRDGRDS(15, "funkybase2", 42.4); 
     
+    // Elements
+    ElementRDG element = new ElementRDGRDS(24, 19.2, "elementname1", 11.9);
+    element = new ElementRDGRDS(25, 15.7, "elementname2", 40.2);
+    element = new ElementRDGRDS(29, 12.9, "elementname3", 49.2);
+    element = new ElementRDGRDS(31, 14.6, "elementname4", 45.7);
+    
     // Chemicals
     ChemicalRDG gateway1 = new ChemicalRDGRDS("funkychem1", 41.2);
     ChemicalRDG gateway2 = new ChemicalRDGRDS("funkychem2", 42.4);
     
     // Compounds
     List<Integer> madeOf1 = new ArrayList<Integer>(), madeOf2 = new ArrayList<Integer>();
-    madeOf1.add(24);
-    madeOf1.add(25);
-    madeOf2.add(26);
-    madeOf2.add(27);
+    madeOf1.add(17);
+    madeOf1.add(18);
+    madeOf2.add(19);
+    madeOf2.add(20);
 
     CompoundRDG RDG1 = new CompoundRDGRDS(madeOf1, "compoundname1", 1.1); 
     CompoundRDG RDG2 = new CompoundRDGRDS(madeOf2, "compoundname2", 1.2); 
-    
-    // Elements
-    
     
     // Metals
     MetalRDG metal = new MetalRDGRDS(1, 1, 1.1, 11.1, "metalname1", 41.1);
     metal = new MetalRDGRDS(2, 2, 2.1, 12.2, "metalname2", 42.1);
     metal = new MetalRDGRDS(3, 3, 3.1, 13.3, "metalname3", 43.1);
     metal = new MetalRDGRDS(4, 4, 4.1, 14.4, "metalname4", 44.1);
+    metal = new MetalRDGRDS(5, 5, 5.1, 15.4, "metalname5", 45.1);
+    
   }
 }

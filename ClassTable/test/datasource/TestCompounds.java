@@ -16,8 +16,8 @@ class TestCompoundsMadeOf extends DatabaseTest {
   @Test
   static void testGetName() {
     // Fetch compounds
-    CompoundRDG compound1 = new CompoundRDGRDS(29);
-    CompoundRDG compound2 = new CompoundRDGRDS(30);
+    CompoundRDG compound1 = new CompoundRDGRDS(23);
+    CompoundRDG compound2 = new CompoundRDGRDS(24);
 
     // Test
     assertEquals("compoundname1", compound1.getCompound().getName());
@@ -30,8 +30,8 @@ class TestCompoundsMadeOf extends DatabaseTest {
   @Test
   static void testGetInventory() {
     // Fetch compounds
-    CompoundRDG compound1 = new CompoundRDGRDS(29);
-    CompoundRDG compound2 = new CompoundRDGRDS(30);
+    CompoundRDG compound1 = new CompoundRDGRDS(23);
+    CompoundRDG compound2 = new CompoundRDGRDS(24);
 
     // Tests
     assertEquals(1.1, compound1.getCompound().getInventory(), 0.1);
