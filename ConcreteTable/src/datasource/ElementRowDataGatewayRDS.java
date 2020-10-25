@@ -19,7 +19,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 	public static void createTable() throws DatabaseException{
 		String drop = "DROP TABLE IF EXISTS Element";
 		String create = "CREATE TABLE Element (" + 
-				"elementID INT NOT NULL, " + 
+				"elementID INT NOT NULL AUTO_INCREMENT, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
 				"inventory Double, " +
 				"atomicNumber INT NOT NULL, " +
@@ -44,6 +44,25 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 		}
 		
 	}
+	
+	/**
+   * Only drop the table.
+   * 
+   * @throws DatabaseException
+   */
+  public static void dropTable() throws DatabaseException {
+    String drop = "DROP TABLE IF EXISTS Element";
+    try {
+      // drop table
+      PreparedStatement stmt;
+      stmt = DatabaseManager.getSingleton().getConnection().prepareStatement(drop);
+      stmt.execute();
+      stmt.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DatabaseException("Unable to drop Element table", e);
+    }
+  }
 
 	private Connection conn;
 	
@@ -74,15 +93,10 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Element WHERE elementID = " + id);
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
-			System.out.println("testsu?");
 			name = rs.getString("name");
-			System.out.println("testsu");
 			inventory = rs.getDouble("inventory");
-			System.out.println("testsu1");
 			atomicNumber = rs.getInt("atomicNumber");
-			System.out.println("testsu2");
 			atomicMass = rs.getDouble("atomicMass");
-			System.out.println("testsu3");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find element with that ID", e);
 		}
@@ -127,8 +141,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 	 * @param atomicMass
 	 * @throws DatabaseException
 	 */
-	public ElementRowDataGatewayRDS(int id, String name, double inventory, int atomicNumber, double atomicMass) throws DatabaseException {
-		elementID = id;
+	public ElementRowDataGatewayRDS(String name, double inventory, int atomicNumber, double atomicMass) throws DatabaseException {
 		this.name = name;
 		this.inventory = inventory;
 		this.atomicNumber = atomicNumber;
@@ -218,6 +231,7 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
 			return true;
 		} catch (SQLException e) {
 			new DatabaseException("could not delete Element");
+			e.printStackTrace();
 			return false;
 		}
   }
@@ -227,8 +241,13 @@ public class ElementRowDataGatewayRDS implements ElementRowDataGateway{
    */
   private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Element(elementID, name, inventory, atomicNumber, atomicMass) VALUES (" + elementID + ", '" + name + "', '" + inventory + "', " + atomicNumber + ", " + atomicMass + ");");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Element(name, inventory, atomicNumber, atomicMass) VALUES ('" + name + "', '" + inventory + "', " + atomicNumber + ", " + atomicMass + ");");
 			stmt.execute();
+			
+			PreparedStatement stmt2 = conn.prepareStatement("SELECT LAST_INSERT_ID();");
+      ResultSet rs = stmt2.executeQuery();
+      rs.next();
+      this.elementID = rs.getInt("LAST_INSERT_ID()");
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into Element table");
 		}

@@ -24,7 +24,7 @@ public abstract class AcidTableDataGatewayRDS {
    */
   public static void createTable() throws DatabaseException {
     String drop = "DROP TABLE IF EXISTS Acid";
-    String create = "CREATE TABLE Acid (" + "acidID INT NOT NULL, " + "name VARCHAR(30) NOT NULL, "
+    String create = "CREATE TABLE Acid (" + "acidID INT NOT NULL AUTO_INCREMENT, " + "name VARCHAR(30) NOT NULL, "
         + "inventory Double, " + "solute INT, " + "UNIQUE(name), " + "PRIMARY KEY(acidID) );";
 
     try {
@@ -113,7 +113,7 @@ public abstract class AcidTableDataGatewayRDS {
    * @param wildCard String that is used in filter.
    * @return List of filtered AcidDTOs.
    */
-  public static List<AcidDTO> filterByWildCardName(String wildCard) {
+  public static List<AcidDTO> filterByNameLike(String wildCard) {
     try {
       PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("SELECT * FROM Acid WHERE name LIKE '%" + wildCard + "%'");
@@ -154,7 +154,7 @@ public abstract class AcidTableDataGatewayRDS {
    * @param max Upper limit for filter.
    * @return List of filtered AcidDTOs.
    */
-  public static List<AcidDTO> filterByInventoryRange(double min, double max) {
+  public static List<AcidDTO> filterByInventoryBetween(double min, double max) {
     try {
       PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("SELECT * FROM Acid WHERE inventory BETWEEN " + min + " AND " + max);

@@ -3,32 +3,28 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import datadto.AcidDTO;
 import datadto.MetalDTO;
-import datasource.AcidTableDataGatewayRDS;
 import datasource.DatabaseException;
 import datasource.MetalRowDataGateway;
 import datasource.MetalRowDataGatewayRDS;
 import datasource.MetalTableDataGatewayRDS;
-import model.Acid;
-import model.DomainModelException;
-import model.Metal;
 import model.MetalDataMapperInterface;
 
 public class MetalDataMapper implements MetalDataMapperInterface {
   public static IdentityMap<Metal> metalMap = new IdentityMap<Metal>();
 
-  @Override
+  /**
+   * @see model.MetalDataMapperInterface#create(String, double, int, double,
+   *      double).
+   */
   public Metal create(String name, double inventory, int atomicNumber, double atomicMass, double acidAmount)
       throws DomainModelException {
     try {
-      int id = 101010101;//// ohnooo
-      Metal m = new Metal(id, name, inventory, atomicNumber, atomicMass, acidAmount);
-
       // HOW DO I GET THE DISOLVED BY???? can it just be null?
-      @SuppressWarnings("unused")
-      MetalRowDataGateway gateway = new MetalRowDataGatewayRDS(id, name, inventory, atomicNumber, atomicMass,
-          acidAmount, 0);
+      MetalRowDataGateway gateway = new MetalRowDataGatewayRDS(name, inventory, atomicNumber, atomicMass,
+          acidAmount, -1); /// MUST CHANGE
+      Metal m = new Metal(gateway.getMetalID(), name, inventory, atomicNumber, atomicMass, acidAmount);
+      metalMap.add(m);
       return m;
     } catch (DatabaseException e) {
       // TODO Auto-generated catch block
@@ -37,7 +33,9 @@ public class MetalDataMapper implements MetalDataMapperInterface {
     return null;
   }
 
-  @Override
+  /**
+   * @see model.MetalDataMapperInterface#read(int).
+   */
   public Metal read(int id) throws DomainModelException {
     try {
       if (metalMap.get(id) == null) {
@@ -57,7 +55,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
     }
     return null;
   }
-  
+
   @Override
   public void update(Metal metal) throws DomainModelException {
     try {
@@ -89,9 +87,10 @@ public class MetalDataMapper implements MetalDataMapperInterface {
       e.printStackTrace();
     }
   }
-  
+
   /**
    * Converts a list of MetalDTOs to a list of Metals.
+   * 
    * @param metalDTOList the list of DTOs.
    * @return the converted list of metals.
    */
@@ -104,14 +103,14 @@ public class MetalDataMapper implements MetalDataMapperInterface {
       int atomicNumber = dto.getAtomicNumber();
       double atomicMass = dto.getAtomicMass();
       double acidAmount = dto.getAcidAmount();
-      
+
       Metal metal = new Metal(metalID, name, inventory, atomicNumber, atomicMass, acidAmount);
       metalMap.add(metal);
       metals.add(metal);
     }
     return metals;
   }
-  
+
   @Override
   public List<Metal> getAll() throws DomainModelException {
     List<MetalDTO> DTOList = MetalTableDataGatewayRDS.getAll();
@@ -119,71 +118,75 @@ public class MetalDataMapper implements MetalDataMapperInterface {
   }
 
   @Override
-  public List<Metal> filterByWildCardName(String wildCard) throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
+  public List<Metal> filterByDissolvedBy(int acidID) throws DomainModelException {
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByDissovedBy(acidID);
+    return DTOListToMetalList(DTOList);
+  }
+
+  @Override
+  public List<Metal> filterByNameLike(String nameLike) throws DomainModelException {
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByNameLike(nameLike);
+    return DTOListToMetalList(DTOList);
   }
 
   @Override
   public List<Metal> filterByInventory(double inventory) throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByInventory(inventory);
+    return DTOListToMetalList(DTOList);
   }
 
   @Override
-  public List<Metal> filterByInventoryRange(double min, double max) throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
+  public List<Metal> filterByInventoryBetween(double min, double max) throws DomainModelException {
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByInventoryBetween(min, max);
+    return DTOListToMetalList(DTOList);
   }
 
   @Override
   public List<Metal> filterByAtomicNumber(int atomicNumber) throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByAtomicNumber(atomicNumber);
+    return DTOListToMetalList(DTOList);
+  }
+
+  @Override
+  public List<Metal> filterByAtomicNumberBetween(int min, int max) throws DomainModelException {
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByAtomicNumberBetween(min, max);
+    return DTOListToMetalList(DTOList);
   }
 
   @Override
   public List<Metal> filterByAtomicMass(double atomicMass) throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByAtomicMass(atomicMass);
+    return DTOListToMetalList(DTOList);
   }
 
   @Override
-  public List<Metal> filterByAtomicMassRange(double min, double max) throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
+  public List<Metal> filterByAtomicMassBetween(double min, double max) throws DomainModelException {
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByAtomicMassBetween(min, max);
+    return DTOListToMetalList(DTOList);
   }
 
   @Override
-  public List<Metal> filterByAcidRequired(double acidRequired) throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
+  public List<Metal> filterByAcidAmount(double acidAmount) throws DomainModelException {
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByAcidAmount(acidAmount);
+    return DTOListToMetalList(DTOList);
   }
 
   @Override
-  public List<Metal> filterByAcidRequiredRange(double min, double max) throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public List<Metal> filterByDissolvedBy(int acidID) throws DomainModelException {
-    // possibly lazy load metals?
-//    ArrayList<MetalRowDataGatewayRDS> metalGateways = MetalRowDataGatewayRDS.findDissolves(id);
-//    ArrayList<Metal> dissolvedMetals = new ArrayList<Metal>();
-//    for (MetalRowDataGatewayRDS m : metalGateways) {
-//      Metal metal = new Metal(m.getMetalID(), m.getName(), m.getInventory(), m.getAtomicNumber(), m.getAtomicMass(),
-//          m.getAcidAmount());
-//      dissolvedMetals.add(metal);
-//      MetalDataMapper.metalMap.add(metal);
-//    }
-    return new ArrayList<Metal>();
+  public List<Metal> filterByAcidAmountBetween(double min, double max) throws DomainModelException {
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByAcidAmountBetween(min, max);
+    return DTOListToMetalList(DTOList);
   }
 
   @Override
   public List<Metal> filterByPartOfCompound(int compoundID) throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByPartOfCompound(compoundID);
+    return DTOListToMetalList(DTOList);
+  }
+
+  @Override
+  public List<Metal> filterByLowInventory() throws DomainModelException {
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByLowInventory();
+    return DTOListToMetalList(DTOList);
   }
 
 }

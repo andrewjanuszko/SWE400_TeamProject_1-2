@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  * Row Data Gateway for Metal.
@@ -22,7 +21,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 	{
 		String drop = "DROP TABLE IF EXISTS Metal";
 		String create = "CREATE TABLE Metal (" + 
-				"metalID INT NOT NULL, " + 
+				"metalID INT NOT NULL AUTO_INCREMENT, " + 
 				"name VARCHAR(30) NOT NULL, " +                     
 				"inventory Double, " +
 				"atomicNumber INT NOT NULL, " +
@@ -107,6 +106,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 			acidAmount = rs.getDouble("acidAmount");
 			dissolvedBy = rs.getInt("dissolvedBy");
 		} catch (SQLException e) {
+		  e.printStackTrace();
 			throw new DatabaseException("Couldn't find metal with that ID", e);
 		}
 	}
@@ -153,9 +153,8 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
 	 * @param dissolvedBy
 	 * @throws DatabaseException
 	 */
-	public MetalRowDataGatewayRDS(int id, String name, double inventory, int atomicNumber, double atomicMass, double acidAmount, int dissolvedBy) throws DatabaseException {
+	public MetalRowDataGatewayRDS(String name, double inventory, int atomicNumber, double atomicMass, double acidAmount, int dissolvedBy) throws DatabaseException {
 	  conn = DatabaseManager.getSingleton().getConnection();
-	  metalID = id;
 		this.name = name;
 		this.inventory = inventory;
 		this.atomicNumber = atomicNumber;
@@ -228,39 +227,6 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
   }
   
   /**
-   * Finds and returns all metals that dissolve by given acidID.
-   * @param acidID
-   * @return Array of MetalRowDataGateways
-   * @throws DatabaseException
-   * @throws SQLException 
-   */
-  public static ArrayList<MetalRowDataGatewayRDS> findDissolves(int acidID) throws DatabaseException{
-    try{
-      ArrayList<MetalRowDataGatewayRDS> metalGateways = new ArrayList<MetalRowDataGatewayRDS>();
-      ArrayList<Integer> metalIDs = new ArrayList<Integer>();
-      PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("SELECT metalID FROM Metal WHERE dissolvedBy = " + acidID);
-      
-      ResultSet rs = stmt.executeQuery();
-      
-      while(rs.next()) {
-        metalIDs.add(rs.getInt("metalID"));
-      }
-      
-      for(int i = 0; i < metalIDs.size(); i++) {
-        metalGateways.add(new MetalRowDataGatewayRDS(metalIDs.get(i)));
-      }
-      
-      return metalGateways;
-      
-    } catch (SQLException e) {
-      
-      e.printStackTrace();
-      new DatabaseException("Couldn't find metals");
-      return new ArrayList<MetalRowDataGatewayRDS>();
-    }
-  }
-  /**
    * Updates the information in the database to reflect changes made.
    * @return boolean
    */
@@ -303,8 +269,19 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
    */
   private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Metal (metalID, name, inventory, atomicNumber, atomicMass, acidAmount, dissolvedBy) VALUES (" + metalID + ", '" + name + "', '" + inventory + "', " + atomicNumber + ", " + atomicMass + ", "  + acidAmount + ", "+ dissolvedBy +");");
-			stmt.execute();
+		  if(this.dissolvedBy == -1) {
+		    PreparedStatement stmt = conn.prepareStatement("INSERT INTO Metal (name, inventory, atomicNumber, atomicMass, acidAmount, dissolvedBy) VALUES ('" + name + "', '" + inventory + "', " + atomicNumber + ", " + atomicMass + ", "  + acidAmount + ", null);");
+	      stmt.execute();
+		  }
+		  else {
+  			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Metal (name, inventory, atomicNumber, atomicMass, acidAmount, dissolvedBy) VALUES ('" + name + "', '" + inventory + "', " + atomicNumber + ", " + atomicMass + ", "  + acidAmount + ", "+ dissolvedBy +");");
+  			stmt.execute();
+		  }
+			
+			PreparedStatement stmt2 = conn.prepareStatement("SELECT LAST_INSERT_ID();");
+      ResultSet rs = stmt2.executeQuery();
+      rs.next();
+      this.metalID = rs.getInt("LAST_INSERT_ID()");
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into Metal table");
 		}

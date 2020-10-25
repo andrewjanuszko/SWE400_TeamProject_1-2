@@ -22,7 +22,8 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest {
 
   @Test
   void testGetters() throws DatabaseException {
-    MetalRowDataGateway Metal = new MetalRowDataGatewayRDS(1, "Metal", 1.0, 5, 10.0, 10.0, 10000);
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS("acid", 1.0, 1);
+    MetalRowDataGateway Metal = new MetalRowDataGatewayRDS("Metal", 1.0, 5, 10.0, 10.0, acid1.getAcidID());
 
     assertEquals(1, Metal.getMetalID());
     assertEquals("Metal", Metal.getName());
@@ -30,19 +31,21 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest {
     assertEquals(5, Metal.getAtomicNumber());
     assertEquals(10.0, Metal.getAtomicMass());
     assertEquals(10.0, Metal.getAcidAmount());
-    assertEquals(10000, Metal.getDissolvedBy());
+    assertEquals(acid1.getAcidID(), Metal.getDissolvedBy());
   }
 
   @Test
   void testSetters() throws DatabaseException {
-    MetalRowDataGateway Metal = new MetalRowDataGatewayRDS(1, "Metal", 1.0, 5, 10.0, 10.0, 10000);
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS("acid", 1.0, 1);
+    AcidRowDataGateway acid2 = new AcidRowDataGatewayRDS("otherAcid", 1.0, 1);
+    MetalRowDataGateway Metal = new MetalRowDataGatewayRDS("Metal", 1.0, 5, 10.0, 10.0, acid1.getAcidID());
 
     Metal.setName("name");
     Metal.setInventory(2.0);
     Metal.setAtomicNumber(10);
     Metal.setAtomicMass(20.0);
     Metal.setAcidAmount(20.0);
-    Metal.setDissolvedBy(12);
+    Metal.setDissolvedBy(acid2.getAcidID());
 
     assertEquals(1, Metal.getMetalID());
     assertEquals("name", Metal.getName());
@@ -50,21 +53,20 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest {
     assertEquals(10, Metal.getAtomicNumber());
     assertEquals(20.0, Metal.getAtomicMass());
     assertEquals(20.0, Metal.getAcidAmount());
-    assertEquals(12, Metal.getDissolvedBy());
+    assertEquals(acid2.getAcidID(), Metal.getDissolvedBy());
   }
 
   @Test
   void testDelete() throws DatabaseException {
-    MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS(1, "metal", 1.0, 5, 10.0, 10.0, 10000);
+    MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS("metal", 1.0, 5, 10.0, 10.0, 10000);
 
     assertTrue(metal1.delete());
   }
 
   @Test
   void testConstructors() throws DatabaseException {
-    @SuppressWarnings("unused")
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(10000, "acid", 1.0, 1);
-    MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS(1, "metal", 1.0, 5, 10.0, 10.0, 10000);
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS("acid", 1.0, 1);
+    MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS("metal", 1.0, 5, 10.0, 10.0, acid1.getAcidID());
     MetalRowDataGateway metal1FindByID = new MetalRowDataGatewayRDS(1);
     MetalRowDataGateway metal1FindByName = new MetalRowDataGatewayRDS("metal");
 
@@ -87,9 +89,8 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest {
 
   @Test
   void testPersist() throws DatabaseException {
-    @SuppressWarnings("unused")
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS(10000, "acid", 1.0, 1);
-    MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS(1, "metal", 1.0, 5, 10.0, 10.0, 10000);
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS("acid", 1.0, 1);
+    MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS("metal", 1.0, 5, 10.0, 10.0, acid1.getAcidID());
     metal1.setName("newName");
     assertTrue(metal1.persist());
     metal1 = null;

@@ -11,28 +11,28 @@ import datasource.AcidTableDataGatewayRDS;
 import datasource.DatabaseException;
 import datasource.MetalRowDataGateway;
 import datasource.MetalRowDataGatewayRDS;
-import model.Acid;
 import model.AcidDataMapperInterface;
-import model.DomainModelException;
-import model.Metal;
 
 public class AcidDataMapper implements AcidDataMapperInterface {
-  private static IdentityMap<Acid> acidMap = new IdentityMap<Acid>();
+  public static IdentityMap<Acid> acidMap = new IdentityMap<Acid>();
 
   @Override
   public Acid create(String name, double inventory, List<Metal> dissolves, int solute) throws DomainModelException {
-
-    int id = 12; // FIGURE OUT HOW TO GET ID!!!
-    // TODO distribute dissolves
-    Acid a = new Acid(id, name, inventory, dissolves, solute);
     try {
-      @SuppressWarnings("unused")
-      AcidRowDataGateway gateway = new AcidRowDataGatewayRDS(id, name, inventory, solute);
+      AcidRowDataGateway gateway = new AcidRowDataGatewayRDS(name, inventory, solute);
+      Acid a = new Acid(gateway.getAcidID(), name, inventory, dissolves, solute);
+      acidMap.add(a);
+      for(Metal m: dissolves) {
+        MetalRowDataGateway mRDG = new MetalRowDataGatewayRDS(m.getID());
+        mRDG.setDissolvedBy(a.getID());
+        mRDG.persist();
+      }
+      return a;
     } catch (DatabaseException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    return a;
+    return null;
   }
 
   @Override
@@ -133,8 +133,8 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-  public List<Acid> filterByWildCardName(String wildCard) throws DomainModelException {
-    List<AcidDTO> DTOList = AcidTableDataGatewayRDS.filterByWildCardName(wildCard);
+  public List<Acid> filterByNameLike(String wildCard) throws DomainModelException {
+    List<AcidDTO> DTOList = AcidTableDataGatewayRDS.filterByNameLike(wildCard);
     return DTOListToAcidList(DTOList);
   }
 
@@ -145,8 +145,8 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   @Override
-  public List<Acid> filterByInventoryRange(double min, double max) throws DomainModelException {
-    List<AcidDTO> DTOList = AcidTableDataGatewayRDS.filterByInventoryRange(min, max);
+  public List<Acid> filterByInventoryBetween(double min, double max) throws DomainModelException {
+    List<AcidDTO> DTOList = AcidTableDataGatewayRDS.filterByInventoryBetween(min, max);
     return DTOListToAcidList(DTOList);
   }
 
@@ -154,6 +154,12 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   public List<Acid> filterBySolute(int chemicalID) throws DomainModelException {
     List<AcidDTO> DTOList = AcidTableDataGatewayRDS.filterBySolute(chemicalID);
     return DTOListToAcidList(DTOList);
+  }
+
+  @Override
+  public List<Acid> filterByLowInventory() throws DomainModelException {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

@@ -14,9 +14,9 @@ import datadto.CompoundMadeOfDTO;
  * @author Joel
  *
  */
-public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDataGateway{
+public class CompoundMadeOfTableDataGatewayRDS{
 	
-	Connection conn;
+	
 	
 	/**
 	 * Creates the table in the database. Drops the table if it already exists.
@@ -64,57 +64,85 @@ public class CompoundMadeOfTableDataGatewayRDS implements CompoundMadeOfTableDat
     }
 	}
 
-	List<CompoundMadeOfDTO> dtoList = new ArrayList<CompoundMadeOfDTO>();
-	private int compoundID;
-	
-	/**
-	 * Constructs CompoundMadeOf Gateway view based off of matches with given ID.
-	 * @param id
-	 * @throws DatabaseException
-	 */
-	public CompoundMadeOfTableDataGatewayRDS(int id) throws DatabaseException {
-		compoundID = id;
-		findCompounds();
-	}
+//	List<CompoundMadeOfDTO> dtoList = new ArrayList<CompoundMadeOfDTO>();
+//	private int compoundID;
+//	
+//	/**
+//	 * Constructs CompoundMadeOf Gateway view based off of matches with given ID.
+//	 * @param id
+//	 * @throws DatabaseException
+//	 */
+//	public CompoundMadeOfTableDataGatewayRDS(int id) throws DatabaseException {
+//		compoundID = id;
+//		findCompounds();
+//	}
 	
 	/**
 	 * Finds compounds and adds to dtoList.
 	 * @throws DatabaseException
 	 */
-	private void findCompounds() throws DatabaseException {
-		conn = DatabaseManager.getSingleton().getConnection();
+	public static List<CompoundMadeOfDTO> findCompoundsByCompound(int compoundID){
+		
 		try {
+		  Connection conn = DatabaseManager.getSingleton().getConnection();
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM CompoundMadeOf WHERE compoundID = " + compoundID);
 			
 			ResultSet rs = stmt.executeQuery();
+			List<CompoundMadeOfDTO> dtoList = new ArrayList<CompoundMadeOfDTO>();
 			while(rs.next()) {
 				dtoList.add(new CompoundMadeOfDTO(rs.getInt("compoundID"), rs.getInt("elementID")));
 			}
-		} catch (SQLException e) {
+			return dtoList;
+		} catch (SQLException | DatabaseException e) {
 			new DatabaseException("could not get CompoundMadeOf");
 		}
+		return null;
 	}
 	
-	@Override
-	public List<CompoundMadeOfDTO> getCompoundMadeOf(){
-		return dtoList;
-	}
+	public static List<CompoundMadeOfDTO> findCompoundsByElement(int elementID) {
+	 
+    try {
+      Connection conn = DatabaseManager.getSingleton().getConnection();
+      PreparedStatement stmt = conn.prepareStatement("SELECT * FROM CompoundMadeOf WHERE elementID = " + elementID);
+      
+      ResultSet rs = stmt.executeQuery();
+      List<CompoundMadeOfDTO> dtoList = new ArrayList<CompoundMadeOfDTO>();
+      while(rs.next()) {
+        dtoList.add(new CompoundMadeOfDTO(rs.getInt("compoundID"), rs.getInt("elementID")));
+      }
+      return dtoList;
+    } catch (SQLException | DatabaseException e) {
+      new DatabaseException("could not get CompoundMadeOf");
+    }
+    return null;
+  }
 	
-	/**
-	 * Links element to current compound.
-	 */
-	public synchronized void addElementToCompound(int elementID) {
-		dtoList.add(new CompoundMadeOfDTO(compoundID, elementID));
+	
+	public static synchronized void addCompoundMadeOf(int compoundID, int elementID) {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO CompoundMadeOf Values (" + compoundID + ", " + elementID + ");");
-			stmt.execute();
-		}catch(SQLException e) {
+		  Connection conn = DatabaseManager.getSingleton().getConnection();
+		  //doesn't add if allready present
+		  PreparedStatement stmt = conn.prepareStatement("SELECT * FROM CompoundMadeOf WHERE elementID = " + elementID + " AND compoundID = " + compoundID);
+		  ResultSet rs = stmt.executeQuery();
+		  if(!rs.next()) {
+		    stmt = conn.prepareStatement("INSERT INTO CompoundMadeOf Values (" + compoundID + ", " + elementID + ");");
+	      stmt.execute();
+		  }
+			
+		}catch(SQLException | DatabaseException e) {
 			new DatabaseException("couldn't insert into CompoundMadeOf");
 		}
 	}
 	
-	public int getCompoundID(){
-		return compoundID;
+	public static void deleteCompound(int compoundID) {
+	  try {
+      Connection conn = DatabaseManager.getSingleton().getConnection();
+      PreparedStatement stmt = conn.prepareStatement("DELETE FROM CompoundMadeOf WHERE compoundID = " + compoundID);
+      
+      stmt.execute();
+    } catch (SQLException | DatabaseException e) {
+      new DatabaseException("could not get CompoundMadeOf");
+    }
+    
 	}
-
 }

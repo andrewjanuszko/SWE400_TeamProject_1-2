@@ -5,7 +5,7 @@ public class BaseDTO {
   private String name;
   private double inventory;
 
-  public BaseDTO(int baseID, int soluteID, String name, double inventory) {
+  public BaseDTO(int baseID, String name, double inventory, int soluteID) {
     this.baseID = baseID;
     this.soluteID = soluteID;
     this.name = name;

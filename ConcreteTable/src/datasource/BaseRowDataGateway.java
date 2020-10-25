@@ -8,13 +8,13 @@ public interface BaseRowDataGateway {
 	
 	public double getInventory();
 	
-	public String getSolute();
+	public int getSolute();
 	
 	public void setName(String name);
 	
 	public void setInventory(double inventory);
 	
-	public void setSolute(String solute);
+	public void setSolute(int solute);
 	
 	public boolean persist();
 	

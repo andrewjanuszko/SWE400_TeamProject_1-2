@@ -1,4 +1,4 @@
-package mappers;
+package model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -68,7 +68,7 @@ class AcidDataMapperTest {
     
     Acid acid1Copy = mapper.read(acid1.getID());
     
-    assertEquals(acid1.getID(), acid1Copy.getID());
+    
     assertEquals(acid1.getName(), acid1Copy.getName());
     assertEquals(acid1.getInventory(), acid1Copy.getInventory());
     assertEquals(acid1.getDissolves(),acid1Copy.getDissolves());

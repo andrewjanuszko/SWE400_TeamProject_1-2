@@ -23,4 +23,8 @@ public class IdentityMap<T extends Chemical> {
   public T get(int key) {
     return map.get(key);
   }
+  
+  public void clear() {
+    map.clear();
+  }
 }

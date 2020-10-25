@@ -18,7 +18,7 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	public static void createTable() throws DatabaseException{
 		String drop = "DROP TABLE IF EXISTS Acid";
 		String create = "CREATE TABLE Acid (" + 
-				"acidID INT NOT NULL, " + 
+				"acidID INT NOT NULL AUTO_INCREMENT, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
 				"inventory Double, " +
 				"solute INT, " +
@@ -93,7 +93,9 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 			inventory = rs.getDouble("inventory");
 			solute = rs.getInt("solute");
 		} catch (SQLException e) {
-			throw new DatabaseException("Couldn't find Acid with that name", e);
+		  e.printStackTrace();
+			throw new DatabaseException("Couldn't find Acid with that id", e);
+			
 		}
 	}
 	
@@ -134,9 +136,8 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	 * @param solute
 	 * @throws DatabaseException 
 	 */
-	public AcidRowDataGatewayRDS(int id, String name, Double inventory, int solute) throws DatabaseException {
+	public AcidRowDataGatewayRDS(String name, Double inventory, int solute) throws DatabaseException {
 	  conn = DatabaseManager.getSingleton().getConnection();
-		acidID = id;
 		this.name = name;
 		this.inventory = inventory;
 		this.solute = solute;
@@ -218,9 +219,15 @@ public class AcidRowDataGatewayRDS implements AcidRowDataGateway{
 	 */
 	private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Acid (acidID, name, inventory, solute) VALUES (" + acidID + ", '" + name + "', '" + inventory + "', " + solute + ");");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Acid (name, inventory, solute) VALUES ('" + name + "', '" + inventory + "', " + solute + ");");
 			stmt.execute();
+			
+			PreparedStatement stmt2 = conn.prepareStatement("SELECT LAST_INSERT_ID();");
+			ResultSet rs = stmt2.executeQuery();
+			rs.next();
+			this.acidID = rs.getInt("LAST_INSERT_ID()");
 		} catch(SQLException e) {
+		  e.printStackTrace();
 			new DatabaseException("could not insert into acid table");
 		}
 	}

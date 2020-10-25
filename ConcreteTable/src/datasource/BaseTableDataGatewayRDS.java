@@ -8,7 +8,7 @@ import java.util.List;
 
 import datadto.BaseDTO;
 
-public class BaseTableDataGatewayRDS {
+public abstract class BaseTableDataGatewayRDS {
   /**
    * Creates table in database.
    * 
@@ -16,7 +16,7 @@ public class BaseTableDataGatewayRDS {
    */
   public static void createTable() throws DatabaseException {
     String drop = "DROP TABLE IF EXISTS Acid";
-    String create = "CREATE TABLE Acid (" + "acidID INT NOT NULL, " + "name VARCHAR(30) NOT NULL, "
+    String create = "CREATE TABLE Acid (" + "acidID INT NOT NULL AUTO_INCREMENT, " + "name VARCHAR(30) NOT NULL, "
         + "inventory Double, " + "solute INT, " + "UNIQUE(name), " + "PRIMARY KEY(acidID) );";
 
     try {
@@ -54,6 +54,8 @@ public class BaseTableDataGatewayRDS {
     }
   }
 
+  private static double lowInventory = 20.0;
+  
   /**
    * Converts a result set that is assumed to contain a collection of acids from
    * the database.
@@ -69,7 +71,7 @@ public class BaseTableDataGatewayRDS {
         String name = rs.getString("name");
         int solute = rs.getInt("solute");
         double inventory = rs.getDouble("inventory");
-        BaseDTO a = new BaseDTO(baseID, solute, name, inventory);
+        BaseDTO a = new BaseDTO(baseID, name, inventory, solute);
         baseDTOs.add(a);
         return baseDTOs;
       }
@@ -105,7 +107,7 @@ public class BaseTableDataGatewayRDS {
    * @param wildCard String that is used in filter.
    * @return List of filtered BaseDTOs.
    */
-  public static List<BaseDTO> filterByWildCardName(String wildCard) {
+  public static List<BaseDTO> filterByNameLike(String wildCard) {
     try {
       PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("SELECT * FROM Base WHERE name LIKE '%" + wildCard + "%'");
@@ -146,7 +148,7 @@ public class BaseTableDataGatewayRDS {
    * @param max Upper limit for filter.
    * @return List of filtered BaseDTOs.
    */
-  public static List<BaseDTO> filterByInventoryRange(double min, double max) {
+  public static List<BaseDTO> filterByInventoryBetween(double min, double max) {
     try {
       PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("SELECT * FROM Base WHERE inventory BETWEEN " + min + " AND " + max);
@@ -170,6 +172,20 @@ public class BaseTableDataGatewayRDS {
     try {
       PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("SELECT * FROM Base WHERE solute = " + chemicalID);
+      ResultSet rs = stmt.executeQuery();
+      return toDTOList(rs);
+
+    } catch (SQLException | DatabaseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return null;
+  }
+  
+  public static List<BaseDTO> filterByLowInventory() {
+    try {
+      PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
+          .prepareStatement("SELECT * FROM Base WHERE Base.inventory <= " + lowInventory);
       ResultSet rs = stmt.executeQuery();
       return toDTOList(rs);
 
