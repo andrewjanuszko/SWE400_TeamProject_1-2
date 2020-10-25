@@ -20,9 +20,10 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
+import model.Chemical;
 import model.Acid;
 
-//import model.AcidDataMapperInterface;
+import model.AcidDataMapperInterface;
 import model.DomainModelException;
 
 public class AcidPanel extends JPanel{
@@ -34,7 +35,7 @@ public class AcidPanel extends JPanel{
 	JButton filterButton = new JButton("Filter");
 	JButton detailsButton = new JButton("Details");
 	JLabel selected = null;
-	int selectedID;
+	Acid selectedChemical;
 	Color labelColor = new Color(30,30,30);
 	List<Acid> acidList;
 	//AcidDataMapper acidMapper = new AcidDataMapper();
@@ -147,23 +148,25 @@ public class AcidPanel extends JPanel{
 	
 	private void getDetailsAcid() {
 		if(selected == null) {
-			
+			return;
 		}
+		new AcidDetailsFrame(selectedChemical);
 	}
 	
 	private void removeSelectedBackground() {
 	    if(selected != null)
 	      selected.setBackground(labelColor);
 	  }
-	/*
+	
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
+		/*
 		try {
-			//acidList = acidMapper.getAll();
+		   acidList = acidMapper.getAll();
 		} catch (DomainModelException e) {
 			e.printStackTrace();
 		}
-
+*/
 		labels.setLayout(new GridLayout(acidList.size(), 1));
 		
 		for(int i = 0; i < acidList.size(); i++) {
@@ -177,7 +180,7 @@ public class AcidPanel extends JPanel{
 		              removeSelectedBackground();
 		              label.setBackground(new Color(234, 201, 55));
 		              selected = label;
-		              selectedID = acidList.get(x).getID();
+		              selectedChemical = acidList.get(x);
 		          }
 		      }); 
 		      labels.add(label);
@@ -185,7 +188,7 @@ public class AcidPanel extends JPanel{
 
 		return labels;
 	}
-    */
+    
 	private String buildHtml(Acid acid) {
 		return acid.getName();
 	}

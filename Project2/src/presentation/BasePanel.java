@@ -29,6 +29,7 @@ public class BasePanel extends JPanel{
 	JLabel selected = null;
 	Color labelColor = new Color(30,30,30);
 	List<Base> baseList;
+	String filter;
 	
 	public BasePanel() {
 		this.setLayout(new GridBagLayout());
@@ -124,15 +125,15 @@ public class BasePanel extends JPanel{
 	}
 	
 	private void filterBase() {
-		if(selected != null) {
 			//brings up new window based on selected base
-			new FilterBaseFrame().addWindowListener(new WindowAdapter() {
+		FilterBaseFrame fbf = new FilterBaseFrame();
+			fbf.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent arg0) {
-					//reset the view
+					filter = fbf.getFilter();
+					System.out.println(filter);
 				}
 			});
-		}
 	}
 	
 	private void getDetailsBase() {

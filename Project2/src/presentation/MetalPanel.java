@@ -124,7 +124,7 @@ public class MetalPanel extends JPanel{
 	}
 	
 	private void filterMetal() {
-		if(selected != null) {
+		
 			//brings up new window based on selected metal
 			new FilterMetalFrame().addWindowListener(new WindowAdapter() {
 				@Override
@@ -132,7 +132,7 @@ public class MetalPanel extends JPanel{
 					//reset the view
 				}
 			});
-		}
+		
 	}
 	
 	private void getDetailsMetal() {

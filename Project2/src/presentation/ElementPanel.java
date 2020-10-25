@@ -29,6 +29,7 @@ public class ElementPanel extends JPanel{
 	JLabel selected = null;
 	Color labelColor = new Color(30,30,30);
 	List<Element> elementList;
+	String filter;
 	
 	public ElementPanel() {
 		this.setLayout(new GridBagLayout());
@@ -74,6 +75,7 @@ public class ElementPanel extends JPanel{
 		      @Override
 		      public void actionPerformed(ActionEvent ae) {
 		        filterElement();
+		        
 		      }
 		    });
 		detailsButton.addActionListener( new ActionListener() {
@@ -124,15 +126,17 @@ public class ElementPanel extends JPanel{
 	}
 	
 	private void filterElement() {
-		if(selected != null) {
+		
 			//brings up new window based on selected element
-			new FilterElementFrame().addWindowListener(new WindowAdapter() {
+			FilterElementFrame fef = new FilterElementFrame();
+			fef.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent arg0) {
-					//reset the view
+					filter = fef.getFilter();
+					System.out.println(filter);
 				}
 			});
-		}
+		
 	}
 	
 	private void getDetailsElement() {

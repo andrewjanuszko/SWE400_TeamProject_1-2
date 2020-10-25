@@ -16,8 +16,7 @@ import javax.swing.JTextField;
 
 public class FilterAcidFrame extends JFrame{
 	
-	int filterType;
-	JRadioButton idFilter = new JRadioButton();          
+	int filterType;        
 	JRadioButton nameFilter = new JRadioButton();        //filterType 1
 	JRadioButton soluteFilter = new JRadioButton();      //filterType 2
 	JRadioButton inventoryFilter = new JRadioButton();   //filterType 3
@@ -77,47 +76,28 @@ public class FilterAcidFrame extends JFrame{
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		add(idFilter, gbc);
-		
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		JLabel idLabel = new JLabel("Id Filter: ");
-		add(idLabel,gbc);
-		
-		gbc.gridx = 2;
-		gbc.gridy = 0;
-		JTextField jtfid1 = new JTextField("Range 1");
-		add(jtfid1,gbc);
-		
-		gbc.gridx = 3;
-		gbc.gridy = 0;
-		JTextField jtfid2 = new JTextField("Range 2");
-		add(jtfid2,gbc);
-
-		gbc.gridx = 0;
-		gbc.gridy = 1;
 		add(nameFilter, gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 1;
+		gbc.gridy = 0;
 		JLabel nameLabel = new JLabel("Name Filter: ");
 		add(nameLabel,gbc);
 
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		add(soluteFilter, gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		JLabel soluteLabel = new JLabel("Solute Filter: ");
 		add(soluteLabel,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		add(inventoryFilter, gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		JLabel inventoryLabel = new JLabel("Inventory Filter: ");
 		add(inventoryLabel,gbc);
 		
@@ -125,28 +105,28 @@ public class FilterAcidFrame extends JFrame{
 		gbc.gridwidth = 2;
 		
 		gbc.gridx = 2;
-		gbc.gridy = 1;
+		gbc.gridy = 0;
 		jtfName = new JTextField("Name");
 		add(jtfName,gbc);
 		
 		gbc.gridx = 2;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		jtfSolute = new JTextField("Solute");
 		add(jtfSolute,gbc);
 		
 
 		gbc.gridx = 2;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		jtfInventory = new JTextField("Inventory");
 		add(jtfInventory,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 3;
 		
 		add(filterButton, gbc);
 		
 		gbc.gridx = 2;
-		gbc.gridy = 4;
+		gbc.gridy = 3;
 		
 		add(clearButton, gbc);
 		
