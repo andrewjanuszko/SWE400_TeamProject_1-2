@@ -6,18 +6,15 @@ import org.junit.jupiter.api.Test;
 
 class CompoundMadeOfTableDataGatewayRDSTest extends DatabaseTest{
 
-	@Test
+	@SuppressWarnings("unused")
+  @Test
 	void testAddRelation() throws DatabaseException {
-		CompoundRowDataGateway c1 = new CompoundRowDataGatewayRDS(12, "compound", 1.0);
-		ElementRowDataGateway e1 = new ElementRowDataGatewayRDS(10, "element", 1.0, 5, 10.0);
+		CompoundRowDataGateway c1 = new CompoundRowDataGatewayRDS("compound", 1.0);
+		ElementRowDataGateway e1 = new ElementRowDataGatewayRDS("element", 1.0, 5, 10.0);
+		//TODO write tests
 		
-		CompoundMadeOfTableDataGateway cmf = new CompoundMadeOfTableDataGatewayRDS(12);
 
-		cmf.addElementToCompound(10);
-		cmf = null;
 		
-		cmf = new CompoundMadeOfTableDataGatewayRDS(12);
-		cmf.getCompoundMadeOf().forEach(x -> assertEquals(10, x.getElementID()));
 	}
 
 }

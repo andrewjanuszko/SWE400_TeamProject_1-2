@@ -21,7 +21,7 @@ class ElementRowDataGatewayRDSTest extends DatabaseTest{
   
 	@Test
 	void testGetters() throws DatabaseException {
-		ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, "element", 1.0, 5, 10.0);
+		ElementRowDataGateway element = new ElementRowDataGatewayRDS("element", 1.0, 5, 10.0);
 		
 		assertEquals(1, element.getElementID());
 		assertEquals("element", element.getName());
@@ -32,7 +32,7 @@ class ElementRowDataGatewayRDSTest extends DatabaseTest{
 	
 	@Test
 	void testSetters() throws DatabaseException {
-		ElementRowDataGateway element = new ElementRowDataGatewayRDS(1, "element", 1.0, 5, 10.0);
+		ElementRowDataGateway element = new ElementRowDataGatewayRDS("element", 1.0, 5, 10.0);
 		
 		element.setName("name");
 		element.setInventory(2.0);
@@ -48,14 +48,14 @@ class ElementRowDataGatewayRDSTest extends DatabaseTest{
 
 	@Test
 	void testDelete() throws DatabaseException {
-	    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(1, "element", 1.0, 5, 10.0);
+	    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS("element", 1.0, 5, 10.0);
 	    
 	    assertTrue(element1.delete());
 	}
 	
 	@Test
 	void testConstructors() throws DatabaseException{
-	    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(1, "element", 1.0, 5, 10.0);
+	    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS("element", 1.0, 5, 10.0);
 	   // ElementRowDataGateway element1FindByID = new ElementRowDataGatewayRDS(1);
 	    ElementRowDataGateway element1FindByName = new ElementRowDataGatewayRDS("element");
 	    
@@ -74,7 +74,7 @@ class ElementRowDataGatewayRDSTest extends DatabaseTest{
 	
 	@Test
 	void testPersist() throws DatabaseException {
-		ElementRowDataGateway element1 = new ElementRowDataGatewayRDS(1, "element", 1.0, 5, 10.0);
+		ElementRowDataGateway element1 = new ElementRowDataGatewayRDS("element", 1.0, 5, 10.0);
 	    element1.setName("newName");
 	    assertTrue(element1.persist());
 	    element1 = null;
