@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Row Data Gateway for Compound.
@@ -21,13 +20,11 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 		
 		String drop = "DROP TABLE IF EXISTS Compound";
 		String create = "CREATE TABLE Compound (" + 
-				"compoundID INT NOT NULL, " + 
+				"compoundID INT NOT NULL AUTO_INCREMENT, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
 				"inventory Double, " + 
 				"UNIQUE(name), " +
 				"PRIMARY KEY(compoundID)) ;";
-		
-		Connection conn = DatabaseManager.getSingleton().getConnection();
 
 		try
 		{
@@ -46,6 +43,24 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 		}
 	}
 	
+	/**
+   * Only drop the table.
+   * 
+   * @return
+   * @throws DatabaseException
+   */
+  public static void dropTable() throws DatabaseException {
+    String drop = "DROP TABLE IF EXISTS Compound";
+    try {
+      // drop table
+      PreparedStatement stmt;
+      stmt = DatabaseManager.getSingleton().getConnection().prepareStatement(drop);
+      stmt.execute();
+      stmt.close();
+    } catch (SQLException e) {
+      throw new DatabaseException("Unable to drop Compound table", e);
+    }
+  }
 
 	private Connection conn;
 	
@@ -117,8 +132,7 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
 	 * @param inventory
 	 * @throws DatabaseException
 	 */
-	public CompoundRowDataGatewayRDS(int id, String name, double inventory) throws DatabaseException {
-		compoundID = id;
+	public CompoundRowDataGatewayRDS(String name, double inventory) throws DatabaseException {
 		this.name = name;
 		this.inventory = inventory;
 		conn = DatabaseManager.getSingleton().getConnection();
@@ -190,8 +204,13 @@ public class CompoundRowDataGatewayRDS implements CompoundRowDataGateway{
    */
   private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Compound(compoundID, name, inventory) VALUES (" + compoundID + ", '" + name + "', '" + inventory + "');");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Compound(name, inventory) VALUES ('" + name + "', '" + inventory + "');");
 			stmt.execute();
+			
+			PreparedStatement stmt2 = conn.prepareStatement("SELECT LAST_INSERT_ID();");
+      ResultSet rs = stmt2.executeQuery();
+      rs.next();
+      this.compoundID = rs.getInt("LAST_INSERT_ID()");
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into compound table");
 		}
