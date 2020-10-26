@@ -1,7 +1,5 @@
 package datasource;
 
-import java.util.List;
-
 public interface CompoundRowDataGateway {
 	
 	public int getCompoundID();

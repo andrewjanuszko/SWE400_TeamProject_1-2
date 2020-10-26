@@ -1,9 +1,9 @@
 package command;
 
-import mappers.MetalDataMapper;
-import model.Command;
+import model.MetalDataMapper;
 import model.DomainModelException;
 import model.Metal;
+import model.MetalDataMapper;
 import model.MetalDataMapperInterface;
 import reports.ReportObserverConnector;
 import reports.ValidEntryReport;

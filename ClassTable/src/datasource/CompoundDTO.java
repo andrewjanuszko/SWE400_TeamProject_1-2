@@ -2,12 +2,26 @@ package datasource;
 
 import java.util.List;
 
+/**
+ * Compound data transfer object
+ * 
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public class CompoundDTO {
   private int compoundId;
   private List<ElementDTO> elements;
   private String name;
   private double inventory;
 
+  /**
+   * Initialize a CompoundDTO
+   * 
+   * @param cId
+   * @param elements
+   * @param name
+   * @param inv
+   */
   public CompoundDTO(int cId, List<ElementDTO> elements, String name, double inv) {
     this.compoundId = cId;
     this.elements = elements;
@@ -15,34 +29,74 @@ public class CompoundDTO {
     this.inventory = inv;
   }
 
+  /**
+   * Get compound id
+   * 
+   * @return compoundId
+   */
   public int getCompoundId() {
     return compoundId;
   }
 
+  /**
+   * Get elements
+   * 
+   * @return list of elementDTOs
+   */
   public List<ElementDTO> getElements() {
     return elements;
   }
 
+  /**
+   * Get name
+   * 
+   * @return name
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Get inventory
+   * 
+   * @return inventory
+   */
   public double getInventory() {
     return inventory;
   }
 
+  /**
+   * Set compoundId
+   * 
+   * @param compoundId
+   */
   public void setCompoundId(int compoundId) {
     this.compoundId = compoundId;
   }
 
+  /**
+   * Set elements
+   * 
+   * @param elements
+   */
   public void setElements(List<ElementDTO> elements) {
     this.elements = elements;
   }
 
+  /**
+   * Set name
+   * 
+   * @param name
+   */
   public void setName(String name) {
     this.name = name;
   }
 
+  /**
+   * Set inventory
+   * 
+   * @param inventory
+   */
   public void setInventory(double inventory) {
     this.inventory = inventory;
   }
@@ -85,6 +139,5 @@ public class CompoundDTO {
       return false;
     return true;
   }
-
 
 }

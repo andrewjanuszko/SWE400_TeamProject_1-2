@@ -62,7 +62,7 @@ public interface ElementDataMapperInterface {
    * @return all Elements that have a partial name match.
    * @throws DomainModelException when things go wrong.
    */
-  public List<Element> filterByWildCardName(String wildCard) throws DomainModelException;
+  public List<Element> filterByNameLike(String nameLike) throws DomainModelException;
 
   /**
    * Get all Elements that have a specific inventory value.
@@ -81,7 +81,7 @@ public interface ElementDataMapperInterface {
    * @return all Elements that have an inventory value in a range.
    * @throws DomainModelException when things go wrong.
    */
-  public List<Element> filterByInventoryRange(double min, double max) throws DomainModelException;
+  public List<Element> filterByInventoryBetween(double min, double max) throws DomainModelException;
 
   /**
    * Get all Elements with a specific atomic number.
@@ -91,6 +91,15 @@ public interface ElementDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Element> filterByAtomicNumber(int atomicNumber) throws DomainModelException;
+  
+  /**
+   * Get all Elements with a specific atomic number.
+   * 
+   * @param atomicNumber the atomic number of the Element.
+   * @return all Elements with a specific atomic number.
+   * @throws DomainModelException when things go wrong.
+   */
+  public List<Element> filterByAtomicNumberBetween(int min, int max) throws DomainModelException;
 
   /**
    * Get all Elements with a specific atomic mass.
@@ -109,7 +118,7 @@ public interface ElementDataMapperInterface {
    * @return all Elements with an atomic mass in a range.
    * @throws DomainModelException when things go wrong.
    */
-  public List<Element> filterByAtomicMassRange(double min, double max) throws DomainModelException;
+  public List<Element> filterByAtomicMassBetween(double min, double max) throws DomainModelException;
 
   /**
    * Get all Elements that are in a Compound.
@@ -119,5 +128,5 @@ public interface ElementDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Element> filterByPartOfCompound(int compoundID) throws DomainModelException;
-
+  
 }

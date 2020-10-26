@@ -4,43 +4,52 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import database.DatabaseException;
 import database.DatabaseManager;
 
 /**
- * Element RDS
- * Row data Gateway
- * @author kimberlyoneill
+ * Element Row Data Gateway used to access a row of the Element table
+ * 
+ * @author Isabella Boone, Kim O'Neill
  *
  */
 public class ElementRDGRDS implements ElementRDG {
   ElementDTO element;
 
   /**
-   * constructor to search for an element
+   * Empty constructor
+   */
+  public ElementRDGRDS() {
+
+  }
+
+  /**
+   * Constructor to search for an element
+   * 
    * @param id
    */
   public ElementRDGRDS(int id) {
-    String select = "SELECT * FROM Element INNER JOIN Chemical ON Chemical.chemicalId = Element.elementId WHERE Element.elementId = " + id + ";";
-    
+    String select = "SELECT * FROM Element INNER JOIN Chemical ON Chemical.chemicalId = Element.elementId WHERE Element.elementId = "
+        + id + ";";
+
     try {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(select);
       rs.next();
-      
-      element = new ElementDTO(id, rs.getInt("atomicNumber"), rs.getDouble("atomicMass"), rs.getString("name"), rs.getDouble("inventory"));
 
+      element = new ElementDTO(id, rs.getInt("atomicNumber"), rs.getDouble("atomicMass"), rs.getString("name"),
+          rs.getDouble("inventory"));
+
+      return;
     } catch (SQLException | DatabaseException e) {
-      e.printStackTrace();
-      System.out.println("No entry with id " + id);
+      System.out.println("couldn't find element with id " + id);
     }
   }
-  
+
   /**
    * Constructor to create an element
+   * 
    * @param atomicNum
    * @param atomicMass
    * @param name
@@ -52,22 +61,22 @@ public class ElementRDGRDS implements ElementRDG {
           .prepareStatement("INSERT INTO Chemical (name, inventory) VALUES (?, ?);");
       insertChemical.setString(1, name);
       insertChemical.setDouble(2, inventory);
-      
-      PreparedStatement insert = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Element (elementId, atomicNumber, atomicMass) VALUES (LAST_INSERT_ID(), ?, ?);");
+
+      PreparedStatement insert = DatabaseManager.getSingleton().getConnection().prepareStatement(
+          "INSERT INTO Element (elementId, atomicNumber, atomicMass) VALUES (LAST_INSERT_ID(), ?, ?);");
       insert.setInt(1, atomicNum);
       insert.setDouble(2, atomicMass);
 
       insertChemical.execute();
       insert.execute();
-      
+
       String fetchId = ("SELECT LAST_INSERT_ID();");
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(fetchId);
       rs.next();
-      
+
       element = new ElementDTO(rs.getInt("LAST_INSERT_ID()"), atomicNum, atomicMass, name, inventory);
-      
+
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert");
@@ -75,7 +84,7 @@ public class ElementRDGRDS implements ElementRDG {
   }
 
   /**
-   * deletes Element already held by the RDS
+   * Deletes an Element held by the RDGRDS
    */
   @Override
   public void delete() {
@@ -86,15 +95,16 @@ public class ElementRDGRDS implements ElementRDG {
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       statement.executeUpdate(sqlElement);
       statement.executeUpdate(sqlChem);
-
+      element = null;
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Problem deleting Element with id " + element.getElementId());
     }
+
   }
 
   /**
-   * updates an element with the new values given
+   * Updates an element with the values in the ElementDTO.
    */
   @Override
   public void update() {
@@ -119,8 +129,12 @@ public class ElementRDGRDS implements ElementRDG {
     }
 
   }
+
   /**
-   * finds entry by atomic number
+   * Finds entry by atomic number
+   * 
+   * @param atomicNum to search for
+   * @return ElementDTO with specified atomicNum
    */
   public ElementDTO findByAtomicNumber(int atomicNum) {
     int id;
@@ -137,27 +151,30 @@ public class ElementRDGRDS implements ElementRDG {
       String sqlChem = "SELECT * FROM Chemical INNER JOIN Element ON Chemical.chemicalId = " + id + ";";
       rs = statement.executeQuery(sqlChem);
       rs.next();
-      
+
       name = rs.getString("name");
       inventory = rs.getDouble("inventory");
-      
+
       return new ElementDTO(id, atomicNum, atomicMass, name, inventory);
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      return null; 
+      return null;
     }
   }
-  
+
   /**
-   * finds entry by atomic Mass
+   * Find entry with a specific atomic mass
+   * 
+   * @param atomicMass to search for
+   * @return ElementTDO
    */
   @Override
   public ElementDTO findByAtomicMass(double atomicMass) {
     int id, atomicNum;
     double inventory;
     String name;
-    
+
     String sqlElement = "SELECT * FROM Element WHERE atomicMass = " + atomicMass + ";";
     try {
 
@@ -172,7 +189,7 @@ public class ElementRDGRDS implements ElementRDG {
       rs.next();
       name = rs.getString("name");
       inventory = rs.getDouble("inventory");
-      
+
       return new ElementDTO(id, atomicNum, atomicMass, name, inventory);
 
     } catch (SQLException | DatabaseException e) {
@@ -181,35 +198,43 @@ public class ElementRDGRDS implements ElementRDG {
     }
   }
 
-  
-
-  @Override
-  public void setElementId(int elementId) {
-    element.setElementId(elementId);;
-  }
-
+  /**
+   * Set atomic number
+   */
   @Override
   public void setAtomicNumber(int atomicNumber) {
     element.setAtomicNumber(atomicNumber);
   }
 
+  /**
+   * Set atomic mass
+   */
   @Override
   public void setAtomicMass(double atomicMass) {
     element.setAtomicMass(atomicMass);
   }
 
+  /**
+   * Set name
+   */
   @Override
   public void setName(String name) {
     element.setName(name);
   }
 
+  /**
+   * Set name
+   */
   @Override
   public void setInventory(double inventory) {
     element.setInventory(inventory);
   }
-  
+
+  /**
+   * Get element currently held by the RDGRDS
+   */
   public ElementDTO getElement() {
     return element;
   }
-  
+
 }

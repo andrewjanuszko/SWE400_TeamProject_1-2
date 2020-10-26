@@ -14,6 +14,8 @@ public interface MetalRowDataGateway {
 	
 	public double getAtomicMass();
 	
+	public double getAcidAmount();
+	
 	public int getDissolvedBy();
 	
 	public void setName(String s);
@@ -23,6 +25,8 @@ public interface MetalRowDataGateway {
 	public void setAtomicNumber(int i);
 	
 	public void setAtomicMass(double d);
+	
+	public void setAcidAmount(double d);
 	
 	public void setDissolvedBy(int i);
 	

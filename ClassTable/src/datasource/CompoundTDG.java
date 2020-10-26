@@ -1,20 +1,21 @@
 package datasource;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseException;
+
 /**
+ * CompoundTDG interface
  * 
- * @author kimberlyoneill
+ * @author Isabella Boone, Kim O'Neill
  *
  */
 public interface CompoundTDG {
 
   List<CompoundDTO> executeQuery() throws DatabaseException;
 
-  CompoundTDGRDS filterByName(String name); 
-  
+  CompoundTDGRDS filterByName(String name);
+
   CompoundTDGRDS filterByInventoryRange(double high, double low);
 
   CompoundTDGRDS filterByInventory(double inventory);
@@ -22,5 +23,5 @@ public interface CompoundTDG {
   CompoundTDGRDS filterByElements(int elementId);
 
   CompoundTDGRDS getAllCompounds();
-   
+
 }

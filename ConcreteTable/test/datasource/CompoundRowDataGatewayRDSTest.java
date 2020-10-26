@@ -23,7 +23,7 @@ class CompoundRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testConstructors() throws DatabaseException{
-    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", 1.0);
+    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS("compound", 1.0);
     CompoundRowDataGateway compound1FindByID = new CompoundRowDataGatewayRDS(1);
     CompoundRowDataGateway compound1FindByName = new CompoundRowDataGatewayRDS("compound");
     
@@ -42,7 +42,7 @@ class CompoundRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testGetters() throws DatabaseException{
-   CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", 1.0);
+   CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS("compound", 1.0);
    
    assertEquals(1, compound1.getCompoundID());
    assertEquals("compound", compound1.getName());
@@ -55,7 +55,7 @@ class CompoundRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testSetters() throws DatabaseException{
-    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", 1.0);
+    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS("compound", 1.0);
     compound1.setInventory(2.0);
     compound1.setName("new");
     
@@ -69,12 +69,11 @@ class CompoundRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testPersist() throws DatabaseException {
-    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", 1.0);
+    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS("compound", 1.0);
     compound1.setName("newName");
     compound1.persist();
-    compound1 = null;
     
-    CompoundRowDataGateway compound1Copy = new CompoundRowDataGatewayRDS(1);
+    CompoundRowDataGateway compound1Copy = new CompoundRowDataGatewayRDS(compound1.getCompoundID());
     assertEquals("newName", compound1Copy.getName());
   }
   
@@ -84,7 +83,7 @@ class CompoundRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testDelete() throws DatabaseException {
-    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS(1, "compound", 1.0);
+    CompoundRowDataGateway compound1 = new CompoundRowDataGatewayRDS("compound", 1.0);
     
     assertTrue(compound1.delete());
   }

@@ -1,5 +1,6 @@
 package presentation;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -19,9 +20,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 
-import model.Acid;
+import model.AcidDataMapper;
+import model.BaseDataMapper;
 import model.Base;
+import model.BaseDataMapper;
 
 public class BasePanel extends JPanel{
 	

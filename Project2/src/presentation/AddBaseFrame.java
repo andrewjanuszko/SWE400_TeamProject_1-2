@@ -32,31 +32,41 @@ public class AddBaseFrame extends JFrame{
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
+		JLabel idLabel = new JLabel("Id: ");
+		add(idLabel,gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		JTextField jtfId = new JTextField("Id");
+		add(jtfId,gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 1;
 		JLabel nameLabel = new JLabel("Name: ");
 		add(nameLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 0;
+		gbc.gridy = 1;
 		JTextField jtfName = new JTextField("Name");
 		add(jtfName,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 2;
 		JLabel inventoryLabel = new JLabel("Inventory: ");
 		add(inventoryLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 1;
+		gbc.gridy = 2;
 		JTextField jtfInventory = new JTextField("Inventory");
 		add(jtfInventory,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		JLabel soluteLabel = new JLabel("Solute: ");
 		add(soluteLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		JTextField jtfSolute = new JTextField("Solute");
 		add(jtfSolute,gbc);
 		
@@ -64,22 +74,25 @@ public class AddBaseFrame extends JFrame{
 		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int id;
 				double inventory;
 				String solute, name;
 				try {
+					id = Integer.parseInt(jtfId.getText());
 					inventory = Double.parseDouble(jtfInventory.getText());
 					solute = jtfSolute.getText();
 					name = jtfName.getText();
-					System.out.println("\n" + name + "\n" + inventory + "\n" + solute);
+					System.out.println(id + "\n" + name + "\n" + inventory + "\n" + solute);
 					dispose();
 				} catch (NumberFormatException e1) {
 					new FailureFrame("Failed to create Base");
 				}
+						
 			}
 		});
 		
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 4;
 		gbc.gridwidth = 2;
 		
 		add(add, gbc);

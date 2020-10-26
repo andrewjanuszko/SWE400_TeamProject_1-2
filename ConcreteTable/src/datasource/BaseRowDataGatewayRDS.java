@@ -4,14 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 /**
  * Row Data Gateway for Base.
  * @author Chase
  *
  */
 public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
-  
+  //TODO make solute foreign key???
   /**
    * Creates the table in the database. Drops the table if it already exists.
    * @throws DatabaseException
@@ -19,15 +18,13 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	public static void createTable() throws DatabaseException{
 		String drop = "DROP TABLE IF EXISTS Base";
 		String create = "CREATE TABLE Base (" + 
-				"baseID INT NOT NULL, " + 
+				"baseID INT NOT NULL AUTO_INCREMENT, " + 
 				"name VARCHAR(30) NOT NULL, " +                      
 				"inventory DOUBLE, " +
-				"solute VARCHAR(30), " + 
+				"solute INT, " + 
 				"UNIQUE(name), " +
 				"PRIMARY KEY(baseID)) ;";
 		
-		Connection conn = DatabaseManager.getSingleton().getConnection();
-
 		try
 		{
 			// drop table
@@ -51,7 +48,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	private int baseID;
 	private String name;
 	private Double inventory;
-	private String solute;
+	private int solute;
 	
 	/**
 	 * Constructs Base Row Data Gateway based off of existing row by ID.
@@ -76,7 +73,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 			rs.next();
 			name = rs.getString("name");
 			inventory = rs.getDouble("inventory");
-			solute = rs.getString("solute");
+			solute = rs.getInt("solute");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find Base with that name", e);
 		}
@@ -105,7 +102,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 			rs.next();
 			baseID = rs.getInt("baseID");
 			inventory = rs.getDouble("inventory");
-			solute = rs.getString("solute");
+			solute = rs.getInt("solute");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find Base with that name", e);
 		}
@@ -119,8 +116,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	 * @param solute
 	 * @throws DatabaseException
 	 */
-	public BaseRowDataGatewayRDS(int id, String name, double inventory, String solute) throws DatabaseException {
-		baseID = id;
+	public BaseRowDataGatewayRDS(String name, double inventory, int solute) throws DatabaseException {
 		this.name = name;
 		this.inventory = inventory;
 		this.solute = solute;
@@ -144,7 +140,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
   }
 
   @Override
-  public String getSolute() {
+  public int getSolute() {
     return this.solute;
   }
 
@@ -159,7 +155,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
   }
 
   @Override
-  public void setSolute(String solute) {
+  public void setSolute(int solute) {
     this.solute = solute;
   }
   
@@ -172,8 +168,8 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
   		PreparedStatement stmt = conn.prepareStatement("UPDATE Base SET"
   				+ " name = '" + name
   				+ "', inventory = '" + inventory
-  				+ "', solute = '" + solute
-  				+ "' WHERE baseID = " + baseID);
+  				+ "', solute = " + solute
+  				+ " WHERE baseID = " + baseID);
   		stmt.executeUpdate();
   		return true;
 	  } catch (SQLException e) {
@@ -192,7 +188,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
       stmt1.execute();
       return true;
     } catch (SQLException e) {
-      new DatabaseException("could not delete acid");
+      new DatabaseException("could not delete base");
       return false;
     }
   }
@@ -202,8 +198,13 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
    */
   private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Base(baseID, name, inventory, solute) VALUES (" + baseID + ", '" + name + "', '" + inventory + "', '" + solute + "');");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Base(name, inventory, solute) VALUES ('" + name + "', '" + inventory + "', '" + solute + "');");
 			stmt.execute();
+			
+			PreparedStatement stmt2 = conn.prepareStatement("SELECT LAST_INSERT_ID();");
+      ResultSet rs = stmt2.executeQuery();
+      rs.next();
+      this.baseID = rs.getInt("LAST_INSERT_ID()");
 		} catch(SQLException e) {
 			new DatabaseException("could not insert into base table");
 		}

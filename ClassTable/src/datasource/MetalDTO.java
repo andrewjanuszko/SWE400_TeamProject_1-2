@@ -1,72 +1,137 @@
 package datasource;
 
+/**
+ * Metal data transfer object
+ * 
+ * @author Isabella Boone, Kim O'Neill
+ *
+ */
 public class MetalDTO {
-  int metalId, dissolvedById, atomicNumber; 
+  int metalId, dissolvedById, atomicNumber;
   String name;
   double inventory, atomicMass, moles;
-  
-  public MetalDTO(int metalId, int dissolvedById, int atomicNumber, double atomicMass, double moles, String name, double inventory) {
+
+  /**
+   * Initialize a metal DTO 
+   * @param metalId
+   * @param dissolvedById
+   * @param atomicNumber
+   * @param atomicMass
+   * @param moles
+   * @param name
+   * @param inventory
+   */
+  public MetalDTO(int metalId, int dissolvedById, int atomicNumber, double atomicMass, double moles, String name,
+      double inventory) {
     this.metalId = metalId;
-    this.dissolvedById = dissolvedById; 
+    this.dissolvedById = dissolvedById;
     this.atomicNumber = atomicNumber;
     this.atomicMass = atomicMass;
     this.moles = moles;
     this.name = name;
     this.inventory = inventory;
   }
-  
-  public int getMetalId() { 
+
+  /**
+   * Get metalId
+   * @return metalId
+   */
+  public int getMetalId() {
     return metalId;
   }
-  
+
+  /**
+   * Get moles
+   * @return moles
+   */
   public double getMoles() {
     return moles;
   }
 
-  public void setMoles(double moles2) {
-    this.moles = moles2;
+  /**
+   * Set moles
+   * @param moles
+   */
+  public void setMoles(double moles) {
+    this.moles = moles;
   }
 
+  /**
+   * Get dissolvedById 
+   * @return dissolvedById
+   */
   public int getDissolvedById() {
-    return dissolvedById; 
+    return dissolvedById;
   }
-  
+
+  /**
+   * Get name
+   * @return name
+   */
   public String getName() {
     return name;
   }
-  
+
+  /**
+   * Get inventory
+   * @return inventory
+   */
   public double getInventory() {
     return inventory;
   }
-  
-  public void setMetalId(int metalId) {
-    this.metalId = metalId;
-  }
-  
+
+  /**
+   * Set dissolvedById
+   * @param dissolvedById
+   */
   public void setDissolvedById(int dissolvedById) {
     this.dissolvedById = dissolvedById;
   }
-  
+
+  /**
+   * Set name
+   * @param name
+   */
   public void setName(String name) {
     this.name = name;
   }
-  
+
+  /** 
+   * Set inventory
+   * @param inventory
+   */
   public void setInventory(double inventory) {
-    this.inventory = inventory; 
+    this.inventory = inventory;
   }
-  
+
+  /**
+   * Get atomic number
+   * @return atomicNumber
+   */
   public int getAtomicNumber() {
     return atomicNumber;
   }
 
+  /**
+   * Set atomic number
+   * @param atomicNumber
+   */
   public void setAtomicNumber(int atomicNumber) {
     this.atomicNumber = atomicNumber;
   }
 
+  /**
+   * Get atomic mass
+   * @return atomicMass
+   */
   public double getAtomicMass() {
     return atomicMass;
   }
 
+  /**
+   * Set atomicMass
+   * @param atomicMass
+   */
   public void setAtomicMass(double atomicMass) {
     this.atomicMass = atomicMass;
   }
@@ -106,6 +171,5 @@ public class MetalDTO {
       return false;
     return true;
   }
-  
-  
+
 }

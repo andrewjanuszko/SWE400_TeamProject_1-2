@@ -26,8 +26,8 @@ class TestChemical extends DatabaseTest {
   @Test
   static void testGetName() throws SQLException, DatabaseException {
     // Fetch chemicals
-    ChemicalRDG chem1 = new ChemicalRDGRDS(1), chem2 = new ChemicalRDGRDS(2), chem3 = new ChemicalRDGRDS(11),
-        chem4 = new ChemicalRDGRDS(12);
+    ChemicalRDG chem1 = new ChemicalRDGRDS(1), chem2 = new ChemicalRDGRDS(2), chem3 = new ChemicalRDGRDS(9),
+        chem4 = new ChemicalRDGRDS(10);
 
     // Tests
     assertEquals("acidname1", chem1.getChemical().getName());
@@ -45,8 +45,8 @@ class TestChemical extends DatabaseTest {
   @Test
   static void testGetInventory() throws SQLException, DatabaseException {
     // Fetch chemicals
-    ChemicalRDG chem1 = new ChemicalRDGRDS(1), chem2 = new ChemicalRDGRDS(2), chem3 = new ChemicalRDGRDS(11),
-        chem4 = new ChemicalRDGRDS(12);
+    ChemicalRDG chem1 = new ChemicalRDGRDS(1), chem2 = new ChemicalRDGRDS(2), chem3 = new ChemicalRDGRDS(9),
+        chem4 = new ChemicalRDGRDS(10);
 
     // Tests
     assertEquals(1.1, chem1.getChemical().getInventory(), 0.1);
@@ -64,7 +64,7 @@ class TestChemical extends DatabaseTest {
   @Test
   static void testUpdate() throws SQLException, DatabaseException {
     // Create acid and getter for it
-    ChemicalRDG chem_setter = new ChemicalRDGRDS("chemname9", 1.9), chem_getter = new ChemicalRDGRDS(22);
+    ChemicalRDG chem_setter = new ChemicalRDGRDS("chemname9", 1.9), chem_getter = new ChemicalRDGRDS(35);
 
     // Ensure it was added
     assertEquals("chemname9", chem_getter.getChemical().getName());
@@ -74,7 +74,7 @@ class TestChemical extends DatabaseTest {
     chem_setter.setName("chemname6");
     chem_setter.setInventory(1.8);
     chem_setter.update();
-    chem_getter = new ChemicalRDGRDS(22);
+    chem_getter = new ChemicalRDGRDS(35);
 
     // Make sure update worked
     assertEquals("chemname6", chem_getter.getChemical().getName());
@@ -118,23 +118,7 @@ class TestChemical extends DatabaseTest {
     try {
       getAll = new ChemicalTDGRDS().getAllChemicals().executeQuery();
       
-      assertEquals(16, getAll.size());
-      assertEquals(1, getAll.get(0).getChemicalId());
-      assertEquals(2, getAll.get(1).getChemicalId());
-      assertEquals(3, getAll.get(2).getChemicalId());
-      assertEquals(4, getAll.get(3).getChemicalId());
-      assertEquals(5, getAll.get(4).getChemicalId());
-      assertEquals(6, getAll.get(5).getChemicalId());
-      assertEquals(7, getAll.get(6).getChemicalId());
-      assertEquals(8, getAll.get(7).getChemicalId());
-      assertEquals(11, getAll.get(8).getChemicalId());
-      assertEquals(12, getAll.get(9).getChemicalId());
-      assertEquals(13, getAll.get(10).getChemicalId());
-      assertEquals(14, getAll.get(11).getChemicalId());
-      assertEquals(15, getAll.get(12).getChemicalId());
-      assertEquals(16, getAll.get(13).getChemicalId());
-      assertEquals(17, getAll.get(14).getChemicalId());
-      assertEquals(18, getAll.get(15).getChemicalId());
+      assertEquals(29, getAll.size());
     } catch(DatabaseException e) {
       e.printStackTrace();
     }
@@ -158,19 +142,19 @@ class TestChemical extends DatabaseTest {
       List<ChemicalDTO> get = new ChemicalTDGRDS().getAllChemicals().filterByInventory(41.2).executeQuery();
       
       assertEquals(7, get.get(0).getChemicalId());
-      assertEquals(17, get.get(1).getChemicalId());
+      assertEquals(15, get.get(1).getChemicalId());
       
       get = new ChemicalTDGRDS().getAllChemicals().filterByInventoryRange(42, 40).executeQuery();
       
       assertEquals(7, get.get(0).getChemicalId());
-      assertEquals(17, get.get(1).getChemicalId());
+      assertEquals(15, get.get(1).getChemicalId());
       
       get = new ChemicalTDGRDS().getAllChemicals().filterByInventoryRange(43, 40).executeQuery();
       
       assertEquals(7, get.get(0).getChemicalId());
       assertEquals(8, get.get(1).getChemicalId());
-      assertEquals(17, get.get(2).getChemicalId());
-      assertEquals(18, get.get(3).getChemicalId());
+      assertEquals(15, get.get(2).getChemicalId());
+      assertEquals(16, get.get(3).getChemicalId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -187,17 +171,11 @@ class TestChemical extends DatabaseTest {
       testDelete();
       testUpdate();
       testGetAll();
-      insert();
       testFilterByName(); 
       testFilterByInventory();
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
     }
-  }
-
-  private static void insert() {
-    ChemicalRDG gateway1 = new ChemicalRDGRDS("funkychem1", 41.2);
-    ChemicalRDG gateway2 = new ChemicalRDGRDS("funkychem2", 42.4);
   }
 
 }

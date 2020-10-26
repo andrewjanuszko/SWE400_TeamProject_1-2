@@ -61,7 +61,7 @@ public interface BaseDataMapperInterface {
    * @return all Bases with a partial name match.
    * @throws DomainModelException when things go wrong.
    */
-  public List<Base> filterByWildCardName(String wildCard) throws DomainModelException;
+  public List<Base> filterByNameLike(String nameLike) throws DomainModelException;
 
   /**
    * Get all Bases with a specific inventory value.
@@ -80,7 +80,7 @@ public interface BaseDataMapperInterface {
    * @return all Bases with a inventory value in a range.
    * @throws DomainModelException when things go wrong.
    */
-  public List<Base> filterByInventoryRange(double min, double max) throws DomainModelException;
+  public List<Base> filterByInventoryBetween(double min, double max) throws DomainModelException;
 
   /**
    * Get all Bases that have the provided solute.
@@ -90,4 +90,5 @@ public interface BaseDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Base> filterBySolute(int chemicalID) throws DomainModelException;
+  
 }
