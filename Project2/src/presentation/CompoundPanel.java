@@ -21,6 +21,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import model.Compound;
+import model.CompoundDataMapper;
+import model.DomainModelException;
 
 
 public class CompoundPanel extends JPanel{
@@ -34,6 +36,7 @@ public class CompoundPanel extends JPanel{
 	JLabel selected = null;
 	Compound selectedCompound = null;
 	Color labelColor = new Color(30,30,30);
+	CompoundDataMapper compoundMapper = new CompoundDataMapper();
 	List<Compound> compoundList = new ArrayList<Compound>();
 	
 	public CompoundPanel() {
@@ -142,8 +145,8 @@ public class CompoundPanel extends JPanel{
 	}
 	
 	private void getDetailsCompound() {
-		if(selected == null) {
-			return;
+		if(selected != null) {
+			new CompoundDetailsFrame(selectedCompound);
 		}
 	}
 	
@@ -156,9 +159,12 @@ public class CompoundPanel extends JPanel{
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
 	
-		compoundList.add(new Compound(0, "compound", 2.0, null));
-		compoundList.add(new Compound(0, "This is an compound", 2.0, null));
-		compoundList.add(new Compound(0, "not an compound", 2.0, null));
+		try {
+			compoundList = compoundMapper.getAll();
+		} catch (DomainModelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		labels.setLayout(new GridLayout(compoundList.size(), 1));
 		
 		for(int i = 0; i < compoundList.size(); i++) {
