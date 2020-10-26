@@ -68,12 +68,19 @@ public class Acid extends Chemical {
   }
 
   public void setThreshold() {
-    List<Metal> list = new MetalDataMapper().filterByDissolvedBy(getID());
-    
-    threshold = 0;
-    for (Metal m : list) {
-      threshold += m.getAcidAmount();
+    List<Metal> list;
+    try {
+      list = new MetalDataMapper().filterByDissolvedBy(getID());
+      threshold = 0;
+      for (Metal m : list) {
+        threshold += m.getAcidAmount();
+      }
+    } catch (DomainModelException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
+    
+    
     
   }
   

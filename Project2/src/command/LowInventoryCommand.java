@@ -54,8 +54,9 @@ public class LowInventoryCommand implements Command {
    * Get low acids
    * 
    * @return all acids that are low
+   * @throws DomainModelException 
    */
-  private List<Acid> getLowAcids() {
+  private List<Acid> getLowAcids() throws DomainModelException {
     List<Acid> acids = new ArrayList<>(), allAcids = new AcidDataMapper().getAll();
 
     for (Acid a : allAcids) {
