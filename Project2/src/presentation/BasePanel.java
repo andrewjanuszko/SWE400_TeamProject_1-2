@@ -37,6 +37,7 @@ public class BasePanel extends JPanel{
 	JButton detailsButton = new JButton("Details");
 	JLabel selected = null;
 	Base selectedBase = null;
+	BaseDataMapper baseMapper = new BaseDataMapper();
 	Color labelColor = new Color(30,30,30);
 	List<Base> baseList = new ArrayList<Base>();
 	String filter;
@@ -130,7 +131,12 @@ public class BasePanel extends JPanel{
 	
 	private void deleteBase() {
 		if(selected != null) {
-			//deletes selected base
+			try {
+				baseMapper.delete(selectedBase);
+			} catch (DomainModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -162,7 +168,7 @@ public class BasePanel extends JPanel{
 		JPanel labels = new JPanel();
 	
 		try {
-			baseList = new BaseDataMapper().getAll();
+			baseList = baseMapper.getAll();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

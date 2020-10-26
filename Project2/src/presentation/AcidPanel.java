@@ -35,6 +35,7 @@ public class AcidPanel extends JPanel{
   JButton detailsButton = new JButton("Details");
   JLabel selected = null;
   Acid selectedAcid = null;
+  AcidDataMapper acidMapper = new AcidDataMapper();
   Color labelColor = new Color(30,30,30);
   List<Acid> acidList = new ArrayList<Acid>();
   String filter;
@@ -128,7 +129,12 @@ public class AcidPanel extends JPanel{
   
   private void deleteAcid() {
       if(selected != null) {
-          //deletes selected acid
+          try {
+			acidMapper.delete(selectedAcid);
+		} catch (DomainModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
       }
   }
   
@@ -160,7 +166,7 @@ public class AcidPanel extends JPanel{
       JPanel labels = new JPanel();
   
       try {
-        acidList = new AcidDataMapper().getAll();
+        acidList = acidMapper.getAll();
       } catch (Exception e) {
         // TODO Auto-generated catch block
         e.printStackTrace();

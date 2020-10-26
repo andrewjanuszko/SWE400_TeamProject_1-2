@@ -128,7 +128,12 @@ public class MetalPanel extends JPanel{
 	
 	private void deleteMetal() {
 		if(selected != null) {
-			//deletes selected metal
+			try {
+				metalMapper.delete(selectedMetal);
+			} catch (DomainModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

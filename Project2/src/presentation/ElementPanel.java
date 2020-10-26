@@ -130,7 +130,12 @@ public class ElementPanel extends JPanel{
 	
 	private void deleteElement() {
 		if(selected != null) {
-			//deletes selected element
+			try {
+				elementMapper.delete(selectedElement);
+			} catch (DomainModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

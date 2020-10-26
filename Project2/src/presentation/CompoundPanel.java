@@ -128,7 +128,12 @@ public class CompoundPanel extends JPanel{
 	
 	private void deleteCompound() {
 		if(selected != null) {
-			//deletes selected compound
+			try {
+				compoundMapper.delete(selectedCompound);
+			} catch (DomainModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
