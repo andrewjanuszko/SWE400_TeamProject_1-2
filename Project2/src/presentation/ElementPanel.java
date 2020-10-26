@@ -4,10 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -16,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import model.Element;
 import model.Element;
 
 public class ElementPanel extends JPanel{
@@ -27,8 +32,10 @@ public class ElementPanel extends JPanel{
 	JButton filterButton = new JButton("Filter");
 	JButton detailsButton = new JButton("Details");
 	JLabel selected = null;
+	Element selectedElement = null;
 	Color labelColor = new Color(30,30,30);
-	List<Element> elementList;
+	List<Element> elementList = new ArrayList<Element>();
+	String filter;
 	
 	public ElementPanel() {
 		this.setLayout(new GridBagLayout());
@@ -40,7 +47,7 @@ public class ElementPanel extends JPanel{
 		elements.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		elements.add(elements.createVerticalScrollBar());
 		
-		elements.setViewportView(Labels());
+		elements.setViewportView(buildLabels());
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 1;
@@ -74,6 +81,7 @@ public class ElementPanel extends JPanel{
 		      @Override
 		      public void actionPerformed(ActionEvent ae) {
 		        filterElement();
+		        
 		      }
 		    });
 		detailsButton.addActionListener( new ActionListener() {
@@ -124,15 +132,17 @@ public class ElementPanel extends JPanel{
 	}
 	
 	private void filterElement() {
-		if(selected != null) {
-			//brings up new window based on selected element
-			new FilterElementFrame().addWindowListener(new WindowAdapter() {
+		
+			//brings up new window elementd on selected element
+			FilterElementFrame fef = new FilterElementFrame();
+			fef.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent arg0) {
-					//reset the view
+					filter = fef.getFilter();
+					System.out.println(filter);
 				}
 			});
-		}
+		
 	}
 	
 	private void getDetailsElement() {
@@ -146,10 +156,37 @@ public class ElementPanel extends JPanel{
 	      selected.setBackground(labelColor);
 	  }
 	
+
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
+	
+		elementList.add(new Element(0, "element", 5.0,  5, 100.0));
+		elementList.add(new Element(0, "This is an element", 1.0,  2, 2.0));
+		elementList.add(new Element(0, "not an element", 41.0,  2, 4.0));
+		labels.setLayout(new GridLayout(elementList.size(), 1));
 		
+		for(int i = 0; i < elementList.size(); i++) {
+		      final int x = i;
+		      JLabel label = new JLabel(buildHtml(elementList.get(i)));
+		      label.setOpaque(true);
+		      label.setBackground(new Color(30, 30, 30));
+		      label.addMouseListener( new MouseAdapter() {
+		          @Override
+		          public void mouseClicked(MouseEvent e) {
+		              removeSelectedBackground();
+		              label.setBackground(new Color(234, 201, 55));
+		              selected = label;
+		              selectedElement = elementList.get(x);
+		          }
+		      }); 
+		      labels.add(label, i, 0);
+		    }
+
 		return labels;
+	}
+    
+	private String buildHtml(Element element) {
+		return "<html><p style=\"color:white;\">" + element.getName() + "</p></html>";
 	}
 
 }
