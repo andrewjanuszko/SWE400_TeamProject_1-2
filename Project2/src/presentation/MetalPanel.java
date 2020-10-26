@@ -20,7 +20,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import model.DomainModelException;
 import model.Metal;
+import model.MetalDataMapper;
 import model.Metal;
 
 public class MetalPanel extends JPanel{
@@ -33,6 +35,7 @@ public class MetalPanel extends JPanel{
 	JButton detailsButton = new JButton("Details");
 	JLabel selected = null;
 	Metal selectedMetal = null;
+	MetalDataMapper metalMapper = new MetalDataMapper();
 	Color labelColor = new Color(30,30,30);
 	List<Metal> metalList = new ArrayList<Metal>();
 	
@@ -142,8 +145,8 @@ public class MetalPanel extends JPanel{
 	}
 	
 	private void getDetailsMetal() {
-		if(selected == null) {
-			return;
+		if(selected != null) {
+			new MetalDetailsFrame(selectedMetal);
 		}
 	}
 	
@@ -156,9 +159,13 @@ public class MetalPanel extends JPanel{
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
 	
-		metalList.add(new Metal(0, "metal", 5.0,  5, 100.0, 100));
-		metalList.add(new Metal(0, "This is an metal", 1.0,  2, 2.0, 2));
-		metalList.add(new Metal(0, "not an metal", 41.0,  2, 4.0, 22));
+		try {
+			metalList = metalMapper.getAll();
+		} catch (DomainModelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		labels.setLayout(new GridLayout(metalList.size(), 1));
 		
 		for(int i = 0; i < metalList.size(); i++) {
