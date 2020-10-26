@@ -9,13 +9,10 @@ import java.util.List;
 
 import database.DatabaseException;
 import database.DatabaseManager;
+import model.Element;
 
 public class CompoundRDGRDS implements CompoundRDG {
   CompoundDTO compound;
-
-  public CompoundRDGRDS() {
-
-  }
 
   public CompoundRDGRDS(int id) {
     try {
@@ -25,15 +22,20 @@ public class CompoundRDGRDS implements CompoundRDG {
     }
   }
 
-  public CompoundRDGRDS(List<Integer> madeOf, String name, double inventory) {
+  public CompoundRDGRDS(List<Element> madeOf, String name, double inventory) {
     try {
-      compound = create(madeOf, name, inventory);
+      List<Integer> madeOfIds = new ArrayList<>();
+      for(Element e : madeOf) {
+        madeOfIds.add(e.getID());
+      }
+      
+      compound = create(madeOfIds, name, inventory);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
-  public CompoundDTO create(List<Integer> madeOf, String name, double inventory) throws Exception {
+  public CompoundDTO create(List<Integer> madeOfIds, String name, double inventory) throws Exception {
     try {
       List<ElementDTO> elements = new ArrayList<>();
       // Insert compound
