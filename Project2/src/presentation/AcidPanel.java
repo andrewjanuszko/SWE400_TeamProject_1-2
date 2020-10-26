@@ -37,7 +37,7 @@ public class AcidPanel extends JPanel{
 	JLabel selected = null;
 	Acid selectedChemical;
 	Color labelColor = new Color(30,30,30);
-	List<Acid> acidList;
+	List<Acid> acidList = new ArrayList<Acid>();
 	//AcidDataMapper acidMapper = new AcidDataMapper();
 	String filter;
 	
@@ -51,7 +51,7 @@ public class AcidPanel extends JPanel{
 		acids.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		acids.add(acids.createVerticalScrollBar());
 		
-		acids.setViewportView(label());
+		acids.setViewportView(buildLabels());
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 1;
@@ -160,13 +160,10 @@ public class AcidPanel extends JPanel{
 	
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
-		/*
-		try {
-		   acidList = acidMapper.getAll();
-		} catch (DomainModelException e) {
-			e.printStackTrace();
-		}
-*/
+	
+		acidList.add(new Acid(0, "acid", 5, null, 5));
+		acidList.add(new Acid(0, "This is an acid", 1, null, 300));
+		acidList.add(new Acid(0, "not an acid", 41, null, 2));
 		labels.setLayout(new GridLayout(acidList.size(), 1));
 		
 		for(int i = 0; i < acidList.size(); i++) {
@@ -183,14 +180,14 @@ public class AcidPanel extends JPanel{
 		              selectedChemical = acidList.get(x);
 		          }
 		      }); 
-		      labels.add(label);
+		      labels.add(label, i, 0);
 		    }
 
 		return labels;
 	}
     
 	private String buildHtml(Acid acid) {
-		return acid.getName();
+		return "<html><p style=\"color:white;\">" + acid.getName() + "</p></html>";
 	}
 
 }

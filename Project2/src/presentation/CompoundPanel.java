@@ -4,10 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -18,6 +22,7 @@ import javax.swing.ScrollPaneConstants;
 
 import model.Compound;
 
+
 public class CompoundPanel extends JPanel{
 
 	JScrollPane compounds = new JScrollPane(); 
@@ -27,8 +32,9 @@ public class CompoundPanel extends JPanel{
 	JButton filterButton = new JButton("Filter");
 	JButton detailsButton = new JButton("Details");
 	JLabel selected = null;
+	Compound selectedCompound = null;
 	Color labelColor = new Color(30,30,30);
-	List<Compound> compoundList;
+	List<Compound> compoundList = new ArrayList<Compound>();
 	
 	public CompoundPanel() {
 		this.setLayout(new GridBagLayout());
@@ -40,7 +46,7 @@ public class CompoundPanel extends JPanel{
 		compounds.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		compounds.add(compounds.createVerticalScrollBar());
 		
-		compounds.setViewportView(Labels());
+		compounds.setViewportView(buildLabels());
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 1;
@@ -124,15 +130,15 @@ public class CompoundPanel extends JPanel{
 	}
 	
 	private void filterCompound() {
-		if(selected != null) {
-			//brings up new window based on selected compound
+		
+			//brings up new window compoundd on selected compound
 			new FilterCompoundFrame().addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent arg0) {
 					//reset the view
 				}
 			});
-		}
+		
 	}
 	
 	private void getDetailsCompound() {
@@ -146,10 +152,37 @@ public class CompoundPanel extends JPanel{
 	      selected.setBackground(labelColor);
 	  }
 	
+
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
+	
+		compoundList.add(new Compound(0, "compound", 2.0, null));
+		compoundList.add(new Compound(0, "This is an compound", 2.0, null));
+		compoundList.add(new Compound(0, "not an compound", 2.0, null));
+		labels.setLayout(new GridLayout(compoundList.size(), 1));
 		
+		for(int i = 0; i < compoundList.size(); i++) {
+		      final int x = i;
+		      JLabel label = new JLabel(buildHtml(compoundList.get(i)));
+		      label.setOpaque(true);
+		      label.setBackground(new Color(30, 30, 30));
+		      label.addMouseListener( new MouseAdapter() {
+		          @Override
+		          public void mouseClicked(MouseEvent e) {
+		              removeSelectedBackground();
+		              label.setBackground(new Color(234, 201, 55));
+		              selected = label;
+		              selectedCompound = compoundList.get(x);
+		          }
+		      }); 
+		      labels.add(label, i, 0);
+		    }
+
 		return labels;
+	}
+    
+	private String buildHtml(Compound compound) {
+		return "<html><p style=\"color:white;\">" + compound.getName() + "</p></html>";
 	}
 
 }

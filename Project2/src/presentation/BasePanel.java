@@ -4,10 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -16,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import model.Acid;
 import model.Base;
 
 public class BasePanel extends JPanel{
@@ -27,8 +32,9 @@ public class BasePanel extends JPanel{
 	JButton filterButton = new JButton("Filter");
 	JButton detailsButton = new JButton("Details");
 	JLabel selected = null;
+	Base selectedBase = null;
 	Color labelColor = new Color(30,30,30);
-	List<Base> baseList;
+	List<Base> baseList = new ArrayList<Base>();
 	String filter;
 	
 	public BasePanel() {
@@ -49,7 +55,7 @@ public class BasePanel extends JPanel{
 		bases.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		bases.add(bases.createVerticalScrollBar());
 		
-		bases.setViewportView(Labels());
+		bases.setViewportView(buildLabels());
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 1;
@@ -149,8 +155,33 @@ public class BasePanel extends JPanel{
 	
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
+	
+		baseList.add(new Base(0, "base", 5,  5));
+		baseList.add(new Base(0, "This is an base", 1,  300));
+		baseList.add(new Base(0, "not an base", 41,  2));
+		labels.setLayout(new GridLayout(baseList.size(), 1));
 		
+		for(int i = 0; i < baseList.size(); i++) {
+		      final int x = i;
+		      JLabel label = new JLabel(buildHtml(baseList.get(i)));
+		      label.setOpaque(true);
+		      label.setBackground(new Color(30, 30, 30));
+		      label.addMouseListener( new MouseAdapter() {
+		          @Override
+		          public void mouseClicked(MouseEvent e) {
+		              removeSelectedBackground();
+		              label.setBackground(new Color(234, 201, 55));
+		              selected = label;
+		              selectedBase = baseList.get(x);
+		          }
+		      }); 
+		      labels.add(label, i, 0);
+		    }
+
 		return labels;
 	}
-
+    
+	private String buildHtml(Base base) {
+		return "<html><p style=\"color:white;\">" + base.getName() + "</p></html>";
+	}
 }
