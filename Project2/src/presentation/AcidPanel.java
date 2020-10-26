@@ -148,6 +148,7 @@ public class AcidPanel extends JPanel{
       if(selected == null) {
           return;
       }
+      new AcidDetailsFrame(selectedAcid);
   }
   
   private void removeSelectedBackground() {
@@ -160,9 +161,9 @@ public class AcidPanel extends JPanel{
   
       try {
         acidList = new AcidDataMapper().getAll();
-      } catch (DomainModelException e1) {
+      } catch (Exception e) {
         // TODO Auto-generated catch block
-        e1.printStackTrace();
+        e.printStackTrace();
       }
       labels.setLayout(new GridLayout(acidList.size(), 1));
       

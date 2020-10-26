@@ -36,8 +36,8 @@ public class AcidDetailsFrame extends JFrame{
 		JLabel dissolves = new JLabel();
 		
 		List<Metal> dissolvesList = acid.getDissolves();
-		if(dissolvesList != null)
-			dissolvesList.forEach(x -> dissolves.setText(dissolves.getText() + " " + x));
+		if(dissolvesList != null && !dissolvesList.isEmpty())
+			dissolvesList.forEach(x -> dissolves.setText(dissolves.getText() + " " + x.getName()));
 		else 
 			dissolves.setText("nothing");
 			

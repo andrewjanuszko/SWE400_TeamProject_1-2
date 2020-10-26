@@ -75,7 +75,7 @@ public class Acid extends Chemical {
       for (Metal m : list) {
         threshold += m.getAcidAmount();
       }
-    } catch (DomainModelException e) {
+    } catch (Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }

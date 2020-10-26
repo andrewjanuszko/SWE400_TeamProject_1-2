@@ -22,8 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
-import model.AcidDataMapper;
 import model.BaseDataMapper;
+import model.DomainModelException;
 import model.Base;
 import model.BaseDataMapper;
 
@@ -150,6 +150,7 @@ public class BasePanel extends JPanel{
 		if(selected == null) {
 			return;
 		}
+		new BaseDetailsFrame(selectedBase);
 	}
 	
 	private void removeSelectedBackground() {
@@ -160,9 +161,12 @@ public class BasePanel extends JPanel{
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
 	
-		baseList.add(new Base(0, "base", 5,  5));
-		baseList.add(new Base(0, "This is an base", 1,  300));
-		baseList.add(new Base(0, "not an base", 41,  2));
+		try {
+			baseList = new BaseDataMapper().getAll();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		labels.setLayout(new GridLayout(baseList.size(), 1));
 		
 		for(int i = 0; i < baseList.size(); i++) {
