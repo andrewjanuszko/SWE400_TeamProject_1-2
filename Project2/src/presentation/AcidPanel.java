@@ -30,7 +30,7 @@ import reports.Report;
 import reports.ReportObserver;
 import model.Acid;
 
-public class AcidPanel extends JPanel implements ReportObserver{
+public class AcidPanel extends JPanel{
 
   JScrollPane acids = new JScrollPane(); 
   GridBagConstraints gbc = new GridBagConstraints(); 
@@ -172,13 +172,14 @@ public class AcidPanel extends JPanel implements ReportObserver{
   
   private JPanel buildLabels() {
       JPanel labels = new JPanel();
-  
+  /*
       try {
         acidList = acidMapper.getAll();
       } catch (Exception e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
+      */
       labels.setLayout(new GridLayout(acidList.size(), 1));
       
       for(int i = 0; i < acidList.size(); i++) {
@@ -203,12 +204,6 @@ public class AcidPanel extends JPanel implements ReportObserver{
   
   private String buildHtml(Acid acid) {
       return "<html><p style=\"color:white;\">" + acid.getName() + "</p></html>";
-  }
-
-  @Override
-  public void receiveReport(Report report) {
-	  // TODO Auto-generated method stub
-	
   }
 
 }

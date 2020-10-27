@@ -21,12 +21,15 @@ public class FilterAcidFrame extends JFrame{
 	JRadioButton nameFilter = new JRadioButton();        //filterType 1
 	JRadioButton soluteFilter = new JRadioButton();      //filterType 2
 	JRadioButton inventoryFilter = new JRadioButton();   //filterType 3
+	JRadioButton inventoryRangeFilter = new JRadioButton();   //filterType 4
 	GridBagConstraints gbc = new GridBagConstraints();
 	JButton filterButton = new JButton("Filter");
 	JButton clearButton = new JButton("Clear Filter");
 	JTextField jtfName;
 	JTextField jtfSolute;
 	JTextField jtfInventory;
+	JTextField jtfInventoryRange1;
+	JTextField jtfInventoryRange2;
 	
 	public FilterAcidFrame() {
 		setLayout(new GridBagLayout());
@@ -58,6 +61,11 @@ public class FilterAcidFrame extends JFrame{
 		inventoryFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 		        filterType = 3;
+		      }
+		});
+		inventoryRangeFilter.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+		        filterType = 4;
 		      }
 		});
 		
@@ -102,6 +110,14 @@ public class FilterAcidFrame extends JFrame{
 		JLabel inventoryLabel = new JLabel("Inventory Filter: ");
 		add(inventoryLabel,gbc);
 		
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		add(inventoryRangeFilter, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 3;
+		JLabel inventoryRangeLabel = new JLabel("Inventory Range Filter: ");
+		add(inventoryRangeLabel,gbc);
 		
 		gbc.gridwidth = 2;
 		
@@ -121,13 +137,29 @@ public class FilterAcidFrame extends JFrame{
 		jtfInventory = new JTextField("Inventory");
 		add(jtfInventory,gbc);
 		
-		gbc.gridx = 0;
+		gbc.gridwidth = 1;
+		
+		gbc.gridx = 2;
 		gbc.gridy = 3;
+		
+		jtfInventoryRange1 = new JTextField("Range 1");
+		add(jtfInventoryRange1,gbc);
+		
+		gbc.gridx = 3;
+		gbc.gridy = 3;
+		
+		jtfInventoryRange2 = new JTextField("Range 2");
+		add(jtfInventoryRange2,gbc);
+		
+		gbc.gridwidth = 2;
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
 		
 		add(filterButton, gbc);
 		
 		gbc.gridx = 2;
-		gbc.gridy = 3;
+		gbc.gridy = 4;
 		
 		add(clearButton, gbc);
 		
@@ -148,6 +180,9 @@ public class FilterAcidFrame extends JFrame{
 					break;
 				case 3:
 					filter = filter + "-" + Double.parseDouble(jtfInventory.getText()); 
+					break;
+				case 4:
+					filter = filter + "-" + "";
 			}
 		} catch(NumberFormatException e) {
 			new FailureFrame("Could not Filter Acid");
