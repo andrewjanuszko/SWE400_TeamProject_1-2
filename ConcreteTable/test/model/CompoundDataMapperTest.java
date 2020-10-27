@@ -30,7 +30,14 @@ class CompoundDataMapperTest {
   @Test
   void testCreate() throws DomainModelException {
     CompoundDataMapper compoundMapper = new CompoundDataMapper();
-    Compound compound1 = compoundMapper.create("name", 1.0, new ArrayList<Element>());
+    ElementDataMapper elementMapper = new ElementDataMapper();
+    MetalDataMapper metalMapper = new MetalDataMapper();
+    List<Element> elList = new ArrayList<Element>();
+    Element e = elementMapper.create("element", 1, 1, 1);
+    Metal m = metalMapper.create("metal", 1, 1, 1, 1);
+    elList.add(e);
+    elList.add(m);
+    Compound compound1 = compoundMapper.create("name", 1.0, elList);
     Compound compound2 = compoundMapper.read(compound1.getID());
 
     assertEquals(compound1.getID(), compound2.getID());

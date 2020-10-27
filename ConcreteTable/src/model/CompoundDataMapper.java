@@ -21,7 +21,8 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
       CompoundRowDataGateway gateway = new CompoundRowDataGatewayRDS(name, inventory);
       Compound a = new Compound(gateway.getCompoundID(), name, inventory, madeOf);
       for(Element e: madeOf) {
-        CompoundMadeOfTableDataGatewayRDS.addCompoundMadeOf(a.getID(), e.getID());
+        System.out.println(e.toString());
+        CompoundMadeOfTableDataGatewayRDS.addCompoundMadeOf(a.getID(), e.getID(), e.toString());
       }
       compoundMap.add(a);
       
@@ -42,7 +43,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
         ElementDataMapper elementMapper = new ElementDataMapper();
         List<Element> madeOf = elementMapper.filterByPartOfCompound(gateway.getCompoundID());
         Compound compound = new Compound(gateway.getCompoundID(), gateway.getName(), gateway.getInventory(), madeOf);
-
+        
         compoundMap.add(compound);
         return compound;
       } else {
@@ -63,7 +64,8 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
       gateway.setInventory(compound.getInventory());
 
       for (Element e : compound.getMadeOf()) {
-        CompoundMadeOfTableDataGatewayRDS.addCompoundMadeOf(compound.getID(), e.getID());
+        System.out.println(e.toString());
+        CompoundMadeOfTableDataGatewayRDS.addCompoundMadeOf(compound.getID(), e.getID(), e.toString());
       }
       gateway.persist();
       compoundMap.replace(compound);

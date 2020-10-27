@@ -4,10 +4,12 @@ public class CompoundMadeOfDTO {
 	
 	private int compoundID;
 	private int elementID;
+	private int metalID;
 	
-	public CompoundMadeOfDTO(int compoundID, int elementID) {
+	public CompoundMadeOfDTO(int compoundID, int elementID, int metalID) {
 		this.compoundID = compoundID;
 		this.elementID = elementID;
+		this.metalID = metalID;
 	}
 	
 	public int getCompoundID() {
@@ -17,6 +19,14 @@ public class CompoundMadeOfDTO {
 	public int getElementID() {
 		return elementID;
 	}
+	
+	public int getChemicalID() {
+    return metalID;
+  }
+	
+	public void setChemcialID(int metID) {
+    metalID = metID;
+  }
 	
 	public void setCompoundID(int comID) {
 		compoundID = comID;

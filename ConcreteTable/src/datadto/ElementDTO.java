@@ -13,7 +13,7 @@ public class ElementDTO {
     this.inventory = inventory;
   }
 
-  public int getElementID() {
+  public int getID() {
     return elementID;
   }
 
@@ -33,7 +33,7 @@ public class ElementDTO {
     return name;
   }
 
-  public void setElementID(int elementID) {
+  public void setID(int elementID) {
     this.elementID = elementID;
   }
 

@@ -94,10 +94,10 @@ public class MetalDataMapper implements MetalDataMapperInterface {
    * @param metalDTOList the list of DTOs.
    * @return the converted list of metals.
    */
-  public List<Metal> DTOListToMetalList(List<MetalDTO> metalDTOList) {
+  public static List<Metal> DTOListToMetalList(List<MetalDTO> metalDTOList) {
     List<Metal> metals = new ArrayList<Metal>();
     for (MetalDTO dto : metalDTOList) {
-      int metalID = dto.getMetalID();
+      int metalID = dto.getID();
       String name = dto.getName();
       double inventory = dto.getInventory();
       int atomicNumber = dto.getAtomicNumber();

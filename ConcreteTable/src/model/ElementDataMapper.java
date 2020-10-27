@@ -8,6 +8,7 @@ import datasource.DatabaseException;
 import datasource.ElementRowDataGateway;
 import datasource.ElementRowDataGatewayRDS;
 import datasource.ElementTableDataGatewayRDS;
+import datasource.MetalTableDataGatewayRDS;
 
 public class ElementDataMapper  implements ElementDataMapperInterface {
   public static IdentityMap<Element> elementMap = new IdentityMap<Element>();
@@ -86,7 +87,7 @@ public class ElementDataMapper  implements ElementDataMapperInterface {
   public List<Element> DTOListToElementList(List<ElementDTO> elementDTOList) throws DomainModelException {
     List<Element> elements = new ArrayList<Element>();
     for (ElementDTO dto : elementDTOList) {
-      int elementID = dto.getElementID();
+      int elementID = dto.getID();
       String name = dto.getName();
       double inventory = dto.getInventory();
       int atomicNumber = dto.getAtomicNumber();
@@ -102,7 +103,11 @@ public class ElementDataMapper  implements ElementDataMapperInterface {
   @Override
   public List<Element> getAll() throws DomainModelException {
     List<ElementDTO> DTOList = ElementTableDataGatewayRDS.getAll();
-    return DTOListToElementList(DTOList);
+    MetalDataMapper mMapper = new MetalDataMapper();
+    List<Element> eList = new ArrayList<Element>();
+    eList.addAll(DTOListToElementList(DTOList));
+    eList.addAll(mMapper.getAll());
+    return eList;
   }
 
   @Override

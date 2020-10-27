@@ -32,7 +32,6 @@ class MetalDataMapperTest {
 
     Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name", 1.0, 1, 1.0, 1.0);
-
     Metal metal2 = mapper.read(metal1.getID());
 
     assertEquals(metal1.getID(), metal2.getID());
@@ -85,7 +84,7 @@ class MetalDataMapperTest {
     Metal metal = new Metal(id, name, inventory, atomicNumber, atomicMass, acidAmount);
     dtoList.add(dto);
 
-    assertEquals(dto.getMetalID(), metal.getID());
+    assertEquals(dto.getID(), metal.getID());
   }
 
   @Test
