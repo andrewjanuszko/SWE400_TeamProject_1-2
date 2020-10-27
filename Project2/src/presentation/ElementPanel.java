@@ -167,14 +167,14 @@ public class ElementPanel extends JPanel{
 
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
-	
+	/*
 		try {
 			elementList = elementMapper.getAll();
 		} catch (DomainModelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+		*/
 		labels.setLayout(new GridLayout(elementList.size(), 1));
 		
 		for(int i = 0; i < elementList.size(); i++) {

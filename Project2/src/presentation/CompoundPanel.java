@@ -163,13 +163,14 @@ public class CompoundPanel extends JPanel{
 
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
-	
+	/*
 		try {
 			compoundList = compoundMapper.getAll();
 		} catch (DomainModelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		*/
 		labels.setLayout(new GridLayout(compoundList.size(), 1));
 		
 		for(int i = 0; i < compoundList.size(); i++) {

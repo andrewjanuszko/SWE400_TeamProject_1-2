@@ -166,13 +166,14 @@ public class BasePanel extends JPanel{
 	
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
-	
+	/*
 		try {
 			baseList = baseMapper.getAll();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		labels.setLayout(new GridLayout(baseList.size(), 1));
 		
 		for(int i = 0; i < baseList.size(); i++) {

@@ -1,6 +1,7 @@
 package presentation;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -18,14 +19,15 @@ public class FilterCompoundFrame extends JFrame{
 
 	int filterType;        
 	JRadioButton nameFilter = new JRadioButton();        //filterType 1
-	
-	JRadioButton inventoryFilter = new JRadioButton();   //filterType 3
+	JRadioButton inventoryFilter = new JRadioButton();   //filterType 2
+	JRadioButton inventoryRangeFilter = new JRadioButton();   //filterType 3
 	GridBagConstraints gbc = new GridBagConstraints();
 	JButton filterButton = new JButton("Filter");
 	JButton clearButton = new JButton("Clear Filter");
 	JTextField jtfName;
-
 	JTextField jtfInventory;
+	JTextField jtfInventoryRange1;
+	JTextField jtfInventoryRange2;
 	
 	public FilterCompoundFrame() {
 		setLayout(new GridBagLayout());
@@ -51,10 +53,14 @@ public class FilterCompoundFrame extends JFrame{
 		});
 		inventoryFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-		        filterType = 3;
+		        filterType = 2;
 		      }
 		});
-		
+		inventoryRangeFilter.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+		        filterType = 2;
+		      }
+		});
 		filterButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -87,6 +93,16 @@ public class FilterCompoundFrame extends JFrame{
 		JLabel inventoryLabel = new JLabel("Inventory Filter: ");
 		add(inventoryLabel,gbc);
 		
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		add(inventoryRangeFilter, gbc);
+		
+		
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		JLabel inventoryRangeLabel = new JLabel("Inventory Range Filter: ");
+		add(inventoryRangeLabel,gbc);
+		
 		
 		gbc.gridwidth = 2;
 		
@@ -100,13 +116,25 @@ public class FilterCompoundFrame extends JFrame{
 		jtfInventory = new JTextField("Inventory");
 		add(jtfInventory,gbc);
 		
-		gbc.gridx = 0;
+		gbc.gridwidth = 1;
+		gbc.gridx = 2;
 		gbc.gridy = 2;
+		jtfInventoryRange1 = new JTextField("Range 1");
+		add(jtfInventoryRange1,gbc);
+		
+		gbc.gridx = 3;
+		gbc.gridy = 2;
+		jtfInventoryRange2 = new JTextField("Range 2");
+		add(jtfInventoryRange2,gbc);
+		
+		gbc.gridwidth = 2;
+		gbc.gridx = 0;
+		gbc.gridy = 3;
 		
 		add(filterButton, gbc);
 		
 		gbc.gridx = 2;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		
 		add(clearButton, gbc);
 		
@@ -122,9 +150,12 @@ public class FilterCompoundFrame extends JFrame{
 				case 1:
 					filter = filter + "-" + jtfName.getText();
 					break;
-
-				case 3:
+				case 2:
 					filter = filter + "-" + Double.parseDouble(jtfInventory.getText()); 
+					break;
+				case 3:
+					filter = filter;
+					break;
 			}
 		} catch(NumberFormatException e) {
 			new FailureFrame("Could not Filter Compound");
