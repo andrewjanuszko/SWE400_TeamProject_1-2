@@ -13,7 +13,6 @@ public class Acid extends Chemical {
 
   private List<Metal> dissolves;
   private int solute;
-  private double threshold;
 
   /**
    * Constructor for creating an Acid object.
@@ -28,7 +27,6 @@ public class Acid extends Chemical {
     super(id, name, inventory);
     setDissolves(dissolves);
     setSolute(solute);
-    setThreshold(); 
   }
 
   /**
@@ -66,26 +64,16 @@ public class Acid extends Chemical {
   public void setSolute(int solute) {
     this.solute = solute;
   }
-
-  public void setThreshold() {
-    List<Metal> list;
-    try {
-      list = new MetalDataMapper().filterByDissolvedBy(getID());
-      threshold = 0;
-      for (Metal m : list) {
-        threshold += m.getAcidAmount();
-      }
-    } catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    
-    
-    
-  }
   
-  public double getThreshold() {
-    return this.threshold;
+  public String toString() {
+    String toString = "";
+    
+    toString.concat("Type: Acid, Name: " + this.getName() + ", Inventory: " + this.getInventory() + ", Dissolves: ");
+    for (Metal metal : dissolves) {
+      toString.concat(metal.getName() + " ");
+    }
+    toString.concat(", Solute: " + this.getSolute());
+    return toString;
   }
 
 }

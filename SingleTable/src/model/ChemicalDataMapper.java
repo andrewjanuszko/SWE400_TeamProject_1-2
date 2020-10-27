@@ -65,7 +65,7 @@ public class ChemicalDataMapper implements ChemicalDataMapperInterface {
   }
 
   @Override
-  public List<Chemical> filterByLowInventory() throws DomainModelException {
+  public List<Chemical> getAllWithLowInventory() throws DomainModelException {
     // TODO Auto-generated method stub
     return null;
   }

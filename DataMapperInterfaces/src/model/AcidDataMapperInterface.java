@@ -91,5 +91,12 @@ public interface AcidDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Acid> filterBySolute(int chemicalID) throws DomainModelException;
+  
+  /**
+   * Get all Acids with low inventory.
+   * @return all Acids with low inventory.
+   * @throws DomainModelException when things go wrong.
+   */
+  public List<Acid> filterByLowInventory() throws DomainModelException;
 
 }

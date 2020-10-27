@@ -129,4 +129,11 @@ public interface ElementDataMapperInterface {
    */
   public List<Element> filterByPartOfCompound(int compoundID) throws DomainModelException;
   
+  /**
+   * Get all Element with low inventory.
+   * @return all Element with low inventory.
+   * @throws DomainModelException when things go wrong.
+   */
+  public List<Element> filterByLowInventory() throws DomainModelException;
+  
 }
