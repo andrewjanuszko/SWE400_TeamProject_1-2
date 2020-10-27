@@ -63,6 +63,16 @@ public class FilterElementFrame extends JFrame {
 		        filterType = 3;
 		      }
 		});
+		numberFilter.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+		        filterType = 5;
+		      }
+		});
+		massFilter.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+		        filterType = 6;
+		      }
+		});
 		
 		filterButton.addActionListener(new ActionListener() {
 			@Override
@@ -174,17 +184,20 @@ public class FilterElementFrame extends JFrame {
 					filter = "" + 0;
 					break;
 				case 1:
-					filter = filter + " " + jtfName.getText();
+					filter = filter + "-" + jtfName.getText();
 					break;
 				case 2:
-					filter = filter + " " + Integer.parseInt(jtfSolute.getText());
+					filter = filter + "-" + Integer.parseInt(jtfSolute.getText());
 					break;
 				case 3:
-					filter = filter + " " + Double.parseDouble(jtfInventory.getText()); 
-				case 4:
-					filter = filter + " " + Integer.parseInt(jtfAtomicNum.getText());
+					filter = filter + "-" + Double.parseDouble(jtfInventory.getText());
+					break;
 				case 5:
-					filter = filter + " " + Integer.parseInt(jtfAtomicMass.getText());
+					filter = filter + "-" + Integer.parseInt(jtfAtomicNum.getText());
+					break;
+				case 6:
+					filter = filter + "-" + Integer.parseInt(jtfAtomicMass.getText());
+					break;
 			}
 		} catch(NumberFormatException e) {
 			new FailureFrame("Could not Filter Element");

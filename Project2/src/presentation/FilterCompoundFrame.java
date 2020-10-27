@@ -120,11 +120,11 @@ public class FilterCompoundFrame extends JFrame{
 					filter = "" + 0;
 					break;
 				case 1:
-					filter = filter + " " + jtfName.getText();
+					filter = filter + "-" + jtfName.getText();
 					break;
 
 				case 3:
-					filter = filter + " " + Double.parseDouble(jtfInventory.getText()); 
+					filter = filter + "-" + Double.parseDouble(jtfInventory.getText()); 
 			}
 		} catch(NumberFormatException e) {
 			new FailureFrame("Could not Filter Compound");

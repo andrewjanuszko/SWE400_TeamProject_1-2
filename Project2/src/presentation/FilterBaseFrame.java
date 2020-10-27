@@ -139,13 +139,14 @@ public class FilterBaseFrame extends JFrame{
 					filter = "" + 0;
 					break;
 				case 1:
-					filter = filter + " " + jtfName.getText();
+					filter = filter + "-" + jtfName.getText();
 					break;
 				case 2:
-					filter = filter + " " + Integer.parseInt(jtfSolute.getText());
+					filter = filter + "-" + Integer.parseInt(jtfSolute.getText());
 					break;
 				case 3:
-					filter = filter + " " + Double.parseDouble(jtfInventory.getText()); 
+					filter = filter + "-" + Double.parseDouble(jtfInventory.getText()); 
+					break;
 			}
 		} catch(NumberFormatException e) {
 			new FailureFrame("Could not Filter Base");

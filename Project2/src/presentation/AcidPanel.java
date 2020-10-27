@@ -20,12 +20,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+
+import command.FilterAcidCommand;
 import model.Acid;
 import model.AcidDataMapper;
 import model.DomainModelException;
+import reports.FilterAcidReport;
+import reports.Report;
+import reports.ReportObserver;
 import model.Acid;
 
-public class AcidPanel extends JPanel{
+public class AcidPanel extends JPanel implements ReportObserver{
 
   JScrollPane acids = new JScrollPane(); 
   GridBagConstraints gbc = new GridBagConstraints(); 
@@ -38,7 +43,9 @@ public class AcidPanel extends JPanel{
   AcidDataMapper acidMapper = new AcidDataMapper();
   Color labelColor = new Color(30,30,30);
   List<Acid> acidList = new ArrayList<Acid>();
-  String filter;
+  String filter = "0"
+  		+ "";
+  
   
   public AcidPanel() {
       this.setLayout(new GridBagLayout());
@@ -140,12 +147,13 @@ public class AcidPanel extends JPanel{
   
   private void filterAcid() {
           //brings up new window acidd on selected acid
-      FilterAcidFrame fbf = new FilterAcidFrame();
-          fbf.addWindowListener(new WindowAdapter() {
+      FilterAcidFrame faf = new FilterAcidFrame();
+          faf.addWindowListener(new WindowAdapter() {
               @Override
               public void windowClosed(WindowEvent arg0) {
-                  filter = fbf.getFilter();
+                  filter = faf.getFilter();
                   System.out.println(filter);
+                  acids.setViewportView(buildLabels());
               }
           });
   }
@@ -195,6 +203,12 @@ public class AcidPanel extends JPanel{
   
   private String buildHtml(Acid acid) {
       return "<html><p style=\"color:white;\">" + acid.getName() + "</p></html>";
+  }
+
+  @Override
+  public void receiveReport(Report report) {
+	  // TODO Auto-generated method stub
+	
   }
 
 }

@@ -174,19 +174,19 @@ public class FilterMetalFrame extends JFrame{
 					filter = "" + 0;
 					break;
 				case 1:
-					filter = filter + " " + jtfName.getText();
+					filter = filter + "-" + jtfName.getText();
 					break;
 				case 2:
-					filter = filter + " " + Integer.parseInt(jtfSolute.getText());
+					filter = filter + "-" + Integer.parseInt(jtfSolute.getText());
 					break;
 				case 3:
-					filter = filter + " " + Double.parseDouble(jtfInventory.getText()); 
+					filter = filter + "-" + Double.parseDouble(jtfInventory.getText()); 
 					break;
 				case 4:
-					filter = filter + " " + Integer.parseInt(jtfAtomicNum.getText());
+					filter = filter + "-" + Integer.parseInt(jtfAtomicNum.getText());
 					break;
 				case 5:
-					filter = filter + " " + Integer.parseInt(jtfAtomicMass.getText());
+					filter = filter + "-" + Integer.parseInt(jtfAtomicMass.getText());
 					break;
 			}
 		} catch(NumberFormatException e) {
