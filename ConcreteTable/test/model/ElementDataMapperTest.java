@@ -173,14 +173,5 @@ class ElementDataMapperTest {
     assertEquals(element1.getID(), result.get(0).getID());
     
   }
-  
-  @Test
-  void testFilterByLowInventory() throws DomainModelException{
-    ElementDataMapper mapper = new ElementDataMapper();
-    Element element1 = mapper.create("name1", 1.0, 1, 1.0);  //inventory of 1.0 is considered low
-    
-    List<Element> result = mapper.filterByLowInventory();
-    assertEquals(element1.getID(), result.get(0).getID());
-    
-  }
+
 }

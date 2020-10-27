@@ -152,11 +152,4 @@ public class ElementDataMapper  implements ElementDataMapperInterface {
     List<ElementDTO> DTOList = ElementTableDataGatewayRDS.filterByPartOfCompound(compoundID);
     return DTOListToElementList(DTOList);
   }
-
-  @Override
-  public List<Element> filterByLowInventory() throws DomainModelException {
-    List<ElementDTO> DTOList = ElementTableDataGatewayRDS.filterByLowInventory();
-    return DTOListToElementList(DTOList);
-  }
-
 }

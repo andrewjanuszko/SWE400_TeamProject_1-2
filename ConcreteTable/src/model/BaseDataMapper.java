@@ -123,13 +123,4 @@ public class BaseDataMapper implements BaseDataMapperInterface{
     List<BaseDTO> DTOList = BaseTableDataGatewayRDS.filterBySolute(chemicalID);
     return DTOListToBaseList(DTOList);
   }
-
-  @Override
-  public List<Base> filterByLowInventory() throws DomainModelException {
-    List<BaseDTO> DTOList = BaseTableDataGatewayRDS.filterByLowInventory();
-    return DTOListToBaseList(DTOList);
-  }
-
-  
-
 }

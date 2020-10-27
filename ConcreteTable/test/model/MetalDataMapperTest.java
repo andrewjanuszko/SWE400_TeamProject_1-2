@@ -241,17 +241,4 @@ class MetalDataMapperTest {
     assertEquals(metal1.getID(), result.get(0).getID());
     
   }
-  
-  @Test
-  void testFilterByLowInventory() throws DomainModelException{
-    MetalDataMapper mapper = new MetalDataMapper();
-    AcidDataMapper acidMapper = new AcidDataMapper();
-
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
-    Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);  //inventory of 1.0 is considered low
-    
-    List<Metal> result = mapper.filterByLowInventory();
-    assertEquals(metal1.getID(), result.get(0).getID());
-    
-  }
 }

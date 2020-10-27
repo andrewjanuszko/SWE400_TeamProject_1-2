@@ -156,10 +156,4 @@ public class AcidDataMapper implements AcidDataMapperInterface {
     return DTOListToAcidList(DTOList);
   }
 
-  @Override
-  public List<Acid> filterByLowInventory() throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
 }

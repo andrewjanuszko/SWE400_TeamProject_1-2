@@ -131,15 +131,4 @@ class BaseDataMapperTest {
     assertEquals(base1.getID(), result.get(0).getID());
     
   }
-  
-  @Test
-  void testFilterByLowInventory() throws DomainModelException{
-    BaseDataMapper baseMapper = new BaseDataMapper();
-    Base base1 = baseMapper.create("name", 1.0, 1);
-      //inventory of 1.0 is considered low
-    
-    List<Base> result = baseMapper.filterByLowInventory();
-    assertEquals(base1.getID(), result.get(0).getID());
-    
-  }
 }
