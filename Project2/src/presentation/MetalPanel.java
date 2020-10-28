@@ -163,14 +163,14 @@ public class MetalPanel extends JPanel{
 
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
-	
+	/*
 		try {
 			metalList = metalMapper.getAll();
 		} catch (DomainModelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+		*/
 		labels.setLayout(new GridLayout(metalList.size(), 1));
 		
 		for(int i = 0; i < metalList.size(); i++) {
