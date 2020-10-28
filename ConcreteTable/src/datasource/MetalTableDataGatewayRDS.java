@@ -16,10 +16,17 @@ public class MetalTableDataGatewayRDS {
    */
   public static void createTable() throws DatabaseException {
     String drop = "DROP TABLE IF EXISTS Metal";
-    String create = "CREATE TABLE Metal (" + "metalID INT NOT NULL AUTO_INCREMENT, " + "name VARCHAR(30) NOT NULL, "
-        + "inventory Double, " + "atomicNumber INT NOT NULL, " + "atomicMass DOUBLE NOT NULL, "
-        + "acidAmount DOUBLE NOT NULL, " + "dissolvedBy INT, " + "UNIQUE(name), " + "PRIMARY KEY(metalID), "
-        + "FOREIGN KEY(dissolvedBy) REFERENCES Acid(acidID)); ";
+    String create = "CREATE TABLE Metal (" + 
+        "metalID INT NOT NULL AUTO_INCREMENT, " + 
+        "name VARCHAR(30) NOT NULL, " + 
+        "inventory Double, " + 
+        "atomicNumber INT NOT NULL, " + 
+        "atomicMass DOUBLE NOT NULL, "+ 
+        "acidAmount DOUBLE NOT NULL, " + 
+        "dissolvedBy INT, " + 
+        "UNIQUE(name), " + 
+        "PRIMARY KEY(metalID), " +
+        "FOREIGN KEY(dissolvedBy) REFERENCES Acid(acidID)); ";
 
     try {
       // drop table
@@ -302,18 +309,35 @@ public class MetalTableDataGatewayRDS {
   }
   
   public static List<MetalDTO> filterByPartOfCompound(int compoundID) {
+    List<MetalDTO> metalDTOs = new ArrayList<MetalDTO>();
     try {
       PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("SELECT * FROM Metal WHERE Metal.metalID = "
-              + "(SELECT elementID FROM CompoundMadeOf WHERE compoundID = " + compoundID + ") ");
+          .prepareStatement("SELECT metalID FROM CompoundMadeOf WHERE compoundID = " + compoundID);
       ResultSet rs = stmt.executeQuery();
-      return toDTOList(rs);
+   
+      while (rs.next()) {
+        PreparedStatement stmt2 = DatabaseManager.getSingleton().getConnection()
+            .prepareStatement("SELECT * FROM Metal WHERE metalID = " + rs.getInt("metalID"));
+        ResultSet rs2 = stmt2.executeQuery();
+        rs2.next();
+        int metalID = rs2.getInt("metalID");
+        String name = rs2.getString("name");
+        double inventory = rs2.getDouble("inventory");
+        int atomicNumber = rs2.getInt("atomicNumber");
+        double atomicMass = rs2.getDouble("atomicMass");
+        double acidAmount = rs2.getDouble("acidAmount");
+        int dissolvedBy = rs2.getInt("dissolvedBy");
+        MetalDTO a = new MetalDTO(metalID, name, inventory, atomicNumber, atomicMass, acidAmount, dissolvedBy);
+        metalDTOs.add(a);
+
+      }
+      return metalDTOs;
 
     } catch (SQLException | DatabaseException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    return null;
+    return metalDTOs;
   }
   
   public static List<MetalDTO> filterByLowInventory() {

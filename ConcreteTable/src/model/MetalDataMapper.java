@@ -22,7 +22,7 @@ public class MetalDataMapper implements MetalDataMapperInterface {
     try {
       // HOW DO I GET THE DISOLVED BY???? can it just be null?
       MetalRowDataGateway gateway = new MetalRowDataGatewayRDS(name, inventory, atomicNumber, atomicMass,
-          acidAmount, -1); /// MUST CHANGE
+          acidAmount, -1); /// -1 = null
       Metal m = new Metal(gateway.getMetalID(), name, inventory, atomicNumber, atomicMass, acidAmount);
       metalMap.add(m);
       return m;

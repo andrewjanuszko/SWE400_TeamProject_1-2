@@ -9,21 +9,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import datadto.AcidDTO;
-import datasource.AcidRowDataGatewayRDS;
+import datasource.ConcreteTableInitializer;
 import datasource.DatabaseException;
-import datasource.MetalRowDataGatewayRDS;
-import model.Acid;
-import model.AcidDataMapper;
-import model.DomainModelException;
-import model.Metal;
 
 class AcidDataMapperTest {
 
   @BeforeEach
   void setup() throws DatabaseException{
-    MetalRowDataGatewayRDS.dropTable();
-    AcidRowDataGatewayRDS.createTable();
-    MetalRowDataGatewayRDS.createTable();
+    ConcreteTableInitializer.clearMaps();
+    ConcreteTableInitializer.dropTables();
+    ConcreteTableInitializer.createTables();
   }
   
   /**

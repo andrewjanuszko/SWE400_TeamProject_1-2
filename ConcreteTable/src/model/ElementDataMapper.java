@@ -8,11 +8,10 @@ import datasource.DatabaseException;
 import datasource.ElementRowDataGateway;
 import datasource.ElementRowDataGatewayRDS;
 import datasource.ElementTableDataGatewayRDS;
-import datasource.MetalTableDataGatewayRDS;
 
-public class ElementDataMapper  implements ElementDataMapperInterface {
+public class ElementDataMapper implements ElementDataMapperInterface {
   public static IdentityMap<Element> elementMap = new IdentityMap<Element>();
-  
+
   @Override
   public Element create(String name, double inventory, int atomicNumber, double atomicMass)
       throws DomainModelException {
@@ -33,7 +32,8 @@ public class ElementDataMapper  implements ElementDataMapperInterface {
     try {
       if (elementMap.get(id) == null) {
         ElementRowDataGateway gateway = new ElementRowDataGatewayRDS(id);
-        Element element = new Element(gateway.getElementID(), gateway.getName(), gateway.getInventory(), gateway.getAtomicNumber(), gateway.getAtomicMass());
+        Element element = new Element(gateway.getElementID(), gateway.getName(), gateway.getInventory(),
+            gateway.getAtomicNumber(), gateway.getAtomicMass());
 
         elementMap.add(element);
         return element;
@@ -51,33 +51,42 @@ public class ElementDataMapper  implements ElementDataMapperInterface {
   @Override
   public void update(Element element) throws DomainModelException {
     try {
-      ElementRowDataGateway gateway = new ElementRowDataGatewayRDS(element.getID());
-      gateway.setName(element.getName());
-      gateway.setInventory(element.getInventory());
-      gateway.setAtomicMass(element.getAtomicMass());
-      gateway.setAtomicNumber(element.getAtomicNumber());
-      gateway.persist();
-      elementMap.replace(element);
-
+      if (element instanceof Metal) {
+        MetalDataMapper mMapper = new MetalDataMapper();
+        mMapper.update((Metal) element);
+      } else {
+        ElementRowDataGateway gateway = new ElementRowDataGatewayRDS(element.getID());
+        gateway.setName(element.getName());
+        gateway.setInventory(element.getInventory());
+        gateway.setAtomicMass(element.getAtomicMass());
+        gateway.setAtomicNumber(element.getAtomicNumber());
+        gateway.persist();
+        elementMap.replace(element);
+      }
     } catch (DatabaseException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    
+
   }
 
   @Override
   public void delete(Element element) throws DomainModelException {
     try {
-      ElementRowDataGateway gateway = new ElementRowDataGatewayRDS(element.getID());
-      gateway.delete();
-      elementMap.remove(element);
+      if (element instanceof Metal) {
+        MetalDataMapper mMapper = new MetalDataMapper();
+        mMapper.delete((Metal) element);
+      } else {
+        ElementRowDataGateway gateway = new ElementRowDataGatewayRDS(element.getID());
+        gateway.delete();
+        elementMap.remove(element);
+      }
     } catch (DatabaseException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
-  
+
   /**
    * Converts a list of ElementDTOs to a list of Elements.
    * 
@@ -93,13 +102,13 @@ public class ElementDataMapper  implements ElementDataMapperInterface {
       int atomicNumber = dto.getAtomicNumber();
       double atomicMass = dto.getAtomicMass();
 
-      Element element = new Element(elementID, name, inventory, atomicNumber,atomicMass);
+      Element element = new Element(elementID, name, inventory, atomicNumber, atomicMass);
       elements.add(element);
       elementMap.add(element);
     }
     return elements;
   }
-  
+
   @Override
   public List<Element> getAll() throws DomainModelException {
     List<ElementDTO> DTOList = ElementTableDataGatewayRDS.getAll();
@@ -113,48 +122,80 @@ public class ElementDataMapper  implements ElementDataMapperInterface {
   @Override
   public List<Element> filterByNameLike(String nameLike) throws DomainModelException {
     List<ElementDTO> DTOList = ElementTableDataGatewayRDS.filterByNameLike(nameLike);
-    return DTOListToElementList(DTOList);
+    MetalDataMapper metalMapper = new MetalDataMapper();
+    List<Element> eList = new ArrayList<Element>();
+    eList.addAll(DTOListToElementList(DTOList));
+    eList.addAll(metalMapper.filterByNameLike(nameLike));
+    return eList;
   }
 
   @Override
   public List<Element> filterByInventory(double inventory) throws DomainModelException {
     List<ElementDTO> DTOList = ElementTableDataGatewayRDS.filterByInventory(inventory);
-    return DTOListToElementList(DTOList);
+    MetalDataMapper metalMapper = new MetalDataMapper();
+    List<Element> eList = new ArrayList<Element>();
+    eList.addAll(DTOListToElementList(DTOList));
+    eList.addAll(metalMapper.filterByInventory(inventory));
+    return eList;
   }
 
   @Override
   public List<Element> filterByInventoryBetween(double min, double max) throws DomainModelException {
     List<ElementDTO> DTOList = ElementTableDataGatewayRDS.filterByInventoryBetween(min, max);
-    return DTOListToElementList(DTOList);
+    MetalDataMapper metalMapper = new MetalDataMapper();
+    List<Element> eList = new ArrayList<Element>();
+    eList.addAll(DTOListToElementList(DTOList));
+    eList.addAll(metalMapper.filterByInventoryBetween(min, max));
+    return eList;
   }
 
   @Override
   public List<Element> filterByAtomicNumber(int atomicNumber) throws DomainModelException {
     List<ElementDTO> DTOList = ElementTableDataGatewayRDS.filterByAtomicNumber(atomicNumber);
-    return DTOListToElementList(DTOList);
+    MetalDataMapper metalMapper = new MetalDataMapper();
+    List<Element> eList = new ArrayList<Element>();
+    eList.addAll(DTOListToElementList(DTOList));
+    eList.addAll(metalMapper.filterByAtomicNumber(atomicNumber));
+    return eList;
   }
 
   @Override
   public List<Element> filterByAtomicNumberBetween(int min, int max) throws DomainModelException {
     List<ElementDTO> DTOList = ElementTableDataGatewayRDS.filterByAtomicNumberBetween(min, max);
-    return DTOListToElementList(DTOList);
+    MetalDataMapper metalMapper = new MetalDataMapper();
+    List<Element> eList = new ArrayList<Element>();
+    eList.addAll(DTOListToElementList(DTOList));
+    eList.addAll(metalMapper.filterByAtomicNumberBetween(min, max));
+    return eList;
   }
 
   @Override
   public List<Element> filterByAtomicMass(double atomicMass) throws DomainModelException {
     List<ElementDTO> DTOList = ElementTableDataGatewayRDS.filterByAtomicMass(atomicMass);
-    return DTOListToElementList(DTOList);
+    MetalDataMapper metalMapper = new MetalDataMapper();
+    List<Element> eList = new ArrayList<Element>();
+    eList.addAll(DTOListToElementList(DTOList));
+    eList.addAll(metalMapper.filterByAtomicMass(atomicMass));
+    return eList;
   }
 
   @Override
   public List<Element> filterByAtomicMassBetween(double min, double max) throws DomainModelException {
     List<ElementDTO> DTOList = ElementTableDataGatewayRDS.filterByAtomicMassBetween(min, max);
-    return DTOListToElementList(DTOList);
+    MetalDataMapper metalMapper = new MetalDataMapper();
+    List<Element> eList = new ArrayList<Element>();
+    eList.addAll(DTOListToElementList(DTOList));
+    eList.addAll(metalMapper.filterByAtomicMassBetween(min, max));
+    return eList;
   }
 
   @Override
   public List<Element> filterByPartOfCompound(int compoundID) throws DomainModelException {
     List<ElementDTO> DTOList = ElementTableDataGatewayRDS.filterByPartOfCompound(compoundID);
-    return DTOListToElementList(DTOList);
+    MetalDataMapper metalMapper = new MetalDataMapper();
+    List<Element> eList = new ArrayList<Element>();
+    eList.addAll(DTOListToElementList(DTOList));
+    eList.addAll(metalMapper.filterByPartOfCompound(compoundID));
+    return eList;
   }
 }

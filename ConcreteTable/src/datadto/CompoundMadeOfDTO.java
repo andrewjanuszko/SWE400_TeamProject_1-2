@@ -20,11 +20,11 @@ public class CompoundMadeOfDTO {
 		return elementID;
 	}
 	
-	public int getChemicalID() {
+	public int getMetalID() {
     return metalID;
   }
 	
-	public void setChemcialID(int metID) {
+	public void setMetalID(int metID) {
     metalID = metID;
   }
 	

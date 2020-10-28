@@ -9,20 +9,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import datadto.MetalDTO;
-import datasource.AcidRowDataGatewayRDS;
+import datasource.ConcreteTableInitializer;
 import datasource.DatabaseException;
-import datasource.MetalRowDataGatewayRDS;
 
 class MetalDataMapperTest {
 
   @BeforeEach
   void setup() throws DatabaseException {
-    MetalDataMapper.metalMap.clear();
-    AcidDataMapper.acidMap.clear();
-    MetalRowDataGatewayRDS.dropTable();
-    AcidRowDataGatewayRDS.dropTable();
-    AcidRowDataGatewayRDS.createTable();
-    MetalRowDataGatewayRDS.createTable();
+    ConcreteTableInitializer.clearMaps();
+    ConcreteTableInitializer.dropTables();
+    ConcreteTableInitializer.createTables();
   }
 
   @Test
@@ -30,7 +26,7 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
 
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name", 1.0, 1, 1.0, 1.0);
     Metal metal2 = mapper.read(metal1.getID());
 
@@ -47,7 +43,7 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
 
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name", 1.0, 1, 1, 1.0);
 
     mapper.delete(metal1);
@@ -60,7 +56,7 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
 
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name", 1.0, 1, 1.0, 1.0);
     metal1.setName("new name");
     mapper.update(metal1);
@@ -116,7 +112,7 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
 
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByNameLike(metal1.getName());
@@ -129,7 +125,7 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
 
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByInventory(metal1.getInventory());
@@ -142,7 +138,7 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
 
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByInventoryBetween(metal1.getInventory(), metal1.getInventory());
@@ -155,7 +151,7 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
 
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByAtomicNumber(metal1.getAtomicNumber());
@@ -168,7 +164,7 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
 
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByAtomicNumberBetween(metal1.getAtomicNumber(), metal1.getAtomicNumber());
@@ -181,7 +177,7 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
 
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByAtomicMass(metal1.getAtomicMass());
@@ -194,7 +190,7 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
 
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByAtomicMassBetween(metal1.getAtomicMass(), metal1.getAtomicMass());
@@ -207,7 +203,7 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
 
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByAcidAmount(metal1.getAcidAmount());
@@ -220,7 +216,7 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
 
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByAcidAmountBetween(metal1.getAcidAmount()-1, metal1.getAcidAmount()+1);
@@ -232,11 +228,16 @@ class MetalDataMapperTest {
   void testFilterByPartOfCompound() throws DomainModelException{
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
-
-    Acid acid1 = acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    CompoundDataMapper cMapper = new CompoundDataMapper();
+    
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
-    //TODO fix?
-    List<Metal> result = mapper.filterByPartOfCompound(12);
+    
+    List<Element> madeOf = new ArrayList<Element>();
+    madeOf.add(metal1);
+    Compound c = cMapper.create("compound", 1, madeOf);
+    
+    List<Metal> result = mapper.filterByPartOfCompound(c.getID());
     assertEquals(metal1.getID(), result.get(0).getID());
     
   }
