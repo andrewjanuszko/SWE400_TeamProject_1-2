@@ -1,6 +1,7 @@
 package presentation;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -8,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,8 +22,9 @@ public class FilterElementFrame extends JFrame {
 	JRadioButton nameFilter = new JRadioButton();        //filterType 1
 	JRadioButton soluteFilter = new JRadioButton();      //filterType 2
 	JRadioButton inventoryFilter = new JRadioButton();   //filterType 3
-	JRadioButton numberFilter = new JRadioButton();   //filterType 4
-	JRadioButton massFilter = new JRadioButton();   //filterType 5
+	JRadioButton inventoryRangeFilter = new JRadioButton();   //filterType 4
+	JRadioButton numberFilter = new JRadioButton();   //filterType 5
+	JRadioButton massFilter = new JRadioButton();   //filterType 6
 	GridBagConstraints gbc = new GridBagConstraints();
 	JButton filterButton = new JButton("Filter");
 	JButton clearButton = new JButton("Clear Filter");
@@ -30,6 +33,8 @@ public class FilterElementFrame extends JFrame {
 	JTextField jtfInventory;
 	JTextField jtfAtomicNum;
 	JTextField jtfAtomicMass;
+	JTextField jtfInventoryRange1;
+	JTextField jtfInventoryRange2;
 	
 	public FilterElementFrame() {
 		setLayout(new GridBagLayout());
@@ -61,6 +66,11 @@ public class FilterElementFrame extends JFrame {
 		inventoryFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 		        filterType = 3;
+		      }
+		});
+		inventoryRangeFilter.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+		        filterType = 4;
 		      }
 		});
 		numberFilter.addItemListener(new ItemListener() {
@@ -117,19 +127,28 @@ public class FilterElementFrame extends JFrame {
 		
 		gbc.gridx = 0;
 		gbc.gridy = 3;
-		add(numberFilter, gbc);
+		add(inventoryRangeFilter, gbc);
 		
 		gbc.gridx = 1;
 		gbc.gridy = 3;
+		JLabel inventoryRangeLabel = new JLabel("Inventory Range Filter: ");
+		add(inventoryRangeLabel,gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		add(numberFilter, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 4;
 		JLabel numberLabel = new JLabel("Atomic Number Filter: ");
 		add(numberLabel,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		add(massFilter, gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		JLabel massLabel = new JLabel("Mass Filter: ");
 		add(massLabel,gbc);
 		
@@ -152,25 +171,39 @@ public class FilterElementFrame extends JFrame {
 		jtfInventory = new JTextField("Inventory");
 		add(jtfInventory,gbc);
 		
+		gbc.gridwidth = 1;
+		
 		gbc.gridx = 2;
 		gbc.gridy = 3;
+		jtfInventoryRange1 = new JTextField("Range 1");
+		add(jtfInventoryRange1,gbc);
+		
+		gbc.gridx = 3;
+		gbc.gridy = 3;
+		jtfInventoryRange2 = new JTextField("Range 2");
+		add(jtfInventoryRange2,gbc);
+		
+		gbc.gridwidth = 2;
+		
+		gbc.gridx = 2;
+		gbc.gridy = 4;
 		jtfAtomicNum = new JTextField("Atomic Number");
 		add(jtfAtomicNum,gbc);
 		
 		gbc.gridx = 2;
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		jtfAtomicMass = new JTextField("AtomicMass");
 		add(jtfAtomicMass,gbc);
 		
 		
 		
 		gbc.gridx = 0;
-		gbc.gridy = 5;
+		gbc.gridy = 6;
 		
 		add(filterButton, gbc);
 		
 		gbc.gridx = 2;
-		gbc.gridy = 5;
+		gbc.gridy = 6;
 		
 		add(clearButton, gbc);
 		
@@ -191,6 +224,9 @@ public class FilterElementFrame extends JFrame {
 					break;
 				case 3:
 					filter = filter + "-" + Double.parseDouble(jtfInventory.getText());
+					break;
+				case 4:
+					filter = filter;
 					break;
 				case 5:
 					filter = filter + "-" + Integer.parseInt(jtfAtomicNum.getText());
