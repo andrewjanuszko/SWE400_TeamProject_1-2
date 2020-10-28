@@ -21,7 +21,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
       CompoundRowDataGateway gateway = new CompoundRowDataGatewayRDS(name, inventory);
       Compound a = new Compound(gateway.getCompoundID(), name, inventory, madeOf);
       for(Element e: madeOf) {
-        System.out.println(e.toString());
+        //System.out.println(e.toString());
         CompoundMadeOfTableDataGatewayRDS.addCompoundMadeOf(a.getID(), e.getID(), e.toString());
       }
       compoundMap.add(a);

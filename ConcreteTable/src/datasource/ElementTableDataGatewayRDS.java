@@ -241,12 +241,13 @@ public class ElementTableDataGatewayRDS {
   }
 
   public static List<ElementDTO> filterByPartOfCompound(int compoundID) {
+    List<ElementDTO> elementDTOs = new ArrayList<ElementDTO>();
     try {
       PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("SELECT elementID FROM CompoundMadeOf WHERE compoundID = " + compoundID);
 
       ResultSet rs = stmt.executeQuery();
-      List<ElementDTO> elementDTOs = new ArrayList<ElementDTO>();
+      elementDTOs = new ArrayList<ElementDTO>();
       while (rs.next()) {
         PreparedStatement stmt2 = DatabaseManager.getSingleton().getConnection()
             .prepareStatement("SELECT * FROM Element WHERE elementID = " + rs.getInt("elementID"));
@@ -267,7 +268,7 @@ public class ElementTableDataGatewayRDS {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    return null;
+    return elementDTOs;
   }
 
   public static List<ElementDTO> filterByLowInventory() {

@@ -9,25 +9,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import datadto.ElementDTO;
-import datasource.AcidRowDataGatewayRDS;
-import datasource.CompoundMadeOfTableDataGatewayRDS;
-import datasource.CompoundRowDataGatewayRDS;
-import datasource.CompoundTableDataGatewayRDS;
+import datasource.ConcreteTableInitializer;
 import datasource.DatabaseException;
-import datasource.ElementRowDataGatewayRDS;
 
 class ElementDataMapperTest {
 
   @BeforeEach
   void setup() throws DatabaseException {
-    ElementDataMapper.elementMap.clear();
-    CompoundMadeOfTableDataGatewayRDS.dropTable();
-    ElementRowDataGatewayRDS.dropTable();
-    CompoundRowDataGatewayRDS.dropTable();
-    
-    CompoundRowDataGatewayRDS.createTable();
-    ElementRowDataGatewayRDS.createTable();
-    CompoundMadeOfTableDataGatewayRDS.createTable();
+    ConcreteTableInitializer.clearMaps();
+    ConcreteTableInitializer.dropTables();
+    ConcreteTableInitializer.createTables();
     
   }
   
@@ -78,7 +69,7 @@ class ElementDataMapperTest {
     Element element = new Element(id, name, inventory, atomicNumber, atomicMass);
     dtoList.add(dto);
 
-    assertEquals(dto.getElementID(), element.getID());
+    assertEquals(dto.getID(), element.getID());
   }
   
   @Test

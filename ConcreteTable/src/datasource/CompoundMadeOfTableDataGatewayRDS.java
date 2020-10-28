@@ -28,7 +28,6 @@ public class CompoundMadeOfTableDataGatewayRDS{
 				"compoundID INT NOT NULL," + 
 				"elementID INT," + 
 				"metalID INT," + 
-				
 				"FOREIGN KEY(compoundID) REFERENCES Compound(compoundID), " +
 				"FOREIGN KEY(elementID) REFERENCES Element(elementID), "  +
 				"FOREIGN KEY(metalID) REFERENCES Metal(metalID));" ;

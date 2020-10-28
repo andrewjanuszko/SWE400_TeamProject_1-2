@@ -8,23 +8,17 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import datadto.BaseDTO;
 import datadto.CompoundDTO;
-import datasource.CompoundMadeOfTableDataGatewayRDS;
-import datasource.CompoundRowDataGatewayRDS;
+import datasource.ConcreteTableInitializer;
 import datasource.DatabaseException;
-import datasource.ElementRowDataGatewayRDS;
 
 class CompoundDataMapperTest {
 
   @BeforeEach
   void setup() throws DatabaseException {
-    CompoundDataMapper.compoundMap.clear();
-    ElementDataMapper.elementMap.clear();
-    CompoundMadeOfTableDataGatewayRDS.dropTable();
-    ElementRowDataGatewayRDS.createTable();
-    CompoundRowDataGatewayRDS.createTable();
-    CompoundMadeOfTableDataGatewayRDS.createTable();
+    ConcreteTableInitializer.clearMaps();
+    ConcreteTableInitializer.dropTables();
+    ConcreteTableInitializer.createTables();
   }
   
   @Test

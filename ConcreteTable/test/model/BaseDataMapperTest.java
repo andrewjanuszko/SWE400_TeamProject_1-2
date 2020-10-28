@@ -9,15 +9,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import datadto.BaseDTO;
-import datasource.BaseRowDataGatewayRDS;
+import datasource.ConcreteTableInitializer;
 import datasource.DatabaseException;
 
 class BaseDataMapperTest {
 
   @BeforeEach
   void setup() throws DatabaseException {
-    BaseDataMapper.baseMap.clear();
-    BaseRowDataGatewayRDS.createTable();
+    ConcreteTableInitializer.clearMaps();
+    ConcreteTableInitializer.dropTables();
+    ConcreteTableInitializer.createTables();
   }
   
   @Test

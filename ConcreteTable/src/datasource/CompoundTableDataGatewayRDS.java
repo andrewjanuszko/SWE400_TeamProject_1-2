@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import datadto.CompoundDTO;
-import datadto.ElementDTO;
 
 public abstract class CompoundTableDataGatewayRDS {
   /**
