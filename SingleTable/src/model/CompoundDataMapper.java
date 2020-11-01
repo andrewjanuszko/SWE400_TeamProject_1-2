@@ -191,4 +191,28 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     }
   }
 
+  /**
+   * @see model.CompoundDataMapperInterface#filterByLowInventory().
+   */
+  @Override
+  public List<Compound> filterByLowInventory() throws DomainModelException {
+    try {
+      List<ChemicalDTO> compounds = ChemicalTableDataGateway.getSingletonInstance().getCompounds().executeQuery();
+      for (ChemicalDTO compound : compounds) {
+        List<ChemicalDTO> elements = ElementCompoundTableDataGateway.getSingletonInstance().readElementsFromCompound(compound.getID()).getRelations();
+        double inventoryNeeded = 0;
+        for (ChemicalDTO element : elements) {
+          inventoryNeeded += element.getInventory();
+        }
+        inventoryNeeded = inventoryNeeded / elements.size();
+        if (inventoryNeeded <= compound.getInventory()) {
+          compounds.remove(compound);
+        }
+      }
+      return convertToCompound(compounds);
+    } catch (DatabaseException e) {
+      throw new DomainModelException("Failed to get all Compounds with low inventory.", e);
+    }
+  }
+
 }

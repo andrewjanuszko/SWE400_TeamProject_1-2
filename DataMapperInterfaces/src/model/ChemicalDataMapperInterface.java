@@ -3,7 +3,7 @@ package model;
 import java.util.List;
 
 public interface ChemicalDataMapperInterface {
-  
+
   /**
    * Get all Chemicals.
    * 
@@ -39,12 +39,13 @@ public interface ChemicalDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Chemical> filterByInventoryBetween(double min, double max) throws DomainModelException;
-  
+
   /**
    * Get all Chemicals with low inventory.
+   * 
    * @return all Chemicals with low inventory.
    * @throws DomainModelException when things go wrong.
    */
   public List<Chemical> filterByLowInventory() throws DomainModelException;
-  
+
 }

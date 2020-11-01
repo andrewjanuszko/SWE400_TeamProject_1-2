@@ -1,8 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
-import model.MetalDataMapper;
+import java.util.Set;
 
 /**
  * Class for creating an Acid.
@@ -13,7 +14,6 @@ public class Acid extends Chemical {
 
   private List<Metal> dissolves;
   private int solute;
-  private double threshold;
 
   /**
    * Constructor for creating an Acid object.
@@ -26,9 +26,8 @@ public class Acid extends Chemical {
    */
   public Acid(int id, String name, double inventory, List<Metal> dissolves, int solute) {
     super(id, name, inventory);
-    setDissolves(dissolves);
+    this.dissolves = dissolves;
     setSolute(solute);
-    setThreshold(); 
   }
 
   /**
@@ -53,9 +52,15 @@ public class Acid extends Chemical {
    * Set the Metals that are dissolved by this Acid.
    * 
    * @param dissolves the Metals that are dissolved by this Acid.
+   * @throws DomainModelException 
    */
-  public void setDissolves(List<Metal> dissolves) {
-    this.dissolves = dissolves;
+  public void setDissolves(List<Integer> dissolvesID) throws DomainModelException {
+    Set<Metal> metals = new HashSet<Metal>();
+    for (Integer metalID : dissolvesID) {
+      Metal metal = new MetalDataMapper().read(metalID);
+      metals.add(metal);
+    }
+    this.dissolves = new ArrayList<Metal>(metals);
   }
 
   /**
@@ -65,27 +70,6 @@ public class Acid extends Chemical {
    */
   public void setSolute(int solute) {
     this.solute = solute;
-  }
-
-  public void setThreshold() {
-    List<Metal> list;
-    try {
-      list = new MetalDataMapper().filterByDissolvedBy(getID());
-      threshold = 0;
-      for (Metal m : list) {
-        threshold += m.getAcidAmount();
-      }
-    } catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    
-    
-    
-  }
-  
-  public double getThreshold() {
-    return this.threshold;
   }
 
 }

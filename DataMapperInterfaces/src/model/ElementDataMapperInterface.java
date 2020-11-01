@@ -91,7 +91,7 @@ public interface ElementDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Element> filterByAtomicNumber(int atomicNumber) throws DomainModelException;
-  
+
   /**
    * Get all Elements with a specific atomic number.
    * 
@@ -128,5 +128,13 @@ public interface ElementDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Element> filterByPartOfCompound(int compoundID) throws DomainModelException;
-  
+
+  /**
+   * Get all Elements with low inventory.
+   * 
+   * @return all Elements with low inventory.
+   * @throws DomainModelException when things go wrong.
+   */
+  public List<Element> filterByLowInventory() throws DomainModelException;
+
 }
