@@ -161,4 +161,17 @@ public class BaseDataMapper implements BaseDataMapperInterface {
     return bases;
   }
 
+  /**
+   * @see model.BaseDataMapperInterface#filterByLowInventory().
+   */
+  @Override
+  public List<Base> filterByLowInventory() throws DomainModelException {
+    try {
+      return convertToBase(
+          ChemicalTableDataGateway.getSingletonInstance().getBasesWithLowInventory());
+    } catch (DatabaseException e) {
+      throw new DomainModelException("Failed to get all Bases with low inventory.", e);
+    }
+  }
+
 }

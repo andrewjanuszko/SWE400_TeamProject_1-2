@@ -1,6 +1,7 @@
-package command;
+package command.element;
 
 import model.ElementDataMapper;
+import command.CreateCommandInterface;
 import model.DomainModelException;
 import model.Element;
 

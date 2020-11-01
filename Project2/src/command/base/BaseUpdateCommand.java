@@ -1,5 +1,6 @@
-package command;
+package command.base;
 
+import command.UpdateCommandInterface;
 import model.Base;
 import model.BaseDataMapper;
 import model.DomainModelException;

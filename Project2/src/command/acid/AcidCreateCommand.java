@@ -1,7 +1,10 @@
-package command;
+package command.acid;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import command.CreateCommandInterface;
 import model.Acid;
 import model.AcidDataMapper;
 import model.Base;
@@ -42,11 +45,11 @@ public class AcidCreateCommand implements CreateCommandInterface {
    */
   @Override
   public Acid execute() throws DomainModelException {
-    List<Metal> dissolves = new ArrayList<>();
     try {
+      Set<Metal> metals = new HashSet<>();
       for (Integer metalID : dissolvesID) {
         Metal metal = new MetalDataMapper().read(metalID);
-        dissolves.add(metal);
+        metals.add(metal);
       }
       Base base = new BaseDataMapper().read(solute);
       if (name.split(" ").length < 2 || name.isBlank()) {
@@ -54,6 +57,7 @@ public class AcidCreateCommand implements CreateCommandInterface {
       } else if (inventory < 0) {
         throw new DomainModelException("Inventory is invalid. Must be >= 0.");
       } else {
+        List<Metal> dissolves = metals.stream().collect(Collectors.toList());
         return new AcidDataMapper().create(name, inventory, dissolves, base.getID());
       }
     } catch (DomainModelException e) {

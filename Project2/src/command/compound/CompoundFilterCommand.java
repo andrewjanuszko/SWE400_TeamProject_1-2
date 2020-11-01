@@ -1,6 +1,8 @@
-package command;
+package command.compound;
 
 import java.util.List;
+
+import command.FilterCommandInterface;
 import model.CompoundDataMapper;
 import model.Compound;
 import model.DomainModelException;

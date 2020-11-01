@@ -1,5 +1,6 @@
-package command;
+package command.compound;
 
+import command.UpdateCommandInterface;
 import model.Compound;
 import model.CompoundDataMapper;
 import model.DomainModelException;

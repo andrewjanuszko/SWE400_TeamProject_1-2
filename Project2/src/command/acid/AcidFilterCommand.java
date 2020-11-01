@@ -1,6 +1,8 @@
-package command;
+package command.acid;
 
 import java.util.List;
+
+import command.FilterCommandInterface;
 import model.AcidDataMapper;
 import model.Acid;
 import model.DomainModelException;

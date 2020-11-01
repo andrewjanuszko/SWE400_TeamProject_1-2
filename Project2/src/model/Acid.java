@@ -2,8 +2,6 @@ package model;
 
 import java.util.List;
 
-import model.MetalDataMapper;
-
 /**
  * Class for creating an Acid.
  * 

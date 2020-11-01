@@ -1,6 +1,8 @@
-package command;
+package command.metal;
 
 import java.util.List;
+
+import command.FilterCommandInterface;
 import model.MetalDataMapper;
 import model.DomainModelException;
 import model.Metal;

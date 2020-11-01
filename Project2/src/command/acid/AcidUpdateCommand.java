@@ -1,5 +1,6 @@
-package command;
+package command.acid;
 
+import command.UpdateCommandInterface;
 import model.Acid;
 import model.AcidDataMapper;
 import model.DomainModelException;

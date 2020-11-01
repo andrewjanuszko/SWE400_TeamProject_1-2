@@ -1,5 +1,6 @@
-package command;
+package command.metal;
 
+import command.DeleteCommandInterface;
 import model.DomainModelException;
 import model.Metal;
 import model.MetalDataMapper;

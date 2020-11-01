@@ -1,6 +1,8 @@
-package command;
+package command.base;
 
 import java.util.List;
+
+import command.FilterCommandInterface;
 import model.BaseDataMapper;
 import model.Base;
 import model.DomainModelException;

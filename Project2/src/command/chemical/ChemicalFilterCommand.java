@@ -1,7 +1,8 @@
-package command;
+package command.chemical;
 
 import java.util.List;
 
+import command.FilterCommandInterface;
 import model.ChemicalDataMapper;
 import model.Chemical;
 import model.DomainModelException;

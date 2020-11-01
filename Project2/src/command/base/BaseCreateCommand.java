@@ -1,6 +1,7 @@
-package command;
+package command.base;
 
 import model.BaseDataMapper;
+import command.CreateCommandInterface;
 import model.Acid;
 import model.AcidDataMapper;
 import model.Base;
