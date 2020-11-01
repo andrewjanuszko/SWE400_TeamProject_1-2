@@ -33,7 +33,7 @@ public class CompoundDataMapperTest extends DatabaseTest {
     Compound hydrogenDioxide = new CompoundDataMapper().read(13);
     assertEquals("Hydrogen Dioxide", hydrogenDioxide.getName());
     assertEquals(2, hydrogenDioxide.getMadeOf().size());
-    List<Element> madeOf = Arrays.asList(new ElementDataMapper().read(4), new ElementDataMapper().read(1), new ElementDataMapper().read(2));
+    List<Integer> madeOf = Arrays.asList(new ElementDataMapper().read(4).getID(), new ElementDataMapper().read(1).getID(), new ElementDataMapper().read(2).getID());
     hydrogenDioxide.setMadeOf(madeOf);
     new CompoundDataMapper().update(hydrogenDioxide);
     hydrogenDioxide = new CompoundDataMapper().read(13);

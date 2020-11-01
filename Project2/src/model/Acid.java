@@ -1,6 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Class for creating an Acid.
@@ -23,7 +26,7 @@ public class Acid extends Chemical {
    */
   public Acid(int id, String name, double inventory, List<Metal> dissolves, int solute) {
     super(id, name, inventory);
-    setDissolves(dissolves);
+    this.dissolves = dissolves;
     setSolute(solute);
   }
 
@@ -49,9 +52,15 @@ public class Acid extends Chemical {
    * Set the Metals that are dissolved by this Acid.
    * 
    * @param dissolves the Metals that are dissolved by this Acid.
+   * @throws DomainModelException 
    */
-  public void setDissolves(List<Metal> dissolves) {
-    this.dissolves = dissolves;
+  public void setDissolves(List<Integer> dissolvesID) throws DomainModelException {
+    Set<Metal> metals = new HashSet<Metal>();
+    for (Integer metalID : dissolvesID) {
+      Metal metal = new MetalDataMapper().read(metalID);
+      metals.add(metal);
+    }
+    this.dissolves = new ArrayList<Metal>(metals);
   }
 
   /**
