@@ -93,7 +93,7 @@ public interface MetalDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Metal> filterByAtomicNumber(int atomicNumber) throws DomainModelException;
-  
+
   /**
    * 
    * @param min
@@ -158,5 +158,13 @@ public interface MetalDataMapperInterface {
    * @throws DomainModelException when things go wrong.
    */
   public List<Metal> filterByPartOfCompound(int compoundID) throws DomainModelException;
-  
+
+  /**
+   * Get all Metals with low inventory.
+   * 
+   * @return all Metals with low inventory.
+   * @throws DomainModelException when things go wrong.
+   */
+  public List<Metal> filterByLowInventory() throws DomainModelException;
+
 }
