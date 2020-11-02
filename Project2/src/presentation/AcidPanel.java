@@ -21,9 +21,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
-import command.FilterAcidCommand;
 import model.Acid;
-import model.AcidDataMapper;
+import command.acid.*;
 import model.DomainModelException;
 import reports.FilterAcidReport;
 import reports.Report;
@@ -40,11 +39,10 @@ public class AcidPanel extends JPanel{
   JButton detailsButton = new JButton("Details");
   JLabel selected = null;
   Acid selectedAcid = null;
-  AcidDataMapper acidMapper = new AcidDataMapper();
+  
   Color labelColor = new Color(30,30,30);
   List<Acid> acidList = new ArrayList<Acid>();
-  String filter = "0"
-  		+ "";
+  String filter = "6";
   
   
   public AcidPanel() {
@@ -136,12 +134,7 @@ public class AcidPanel extends JPanel{
   
   private void deleteAcid() {
       if(selected != null) {
-          try {
-			acidMapper.delete(selectedAcid);
-		} catch (DomainModelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+          new AcidDeleteCommand(selectedAcid);
       }
   }
   
@@ -172,14 +165,14 @@ public class AcidPanel extends JPanel{
   
   private JPanel buildLabels() {
       JPanel labels = new JPanel();
-  /*
+  
       try {
-        acidList = acidMapper.getAll();
+        acidList = new AcidFilterCommand(filter).execute();
       } catch (Exception e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
-      */
+      
       labels.setLayout(new GridLayout(acidList.size(), 1));
       
       for(int i = 0; i < acidList.size(); i++) {
