@@ -133,9 +133,15 @@ public class AcidPanel extends JPanel{
   }
   
   private void deleteAcid() {
-      if(selected != null) {
-          new AcidDeleteCommand(selectedAcid);
-      }
+     if(selected != null) {
+          try {
+			new AcidDeleteCommand(selectedAcid).execute();
+		} catch (DomainModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+          acids.setViewportView(buildLabels());
+     }
   }
   
   private void filterAcid() {

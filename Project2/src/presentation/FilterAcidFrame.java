@@ -17,7 +17,7 @@ import javax.swing.SwingConstants;
 
 public class FilterAcidFrame extends JFrame{
 	
-	int filterType;        
+	int filterType = 6;        
 	JRadioButton nameFilter = new JRadioButton();        //filterType 1
 	JRadioButton soluteFilter = new JRadioButton();      //filterType 2
 	JRadioButton inventoryFilter = new JRadioButton();   //filterType 3

@@ -5,11 +5,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import command.acid.AcidCreateCommand;
+import model.DomainModelException;
 
 public class AddAcidFrame extends JFrame{
 	
@@ -32,42 +36,42 @@ public class AddAcidFrame extends JFrame{
 		gbc.weighty = 1;
 		
 		gbc.gridx = 0;
-		gbc.gridy = 0;
-		JLabel idLabel = new JLabel("Id: ");
+		gbc.gridy = 3;
+		JLabel idLabel = new JLabel("Dissolves Id: ");
 		add(idLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 0;
-		JTextField jtfId = new JTextField("Id");
+		gbc.gridy = 3;
+		JTextField jtfId = new JTextField("Dissolves Ids");
 		add(jtfId,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 0;
 		JLabel nameLabel = new JLabel("Name: ");
 		add(nameLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 1;
+		gbc.gridy = 0;
 		JTextField jtfName = new JTextField("Name");
 		add(jtfName,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		JLabel inventoryLabel = new JLabel("Inventory: ");
 		add(inventoryLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		JTextField jtfInventory = new JTextField("Inventory");
 		add(jtfInventory,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		JLabel soluteLabel = new JLabel("Solute: ");
 		add(soluteLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		JTextField jtfSolute = new JTextField("Solute");
 		add(jtfSolute,gbc);
 		
@@ -75,21 +79,34 @@ public class AddAcidFrame extends JFrame{
 		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int id;
-				double inventory;
-				String solute, name;
+				String id;
+				int solute = 0;
+				double inventory = 0;
+				String name = "";
+				List<Integer> ids = new ArrayList<Integer>();
 				try {
-					id = Integer.parseInt(jtfId.getText());
+					id = jtfId.getText();
 					inventory = Double.parseDouble(jtfInventory.getText());
-					solute = jtfSolute.getText();
+					solute = Integer.parseInt(jtfSolute.getText());
 					name = jtfName.getText();
-					
-					System.out.println(id + "\n" + name + "\n" + inventory + "\n" + solute);
-					
+					String[] stringIds = id.split(" ");
+					System.out.println(stringIds[0]);
+					if(!stringIds[0].equals(""))
+						for(String s: stringIds) {
+							ids.add(Integer.parseInt(s));
+						}
+						
+						try {
+							new AcidCreateCommand(name, inventory, ids, solute).execute();
+						} catch (DomainModelException e1) {
+							e1.printStackTrace();
+						}
+						
 					dispose();
 				} catch (NumberFormatException e1) {
 					new FailureFrame("Failed to create Acid");
 				}
+
 			}
 		});
 		
