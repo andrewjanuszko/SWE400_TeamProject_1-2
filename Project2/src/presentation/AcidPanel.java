@@ -20,9 +20,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+
+import command.FilterAcidCommand;
 import model.Acid;
 import model.AcidDataMapper;
 import model.DomainModelException;
+import reports.FilterAcidReport;
+import reports.Report;
+import reports.ReportObserver;
 import model.Acid;
 
 public class AcidPanel extends JPanel{
@@ -35,9 +40,12 @@ public class AcidPanel extends JPanel{
   JButton detailsButton = new JButton("Details");
   JLabel selected = null;
   Acid selectedAcid = null;
+  AcidDataMapper acidMapper = new AcidDataMapper();
   Color labelColor = new Color(30,30,30);
   List<Acid> acidList = new ArrayList<Acid>();
-  String filter;
+  String filter = "0"
+  		+ "";
+  
   
   public AcidPanel() {
       this.setLayout(new GridBagLayout());
@@ -128,18 +136,24 @@ public class AcidPanel extends JPanel{
   
   private void deleteAcid() {
       if(selected != null) {
-          //deletes selected acid
+          try {
+			acidMapper.delete(selectedAcid);
+		} catch (DomainModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
       }
   }
   
   private void filterAcid() {
           //brings up new window acidd on selected acid
-      FilterAcidFrame fbf = new FilterAcidFrame();
-          fbf.addWindowListener(new WindowAdapter() {
+      FilterAcidFrame faf = new FilterAcidFrame();
+          faf.addWindowListener(new WindowAdapter() {
               @Override
               public void windowClosed(WindowEvent arg0) {
-                  filter = fbf.getFilter();
+                  filter = faf.getFilter();
                   System.out.println(filter);
+                  acids.setViewportView(buildLabels());
               }
           });
   }
@@ -158,13 +172,14 @@ public class AcidPanel extends JPanel{
   
   private JPanel buildLabels() {
       JPanel labels = new JPanel();
-  
+  /*
       try {
-        acidList = new AcidDataMapper().getAll();
+        acidList = acidMapper.getAll();
       } catch (Exception e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
+      */
       labels.setLayout(new GridLayout(acidList.size(), 1));
       
       for(int i = 0; i < acidList.size(); i++) {

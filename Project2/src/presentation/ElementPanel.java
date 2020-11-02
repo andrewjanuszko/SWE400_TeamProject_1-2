@@ -20,7 +20,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import model.DomainModelException;
 import model.Element;
+import model.ElementDataMapper;
 import model.Element;
 
 public class ElementPanel extends JPanel{
@@ -34,6 +36,7 @@ public class ElementPanel extends JPanel{
 	JLabel selected = null;
 	Element selectedElement = null;
 	Color labelColor = new Color(30,30,30);
+	ElementDataMapper elementMapper = new ElementDataMapper();
 	List<Element> elementList = new ArrayList<Element>();
 	String filter;
 	
@@ -127,7 +130,12 @@ public class ElementPanel extends JPanel{
 	
 	private void deleteElement() {
 		if(selected != null) {
-			//deletes selected element
+			try {
+				elementMapper.delete(selectedElement);
+			} catch (DomainModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -146,8 +154,8 @@ public class ElementPanel extends JPanel{
 	}
 	
 	private void getDetailsElement() {
-		if(selected == null) {
-			return;
+		if(selected != null) {
+			new ElementDetailsFrame(selectedElement);
 		}
 	}
 	
@@ -159,10 +167,14 @@ public class ElementPanel extends JPanel{
 
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
-	
-		elementList.add(new Element(0, "element", 5.0,  5, 100.0));
-		elementList.add(new Element(0, "This is an element", 1.0,  2, 2.0));
-		elementList.add(new Element(0, "not an element", 41.0,  2, 4.0));
+	/*
+		try {
+			elementList = elementMapper.getAll();
+		} catch (DomainModelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		*/
 		labels.setLayout(new GridLayout(elementList.size(), 1));
 		
 		for(int i = 0; i < elementList.size(); i++) {
