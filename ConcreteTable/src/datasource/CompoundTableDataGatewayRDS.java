@@ -59,7 +59,7 @@ public abstract class CompoundTableDataGatewayRDS {
     }
   }
 
-  //private static double lowInventory = 20.0;
+  private static double lowInventory = 20.0;
   
   /**
    * Converts a result set that is assumed to contain a collection of acids from
@@ -135,6 +135,26 @@ public abstract class CompoundTableDataGatewayRDS {
    try {
      PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
          .prepareStatement("SELECT * FROM Compound WHERE inventory = " + inventory);
+     ResultSet rs = stmt.executeQuery();
+     return toDTOList(rs);
+
+   } catch (SQLException | DatabaseException e) {
+     // TODO Auto-generated catch block
+     e.printStackTrace();
+   }
+   return null;
+ }
+ 
+ /**
+  * Filters the Compound table by inventory.
+  * 
+  * @param inventory Given amount.
+  * @return List of filtered CompoundDTOs.
+  */
+ public static List<CompoundDTO> filterByLowInventory() {
+   try {
+     PreparedStatement stmt = DatabaseManager.getSingleton().getConnection()
+         .prepareStatement("SELECT * FROM Compound WHERE inventory <= " + lowInventory);
      ResultSet rs = stmt.executeQuery();
      return toDTOList(rs);
 

@@ -138,6 +138,16 @@ public class ElementDataMapper implements ElementDataMapperInterface {
     eList.addAll(metalMapper.filterByInventory(inventory));
     return eList;
   }
+  
+  @Override
+  public List<Element> filterByLowInventory() throws DomainModelException {
+    List<ElementDTO> DTOList = ElementTableDataGatewayRDS.filterByLowInventory();
+    MetalDataMapper metalMapper = new MetalDataMapper();
+    List<Element> eList = new ArrayList<Element>();
+    eList.addAll(DTOListToElementList(DTOList));
+    eList.addAll(metalMapper.filterByLowInventory());
+    return eList;
+  }
 
   @Override
   public List<Element> filterByInventoryBetween(double min, double max) throws DomainModelException {

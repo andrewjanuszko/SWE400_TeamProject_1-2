@@ -134,6 +134,12 @@ public class MetalDataMapper implements MetalDataMapperInterface {
     List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByInventory(inventory);
     return DTOListToMetalList(DTOList);
   }
+  
+  @Override
+  public List<Metal> filterByLowInventory() throws DomainModelException {
+    List<MetalDTO> DTOList = MetalTableDataGatewayRDS.filterByLowInventory();
+    return DTOListToMetalList(DTOList);
+  }
 
   @Override
   public List<Metal> filterByInventoryBetween(double min, double max) throws DomainModelException {

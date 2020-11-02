@@ -128,6 +128,12 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     List<CompoundDTO> DTOList = CompoundTableDataGatewayRDS.filterByInventory(inventory);
     return DTOListToCompoundList(DTOList);
   }
+  
+  @Override
+  public List<Compound> filterByLowInventory() throws DomainModelException {
+    List<CompoundDTO> DTOList = CompoundTableDataGatewayRDS.filterByLowInventory();
+    return DTOListToCompoundList(DTOList);
+  }
 
   @Override
   public List<Compound> filterByInventoryBetween(double min, double max) throws DomainModelException {

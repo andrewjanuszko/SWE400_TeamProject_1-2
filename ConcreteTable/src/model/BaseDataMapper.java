@@ -111,6 +111,12 @@ public class BaseDataMapper implements BaseDataMapperInterface{
     List<BaseDTO> DTOList = BaseTableDataGatewayRDS.filterByInventory(inventory);
     return DTOListToBaseList(DTOList);
   }
+  
+  @Override
+  public List<Base> filterByLowInventory() throws DomainModelException {
+    List<BaseDTO> DTOList = BaseTableDataGatewayRDS.filterByLowInventory();
+    return DTOListToBaseList(DTOList);
+  }
 
   @Override
   public List<Base> filterByInventoryBetween(double min, double max) throws DomainModelException {
