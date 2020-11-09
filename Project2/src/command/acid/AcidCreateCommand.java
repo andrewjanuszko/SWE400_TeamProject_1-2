@@ -1,9 +1,6 @@
 package command.acid;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import command.CreateCommandInterface;
 import model.Acid;
 import model.AcidDataMapper;
@@ -11,7 +8,6 @@ import model.Base;
 import model.BaseDataMapper;
 import model.DomainModelException;
 import model.Metal;
-import model.MetalDataMapper;
 
 /**
  * Command for creating an Acid object.
@@ -22,7 +18,7 @@ public class AcidCreateCommand implements CreateCommandInterface {
 
   private String name;
   private double inventory;
-  private List<Integer> dissolvesID;
+  private List<Metal> dissolves;
   private int solute;
 
   /**
@@ -33,10 +29,10 @@ public class AcidCreateCommand implements CreateCommandInterface {
    * @param dissolves, the Metals dissolved by the Acid.
    * @param solute,    the ID of the solute for the Acid.
    */
-  public AcidCreateCommand(String name, double inventory, List<Integer> dissolvesID, int solute) {
+  public AcidCreateCommand(String name, double inventory, List<Metal> dissolves, int solute) {
     this.name = name;
     this.inventory = inventory;
-    this.dissolvesID = dissolvesID;
+    this.dissolves = dissolves;
     this.solute = solute;
   }
 
@@ -46,18 +42,12 @@ public class AcidCreateCommand implements CreateCommandInterface {
   @Override
   public Acid execute() throws DomainModelException {
     try {
-      Set<Metal> metals = new HashSet<>();
-      for (Integer metalID : dissolvesID) {
-        Metal metal = new MetalDataMapper().read(metalID);
-        metals.add(metal);
-      }
       Base base = new BaseDataMapper().read(solute);
       if (name.split(" ").length < 2 || name.isBlank()) {
         throw new DomainModelException("Name is invalid. Must be >= 2 words.");
       } else if (inventory < 0) {
         throw new DomainModelException("Inventory is invalid. Must be >= 0.");
       } else {
-        List<Metal> dissolves = metals.stream().collect(Collectors.toList());
         return new AcidDataMapper().create(name, inventory, dissolves, base.getID());
       }
     } catch (DomainModelException e) {
