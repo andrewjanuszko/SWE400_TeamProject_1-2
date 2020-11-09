@@ -90,7 +90,7 @@ public class AddAcidFrame extends JFrame{
 					solute = Integer.parseInt(jtfSolute.getText());
 					name = jtfName.getText();
 					String[] stringIds = id.split(" ");
-					System.out.println(stringIds[0]);
+					
 					if(!stringIds[0].equals(""))
 						for(String s: stringIds) {
 							ids.add(Integer.parseInt(s));
