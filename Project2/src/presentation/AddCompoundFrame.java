@@ -66,12 +66,12 @@ public class AddCompoundFrame extends JFrame{
 		add(jtfInventory,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 2;
 		JLabel MadeOfLabel = new JLabel("Made Of: ");
 		add(MadeOfLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 1;
+		gbc.gridy = 2;
 		JTextField jtfElements = new JTextField("Elements");
 		add(jtfElements,gbc);
 		
