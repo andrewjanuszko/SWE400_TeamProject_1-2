@@ -81,7 +81,7 @@ public class AddElementFrame extends JFrame {
 		add(atmMassLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		JTextField jtfAtmMass = new JTextField("Mass");
 		add(jtfAtmMass,gbc);
 		
