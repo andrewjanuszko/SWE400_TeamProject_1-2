@@ -11,6 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import command.base.BaseCreateCommand;
+import model.DomainModelException;
+
 public class AddBaseFrame extends JFrame{
 	GridBagConstraints gbc = new GridBagConstraints(); 
 	int height = 450, width = 300;
@@ -29,7 +32,7 @@ public class AddBaseFrame extends JFrame{
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weightx = 1;
 		gbc.weighty = 1;
-		
+		/*
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		JLabel idLabel = new JLabel("Id: ");
@@ -39,34 +42,34 @@ public class AddBaseFrame extends JFrame{
 		gbc.gridy = 0;
 		JTextField jtfId = new JTextField("Id");
 		add(jtfId,gbc);
-		
+		*/
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 0;
 		JLabel nameLabel = new JLabel("Name: ");
 		add(nameLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 1;
+		gbc.gridy = 0;
 		JTextField jtfName = new JTextField("Name");
 		add(jtfName,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		JLabel inventoryLabel = new JLabel("Inventory: ");
 		add(inventoryLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		JTextField jtfInventory = new JTextField("Inventory");
 		add(jtfInventory,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		JLabel soluteLabel = new JLabel("Solute: ");
 		add(soluteLabel,gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		JTextField jtfSolute = new JTextField("Solute");
 		add(jtfSolute,gbc);
 		
@@ -76,14 +79,20 @@ public class AddBaseFrame extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				int id;
 				double inventory;
-				String solute, name;
+				int solute;
+				String name;
 				try {
-					id = Integer.parseInt(jtfId.getText());
+					//id = Integer.parseInt(jtfId.getText());
 					inventory = Double.parseDouble(jtfInventory.getText());
-					solute = jtfSolute.getText();
+					solute = Integer.parseInt(jtfSolute.getText());
 					name = jtfName.getText();
-					System.out.println(id + "\n" + name + "\n" + inventory + "\n" + solute);
+					//System.out.println(id + "\n" + name + "\n" + inventory + "\n" + solute);
 					dispose();
+					try {
+						new BaseCreateCommand(name, inventory, solute).execute();
+					} catch (DomainModelException e1) {
+						e1.printStackTrace();
+					}
 				} catch (NumberFormatException e1) {
 					new FailureFrame("Failed to create Base");
 				}
@@ -92,7 +101,7 @@ public class AddBaseFrame extends JFrame{
 		});
 		
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 3;
 		gbc.gridwidth = 2;
 		
 		add(add, gbc);

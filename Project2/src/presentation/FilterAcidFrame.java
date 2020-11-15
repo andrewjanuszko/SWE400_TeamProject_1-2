@@ -17,7 +17,7 @@ import javax.swing.SwingConstants;
 
 public class FilterAcidFrame extends JFrame{
 	
-	int filterType;        
+	int filterType = 6;        
 	JRadioButton nameFilter = new JRadioButton();        //filterType 1
 	JRadioButton soluteFilter = new JRadioButton();      //filterType 2
 	JRadioButton inventoryFilter = new JRadioButton();   //filterType 3
@@ -55,17 +55,17 @@ public class FilterAcidFrame extends JFrame{
 		});
 		soluteFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-		        filterType = 2;
+		        filterType = 4;
 		      }
 		});
 		inventoryFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-		        filterType = 3;
+		        filterType = 2;
 		      }
 		});
 		inventoryRangeFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-		        filterType = 4;
+		        filterType = 3;
 		      }
 		});
 		
@@ -79,6 +79,7 @@ public class FilterAcidFrame extends JFrame{
 		clearButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				filterType = 6;
 				dispose();
 			}
 		});
@@ -169,20 +170,22 @@ public class FilterAcidFrame extends JFrame{
 		String filter = "" + filterType;
 		try {
 			switch(filterType) {
-				case 0:
-					filter = "" + 0;
+				case 6:
+					filter = "" + 6;
 					break;
 				case 1:
 					filter = filter + "-" + jtfName.getText();
 					break;
 				case 2:
-					filter = filter + "-" + Integer.parseInt(jtfSolute.getText());
-					break;
-				case 3:
 					filter = filter + "-" + Double.parseDouble(jtfInventory.getText()); 
 					break;
+				case 3:
+					filter = filter + "-" + Double.parseDouble(jtfInventoryRange1.getText()) + "-" + Double.parseDouble(jtfInventoryRange2.getText());
+					break;
 				case 4:
-					filter = filter + "-" + "";
+					filter = filter + "-" + Integer.parseInt(jtfSolute.getText());
+					break;
+				
 			}
 		} catch(NumberFormatException e) {
 			new FailureFrame("Could not Filter Acid");
