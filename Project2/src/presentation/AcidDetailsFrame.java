@@ -77,7 +77,7 @@ public class AcidDetailsFrame extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				String[] strings = dissolves.getText().split(" ");
 				for(String s: strings) {
-					dissolvesList.add(new Metal(Integer.parseInt(s)));
+					//dissolvesList.add(new Metal(Integer.parseInt(s)));
 				}
 				try {
 					new AcidUpdateCommand(new Acid(acid.getID(), name.getText(), Double.parseDouble(inventory.getText()), dissolvesList, Integer.parseInt(solute.getText()))).execute();
