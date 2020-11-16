@@ -1,9 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Class for creating a Compound.
@@ -24,7 +21,7 @@ public class Compound extends Chemical {
    */
   public Compound(int id, String name, double inventory, List<Element> madeOf) {
     super(id, name, inventory);
-    this.madeOf = madeOf;
+    setMadeOf(madeOf);
   }
 
   /**
@@ -33,13 +30,8 @@ public class Compound extends Chemical {
    * @param madeOf the Elements that make up the Compound.
    * @throws DomainModelException 
    */
-  public void setMadeOf(List<Integer> madeOfID) throws DomainModelException {
-    Set<Element> elements = new HashSet<Element>();
-    for (Integer elementID : madeOfID) {
-      Element element = new ElementDataMapper().read(elementID);
-      elements.add(element);
-    }
-    this.madeOf = new ArrayList<Element>(elements);
+  public void setMadeOf(List<Element> madeOf) {
+    this.madeOf = madeOf;
   }
 
   /**

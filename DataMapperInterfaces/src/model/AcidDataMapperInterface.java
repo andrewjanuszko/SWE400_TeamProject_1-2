@@ -20,7 +20,7 @@ public interface AcidDataMapperInterface {
    * @return an Acid.
    * @throws DomainModelException when things go wrong.
    */
-  public Acid create(String name, double inventory, List<Metal> dissolves, int solute) throws DomainModelException;
+  public Acid create(String name, double inventory, List<Metal> dissolves, Base solute) throws DomainModelException;
 
   /**
    * Reads an Acid from the Gateways.

@@ -1,6 +1,7 @@
 package command.base;
 
 import model.BaseDataMapper;
+import model.Chemical;
 import command.CreateCommandInterface;
 import model.Acid;
 import model.AcidDataMapper;
@@ -16,7 +17,7 @@ public class BaseCreateCommand implements CreateCommandInterface {
 
   private String name;
   private double inventory;
-  private int solute;
+  private Acid solute;
 
   /**
    * Constructor for BaseCreateCommand(String, double, int).
@@ -25,7 +26,7 @@ public class BaseCreateCommand implements CreateCommandInterface {
    * @param inventory, the inventory of the Base.
    * @param solute,    the ID of the solute for the Base.
    */
-  public BaseCreateCommand(String name, double inventory, int solute) {
+  public BaseCreateCommand(String name, double inventory, Acid solute) {
     this.name = name;
     this.inventory = inventory;
     this.solute = solute;
@@ -37,13 +38,12 @@ public class BaseCreateCommand implements CreateCommandInterface {
   @Override
   public Base execute() throws DomainModelException {
     try {
-      Acid acid = new AcidDataMapper().read(solute);
       if (name.split(" ").length < 2 || name.isBlank()) {
         throw new DomainModelException("Name is invalid. Must be >= 2 words.");
       } else if (inventory < 0) {
         throw new DomainModelException("Inventory is invalid. Must be >= 0.");
       } else {
-        return new BaseDataMapper().create(name, inventory, acid.getID());
+        return new BaseDataMapper().create(name, inventory, solute);
       }
     } catch (DomainModelException e) {
       throw new DomainModelException("Failed to create Base.", e);
