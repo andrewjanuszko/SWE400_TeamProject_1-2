@@ -22,13 +22,14 @@ public class FilterBaseFrame extends JFrame{
 	JRadioButton soluteFilter = new JRadioButton();      //filterType 2
 	JRadioButton inventoryFilter = new JRadioButton();   //filterType 3
 	JRadioButton inventoryRangeFilter = new JRadioButton();   //filterType 4
+	JRadioButton lowInvFilter = new JRadioButton();
 	GridBagConstraints gbc = new GridBagConstraints();
 	JButton filterButton = new JButton("Filter");
 	JButton clearButton = new JButton("Clear Filter");
 	JTextField jtfName;
 	JTextField jtfSolute;
 	JTextField jtfInventory;
-	Component jtfInventoryRange1;
+	JTextField jtfInventoryRange1;
 	JTextField jtfInventoryRange2;
 	
 	
@@ -56,17 +57,22 @@ public class FilterBaseFrame extends JFrame{
 		});
 		soluteFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-		        filterType = 2;
+		        filterType = 4;
 		      }
 		});
 		inventoryFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-		        filterType = 3;
+		        filterType = 2;
 		      }
 		});
 		inventoryRangeFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-		        filterType = 4;
+		        filterType = 3;
+		      }
+		});
+		lowInvFilter.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+		        filterType = 5;
 		      }
 		});
 		
@@ -154,15 +160,24 @@ public class FilterBaseFrame extends JFrame{
 		jtfInventoryRange2 = new JTextField("Range 2");
 		add(jtfInventoryRange2,gbc);
 		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		add(lowInvFilter, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 4;
+		JLabel lowInvLabel = new JLabel("Filter By Low Inventory");
+		add(lowInvLabel,gbc);
+		
 		gbc.gridwidth = 2;
 		
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		
 		add(filterButton, gbc);
 		
 		gbc.gridx = 2;
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		
 		add(clearButton, gbc);
 		
@@ -179,13 +194,16 @@ public class FilterBaseFrame extends JFrame{
 					filter = filter + "-" + jtfName.getText();
 					break;
 				case 2:
-					filter = filter + "-" + Integer.parseInt(jtfSolute.getText());
+					filter = filter + "-" + Double.parseDouble(jtfInventory.getText());
 					break;
 				case 3:
-					filter = filter + "-" + Double.parseDouble(jtfInventory.getText()); 
+					filter = filter + "-" + Double.parseDouble(jtfInventoryRange1.getText()) + "-" + Double.parseDouble(jtfInventoryRange2.getText());
 					break;
 				case 4:
-					filter = filter;
+					filter = filter + "-" + Integer.parseInt(jtfSolute.getText());
+					break;
+				case 5:
+					filter = "5";
 					break;
 			}
 		} catch(NumberFormatException e) {

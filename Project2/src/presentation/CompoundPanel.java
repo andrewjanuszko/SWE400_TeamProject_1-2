@@ -139,14 +139,15 @@ public class CompoundPanel extends JPanel{
 	}
 	
 	private void filterCompound() {
-		
-			//brings up new window compoundd on selected compound
-			new FilterCompoundFrame().addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosed(WindowEvent arg0) {
-					//reset the view
-				}
-			});
+		FilterCompoundFrame faf = new FilterCompoundFrame();
+        faf.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent arg0) {
+                filter = faf.getFilter();
+                System.out.println(filter);
+                compounds.setViewportView(buildLabels());
+            }
+        });
 		
 	}
 	
