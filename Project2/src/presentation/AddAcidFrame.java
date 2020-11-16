@@ -3,22 +3,32 @@ package presentation;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import command.acid.AcidCreateCommand;
 import model.DomainModelException;
+import model.Metal;
+import command.metal.MetalFilterCommand;
 
 public class AddAcidFrame extends JFrame{
 	
 	GridBagConstraints gbc = new GridBagConstraints(); 
 	int height = 450, width = 300;
+	List<Metal> selectedMetals = new ArrayList<Metal>();
+	JScrollPane metals = new JScrollPane();
 	
 	public AddAcidFrame() {
 		setLayout(new GridBagLayout());
@@ -28,6 +38,7 @@ public class AddAcidFrame extends JFrame{
 	    setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
+		
 	}
 	
 	public void setUp() {
@@ -35,15 +46,8 @@ public class AddAcidFrame extends JFrame{
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		JLabel idLabel = new JLabel("Dissolves Id: ");
-		add(idLabel,gbc);
 		
-		gbc.gridx = 1;
-		gbc.gridy = 3;
-		JTextField jtfId = new JTextField("Dissolves Ids");
-		add(jtfId,gbc);
+		
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -79,25 +83,17 @@ public class AddAcidFrame extends JFrame{
 		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String id;
 				int solute = 0;
 				double inventory = 0;
 				String name = "";
 				List<Integer> ids = new ArrayList<Integer>();
 				try {
-					id = jtfId.getText();
+					
 					inventory = Double.parseDouble(jtfInventory.getText());
 					solute = Integer.parseInt(jtfSolute.getText());
 					name = jtfName.getText();
-					String[] stringIds = id.split(" ");
-					
-					if(!stringIds[0].equals(""))
-						for(String s: stringIds) {
-							ids.add(Integer.parseInt(s));
-						}
-						
 						try {
-							new AcidCreateCommand(name, inventory, ids, solute).execute();
+							new AcidCreateCommand(name, inventory, selectedMetals, solute).execute();
 						} catch (DomainModelException e1) {
 							e1.printStackTrace();
 						}
@@ -111,9 +107,62 @@ public class AddAcidFrame extends JFrame{
 		});
 		
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 3;
+		
+		JLabel idLabel = new JLabel("Dissolves:");
+		add(idLabel,gbc);
+		metals.add(metals.createVerticalScrollBar());
+		metals.setViewportView(buildLabels());
+		
+		gbc.gridx = 1;
+		gbc.gridy = 3;
+		add(metals,gbc);
+
 		gbc.gridwidth = 2;
+		gbc.gridx = 0;
+		gbc.gridy = 5;
 		
 		add(add, gbc);
 	}
+	private JPanel buildLabels() {
+		JPanel labels = new JPanel();
+		List<Metal> metalList = new ArrayList<Metal>();
+		try {
+			metalList = new MetalFilterCommand("12").execute();
+		} catch (DomainModelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		labels.setLayout(new GridLayout(metalList.size(), 1));
+		
+		for(int i = 0; i < metalList.size(); i++) {
+		      final int x = i;
+		      final Metal m = metalList.get(i);
+		      JLabel label = new JLabel(buildHtml(m));
+		      label.setOpaque(true);
+		      label.setBackground(new Color(30, 30, 30));
+		      label.addMouseListener( new MouseAdapter() {
+		          @Override
+		          public void mouseClicked(MouseEvent e) {
+		              if(selectedMetals.contains(m)) {
+		            	  selectedMetals.remove(m);
+		            	  label.setBackground(new Color(30, 30, 30));
+		              }
+		              else {
+		            	  selectedMetals.add(m);
+		            	  label.setBackground(new Color(234, 201, 55));
+		              }
+		          }
+		      }); 
+		      labels.add(label, i, 0);
+		    }
+
+		return labels;
+	}
+    
+	private String buildHtml(Metal metal) {
+		return "<html><p style=\"color:white;\">" + metal.getName() + "</p></html>";
+	}
+
 }

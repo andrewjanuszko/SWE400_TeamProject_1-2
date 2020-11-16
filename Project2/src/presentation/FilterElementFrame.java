@@ -94,6 +94,7 @@ public class FilterElementFrame extends JFrame {
 		clearButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				filterType = 9;
 				dispose();
 			}
 		});
@@ -213,8 +214,8 @@ public class FilterElementFrame extends JFrame {
 		String filter = "" + filterType;
 		try {
 			switch(filterType) {
-				case 0:
-					filter = "" + 0;
+				case 9:
+					filter = "" + 9;
 					break;
 				case 1:
 					filter = filter + "-" + jtfName.getText();

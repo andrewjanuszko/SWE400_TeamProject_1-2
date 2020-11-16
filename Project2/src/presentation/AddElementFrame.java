@@ -114,7 +114,7 @@ public class AddElementFrame extends JFrame {
 		});
 		
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 4;
 		gbc.gridwidth = 2;
 		
 		add(add, gbc);

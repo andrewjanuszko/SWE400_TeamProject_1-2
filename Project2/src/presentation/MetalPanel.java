@@ -125,8 +125,14 @@ public class MetalPanel extends JPanel{
 		});
 	}
 	
-	private void deleteMetal() {
+	private void deleteMetal()  {
 		if(selected != null) {
+			try {
+				new MetalDeleteCommand(selectedMetal).execute();
+				metals.setViewportView(buildLabels());
+			} catch (DomainModelException e) {
+				
+			}
 		}
 	}
 	

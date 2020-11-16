@@ -17,7 +17,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 public class FilterBaseFrame extends JFrame{
-	int filterType;        
+	int filterType = 6;        
 	JRadioButton nameFilter = new JRadioButton();        //filterType 1
 	JRadioButton soluteFilter = new JRadioButton();      //filterType 2
 	JRadioButton inventoryFilter = new JRadioButton();   //filterType 3
@@ -80,6 +80,7 @@ public class FilterBaseFrame extends JFrame{
 		clearButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				filterType = 6;
 				dispose();
 			}
 		});
@@ -171,8 +172,8 @@ public class FilterBaseFrame extends JFrame{
 		String filter = "" + filterType;
 		try {
 			switch(filterType) {
-				case 0:
-					filter = "" + 0;
+				case 6:
+					filter = "" + 6;
 					break;
 				case 1:
 					filter = filter + "-" + jtfName.getText();

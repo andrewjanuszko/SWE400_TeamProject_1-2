@@ -20,10 +20,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import command.element.*;
 import model.DomainModelException;
 import model.Element;
-import model.ElementDataMapper;
-import model.Element;
+
 
 public class ElementPanel extends JPanel{
 
@@ -36,9 +36,9 @@ public class ElementPanel extends JPanel{
 	JLabel selected = null;
 	Element selectedElement = null;
 	Color labelColor = new Color(30,30,30);
-	ElementDataMapper elementMapper = new ElementDataMapper();
+
 	List<Element> elementList = new ArrayList<Element>();
-	String filter;
+	String filter = "9";
 	
 	public ElementPanel() {
 		this.setLayout(new GridBagLayout());
@@ -131,7 +131,8 @@ public class ElementPanel extends JPanel{
 	private void deleteElement() {
 		if(selected != null) {
 			try {
-				elementMapper.delete(selectedElement);
+				new ElementDeleteCommand(selectedElement).execute();
+				elements.setViewportView(buildLabels());
 			} catch (DomainModelException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -167,14 +168,14 @@ public class ElementPanel extends JPanel{
 
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
-	/*
+	
 		try {
-			elementList = elementMapper.getAll();
+			elementList = new ElementFilterCommand(filter).execute();
 		} catch (DomainModelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		*/
+		
 		labels.setLayout(new GridLayout(elementList.size(), 1));
 		
 		for(int i = 0; i < elementList.size(); i++) {
