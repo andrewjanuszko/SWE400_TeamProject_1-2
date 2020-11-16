@@ -19,7 +19,7 @@ public interface BaseDataMapperInterface {
    * @return a Base.
    * @throws DomainModelException when things go wrong.
    */
-  public Base create(String name, double inventory, int solute) throws DomainModelException;
+  public Base create(String name, double inventory, Acid solute) throws DomainModelException;
 
   /**
    * Read a Base from the Gateways.
