@@ -7,7 +7,7 @@ package model;
  */
 public class Base extends Chemical {
 
-  private int solute;
+  private Chemical solute;
 
   /**
    * Constructor for creating a Base object.
@@ -17,7 +17,7 @@ public class Base extends Chemical {
    * @param inventory the inventory of the Base.
    * @param solute    the Chemical that creates a solution.
    */
-  public Base(int id, String name, double inventory, int solute) {
+  public Base(int id, String name, double inventory, Chemical solute) {
     super(id, name, inventory);
     setSolute(solute);
   }
@@ -27,7 +27,7 @@ public class Base extends Chemical {
    * 
    * @return the solute for the Base.
    */
-  public int getSolute() {
+  public Chemical getSolute() {
     return solute;
   }
 
@@ -36,7 +36,7 @@ public class Base extends Chemical {
    * 
    * @param solute the solute for the Base.
    */
-  public void setSolute(int solute) {
+  public void setSolute(Chemical solute) {
     this.solute = solute;
   }
 

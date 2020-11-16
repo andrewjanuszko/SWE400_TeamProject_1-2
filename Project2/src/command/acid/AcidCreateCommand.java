@@ -6,6 +6,7 @@ import model.Acid;
 import model.AcidDataMapper;
 import model.Base;
 import model.BaseDataMapper;
+import model.Chemical;
 import model.DomainModelException;
 import model.Metal;
 
@@ -19,7 +20,7 @@ public class AcidCreateCommand implements CreateCommandInterface {
   private String name;
   private double inventory;
   private List<Metal> dissolves;
-  private int solute;
+  private Base solute;
 
   /**
    * Constructor for AcidCreateCommand(String, double, List<Metal>, int).
@@ -29,7 +30,7 @@ public class AcidCreateCommand implements CreateCommandInterface {
    * @param dissolves, the Metals dissolved by the Acid.
    * @param solute,    the ID of the solute for the Acid.
    */
-  public AcidCreateCommand(String name, double inventory, List<Metal> dissolves, int solute) {
+  public AcidCreateCommand(String name, double inventory, List<Metal> dissolves, Base solute) {
     this.name = name;
     this.inventory = inventory;
     this.dissolves = dissolves;
@@ -42,13 +43,12 @@ public class AcidCreateCommand implements CreateCommandInterface {
   @Override
   public Acid execute() throws DomainModelException {
     try {
-      Base base = new BaseDataMapper().read(solute);
       if (name.split(" ").length < 2 || name.isBlank()) {
         throw new DomainModelException("Name is invalid. Must be >= 2 words.");
       } else if (inventory < 0) {
         throw new DomainModelException("Inventory is invalid. Must be >= 0.");
       } else {
-        return new AcidDataMapper().create(name, inventory, dissolves, base.getID());
+        return new AcidDataMapper().create(name, inventory, dissolves, solute);
       }
     } catch (DomainModelException e) {
       throw new DomainModelException("Failed to create Acid.", e);
