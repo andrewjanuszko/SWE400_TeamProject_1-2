@@ -82,6 +82,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
       ChemicalRowDataGateway row = new ChemicalRowDataGateway(compound.getID());
       row.setName(compound.getName());
       row.setInventory(compound.getInventory());
+      row.update();
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to update Compound with ID '" + compound.getID() + "'.", e);
     }
