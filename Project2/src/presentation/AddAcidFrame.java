@@ -19,16 +19,21 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import command.acid.AcidCreateCommand;
+import model.Base;
 import model.DomainModelException;
 import model.Metal;
 import command.metal.MetalFilterCommand;
+import command.base.BaseFilterCommand;
 
 public class AddAcidFrame extends JFrame{
 	
 	GridBagConstraints gbc = new GridBagConstraints(); 
 	int height = 450, width = 300;
 	List<Metal> selectedMetals = new ArrayList<Metal>();
+	Base selectedBase = null;
 	JScrollPane metals = new JScrollPane();
+	JScrollPane bases = new JScrollPane();
+	JLabel selectedLabel = null;
 	
 	public AddAcidFrame() {
 		setLayout(new GridBagLayout());
@@ -45,7 +50,7 @@ public class AddAcidFrame extends JFrame{
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weightx = 1;
 		gbc.weighty = 1;
-		
+		gbc.gridheight = 1;
 		
 		
 		
@@ -76,8 +81,9 @@ public class AddAcidFrame extends JFrame{
 		
 		gbc.gridx = 1;
 		gbc.gridy = 2;
-		JTextField jtfSolute = new JTextField("Solute");
-		add(jtfSolute,gbc);
+		bases.add(bases.createVerticalScrollBar());
+		bases.setViewportView(buildLabelsBase());
+		add(bases, gbc);
 		
 		JButton add = new JButton("Add");
 		add.addActionListener(new ActionListener() {
@@ -90,10 +96,10 @@ public class AddAcidFrame extends JFrame{
 				try {
 					
 					inventory = Double.parseDouble(jtfInventory.getText());
-					solute = Integer.parseInt(jtfSolute.getText());
+					
 					name = jtfName.getText();
 						try {
-							new AcidCreateCommand(name, inventory, selectedMetals, solute).execute();
+							new AcidCreateCommand(name, inventory, selectedMetals, selectedBase).execute();
 						} catch (DomainModelException e1) {
 							e1.printStackTrace();
 						}
@@ -112,7 +118,7 @@ public class AddAcidFrame extends JFrame{
 		JLabel idLabel = new JLabel("Dissolves:");
 		add(idLabel,gbc);
 		metals.add(metals.createVerticalScrollBar());
-		metals.setViewportView(buildLabels());
+		metals.setViewportView(buildLabelsMetal());
 		
 		gbc.gridx = 1;
 		gbc.gridy = 3;
@@ -124,7 +130,7 @@ public class AddAcidFrame extends JFrame{
 		
 		add(add, gbc);
 	}
-	private JPanel buildLabels() {
+	private JPanel buildLabelsMetal() {
 		JPanel labels = new JPanel();
 		List<Metal> metalList = new ArrayList<Metal>();
 		try {
@@ -164,5 +170,41 @@ public class AddAcidFrame extends JFrame{
 	private String buildHtml(Metal metal) {
 		return "<html><p style=\"color:white;\">" + metal.getName() + "</p></html>";
 	}
+	private JPanel buildLabelsBase() {
+		JPanel labels = new JPanel();
+		List<Base> baseList = new ArrayList<Base>();
+		try {
+			baseList = new BaseFilterCommand("6").execute();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
+		labels.setLayout(new GridLayout(baseList.size(), 1));
+		
+		for(int i = 0; i < baseList.size(); i++) {
+		      final int x = i;
+		      final Base b = baseList.get(x);
+		      JLabel label = new JLabel(buildHtml(baseList.get(i)));
+		      label.setOpaque(true);
+		      label.setBackground(new Color(30, 30, 30));
+		      label.addMouseListener( new MouseAdapter() {
+		          @Override
+		          public void mouseClicked(MouseEvent e) {
+		        	  if(selectedBase != null)
+		        		  selectedLabel.setBackground(new Color(30, 30, 30));
+		              label.setBackground(new Color(234, 201, 55));
+		              selectedLabel = label;
+		              selectedBase = b;
+		          }
+		      }); 
+		      labels.add(label, i, 0);
+		    }
+
+		return labels;
+	}
+    
+	private String buildHtml(Base base) {
+		return "<html><p style=\"color:white;\">" + base.getName() + "</p></html>";
+	}
 }

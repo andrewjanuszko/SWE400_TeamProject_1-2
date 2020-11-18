@@ -156,7 +156,12 @@ public class ElementPanel extends JPanel{
 	
 	private void getDetailsElement() {
 		if(selected != null) {
-			new ElementDetailsFrame(selectedElement);
+			new ElementDetailsFrame(selectedElement).addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosed(WindowEvent arg0) {
+					elements.setViewportView(buildLabels());
+				}
+			});
 		}
 	}
 	

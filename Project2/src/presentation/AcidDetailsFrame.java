@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 
 import command.acid.AcidUpdateCommand;
 import model.Acid;
+import model.Base;
 import model.DomainModelException;
 import model.Metal;
 
@@ -23,6 +24,7 @@ public class AcidDetailsFrame extends JFrame{
 	Acid acid;
 	GridBagConstraints gbc = new GridBagConstraints();
 	JButton update = new JButton("Update");
+	Base selectedBase = null;
 	
 	public AcidDetailsFrame(Acid a) {
 		acid = a;
@@ -80,7 +82,7 @@ public class AcidDetailsFrame extends JFrame{
 					//dissolvesList.add(new Metal(Integer.parseInt(s)));
 				}
 				try {
-					new AcidUpdateCommand(new Acid(acid.getID(), name.getText(), Double.parseDouble(inventory.getText()), dissolvesList, Integer.parseInt(solute.getText()))).execute();
+					new AcidUpdateCommand(new Acid(acid.getID(), name.getText(), Double.parseDouble(inventory.getText()), dissolvesList, selectedBase)).execute();
 				} catch (NumberFormatException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

@@ -153,7 +153,13 @@ public class CompoundPanel extends JPanel{
 	
 	private void getDetailsCompound() {
 		if(selected != null) {
-			new CompoundDetailsFrame(selectedCompound);
+			new CompoundDetailsFrame(selectedCompound).addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosed(WindowEvent arg0) {
+					compounds.setViewportView(buildLabels());
+				}
+			});
+			
 		}
 	}
 	
