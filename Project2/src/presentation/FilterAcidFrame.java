@@ -22,6 +22,7 @@ public class FilterAcidFrame extends JFrame{
 	JRadioButton soluteFilter = new JRadioButton();      //filterType 2
 	JRadioButton inventoryFilter = new JRadioButton();   //filterType 3
 	JRadioButton inventoryRangeFilter = new JRadioButton();   //filterType 4
+	JRadioButton lowInvFilter = new JRadioButton();
 	GridBagConstraints gbc = new GridBagConstraints();
 	JButton filterButton = new JButton("Filter");
 	JButton clearButton = new JButton("Clear Filter");
@@ -67,6 +68,11 @@ public class FilterAcidFrame extends JFrame{
 			public void itemStateChanged(ItemEvent e) {
 		        filterType = 3;
 		      }
+		});
+		lowInvFilter.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+		        filterType = 5;
+		    }
 		});
 		
 		filterButton.addActionListener(new ActionListener() {
@@ -152,15 +158,25 @@ public class FilterAcidFrame extends JFrame{
 		jtfInventoryRange2 = new JTextField("Range 2");
 		add(jtfInventoryRange2,gbc);
 		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		add(lowInvFilter, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 4;
+		JLabel lowInvLabel = new JLabel("Filter By Low Inventory");
+		add(lowInvLabel,gbc);
+		
+		
 		gbc.gridwidth = 2;
 		
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		
 		add(filterButton, gbc);
 		
 		gbc.gridx = 2;
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		
 		add(clearButton, gbc);
 		
@@ -184,6 +200,9 @@ public class FilterAcidFrame extends JFrame{
 					break;
 				case 4:
 					filter = filter + "-" + Integer.parseInt(jtfSolute.getText());
+					break;
+				case 5:
+					filter = "5";
 					break;
 				
 			}

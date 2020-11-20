@@ -20,8 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import command.compound.*;
 import model.Compound;
-import model.CompoundDataMapper;
 import model.DomainModelException;
 
 
@@ -36,8 +36,8 @@ public class CompoundPanel extends JPanel{
 	JLabel selected = null;
 	Compound selectedCompound = null;
 	Color labelColor = new Color(30,30,30);
-	CompoundDataMapper compoundMapper = new CompoundDataMapper();
 	List<Compound> compoundList = new ArrayList<Compound>();
+	String filter = "6";
 	
 	public CompoundPanel() {
 		this.setLayout(new GridBagLayout());
@@ -129,7 +129,8 @@ public class CompoundPanel extends JPanel{
 	private void deleteCompound() {
 		if(selected != null) {
 			try {
-				compoundMapper.delete(selectedCompound);
+				new CompoundDeleteCommand(selectedCompound).execute();
+				compounds.setViewportView(buildLabels());
 			} catch (DomainModelException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -138,20 +139,27 @@ public class CompoundPanel extends JPanel{
 	}
 	
 	private void filterCompound() {
-		
-			//brings up new window compoundd on selected compound
-			new FilterCompoundFrame().addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosed(WindowEvent arg0) {
-					//reset the view
-				}
-			});
+		FilterCompoundFrame faf = new FilterCompoundFrame();
+        faf.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent arg0) {
+                filter = faf.getFilter();
+                System.out.println(filter);
+                compounds.setViewportView(buildLabels());
+            }
+        });
 		
 	}
 	
 	private void getDetailsCompound() {
 		if(selected != null) {
-			new CompoundDetailsFrame(selectedCompound);
+			new CompoundDetailsFrame(selectedCompound).addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosed(WindowEvent arg0) {
+					compounds.setViewportView(buildLabels());
+				}
+			});
+			
 		}
 	}
 	
@@ -163,14 +171,14 @@ public class CompoundPanel extends JPanel{
 
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
-	/*
+	
 		try {
-			compoundList = compoundMapper.getAll();
+			compoundList = new CompoundFilterCommand(filter).execute();
 		} catch (DomainModelException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
-		*/
+		
 		labels.setLayout(new GridLayout(compoundList.size(), 1));
 		
 		for(int i = 0; i < compoundList.size(); i++) {

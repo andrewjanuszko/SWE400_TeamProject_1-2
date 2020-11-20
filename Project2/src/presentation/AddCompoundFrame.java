@@ -3,22 +3,32 @@ package presentation;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import command.compound.CompoundCreateCommand;
+import command.element.ElementFilterCommand;
 import model.DomainModelException;
+import model.Element;
+import model.Element;
 
 public class AddCompoundFrame extends JFrame{
 	GridBagConstraints gbc = new GridBagConstraints(); 
 	int height = 450, width = 300;
+	List<Element> selectedElements = new ArrayList<Element>();
+	JScrollPane elements = new JScrollPane();
 	
 	public AddCompoundFrame() {
 		setLayout(new GridBagLayout());
@@ -72,35 +82,32 @@ public class AddCompoundFrame extends JFrame{
 		
 		gbc.gridx = 1;
 		gbc.gridy = 2;
-		JTextField jtfElements = new JTextField("Elements");
-		add(jtfElements,gbc);
+		elements.add(elements.createVerticalScrollBar());
+		elements.setViewportView(buildLabels());
+		elements.setSize(this.height/2, 12);
+		add(elements, gbc);
 		
 		JButton add = new JButton("Add");
 		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String id;
 				double inventory;
 				int solute;
 				String name;
-				List<Integer> ids = new ArrayList<Integer>();
+				
 				try {
-					id = jtfElements.getText();
+			
 					inventory = Double.parseDouble(jtfInventory.getText());
 					name = jtfName.getText();
-					String[] stringIds = id.split(" ");
-					System.out.println(stringIds[0]);
-					if(!stringIds[0].equals(""))
-						for(String s: stringIds) {
-							ids.add(Integer.parseInt(s));
-						}
-						
-					dispose();
+					
+			
 					try {
-						new CompoundCreateCommand(name, inventory, ids).execute();
+						new CompoundCreateCommand(name, inventory, selectedElements).execute();
 					} catch (DomainModelException e1) {
 						e1.printStackTrace();
 					}
+
+					dispose();
 				} catch (NumberFormatException e1) {
 					new FailureFrame("Failed to create Compound");
 				}
@@ -113,5 +120,46 @@ public class AddCompoundFrame extends JFrame{
 		gbc.gridwidth = 2;
 		
 		add(add, gbc);
+	}
+	
+	private JPanel buildLabels() {
+		JPanel labels = new JPanel();
+		List<Element> elementList = new ArrayList<Element>();
+		try {
+			elementList = new ElementFilterCommand("9").execute();
+		} catch (DomainModelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		labels.setLayout(new GridLayout(elementList.size(), 1));
+		
+		for(int i = 0; i < elementList.size(); i++) {
+		      final int x = i;
+		      final Element m = elementList.get(i);
+		      JLabel label = new JLabel(buildHtml(m));
+		      label.setOpaque(true);
+		      label.setBackground(new Color(30, 30, 30));
+		      label.addMouseListener( new MouseAdapter() {
+		          @Override
+		          public void mouseClicked(MouseEvent e) {
+		              if(selectedElements.contains(m)) {
+		            	  selectedElements.remove(m);
+		            	  label.setBackground(new Color(30, 30, 30));
+		              }
+		              else {
+		            	  selectedElements.add(m);
+		            	  label.setBackground(new Color(234, 201, 55));
+		              }
+		          }
+		      }); 
+		      labels.add(label, i, 0);
+		    }
+
+		return labels;
+	}
+    
+	private String buildHtml(Element element) {
+		return "<html><p style=\"color:white;\">" + element.getName() + "</p></html>";
 	}
 }
