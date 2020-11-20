@@ -27,7 +27,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
    * @see model.BaseDataMapperInterface#create(String, double, int).
    */
   @Override
-  public Base create(String name, double inventory, Acid solute) throws DomainModelException {
+  public Base create(String name, double inventory, Chemical solute) throws DomainModelException {
     try {
       ChemicalRowDataGateway row = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), name, inventory, 0, 0, 0,
           0, solute.getID());
@@ -47,7 +47,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
       if (row.getType() != ChemicalEnum.BASE.getIntValue()) {
         throw new DatabaseException("ID '" + id + "' does not belong to a Base.");
       }
-      Acid solute = new AcidDataMapper().read(row.getSolute());
+      Chemical solute = new ChemicalDataMapper().read(row.getSolute());
       return new Base(row.getID(), row.getName(), row.getInventory(), solute);
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to read a Base with ID '" + id + "'.", e);
@@ -63,7 +63,11 @@ public class BaseDataMapper implements BaseDataMapperInterface {
       ChemicalRowDataGateway row = new ChemicalRowDataGateway(base.getID());
       row.setName(base.getName());
       row.setInventory(base.getInventory());
-      row.setSolute(base.getSolute().getID());
+      if (base.getSolute() == null) {
+        row.setSolute(0);
+      } else {
+        row.setSolute(base.getSolute().getID());
+      }
       row.update();
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to update a Base with ID '" + base.getID() + "'.", e);
@@ -157,7 +161,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   private List<Base> convertToBase(List<ChemicalDTO> chemicals) throws DomainModelException {
     ArrayList<Base> bases = new ArrayList<Base>();
     for (ChemicalDTO chemical : chemicals) {
-      Acid solute = new AcidDataMapper().read(chemical.getSolute());
+      Chemical solute = new ChemicalDataMapper().read(chemical.getSolute());
       bases.add(new Base(chemical.getID(), chemical.getName(), chemical.getInventory(), solute));
     }
     return bases;

@@ -22,6 +22,15 @@ public enum ChemicalEnum {
 		this.chemicalType = chemicalType;
 	}
 	
+	public static ChemicalEnum getChemicalType(int type) {
+	  for(ChemicalEnum chemicalEnum : ChemicalEnum.values()) {
+	    if (chemicalEnum.chemicalType == type) {
+	      return chemicalEnum;
+	    }
+	  }
+    return null; 
+	}
+	
 	/**
 	 * Get the type of the chemical.
 	 * @return the integer value of the chemical.

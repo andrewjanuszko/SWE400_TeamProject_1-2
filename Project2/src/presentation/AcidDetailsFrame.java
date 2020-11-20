@@ -80,7 +80,7 @@ public class AcidDetailsFrame extends JFrame{
 					//dissolvesList.add(new Metal(Integer.parseInt(s)));
 				}
 				try {
-					new AcidUpdateCommand(new Acid(acid.getID(), name.getText(), Double.parseDouble(inventory.getText()), dissolvesList, Integer.parseInt(solute.getText()))).execute();
+					new AcidUpdateCommand(acid).execute();
 				} catch (NumberFormatException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

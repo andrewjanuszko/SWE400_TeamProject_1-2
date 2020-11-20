@@ -32,18 +32,18 @@ public class AcidFilterCommand implements FilterCommandInterface {
   public List<Acid> execute() throws DomainModelException {
     switch (Integer.parseInt(filter[0])) {
     case 1:
-      return new AcidDataMapper().filterByNameLike(filter[1]);
+      return new AcidDataMapper().getAll();
     case 2:
-      return new AcidDataMapper().filterByInventory(Double.parseDouble(filter[1]));
+      return new AcidDataMapper().filterByNameLike(filter[1]);
     case 3:
+      return new AcidDataMapper().filterByInventory(Double.parseDouble(filter[1]));
+    case 4:
       return new AcidDataMapper().filterByInventoryBetween(Double.parseDouble(filter[1]),
           Double.parseDouble(filter[2]));
-    case 4:
-      return new AcidDataMapper().filterBySolute(Integer.parseInt(filter[1]));
     case 5:
-      return new AcidDataMapper().filterByLowInventory();
+      return new AcidDataMapper().filterBySolute(Integer.parseInt(filter[1]));
     case 6:
-      return new AcidDataMapper().getAll();
+      return new AcidDataMapper().filterByLowInventory();
     default:
       throw new DomainModelException("Failed to execute filter for Acid.");
     }

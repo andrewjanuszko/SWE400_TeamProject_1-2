@@ -52,12 +52,12 @@ public class PopulateDatabase {
     /**
      * Insert Acids into the table.
      */
-    ChemicalRowDataGateway hydrochloricAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Hydrochloric Acid", 10, 0, 0, 0, 0, 30);
-    ChemicalRowDataGateway nitricAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Nitric Acid", 20, 0, 0, 0, 0, 29);
-    ChemicalRowDataGateway sulfuricAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Sulfuric Acid", 30, 0, 0, 0, 0, 28);
-    ChemicalRowDataGateway carbonicAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Carbonic Acid", 40, 0, 0, 0, 0, 27);
-    ChemicalRowDataGateway formicAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Formic Acid", 10, 0, 0, 0, 0, 26);
-    ChemicalRowDataGateway citricAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Citric Acid", 10, 0, 0, 0, 0, 25);
+    ChemicalRowDataGateway hydrochloricAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Hydrochloric Acid", 10, 0, 0, 0, 0, 1);
+    ChemicalRowDataGateway nitricAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Nitric Acid", 20, 0, 0, 0, 0, 2);
+    ChemicalRowDataGateway sulfuricAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Sulfuric Acid", 30, 0, 0, 0, 0, 3);
+    ChemicalRowDataGateway carbonicAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Carbonic Acid", 40, 0, 0, 0, 0, 4);
+    ChemicalRowDataGateway formicAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Formic Acid", 10, 0, 0, 0, 0, 5);
+    ChemicalRowDataGateway citricAcid = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), "Citric Acid", 10, 0, 0, 0, 0, 6);
     
     sodium.setDissolvedBy(nitricAcid.getID());
     sodium.update();
@@ -75,12 +75,12 @@ public class PopulateDatabase {
     /**
      * Insert Bases into the table.
      */
-    ChemicalRowDataGateway potassiumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Potassium Hydroxide", 10, 0, 0, 0, 0, 18);
-    ChemicalRowDataGateway sodiumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Sodium Hydroxide", 70, 0, 0, 0, 0, 19);
-    ChemicalRowDataGateway calciumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Calcium Hydroxide", 18, 0, 0, 0, 0, 21);
-    ChemicalRowDataGateway lithiumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Lithium Hydroxide", 30, 0, 0, 0, 0, 22);
-    ChemicalRowDataGateway bariumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Barium Hydroxide", 10, 0, 0, 0, 0, 23);
-    ChemicalRowDataGateway strontiumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Strontium Hydroxide",20, 0, 0, 0, 0, 24);
+    ChemicalRowDataGateway potassiumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Potassium Hydroxide", 10, 0, 0, 0, 0, 7);
+    ChemicalRowDataGateway sodiumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Sodium Hydroxide", 70, 0, 0, 0, 0, 8);
+    ChemicalRowDataGateway calciumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Calcium Hydroxide", 18, 0, 0, 0, 0, 9);
+    ChemicalRowDataGateway lithiumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Lithium Hydroxide", 30, 0, 0, 0, 0, 10);
+    ChemicalRowDataGateway bariumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Barium Hydroxide", 10, 0, 0, 0, 0, 11);
+    ChemicalRowDataGateway strontiumHydroxide = new ChemicalRowDataGateway(ChemicalEnum.BASE.getIntValue(), "Strontium Hydroxide",20, 0, 0, 0, 0, 12);
     /**
      * Create link Elements to Compound 'hydrogenDioxide'
      */

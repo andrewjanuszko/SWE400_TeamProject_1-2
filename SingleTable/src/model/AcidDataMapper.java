@@ -27,7 +27,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
    * @see model.AcidDataMapperInterface#create(String, double, List, int).
    */
   @Override
-  public Acid create(String name, double inventory, List<Metal> dissolves, Base solute) throws DomainModelException {
+  public Acid create(String name, double inventory, List<Metal> dissolves, Chemical solute) throws DomainModelException {
     try {
       ChemicalRowDataGateway row = new ChemicalRowDataGateway(ChemicalEnum.ACID.getIntValue(), name, inventory, 0, 0, 0,
           0, solute.getID());
@@ -55,7 +55,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
         throw new DatabaseException("ID '" + id + "' does not belong to an Acid.");
       }
       List<Metal> dissolves = new MetalDataMapper().filterByDissolvedBy(id);
-      Base solute = new BaseDataMapper().read(row.getSolute());
+      Chemical solute = new ChemicalDataMapper().read(row.getSolute());
       return new Acid(row.getID(), row.getName(), row.getInventory(), dissolves, solute);
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to read an Acid with ID '" + id + "'.", e);
@@ -82,7 +82,11 @@ public class AcidDataMapper implements AcidDataMapperInterface {
       ChemicalRowDataGateway row = new ChemicalRowDataGateway(acid.getID());
       row.setName(acid.getName());
       row.setInventory(acid.getInventory());
-      row.setSolute(acid.getSolute().getID());
+      if (acid.getSolute() == null) {
+        row.setSolute(0);
+      } else {
+        row.setSolute(acid.getSolute().getID());
+      }
       row.update();
     } catch (DatabaseException e) {
       throw new DomainModelException("Failed to update an Acid with ID '" + acid.getID() + "'.", e);
@@ -184,7 +188,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
     List<Acid> acids = new ArrayList<>();
     for (ChemicalDTO dto : chemicals) {
       List<Metal> dissolves = new MetalDataMapper().filterByDissolvedBy(dto.getID());
-      Base solute = new BaseDataMapper().read(dto.getSolute());
+      Chemical solute = new ChemicalDataMapper().read(dto.getSolute());
       acids.add(new Acid(dto.getID(), dto.getName(), dto.getInventory(), dissolves, solute));
     }
     return acids;
