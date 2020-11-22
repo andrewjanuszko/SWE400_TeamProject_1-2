@@ -4,8 +4,6 @@ import java.util.List;
 import command.CreateCommandInterface;
 import model.Acid;
 import model.AcidDataMapper;
-import model.Base;
-import model.BaseDataMapper;
 import model.Chemical;
 import model.DomainModelException;
 import model.Metal;
@@ -20,7 +18,7 @@ public class AcidCreateCommand implements CreateCommandInterface {
   private String name;
   private double inventory;
   private List<Metal> dissolves;
-  private Base solute;
+  private Chemical solute;
 
   /**
    * Constructor for AcidCreateCommand(String, double, List<Metal>, int).
@@ -30,7 +28,7 @@ public class AcidCreateCommand implements CreateCommandInterface {
    * @param dissolves, the Metals dissolved by the Acid.
    * @param solute,    the ID of the solute for the Acid.
    */
-  public AcidCreateCommand(String name, double inventory, List<Metal> dissolves, Base solute) {
+  public AcidCreateCommand(String name, double inventory, List<Metal> dissolves, Chemical solute) {
     this.name = name;
     this.inventory = inventory;
     this.dissolves = dissolves;

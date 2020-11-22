@@ -3,8 +3,6 @@ package command.base;
 import model.BaseDataMapper;
 import model.Chemical;
 import command.CreateCommandInterface;
-import model.Acid;
-import model.AcidDataMapper;
 import model.Base;
 import model.DomainModelException;
 
@@ -17,7 +15,7 @@ public class BaseCreateCommand implements CreateCommandInterface {
 
   private String name;
   private double inventory;
-  private Acid solute;
+  private Chemical solute;
 
   /**
    * Constructor for BaseCreateCommand(String, double, int).
@@ -26,7 +24,7 @@ public class BaseCreateCommand implements CreateCommandInterface {
    * @param inventory, the inventory of the Base.
    * @param solute,    the ID of the solute for the Base.
    */
-  public BaseCreateCommand(String name, double inventory, Acid solute) {
+  public BaseCreateCommand(String name, double inventory, Chemical solute) {
     this.name = name;
     this.inventory = inventory;
     this.solute = solute;
