@@ -22,10 +22,10 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
-import model.BaseDataMapper;
 import model.DomainModelException;
 import model.Base;
-import model.BaseDataMapper;
+import command.base.*;
+
 
 public class BasePanel extends JPanel{
 	
@@ -37,10 +37,10 @@ public class BasePanel extends JPanel{
 	JButton detailsButton = new JButton("Details");
 	JLabel selected = null;
 	Base selectedBase = null;
-	BaseDataMapper baseMapper = new BaseDataMapper();
+	
 	Color labelColor = new Color(30,30,30);
 	List<Base> baseList = new ArrayList<Base>();
-	String filter;
+	String filter = "6";
 	
 	public BasePanel() {
 		this.setLayout(new GridBagLayout());
@@ -132,7 +132,7 @@ public class BasePanel extends JPanel{
 	private void deleteBase() {
 		if(selected != null) {
 			try {
-				baseMapper.delete(selectedBase);
+				new BaseDeleteCommand(selectedBase).execute();
 			} catch (DomainModelException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -166,14 +166,13 @@ public class BasePanel extends JPanel{
 	
 	private JPanel buildLabels() {
 		JPanel labels = new JPanel();
-	
 		try {
-			baseList = baseMapper.getAll();
+			baseList = new BaseFilterCommand(filter).execute();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
+
 		labels.setLayout(new GridLayout(baseList.size(), 1));
 		
 		for(int i = 0; i < baseList.size(); i++) {

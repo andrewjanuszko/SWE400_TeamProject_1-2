@@ -20,11 +20,13 @@ public class FilterElementFrame extends JFrame {
 
 	int filterType;        
 	JRadioButton nameFilter = new JRadioButton();        //filterType 1
-	JRadioButton soluteFilter = new JRadioButton();      //filterType 2
-	JRadioButton inventoryFilter = new JRadioButton();   //filterType 3
-	JRadioButton inventoryRangeFilter = new JRadioButton();   //filterType 4
-	JRadioButton numberFilter = new JRadioButton();   //filterType 5
-	JRadioButton massFilter = new JRadioButton();   //filterType 6
+	JRadioButton inventoryFilter = new JRadioButton();   //filterType 2
+	JRadioButton inventoryRangeFilter = new JRadioButton();   //filterType 3
+	JRadioButton numberFilter = new JRadioButton();   //filterType 4
+	JRadioButton massFilter = new JRadioButton();   //filterType 5
+	JRadioButton massBetweenFilter = new JRadioButton();
+	JRadioButton partOfFilter = new JRadioButton();
+	JRadioButton lowInvFilter = new JRadioButton();
 	GridBagConstraints gbc = new GridBagConstraints();
 	JButton filterButton = new JButton("Filter");
 	JButton clearButton = new JButton("Clear Filter");
@@ -35,6 +37,9 @@ public class FilterElementFrame extends JFrame {
 	JTextField jtfAtomicMass;
 	JTextField jtfInventoryRange1;
 	JTextField jtfInventoryRange2;
+	JTextField jtfMassRange1;
+	JTextField jtfMassRange2;
+	JTextField jtfPartOf;
 	
 	public FilterElementFrame() {
 		setLayout(new GridBagLayout());
@@ -58,29 +63,40 @@ public class FilterElementFrame extends JFrame {
 		        filterType = 1;
 		      }
 		});
-		soluteFilter.addItemListener(new ItemListener() {
+		
+		inventoryFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 		        filterType = 2;
 		      }
 		});
-		inventoryFilter.addItemListener(new ItemListener() {
+		inventoryRangeFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 		        filterType = 3;
 		      }
 		});
-		inventoryRangeFilter.addItemListener(new ItemListener() {
+		numberFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 		        filterType = 4;
 		      }
 		});
-		numberFilter.addItemListener(new ItemListener() {
+		massFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 		        filterType = 5;
 		      }
 		});
-		massFilter.addItemListener(new ItemListener() {
+		massBetweenFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 		        filterType = 6;
+		      }
+		});
+		partOfFilter.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+		        filterType = 7;
+		      }
+		});
+		lowInvFilter.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+		        filterType = 8;
 		      }
 		});
 		
@@ -94,6 +110,7 @@ public class FilterElementFrame extends JFrame {
 		clearButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				filterType = 9;
 				dispose();
 			}
 		});
@@ -109,48 +126,61 @@ public class FilterElementFrame extends JFrame {
 
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		add(soluteFilter, gbc);
-		
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		JLabel soluteLabel = new JLabel("Solute Filter: ");
-		add(soluteLabel,gbc);
-		
-		gbc.gridx = 0;
-		gbc.gridy = 2;
 		add(inventoryFilter, gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		JLabel inventoryLabel = new JLabel("Inventory Filter: ");
 		add(inventoryLabel,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		add(inventoryRangeFilter, gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		JLabel inventoryRangeLabel = new JLabel("Inventory Range Filter: ");
 		add(inventoryRangeLabel,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 3;
 		add(numberFilter, gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 4;
+		gbc.gridy = 3;
 		JLabel numberLabel = new JLabel("Atomic Number Filter: ");
 		add(numberLabel,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 5;
+		gbc.gridy = 4;
 		add(massFilter, gbc);
 		
 		gbc.gridx = 1;
-		gbc.gridy = 5;
+		gbc.gridy = 4;
 		JLabel massLabel = new JLabel("Mass Filter: ");
 		add(massLabel,gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		add(massBetweenFilter, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 5;
+		JLabel massBetweenLabel = new JLabel("Mass Between Filter: ");
+		add(massBetweenLabel,gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 6;
+		add(partOfFilter, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 6;
+		JLabel partOfLabel = new JLabel("Part Of Filter: ");
+		add(partOfLabel,gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 7;
+		add(lowInvFilter, gbc);
 		
 		
 		gbc.gridwidth = 2;
@@ -159,51 +189,65 @@ public class FilterElementFrame extends JFrame {
 		gbc.gridy = 0;
 		jtfName = new JTextField("Name");
 		add(jtfName,gbc);
-		
-		gbc.gridx = 2;
-		gbc.gridy = 1;
-		jtfSolute = new JTextField("Solute");
-		add(jtfSolute,gbc);
+
 		
 
 		gbc.gridx = 2;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		jtfInventory = new JTextField("Inventory");
 		add(jtfInventory,gbc);
 		
 		gbc.gridwidth = 1;
 		
 		gbc.gridx = 2;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		jtfInventoryRange1 = new JTextField("Range 1");
 		add(jtfInventoryRange1,gbc);
 		
 		gbc.gridx = 3;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		jtfInventoryRange2 = new JTextField("Range 2");
 		add(jtfInventoryRange2,gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 5;
+		jtfMassRange1 = new JTextField("Range 1");
+		add(jtfMassRange1,gbc);
+		
+		gbc.gridx = 3;
+		gbc.gridy = 5;
+		jtfMassRange2 = new JTextField("Range 2");
+		add(jtfMassRange2,gbc);
 		
 		gbc.gridwidth = 2;
 		
 		gbc.gridx = 2;
-		gbc.gridy = 4;
+		gbc.gridy = 3;
 		jtfAtomicNum = new JTextField("Atomic Number");
 		add(jtfAtomicNum,gbc);
 		
 		gbc.gridx = 2;
-		gbc.gridy = 5;
+		gbc.gridy = 4;
 		jtfAtomicMass = new JTextField("AtomicMass");
 		add(jtfAtomicMass,gbc);
 		
+		gbc.gridx = 2;
+		gbc.gridy = 6;
+		jtfPartOf = new JTextField("PartOf");
+		add(jtfPartOf,gbc);
 		
+		gbc.gridx = 1;
+		gbc.gridy = 7;
+		JLabel lowInvLabel = new JLabel("Filter By Low Inventory");
+		add(lowInvLabel, gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 6;
+		gbc.gridy = 8;
 		
 		add(filterButton, gbc);
 		
 		gbc.gridx = 2;
-		gbc.gridy = 6;
+		gbc.gridy = 8;
 		
 		add(clearButton, gbc);
 		
@@ -213,26 +257,32 @@ public class FilterElementFrame extends JFrame {
 		String filter = "" + filterType;
 		try {
 			switch(filterType) {
-				case 0:
-					filter = "" + 0;
+				case 9:
+					filter = "" + 9;
 					break;
 				case 1:
 					filter = filter + "-" + jtfName.getText();
 					break;
 				case 2:
-					filter = filter + "-" + Integer.parseInt(jtfSolute.getText());
-					break;
-				case 3:
 					filter = filter + "-" + Double.parseDouble(jtfInventory.getText());
 					break;
-				case 4:
-					filter = filter;
+				case 3:
+					filter = filter + "-" + Double.parseDouble(jtfInventoryRange1.getText()) + "-" + Double.parseDouble(jtfInventoryRange2.getText());
 					break;
-				case 5:
+				case 4:
 					filter = filter + "-" + Integer.parseInt(jtfAtomicNum.getText());
 					break;
-				case 6:
+				case 5:
 					filter = filter + "-" + Integer.parseInt(jtfAtomicMass.getText());
+					break;
+				case 6:
+					filter = filter + "-" + Double.parseDouble(jtfMassRange1.getText()) + "-" + Double.parseDouble(jtfMassRange2.getText());
+					break;
+				case 7:
+					filter = filter + "-" + Integer.parseInt(jtfPartOf.getText());
+					break;
+				case 8:
+					filter = "8";
 					break;
 			}
 		} catch(NumberFormatException e) {

@@ -9,14 +9,18 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import command.base.BaseCreateCommand;
+import model.Acid;
 import model.DomainModelException;
 
 public class AddBaseFrame extends JFrame{
 	GridBagConstraints gbc = new GridBagConstraints(); 
 	int height = 450, width = 300;
+	Acid selectedAcid = null;
+	JScrollPane acids = new JScrollPane();
 	
 	public AddBaseFrame() {
 		setLayout(new GridBagLayout());
@@ -89,7 +93,7 @@ public class AddBaseFrame extends JFrame{
 					//System.out.println(id + "\n" + name + "\n" + inventory + "\n" + solute);
 					dispose();
 					try {
-						new BaseCreateCommand(name, inventory, solute).execute();
+						new BaseCreateCommand(name, inventory, selectedAcid).execute();
 					} catch (DomainModelException e1) {
 						e1.printStackTrace();
 					}

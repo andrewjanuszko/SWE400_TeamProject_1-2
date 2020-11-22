@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,8 +126,14 @@ public class MetalPanel extends JPanel{
 		});
 	}
 	
-	private void deleteMetal() {
+	private void deleteMetal()  {
 		if(selected != null) {
+			try {
+				new MetalDeleteCommand(selectedMetal).execute();
+				metals.setViewportView(buildLabels());
+			} catch (DomainModelException e) {
+				
+			}
 		}
 	}
 	
@@ -136,16 +143,23 @@ public class MetalPanel extends JPanel{
 			new FilterMetalFrame().addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent arg0) {
-					//reset the view
+					metals.setViewportView(buildLabels());
 				}
 			});
+			
 		
 	}
 	
 	private void getDetailsMetal() {
 		if(selected != null) {
-			new MetalDetailsFrame(selectedMetal);
+			new MetalDetailsFrame(selectedMetal).addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosed(WindowEvent arg0) {
+					metals.setViewportView(buildLabels());
+				}
+			});	
 		}
+		
 	}
 	
 	private void removeSelectedBackground() {
