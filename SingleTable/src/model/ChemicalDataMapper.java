@@ -2,8 +2,6 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import dataENUM.ChemicalEnum;
 import datasource.ChemicalRowDataGateway;
 import datasource.DatabaseException;
 
