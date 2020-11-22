@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import datasource.ChemicalRowDataGateway;
+import datasource.DatabaseException;
 
 /**
  * A mapper for Chemicals.
@@ -10,6 +12,29 @@ import java.util.List;
  *
  */
 public class ChemicalDataMapper implements ChemicalDataMapperInterface {
+  
+  @Override
+  public Chemical read(int id) throws DomainModelException {
+    try {
+      ChemicalRowDataGateway row = new ChemicalRowDataGateway(id);
+      switch (row.getType()) {
+      case 1:
+        return new ElementDataMapper().read(id);
+      case 2:
+        return new MetalDataMapper().read(id);
+      case 3:
+        return new CompoundDataMapper().read(id);
+      case 4:
+        return new BaseDataMapper().read(id);
+      case 5:
+        return new AcidDataMapper().read(id);
+      default:
+        throw new DomainModelException("Chemical is not of a valid type.");
+      }
+    } catch (DatabaseException e) {
+      throw new DomainModelException("Failed to read a Chemical with ID '" + id + "'.", e);
+    }
+  }
 
   /**
    * @see model.ChemicalDataMapperInterface#getAll().

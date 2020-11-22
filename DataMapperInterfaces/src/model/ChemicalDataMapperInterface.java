@@ -3,6 +3,14 @@ package model;
 import java.util.List;
 
 public interface ChemicalDataMapperInterface {
+  
+  /**
+   * Read a Chemical from the database. 
+   * @param id the id to search.
+   * @return the Chemical.
+   * @throws DomainModelException when things go wrong.
+   */
+  public Chemical read(int id) throws DomainModelException;
 
   /**
    * Get all Chemicals.
