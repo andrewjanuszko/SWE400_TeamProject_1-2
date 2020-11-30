@@ -40,7 +40,7 @@ public class AcidDetailsFrame extends JFrame{
 	public void setUp() {
 		JTextField name = new JTextField(acid.getName());
 		JTextField inventory = new JTextField("" + acid.getInventory());
-		JTextField solute = new JTextField("" + acid.getSolute());
+		JTextField solute = new JTextField("" + acid.getSolute().getName());
 		JTextField id = new JTextField("" + acid.getID());
 		
 		JLabel dissolves = new JLabel();
@@ -51,6 +51,7 @@ public class AcidDetailsFrame extends JFrame{
 		else 
 			dissolves.setText("nothing");
 			
+		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		

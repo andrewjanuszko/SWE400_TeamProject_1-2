@@ -133,6 +133,7 @@ public class BasePanel extends JPanel{
 		if(selected != null) {
 			try {
 				new BaseDeleteCommand(selectedBase).execute();
+				bases.setViewportView(buildLabels());
 			} catch (DomainModelException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

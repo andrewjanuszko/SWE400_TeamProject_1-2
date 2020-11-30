@@ -38,6 +38,8 @@ public class ChemicalFilterCommand implements FilterCommandInterface {
     case 3:
       return new ChemicalDataMapper().filterByInventoryBetween(Integer.parseInt(filter[1]),
           Integer.parseInt(filter[2]));
+    case 4:
+      return new ChemicalDataMapper().getAll();
     default:
       throw new DomainModelException("Failed to execute filter for Chemical.");
     }
