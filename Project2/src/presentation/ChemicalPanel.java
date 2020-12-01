@@ -12,15 +12,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
+import command.chemical.ChemicalFilterCommand;
 import model.Acid;
 import model.BaseDataMapper;
 import model.Chemical;
@@ -31,10 +35,13 @@ public class ChemicalPanel extends JPanel{
   GridBagConstraints gbc = new GridBagConstraints();
   JButton filterButton = new JButton("Filter");
   JButton detailsButton = new JButton("Details");
+  Chemical selectedChemical;
   JLabel selected = null;
   Color labelColor = new Color(30, 30, 30);
   List<Chemical> chemicallList;
-	
+  String filter = "4";
+  
+  
   public ChemicalPanel() {
     this.setLayout(new GridBagLayout());
     addScrollPane();
@@ -45,7 +52,7 @@ public class ChemicalPanel extends JPanel{
     chemicals.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     chemicals.add(chemicals.createVerticalScrollBar());
 
-    chemicals.setViewportView(Labels());
+    chemicals.setViewportView(buildLabels());
     gbc.gridx = 0;
     gbc.gridy = 0;
     gbc.weightx = 1;
@@ -66,13 +73,13 @@ public class ChemicalPanel extends JPanel{
     filterButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent ae) {
-        filterAcid();
+        filterChemical();
       }
     });
     detailsButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent ae) {
-        getDetailAcid();
+        getDetailChemical();
       }
     });
     JPanel buttons = new JPanel(new GridBagLayout());
@@ -96,21 +103,22 @@ public class ChemicalPanel extends JPanel{
 
   }
 
-  private void filterAcid() {
-    if (selected != null) {
-      // brings up new window based on selected metal
-      new FilterMetalFrame().addWindowListener(new WindowAdapter() {
+  private void filterChemical() {
+   
+      FilterChemicalFrame fcf = new FilterChemicalFrame();
+    	fcf.addWindowListener(new WindowAdapter() {
         @Override
         public void windowClosed(WindowEvent arg0) {
-          // reset the view
+        	filter = fcf.getFilter();
+        	chemicals.setViewportView(buildLabels());
         }
       });
-    }
+    
   }
 
-  private void getDetailAcid() {
-    if (selected == null) {
-      return;
+  private void getDetailChemical() {
+    if (selected != null) {
+       new ChemicalDetailsFrame(selectedChemical);
     }
   }
 
@@ -120,8 +128,40 @@ public class ChemicalPanel extends JPanel{
   }
 
   private JPanel buildLabels() {
-    JPanel labels = new JPanel();
+	  JPanel labels = new JPanel();
+		List<Chemical> baseList = new ArrayList<Chemical>();
+		try {
+			baseList = (List<Chemical>) new ChemicalFilterCommand(filter).execute();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-    return labels;
+		labels.setLayout(new GridLayout(baseList.size(), 1));
+		
+		for(int i = 0; i < baseList.size(); i++) {
+		      final int x = i;
+		      final Chemical b = baseList.get(x);
+		      JLabel label = new JLabel(buildHtml(baseList.get(i)));
+		      label.setOpaque(true);
+		      label.setBackground(new Color(30, 30, 30));
+		      label.addMouseListener( new MouseAdapter() {
+		          @Override
+		          public void mouseClicked(MouseEvent e) {
+		        	  if(selectedChemical != null)
+		        		  selected.setBackground(new Color(30, 30, 30));
+		              label.setBackground(new Color(234, 201, 55));
+		              selected = label;
+		              selectedChemical = b;
+		          }
+		      }); 
+		      labels.add(label, i, 0);
+		    }
+
+		return labels;
   }
+  
+  private String buildHtml(Chemical chem) {
+		return "<html><p style=\"color:white;\">" + chem.getName() + "</p></html>";
+	}
 }

@@ -20,17 +20,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import command.acid.AcidCreateCommand;
 import model.Base;
+import model.Chemical;
 import model.DomainModelException;
 import model.Metal;
 import command.metal.MetalFilterCommand;
 import command.base.BaseFilterCommand;
+import command.chemical.ChemicalFilterCommand;
 
 public class AddAcidFrame extends JFrame{
 	
 	GridBagConstraints gbc = new GridBagConstraints(); 
 	int height = 450, width = 300;
 	List<Metal> selectedMetals = new ArrayList<Metal>();
-	Base selectedBase = null;
+	Chemical selectedBase = null;
 	JScrollPane metals = new JScrollPane();
 	JScrollPane bases = new JScrollPane();
 	JLabel selectedLabel = null;
@@ -89,15 +91,13 @@ public class AddAcidFrame extends JFrame{
 		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int solute = 0;
-				double inventory = 0;
-				String name = "";
-				List<Integer> ids = new ArrayList<Integer>();
+				
+				
 				try {
 					
-					inventory = Double.parseDouble(jtfInventory.getText());
+					double inventory = Double.parseDouble(jtfInventory.getText());
 					
-					name = jtfName.getText();
+					String name = jtfName.getText();
 						try {
 							new AcidCreateCommand(name, inventory, selectedMetals, selectedBase).execute();
 						} catch (DomainModelException e1) {
@@ -172,9 +172,9 @@ public class AddAcidFrame extends JFrame{
 	}
 	private JPanel buildLabelsBase() {
 		JPanel labels = new JPanel();
-		List<Base> baseList = new ArrayList<Base>();
+		List<Chemical> baseList = new ArrayList<Chemical>();
 		try {
-			baseList = new BaseFilterCommand("6").execute();
+			baseList = (List<Chemical>) new ChemicalFilterCommand("4").execute();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -184,7 +184,7 @@ public class AddAcidFrame extends JFrame{
 		
 		for(int i = 0; i < baseList.size(); i++) {
 		      final int x = i;
-		      final Base b = baseList.get(x);
+		      final Chemical b = baseList.get(x);
 		      JLabel label = new JLabel(buildHtml(baseList.get(i)));
 		      label.setOpaque(true);
 		      label.setBackground(new Color(30, 30, 30));
@@ -204,7 +204,7 @@ public class AddAcidFrame extends JFrame{
 		return labels;
 	}
     
-	private String buildHtml(Base base) {
+	private String buildHtml(Chemical base) {
 		return "<html><p style=\"color:white;\">" + base.getName() + "</p></html>";
 	}
 }
