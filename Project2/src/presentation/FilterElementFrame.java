@@ -4,17 +4,28 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import command.compound.CompoundFilterCommand;
+import model.Compound;
+import model.DomainModelException;
 
 public class FilterElementFrame extends JFrame {
 
@@ -39,7 +50,10 @@ public class FilterElementFrame extends JFrame {
 	JTextField jtfInventoryRange2;
 	JTextField jtfMassRange1;
 	JTextField jtfMassRange2;
-	JTextField jtfPartOf;
+	//JTextField jtfPartOf;
+	JScrollPane compounds = new JScrollPane();
+	Compound selectedCompound;
+	JLabel selected;
 	
 	public FilterElementFrame() {
 		setLayout(new GridBagLayout());
@@ -233,8 +247,9 @@ public class FilterElementFrame extends JFrame {
 		
 		gbc.gridx = 2;
 		gbc.gridy = 6;
-		jtfPartOf = new JTextField("PartOf");
-		add(jtfPartOf,gbc);
+		//jtfPartOf = new JTextField("PartOf");
+		compounds.setViewportView(buildLabels());
+		add(compounds,gbc);
 		
 		gbc.gridx = 1;
 		gbc.gridy = 7;
@@ -279,7 +294,7 @@ public class FilterElementFrame extends JFrame {
 					filter = filter + "-" + Double.parseDouble(jtfMassRange1.getText()) + "-" + Double.parseDouble(jtfMassRange2.getText());
 					break;
 				case 7:
-					filter = filter + "-" + Integer.parseInt(jtfPartOf.getText());
+					filter = filter + "-" + selectedCompound.getID();
 					break;
 				case 8:
 					filter = "8";
@@ -291,4 +306,48 @@ public class FilterElementFrame extends JFrame {
 		}
 		return filter;
 	}
+	
+	private JPanel buildLabels() {
+		JPanel labels = new JPanel();
+		List<Compound> compoundList = new ArrayList<Compound>();
+		try {
+			compoundList = new CompoundFilterCommand("6").execute();
+		} catch (DomainModelException e1) {
+			
+			e1.printStackTrace();
+		}
+		
+		labels.setLayout(new GridLayout(compoundList.size(), 1));
+		
+		for(int i = 0; i < compoundList.size(); i++) {
+		      final int x = i;
+		      final Compound c = compoundList.get(x);
+		      JLabel label = new JLabel(buildHtml(compoundList.get(i)));
+		      label.setOpaque(true);
+		      label.setBackground(new Color(30, 30, 30));
+		      label.addMouseListener( new MouseAdapter() {
+		          @Override
+		          public void mouseClicked(MouseEvent e) {
+		              removeSelectedBackground();
+		              label.setBackground(new Color(234, 201, 55));
+		              selected = label;
+		              selectedCompound = c;
+		          }
+		      }); 
+		      labels.add(label, i, 0);
+		    }
+
+		return labels;
+	}
+    
+	private String buildHtml(Compound compound) {
+		return "<html><p style=\"color:white;\">" + compound.getName() + "</p></html>";
+	}
+	
+	private void removeSelectedBackground() {
+	    if(selected != null)
+	      selected.setBackground(new Color(30, 30, 30));
+	  }
+	
+
 }
