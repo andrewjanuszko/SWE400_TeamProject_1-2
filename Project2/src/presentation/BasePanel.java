@@ -148,7 +148,7 @@ public class BasePanel extends JPanel{
 				@Override
 				public void windowClosed(WindowEvent arg0) {
 					filter = fbf.getFilter();
-					System.out.println(filter);
+					bases.setViewportView(buildLabels());
 				}
 			});
 	}

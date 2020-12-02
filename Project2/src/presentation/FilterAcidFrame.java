@@ -3,17 +3,27 @@ package presentation;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import command.chemical.ChemicalFilterCommand;
+import model.Chemical;
 
 public class FilterAcidFrame extends JFrame{
 	
@@ -31,6 +41,9 @@ public class FilterAcidFrame extends JFrame{
 	JTextField jtfInventory;
 	JTextField jtfInventoryRange1;
 	JTextField jtfInventoryRange2;
+	JScrollPane chemicals = new JScrollPane();
+	Chemical selectedChemical = null;
+	JLabel selected;
 	
 	public FilterAcidFrame() {
 		setLayout(new GridBagLayout());
@@ -135,8 +148,10 @@ public class FilterAcidFrame extends JFrame{
 		
 		gbc.gridx = 2;
 		gbc.gridy = 1;
-		jtfSolute = new JTextField("Solute");
-		add(jtfSolute,gbc);
+		//jtfSolute = new JTextField("Solute");
+		chemicals.setVerticalScrollBar(chemicals.createVerticalScrollBar());
+		chemicals.setViewportView(buildLabels());
+		add(chemicals,gbc);
 		
 
 		gbc.gridx = 2;
@@ -199,7 +214,7 @@ public class FilterAcidFrame extends JFrame{
 					filter = filter + "-" + Double.parseDouble(jtfInventoryRange1.getText()) + "-" + Double.parseDouble(jtfInventoryRange2.getText());
 					break;
 				case 4:
-					filter = filter + "-" + Integer.parseInt(jtfSolute.getText());
+					filter = filter + "-" + selectedChemical.getID();
 					break;
 				case 5:
 					filter = "5";
@@ -211,5 +226,42 @@ public class FilterAcidFrame extends JFrame{
 			return "" + 0;
 		}
 		return filter;
+	}
+	private JPanel buildLabels() {
+		JPanel labels = new JPanel();
+		List<Chemical> baseList = new ArrayList<Chemical>();
+		try {
+			baseList = (List<Chemical>) new ChemicalFilterCommand("4").execute();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		labels.setLayout(new GridLayout(baseList.size(), 1));
+		
+		for(int i = 0; i < baseList.size(); i++) {
+		      final int x = i;
+		      final Chemical b = baseList.get(x);
+		      JLabel label = new JLabel(buildHtml(baseList.get(i)));
+		      label.setOpaque(true);
+		      label.setBackground(new Color(30, 30, 30));
+		      label.addMouseListener( new MouseAdapter() {
+		          @Override
+		          public void mouseClicked(MouseEvent e) {
+		        	  if(selectedChemical != null)
+		        		  selected.setBackground(new Color(30, 30, 30));
+		              label.setBackground(new Color(234, 201, 55));
+		              selected = label;
+		              selectedChemical = b;
+		          }
+		      }); 
+		      labels.add(label, i, 0);
+		    }
+
+		return labels;
+	}
+    
+	private String buildHtml(Chemical base) {
+		return "<html><p style=\"color:white;\">" + base.getName() + "</p></html>";
 	}
 }

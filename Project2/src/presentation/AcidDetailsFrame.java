@@ -35,12 +35,14 @@ public class AcidDetailsFrame extends JFrame{
 	Chemical selectedBase = null;
 	JLabel selectedLabel = null;
 	List<Metal> selectedMetals = new ArrayList<Metal>();
+	List<Integer> dissolves = new ArrayList<Integer>();
 	JScrollPane solute = new JScrollPane();
 	JScrollPane metals = new JScrollPane();
 
 	
 	public AcidDetailsFrame(Acid a) {
 		acid = a;
+		acid.getDissolves().forEach(x -> dissolves.add(x.getID()));;
 		setLayout(new GridBagLayout());
     	setBackground(Color.BLACK);
     	setUp();
@@ -53,7 +55,7 @@ public class AcidDetailsFrame extends JFrame{
 	public void setUp() {
 		JTextField name = new JTextField(acid.getName());
 		JTextField inventory = new JTextField("" + acid.getInventory());
-		JTextField id = new JTextField("" + acid.getID());
+		
 		
 		
 			
@@ -63,25 +65,23 @@ public class AcidDetailsFrame extends JFrame{
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		add(id, gbc);
-		
-		gbc.gridx = 0;
-		gbc.gridy = 1;
 		add(name,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		add(inventory, gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 2;
 		solute.setViewportView(buildLabelsBase());
 		solute.setVerticalScrollBar(solute.createVerticalScrollBar());
 		add(solute,gbc);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 4;
-		//add(dissolves,gbc);
+		gbc.gridy = 3;
+		metals.setViewportView(buildLabelsMetal());
+		metals.setVerticalScrollBar(metals.createVerticalScrollBar());
+		add(metals,gbc);
 		
 		update.addActionListener(new ActionListener() {
 			@Override
@@ -99,7 +99,7 @@ public class AcidDetailsFrame extends JFrame{
 		});
 				
 		gbc.gridx = 0;
-		gbc.gridy = 5;
+		gbc.gridy = 4;
 		add(update,gbc);
 	}
 	
@@ -120,9 +120,16 @@ public class AcidDetailsFrame extends JFrame{
 		      final Metal m = metalList.get(i);
 		      JLabel label = new JLabel(buildHtml(m));
 		      label.setOpaque(true);
-		      
-		      label.setBackground(new Color(30, 30, 30));
-		      
+		      for(int j = 0; j < dissolves.size(); j++) {
+			      	if(m.getID() == dissolves.get(j)) {
+			      		selectedMetals.add(m);
+			      	}
+			      }
+			      if(selectedMetals.contains(m))
+			    	  label.setBackground(new Color(234, 201, 55)); 
+			      else
+			    	  label.setBackground(new Color(30, 30, 30));
+			      
 		      label.addMouseListener( new MouseAdapter() {
 		          @Override
 		          public void mouseClicked(MouseEvent e) {
@@ -162,8 +169,12 @@ public class AcidDetailsFrame extends JFrame{
 		      final Chemical b = baseList.get(x);
 		      JLabel label = new JLabel(buildHtml(baseList.get(i)));
 		      label.setOpaque(true);
-		      
-		      label.setBackground(new Color(30, 30, 30));
+		      if(b.getID() == acid.getSolute().getID()) {
+		    	  label.setBackground(new Color(234, 201, 55));
+		      	  selectedBase = b;
+		      	  selectedLabel = label;
+		      } else
+		    	  label.setBackground(new Color(30, 30, 30));
 		      
 		      label.addMouseListener( new MouseAdapter() {
 		          @Override
