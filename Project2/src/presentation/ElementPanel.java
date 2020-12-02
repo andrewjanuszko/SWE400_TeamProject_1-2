@@ -148,7 +148,7 @@ public class ElementPanel extends JPanel{
 				@Override
 				public void windowClosed(WindowEvent arg0) {
 					filter = fef.getFilter();
-					System.out.println(filter);
+					elements.setViewportView(buildLabels());
 				}
 			});
 		
