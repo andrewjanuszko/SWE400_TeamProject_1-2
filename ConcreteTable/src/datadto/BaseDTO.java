@@ -4,12 +4,14 @@ public class BaseDTO {
   private int baseID, soluteID;
   private String name;
   private double inventory;
+  private String soluteType;
 
-  public BaseDTO(int baseID, String name, double inventory, int soluteID) {
+  public BaseDTO(int baseID, String name, double inventory, int soluteID, String soluteType) {
     this.baseID = baseID;
     this.soluteID = soluteID;
     this.name = name;
     this.inventory = inventory;
+    this.soluteType = soluteType;
   }
 
   public int getBaseID() {
@@ -27,7 +29,11 @@ public class BaseDTO {
   public double getInventory() {
     return inventory;
   }
-
+  
+  public String getSoluteType() {
+    return soluteType;
+  }
+  
   public void setBaseID(int baseID) {
     this.baseID = baseID;
   }
@@ -42,5 +48,9 @@ public class BaseDTO {
 
   public void setInventory(double inventory) {
     this.inventory = inventory;
+  }
+  
+  public void setSoluteType(String soluteType) {
+    this.soluteType = soluteType;
   }
 }

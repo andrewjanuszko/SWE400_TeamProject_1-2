@@ -25,7 +25,9 @@ class BaseRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testConstructors() throws DatabaseException{
-    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS("base", 1.0, 1);
+    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS("element", 1.0, 0, 1.0);
+
+    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS("base", 1.0, element1.getElementID(), "Element");
     BaseRowDataGateway base1FindByID = new BaseRowDataGatewayRDS(base1.getBaseID());
     BaseRowDataGateway base1FindByName = new BaseRowDataGatewayRDS("base");
     
@@ -46,7 +48,8 @@ class BaseRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testGetters() throws DatabaseException{
-   BaseRowDataGateway base1 = new BaseRowDataGatewayRDS("base", 1.0, 1);
+   ElementRowDataGateway element1 = new ElementRowDataGatewayRDS("element", 1.0, 0, 1.0);
+   BaseRowDataGateway base1 = new BaseRowDataGatewayRDS("base", 1.0, element1.getElementID(), "Element");
    
    assertEquals(1, base1.getBaseID());
    assertEquals("base", base1.getName());
@@ -60,7 +63,8 @@ class BaseRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testSetters() throws DatabaseException{
-    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS("base", 1.0, 1);
+    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS("element", 1.0, 0, 1.0);
+    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS("base", 1.0, element1.getElementID(), "Element");
     base1.setInventory(2.0);
     base1.setName("new");
     base1.setSolute(2);
@@ -76,7 +80,8 @@ class BaseRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testPersist() throws DatabaseException {
-    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS("base", 1.0, 1);
+    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS("element", 1.0, 0, 1.0);
+    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS("base", 1.0, element1.getElementID(), "Element");
     base1.setName("newName");
     assertTrue(base1.persist());
     base1 = null;
@@ -91,7 +96,8 @@ class BaseRowDataGatewayRDSTest extends DatabaseTest{
    */
   @Test
   void testDelete() throws DatabaseException {
-    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS("base", 1.0, 2);
+    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS("element", 1.0, 0, 1.0);
+    BaseRowDataGateway base1 = new BaseRowDataGatewayRDS("base", 1.0, element1.getElementID(), "Element");
     
     assertTrue(base1.delete());
   }

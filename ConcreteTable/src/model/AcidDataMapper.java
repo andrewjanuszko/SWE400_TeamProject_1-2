@@ -17,12 +17,14 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   public static IdentityMap<Acid> acidMap = new IdentityMap<Acid>();
 
   @Override
-  public Acid create(String name, double inventory, List<Metal> dissolves, int solute) throws DomainModelException {
+  public Acid create(String name, double inventory, List<Metal> dissolves, Chemical solute)
+      throws DomainModelException {
     try {
-      AcidRowDataGateway gateway = new AcidRowDataGatewayRDS(name, inventory, solute);
+      AcidRowDataGateway gateway = new AcidRowDataGatewayRDS(name, inventory, solute.getID(),
+          solute.getClass().getName());
       Acid a = new Acid(gateway.getAcidID(), name, inventory, dissolves, solute);
       acidMap.add(a);
-      for(Metal m: dissolves) {
+      for (Metal m : dissolves) {
         MetalRowDataGateway mRDG = new MetalRowDataGatewayRDS(m.getID());
         mRDG.setDissolvedBy(a.getID());
         mRDG.persist();
@@ -42,8 +44,9 @@ public class AcidDataMapper implements AcidDataMapperInterface {
       if (acidMap.get(id) == null) {
         AcidRowDataGateway gateway = new AcidRowDataGatewayRDS(id);
         MetalDataMapper metalMapper = new MetalDataMapper();
+
         Acid acid = new Acid(gateway.getAcidID(), gateway.getName(), gateway.getInventory(),
-            metalMapper.filterByDissolvedBy(id), gateway.getSolute());
+            metalMapper.filterByDissolvedBy(id), soluteType(gateway.getSoluteType(), gateway.getSolute()));
 
         acidMap.add(acid);
         return acid;
@@ -64,7 +67,8 @@ public class AcidDataMapper implements AcidDataMapperInterface {
       AcidRowDataGateway gateway = new AcidRowDataGatewayRDS(acid.getID());
       gateway.setName(acid.getName());
       gateway.setInventory(acid.getInventory());
-      gateway.setSolute(acid.getSolute());
+      gateway.setSolute(acid.getSolute().getID());
+      gateway.setSoluteType(acid.getSolute().getClass().getName());
 
       // how to update dissolvedMetals???
       MetalDataMapper metalMapper = new MetalDataMapper();
@@ -98,6 +102,40 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   }
 
   /**
+   * Fetches a solute by it's type
+   * 
+   * @param s Solute Type
+   * @param i ID
+   * @return Solute
+   */
+  private Chemical soluteType(String s, int i) {
+    // very possible there is infinite loading shenanigans
+    try {
+      if (s.contains("Acid")) {
+        AcidDataMapper m = new AcidDataMapper();
+        return m.read(i);
+      } else if (s.contains("Base")) {
+        BaseDataMapper m = new BaseDataMapper();
+        return m.read(i);
+      } else if (s.contains("Compound")) {
+        CompoundDataMapper m = new CompoundDataMapper();
+        return m.read(i);
+      } else if (s.contains("Element")) {
+        ElementDataMapper m = new ElementDataMapper();
+        return m.read(i);
+      } else if (s.contains("Metal")) {
+        BaseDataMapper m = new BaseDataMapper();
+        return m.read(i);
+      }
+
+    } catch (DomainModelException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  /**
    * Converts a list of AcidDTOs to a list of Acids.
    * 
    * @param acidDTOList the list of DTOs.
@@ -109,7 +147,9 @@ public class AcidDataMapper implements AcidDataMapperInterface {
       for (AcidDTO dto : acidDTOList) {
         int acidID = dto.getAcidID();
         String name = dto.getName();
-        int solute = dto.getSoluteID();
+        int soluteId = dto.getSoluteID();
+        String soluteType = dto.getSoluteType();
+        Chemical solute = soluteType(soluteType, soluteId);
         MetalDataMapper metalMapper = new MetalDataMapper();
         List<Metal> dissolves = metalMapper.filterByDissolvedBy(dto.getAcidID());
         double inventory = dto.getInventory();

@@ -22,7 +22,7 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest {
 
   @Test
   void testGetters() throws DatabaseException {
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS("acid", 1.0, 1);
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS("acid", 1.0, 1, "Null");
     MetalRowDataGateway Metal = new MetalRowDataGatewayRDS("Metal", 1.0, 5, 10.0, 10.0, acid1.getAcidID());
 
     assertEquals(1, Metal.getMetalID());
@@ -36,8 +36,8 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest {
 
   @Test
   void testSetters() throws DatabaseException {
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS("acid", 1.0, 1);
-    AcidRowDataGateway acid2 = new AcidRowDataGatewayRDS("otherAcid", 1.0, 1);
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS("acid", 1.0, 1, "Null");
+    AcidRowDataGateway acid2 = new AcidRowDataGatewayRDS("otherAcid", 1.0, 1, "Null");
     MetalRowDataGateway Metal = new MetalRowDataGatewayRDS("Metal", 1.0, 5, 10.0, 10.0, acid1.getAcidID());
 
     Metal.setName("name");
@@ -65,7 +65,7 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest {
 
   @Test
   void testConstructors() throws DatabaseException {
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS("acid", 1.0, 1);
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS("acid", 1.0, 1, "Null");
     MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS("metal", 1.0, 5, 10.0, 10.0, acid1.getAcidID());
     MetalRowDataGateway metal1FindByID = new MetalRowDataGatewayRDS(1);
     MetalRowDataGateway metal1FindByName = new MetalRowDataGatewayRDS("metal");
@@ -89,7 +89,7 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest {
 
   @Test
   void testPersist() throws DatabaseException {
-    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS("acid", 1.0, 1);
+    AcidRowDataGateway acid1 = new AcidRowDataGatewayRDS("acid", 1.0, 1, "Null");
     MetalRowDataGateway metal1 = new MetalRowDataGatewayRDS("metal", 1.0, 5, 10.0, 10.0, acid1.getAcidID());
     metal1.setName("newName");
     assertTrue(metal1.persist());
