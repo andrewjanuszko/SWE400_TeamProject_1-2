@@ -62,7 +62,7 @@ public class BaseRDGRDS implements BaseRDG {
 
       // Insert Base
       PreparedStatement insertBase = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Base (baseId, solute)" + "VALUES (LAST_INSERT_ID(), ?, ?);");
+          .prepareStatement("INSERT INTO Base (baseId, solute, soluteType)" + "VALUES (LAST_INSERT_ID(), ?, ?);");
       insertBase.setInt(2, solute); // set solute id
       insertBase.setString(3, soluteType); // set solute id
 

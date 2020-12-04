@@ -58,7 +58,7 @@ public class AcidRDGRDS implements AcidRDG {
       
       // Insert Acid
       PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
-        .prepareStatement("INSERT INTO Acid (acidId, solute) VALUES (LAST_INSERT_ID(), ?, ?);");
+        .prepareStatement("INSERT INTO Acid (acidId, solute, soluteType) VALUES (LAST_INSERT_ID(), ?, ?);");
       insertAcid.setInt(1, solute); // set solute id
       insertChemical.setString(2, soluteType); // solute type
       
