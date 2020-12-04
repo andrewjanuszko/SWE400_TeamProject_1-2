@@ -77,7 +77,7 @@ class TestAcid extends DatabaseTest {
   @Test
   static void testDelete() {
     // Create acid
-    AcidRDG acid = new AcidRDGRDS(59, "acidname1", 1.9);
+    AcidRDG acid = new AcidRDGRDS(59, "acidname1", 1.9, "Acid");
 
     // Ensure it has been added
     assertEquals("acidname1", acid.getAcid().getName());
@@ -104,7 +104,7 @@ class TestAcid extends DatabaseTest {
   @Test
   static void testUpdate() throws SQLException, DatabaseException {
     // Create acid and getter for that acid
-    AcidRDG acid_setter = new AcidRDGRDS(59, "acidname9", 1.9), 
+    AcidRDG acid_setter = new AcidRDGRDS(59, "acidname9", 1.9, "Acid"), 
         acid_getter = new AcidRDGRDS(31);
 
     // Ensure that acid has been added and fetches the right information

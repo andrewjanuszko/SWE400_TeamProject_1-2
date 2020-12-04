@@ -83,7 +83,7 @@ class TestBase extends DatabaseTest {
   @Test
   static void testUpdate() throws SQLException, DatabaseException {
     // Create a new base and getter for the base
-    BaseRDG base_setter = new BaseRDGRDS(59, "basename9", 1.9), base_getter = new BaseRDGRDS(33);
+    BaseRDG base_setter = new BaseRDGRDS(59, "basename9", 1.9, "base"), base_getter = new BaseRDGRDS(33);
 
     // Ensure the base has been added properly
     assertEquals("basename9", base_getter.getBase().getName());
@@ -111,7 +111,7 @@ class TestBase extends DatabaseTest {
   @Test
   static void testDelete() {
     // Create a new base
-    BaseRDG base = new BaseRDGRDS(9, "basename9", 1.9);
+    BaseRDG base = new BaseRDGRDS(9, "basename9", 1.9, "base");
 
     // Ensure the base has been added properly
     assertEquals("basename9", base.getBase().getName());

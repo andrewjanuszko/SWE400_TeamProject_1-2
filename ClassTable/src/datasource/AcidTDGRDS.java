@@ -110,7 +110,8 @@ public class AcidTDGRDS implements AcidTDG {
           int soluteId = results.getInt("solute");
           String name = results.getString("name");
           double inventory = results.getDouble("inventory");
-          AcidDTO acid = new AcidDTO(acidId, soluteId, name, inventory);
+          String soluteType = results.getString("soluteType");
+          AcidDTO acid = new AcidDTO(acidId, soluteId, name, inventory, soluteType);
           listDTO.add(acid);
         }
 

@@ -47,8 +47,24 @@ public class ChemicalDataMapper implements ChemicalDataMapperInterface {
 
   @Override
   public List<Chemical> filterByLowInventory() throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null
+    return null;
+  }
+
+  @Override
+  public Chemical read(int id) throws DomainModelException {
+    List<Chemical> chemicals = new ArrayList<>(); 
+    chemicals.addAll(new ElementDataMapper().getAll());
+    chemicals.addAll(new CompoundDataMapper().getAll());
+    chemicals.addAll(new BaseDataMapper().getAll());
+    chemicals.addAll(new AcidDataMapper().getAll());
+    
+    for(Chemical c : chemicals) {
+      if(c.getID() == id) {
+        return c; 
+      }
+    }
+    throw new DomainModelException(id + " not found."); 
+    
   }
 
 }

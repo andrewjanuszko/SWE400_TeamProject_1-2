@@ -252,4 +252,9 @@ public class ElementDataMapper implements ElementDataMapperInterface {
         dto.getAtomicMass());
   }
 
+  @Override
+  public List<Element> filterByLowInventory() throws DomainModelException {
+    return null;
+  }
+
 }
