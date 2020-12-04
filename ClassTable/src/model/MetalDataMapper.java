@@ -227,4 +227,10 @@ public class MetalDataMapper implements MetalDataMapperInterface {
     return null;
   }
 
+  @Override
+  public List<Metal> filterByLowInventory() throws DomainModelException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
 }
