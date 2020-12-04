@@ -61,13 +61,13 @@ public class BaseRDGRDS implements BaseRDG {
       insertChemical.setDouble(2, inventory);
 
       // Insert Base
-      PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
+      PreparedStatement insertBase = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Base (baseId, solute)" + "VALUES (LAST_INSERT_ID(), ?, ?);");
-      insertAcid.setInt(1, solute); // set solute id
-      insertAcid.setString(2, soluteType); // set solute id
+      insertBase.setInt(2, solute); // set solute id
+      insertBase.setString(3, soluteType); // set solute id
 
       insertChemical.execute(); // Insert chemical
-      insertAcid.execute(); // Insert acid
+      insertBase.execute(); // Insert base
 
       String fetchId = ("SELECT LAST_INSERT_ID();");
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
@@ -77,7 +77,7 @@ public class BaseRDGRDS implements BaseRDG {
       base = new BaseDTO(rs.getInt("LAST_INSERT_ID()"), solute, name, inventory, soluteType);
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
-      System.out.println("Failed to insert acid through constructor");
+      System.out.println("Failed to insert base through constructor");
     }
   }
 
