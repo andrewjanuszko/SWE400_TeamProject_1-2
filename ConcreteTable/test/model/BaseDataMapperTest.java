@@ -24,7 +24,9 @@ class BaseDataMapperTest {
   @Test
   void testCreate() throws DomainModelException {
     BaseDataMapper baseMapper = new BaseDataMapper();
-    Base base1 = baseMapper.create("name", 1.0, 1);
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    Base base1 = baseMapper.create("name", 1.0, e1);
     Base base2 = baseMapper.read(base1.getID());
 
     assertEquals(base1.getID(), base2.getID());
@@ -40,7 +42,9 @@ class BaseDataMapperTest {
   @Test
   void testDelete() throws DomainModelException {
     BaseDataMapper baseMapper = new BaseDataMapper();
-    Base base1 = baseMapper.create("name", 1.0, 1);
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    Base base1 = baseMapper.create("name", 1.0, e1);
     baseMapper.delete(base1);
     assertEquals(null, baseMapper.read(base1.getID()));
   }
@@ -52,7 +56,9 @@ class BaseDataMapperTest {
   @Test
   void testUpdate() throws DomainModelException {
     BaseDataMapper baseMapper = new BaseDataMapper();
-    Base base1 = baseMapper.create("name", 1.0, 1);
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    Base base1 = baseMapper.create("name", 1.0, e1);
     base1.setName("new name");
     baseMapper.update(base1);
     
@@ -73,8 +79,10 @@ class BaseDataMapperTest {
     double inventory = 1.0;
     int solute = 1;
     
-    BaseDTO dto = new BaseDTO(id, name, inventory, solute);
-    Base base = new Base(id, name, inventory, solute);
+    Element e1 = new Element(1,"element", 1, 1, 1);
+    
+    BaseDTO dto = new BaseDTO(id, name, inventory, e1.getID(), e1.getClass().getName());
+    Base base = new Base(id, name, inventory, e1);
     
     dtoList.add(dto);
     
@@ -86,8 +94,10 @@ class BaseDataMapperTest {
   
   @Test
   void testGetAll() throws DomainModelException {
-    BaseDataMapper baseMapper = new BaseDataMapper();    
-    Base base1 = baseMapper.create("name", 1.0, 1);
+    BaseDataMapper baseMapper = new BaseDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    Base base1 = baseMapper.create("name", 1.0, e1);
     
     List<Base> result = baseMapper.getAll();
     assertEquals(base1.getID(), result.get(0).getID());
@@ -96,7 +106,9 @@ class BaseDataMapperTest {
   @Test
   void testFilterByNameLike() throws DomainModelException{
     BaseDataMapper baseMapper = new BaseDataMapper();
-    Base base1 = baseMapper.create("name", 1.0, 1);
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    Base base1 = baseMapper.create("name", 1.0, e1);
         
     List<Base> result = baseMapper.filterByNameLike(base1.getName());
     assertEquals(base1.getID(), result.get(0).getID());
@@ -106,7 +118,9 @@ class BaseDataMapperTest {
   @Test
   void testFilterByInventory() throws DomainModelException{
     BaseDataMapper baseMapper = new BaseDataMapper();   
-    Base base1 = baseMapper.create("name", 1.0, 1);
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    Base base1 = baseMapper.create("name", 1.0, e1);
     
     List<Base> result = baseMapper.filterByInventory(base1.getInventory());
     assertEquals(base1.getID(), result.get(0).getID());
@@ -116,7 +130,9 @@ class BaseDataMapperTest {
   @Test
   void testFilterByInventoryAmountBetween() throws DomainModelException{
     BaseDataMapper baseMapper = new BaseDataMapper();  
-    Base base1 = baseMapper.create("name", 1.0, 1);
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    Base base1 = baseMapper.create("name", 1.0, e1);
     
     List<Base> result = baseMapper.filterByInventoryBetween(base1.getInventory(), base1.getInventory());
     assertEquals(base1.getID(), result.get(0).getID());
@@ -126,7 +142,9 @@ class BaseDataMapperTest {
   @Test
   void testFilterBySolute() throws DomainModelException{
     BaseDataMapper baseMapper = new BaseDataMapper();
-    Base base1 = baseMapper.create("name", 1.0, 1);
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    Base base1 = baseMapper.create("name", 1.0, e1);
        
     List<Base> result = baseMapper.filterByInventoryBetween(base1.getInventory(), base1.getInventory());
     assertEquals(base1.getID(), result.get(0).getID());

@@ -4,6 +4,7 @@ public class AcidDTO {
   private int acidID, soluteID;
   private String name;
   private double inventory;
+  private String soluteType;
 
   /**
    * Initialize an acid DTO.
@@ -12,11 +13,12 @@ public class AcidDTO {
    * @param name String
    * @param inventory double
    */
-  public AcidDTO(int acidID, String name,double inventory, int soluteID) {
+  public AcidDTO(int acidID, String name,double inventory, int soluteID, String soluteType) {
     this.acidID = acidID;
     this.soluteID = soluteID;
     this.name = name;
     this.inventory = inventory;
+    this.soluteType = soluteType;
   }
 
   /**
@@ -49,6 +51,10 @@ public class AcidDTO {
    */
   public double getInventory() {
     return inventory;
+  }
+  
+  public String getSoluteType() {
+    return soluteType;
   }
 
   /**
@@ -83,4 +89,7 @@ public class AcidDTO {
     this.inventory = inventory;
   }
   
+  public void setSoluteType(String soluteType) {
+    this.soluteType = soluteType;
+  }
 }

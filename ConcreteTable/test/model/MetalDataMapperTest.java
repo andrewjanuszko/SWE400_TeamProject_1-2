@@ -25,8 +25,9 @@ class MetalDataMapperTest {
   void testCreate() throws DomainModelException {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
-
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name", 1.0, 1, 1.0, 1.0);
     Metal metal2 = mapper.read(metal1.getID());
 
@@ -42,8 +43,10 @@ class MetalDataMapperTest {
   void testDelete() throws DomainModelException {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
 
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name", 1.0, 1, 1, 1.0);
 
     mapper.delete(metal1);
@@ -55,8 +58,10 @@ class MetalDataMapperTest {
   void testUpdate() throws DomainModelException {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
 
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name", 1.0, 1, 1.0, 1.0);
     metal1.setName("new name");
     mapper.update(metal1);
@@ -96,10 +101,12 @@ class MetalDataMapperTest {
   void testFilterByDissolvedBy() throws DomainModelException{
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
     Metal metal1 = mapper.create("metal", 1.0, 1, 1.0, 1.0);
     List<Metal> metalList = new ArrayList<Metal>();
     metalList.add(metal1);
-    Acid acid1 = acidMapper.create("acid", 1.0, metalList, 1);
+    Acid acid1 = acidMapper.create("acid", 1.0, metalList, e1);
     
     
     List<Metal> result = mapper.filterByDissolvedBy(acid1.getID());
@@ -111,8 +118,10 @@ class MetalDataMapperTest {
   void testFilterByNameLike() throws DomainModelException{
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
 
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByNameLike(metal1.getName());
@@ -124,8 +133,10 @@ class MetalDataMapperTest {
   void testFilterByInventory() throws DomainModelException{
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
 
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByInventory(metal1.getInventory());
@@ -137,8 +148,10 @@ class MetalDataMapperTest {
   void testFilterByInventoryBetween() throws DomainModelException{
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
-
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByInventoryBetween(metal1.getInventory(), metal1.getInventory());
@@ -150,8 +163,10 @@ class MetalDataMapperTest {
   void testFilterByAtomicNumber() throws DomainModelException{
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
 
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByAtomicNumber(metal1.getAtomicNumber());
@@ -163,8 +178,10 @@ class MetalDataMapperTest {
   void testFilterByAtomicNumberBetween() throws DomainModelException{
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
 
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByAtomicNumberBetween(metal1.getAtomicNumber(), metal1.getAtomicNumber());
@@ -176,8 +193,10 @@ class MetalDataMapperTest {
   void testFilterByAtomicMass() throws DomainModelException{
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
 
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByAtomicMass(metal1.getAtomicMass());
@@ -189,8 +208,10 @@ class MetalDataMapperTest {
   void testFilterByAtomicMassBetween() throws DomainModelException{
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
 
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByAtomicMassBetween(metal1.getAtomicMass(), metal1.getAtomicMass());
@@ -202,8 +223,10 @@ class MetalDataMapperTest {
   void testFilterByAcidAmount() throws DomainModelException{
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
 
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByAcidAmount(metal1.getAcidAmount());
@@ -215,8 +238,10 @@ class MetalDataMapperTest {
   void testFilterByAcidAmountBetween() throws DomainModelException{
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
 
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Metal> result = mapper.filterByAcidAmountBetween(metal1.getAcidAmount()-1, metal1.getAcidAmount()+1);
@@ -229,8 +254,10 @@ class MetalDataMapperTest {
     MetalDataMapper mapper = new MetalDataMapper();
     AcidDataMapper acidMapper = new AcidDataMapper();
     CompoundDataMapper cMapper = new CompoundDataMapper();
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
     
-    acidMapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    acidMapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Metal metal1 = mapper.create("name1", 1.0, 1, 1.0, 1.0);
     
     List<Element> madeOf = new ArrayList<Element>();

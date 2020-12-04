@@ -22,6 +22,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 				"name VARCHAR(30) NOT NULL, " +                      
 				"inventory DOUBLE, " +
 				"solute INT, " + 
+				"soluteType VARCHAR(30)" +
 				"UNIQUE(name), " +
 				"PRIMARY KEY(baseID)) ;";
 		
@@ -49,6 +50,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	private String name;
 	private Double inventory;
 	private int solute;
+	private String soluteType;
 	
 	/**
 	 * Constructs Base Row Data Gateway based off of existing row by ID.
@@ -74,6 +76,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 			name = rs.getString("name");
 			inventory = rs.getDouble("inventory");
 			solute = rs.getInt("solute");
+			soluteType = rs.getString("soluteType");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find Base with that name", e);
 		}
@@ -103,6 +106,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 			baseID = rs.getInt("baseID");
 			inventory = rs.getDouble("inventory");
 			solute = rs.getInt("solute");
+			soluteType = rs.getString("soluteType");
 		} catch (SQLException e) {
 			throw new DatabaseException("Couldn't find Base with that name", e);
 		}
@@ -116,10 +120,11 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	 * @param solute
 	 * @throws DatabaseException
 	 */
-	public BaseRowDataGatewayRDS(String name, double inventory, int solute) throws DatabaseException {
+	public BaseRowDataGatewayRDS(String name, double inventory, int solute, String soluteType) throws DatabaseException {
 		this.name = name;
 		this.inventory = inventory;
 		this.solute = solute;
+		this.soluteType = soluteType;
 		conn = DatabaseManager.getSingleton().getConnection();
 		insert();
 	}
@@ -143,7 +148,11 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
   public int getSolute() {
     return this.solute;
   }
-
+  
+  public String getSoluteType() {
+    return soluteType;
+  }
+  
   @Override
   public void setName(String name) {
     this.name = name;
@@ -159,6 +168,10 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
     this.solute = solute;
   }
   
+  public void setSoluteType(String soluteType) {
+    this.soluteType = soluteType;
+  }
+  
   /**
    * Updates the information in the database to reflect changes made.
    * @return boolean
@@ -169,7 +182,8 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
   				+ " name = '" + name
   				+ "', inventory = '" + inventory
   				+ "', solute = " + solute
-  				+ " WHERE baseID = " + baseID);
+  				+ " , soluteType = '" + soluteType
+  				+ "', WHERE baseID = " + baseID);
   		stmt.executeUpdate();
   		return true;
 	  } catch (SQLException e) {
@@ -198,7 +212,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
    */
   private void insert() {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Base(name, inventory, solute) VALUES ('" + name + "', '" + inventory + "', '" + solute + "');");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Base(name, inventory, solute, soluteType) VALUES ('" + name + "', '" + inventory + "', '" + solute + "','" + soluteType +"');");
 			stmt.execute();
 			
 			PreparedStatement stmt2 = conn.prepareStatement("SELECT LAST_INSERT_ID();");

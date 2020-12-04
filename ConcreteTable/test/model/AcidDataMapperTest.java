@@ -28,7 +28,10 @@ class AcidDataMapperTest {
   @Test
   void testCreate() throws DomainModelException {
     AcidDataMapper mapper = new AcidDataMapper();
-    Acid acid1 = mapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    
+    Acid acid1 = mapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     Acid acid2 = mapper.read(acid1.getID());
     
     assertEquals(acid1.getID(), acid2.getID());
@@ -45,7 +48,9 @@ class AcidDataMapperTest {
   @Test
   void testDelete() throws DomainModelException {
     AcidDataMapper mapper = new AcidDataMapper();
-    Acid acid1 = mapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    Acid acid1 = mapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     mapper.delete(acid1);
     assertEquals(null, mapper.read(acid1.getID()));
   }
@@ -57,7 +62,9 @@ class AcidDataMapperTest {
   @Test
   void testUpdate() throws DomainModelException {
     AcidDataMapper mapper = new AcidDataMapper();
-    Acid acid1 = mapper.create("name", 1.0, new ArrayList<Metal>(), 1);
+    ElementDataMapper eMapper = new ElementDataMapper();
+    Element e1 = eMapper.create("element", 1, 1, 1);
+    Acid acid1 = mapper.create("name", 1.0, new ArrayList<Metal>(), e1);
     acid1.setName("new name");
     mapper.update(acid1);
     
@@ -78,10 +85,12 @@ class AcidDataMapperTest {
     String name = "name";
     double inventory = 1.0;
     List<Metal> dissolves = new ArrayList<Metal>();
-    int solute = 1;
+    Element e = new Element(13, "Name", 1, 1, 1);
+    int solute = 13;
+    String soluteType = "Element";
     
-    AcidDTO dto = new AcidDTO(id, name, inventory, solute);
-    Acid acid = new Acid(id, name, inventory, dissolves, solute);
+    AcidDTO dto = new AcidDTO(id, name, inventory, solute, soluteType);
+    Acid acid = new Acid(id, name, inventory, dissolves, e);
     
     dtoList.add(dto);
     

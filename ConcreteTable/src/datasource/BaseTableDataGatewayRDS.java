@@ -70,8 +70,10 @@ public abstract class BaseTableDataGatewayRDS {
         int baseID = rs.getInt("baseID");
         String name = rs.getString("name");
         int solute = rs.getInt("solute");
+        String soluteType = rs.getString("soluteType");
         double inventory = rs.getDouble("inventory");
-        BaseDTO a = new BaseDTO(baseID, name, inventory, solute);
+        
+        BaseDTO a = new BaseDTO(baseID, name, inventory, solute, soluteType);
         baseDTOs.add(a);
         return baseDTOs;
       }
