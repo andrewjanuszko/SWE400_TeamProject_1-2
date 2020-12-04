@@ -80,7 +80,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
     ArrayList<Acid> acids = new ArrayList<>();
     try {
       // Get all acids 
-      List<AcidDTO> dtos = AcidTDGRDS.getSingleton().executeQuery();
+      List<AcidDTO> dtos = AcidTDGRDS.getSingleton().getAllAcids().executeQuery();
       // For all acids, convert dto to acid and add to list
       for (AcidDTO a : dtos) {
         acids.add(convertFromDTO(a));
