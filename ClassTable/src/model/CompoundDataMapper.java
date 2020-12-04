@@ -191,11 +191,5 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     // Return list of compounds
     return listCompounds;
   }
-
-  @Override
-  public List<Compound> filterByLowInventory() throws DomainModelException {
-    // TODO Auto-generated method stub
-    return null;
-  }
   
 }
