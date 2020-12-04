@@ -18,8 +18,8 @@ import datasource.BaseTDGRDS;
  */
 public class BaseDataMapper implements BaseDataMapperInterface {
   @Override
-  public Base create(String name, double inventory, int solute) throws DomainModelException {
-    BaseRDG row = new BaseRDGRDS(solute, name, inventory);
+  public Base create(String name, double inventory, Chemical solute) throws DomainModelException {
+    BaseRDG row = new BaseRDGRDS(solute.getID(), name, inventory, solute.getName());
     // Use BaseRDG to create base
 
     return convertFromDTO(row.getBase());
@@ -48,7 +48,8 @@ public class BaseDataMapper implements BaseDataMapperInterface {
       // Set new values with setters
       row.setName(base.getName());
       row.setInventory(base.getInventory());
-      row.setSolute(base.getSolute());
+      row.setSolute(base.getSolute().getID());
+      row.setSoluteType(base.getSolute().getName());
 
       // Update
       row.update();
@@ -169,13 +170,52 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   /**
+   * Fetches a solute by it's type
+   * 
+   * @param s Solute Type
+   * @param i ID
+   * @return Solute
+   */
+  private Chemical soluteType(String s, int i) {
+    // very possible there is infinite loading shenanigans
+    try {
+      if (s.contains("Acid")) {
+        AcidDataMapper m = new AcidDataMapper();
+        return m.read(i);
+      } else if (s.contains("Base")) {
+        BaseDataMapper m = new BaseDataMapper();
+        return m.read(i);
+      } else if (s.contains("Compound")) {
+        CompoundDataMapper m = new CompoundDataMapper();
+        return m.read(i);
+      } else if (s.contains("Element")) {
+        ElementDataMapper m = new ElementDataMapper();
+        return m.read(i);
+      } else if (s.contains("Metal")) {
+        BaseDataMapper m = new BaseDataMapper();
+        return m.read(i);
+      }
+
+    } catch (DomainModelException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  /**
    * Convert a dto to a base
    * 
    * @param dto to convert
    * @return converted Base
    */
   private Base convertFromDTO(BaseDTO dto) {
-    return new Base(dto.getBaseId(), dto.getName(), dto.getInventory(), dto.getSoluteId());
+    return new Base(dto.getBaseId(), dto.getName(), dto.getInventory(), soluteType(dto.getSoluteType(), dto.getSoluteId()));
+  }
+
+  @Override
+  public List<Base> filterByLowInventory() throws DomainModelException {
+    return null;
   }
 
 }

@@ -10,6 +10,7 @@ public class BaseDTO {
   private int baseId, soluteId;
   private String name;
   private double inventory;
+  private String soluteType; 
 
   /**
    * Initialize a base DTO
@@ -19,11 +20,19 @@ public class BaseDTO {
    * @param name      of the base
    * @param inventory of the base
    */
-  public BaseDTO(int baseId, int soluteId, String name, double inventory) {
+  public BaseDTO(int baseId, int soluteId, String name, double inventory, String soluteType) {
     this.baseId = baseId;
     this.soluteId = soluteId;
     this.name = name;
     this.inventory = inventory;
+  }
+  
+  public void setSoluteType(String soluteType) {
+    this.soluteType = soluteType; 
+  }
+  
+  public String getSoluteType() {
+    return soluteType;
   }
 
   /**

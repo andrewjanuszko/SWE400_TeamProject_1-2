@@ -10,6 +10,8 @@ import java.util.List;
 public interface BaseRDG {
 
   public void setSolute(int newSolute);
+  
+  public void setSoluteType(String soluteType); 
 
   public void setName(String newName);
 

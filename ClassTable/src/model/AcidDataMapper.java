@@ -14,11 +14,11 @@ import datasource.MetalRDG;
 import datasource.MetalRDGRDS;
 
 public class AcidDataMapper implements AcidDataMapperInterface {
-
+  
   @Override
-  public Acid create(String name, double inventory, List<Metal> dissolves, int solute) throws DomainModelException {
+  public Acid create(String name, double inventory, List<Metal> dissolves, Chemical solute) throws DomainModelException {
     // Create acid using AcidRDG
-    AcidRDG row = new AcidRDGRDS(solute, name, inventory);
+    AcidRDG row = new AcidRDGRDS(solute.getID(), name, inventory, solute.getName());
 
     // Set dissolvedById for metals
     Acid a = convertFromDTO(row.getAcid());
@@ -50,7 +50,8 @@ public class AcidDataMapper implements AcidDataMapperInterface {
       // Use setters to update values
       row.setName(acid.getName());
       row.setInventory(acid.getInventory());
-      row.setSolute(acid.getSolute());
+      row.setSolute(acid.getSolute().getID());
+      row.setSoluteType(acid.getSolute().getName());
 
       // Update the acid
       row.update();
@@ -163,6 +164,33 @@ public class AcidDataMapper implements AcidDataMapperInterface {
 
     return acids;
   }
+  
+  private Chemical soluteType(String s, int i) {
+    // very possible there is infinite loading shenanigans
+    try {
+      if (s.contains("Acid")) {
+        AcidDataMapper m = new AcidDataMapper();
+        return m.read(i);
+      } else if (s.contains("Base")) {
+        BaseDataMapper m = new BaseDataMapper();
+        return m.read(i);
+      } else if (s.contains("Compound")) {
+        CompoundDataMapper m = new CompoundDataMapper();
+        return m.read(i);
+      } else if (s.contains("Element")) {
+        ElementDataMapper m = new ElementDataMapper();
+        return m.read(i);
+      } else if (s.contains("Metal")) {
+        BaseDataMapper m = new BaseDataMapper();
+        return m.read(i);
+      }
+
+    } catch (DomainModelException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
 
   /**
    * Convert dto to acid
@@ -176,7 +204,14 @@ public class AcidDataMapper implements AcidDataMapperInterface {
       betterMetals.add(new Metal(m.getMetalId(), m.getName(), m.getInventory(), m.getAtomicNumber(), m.getAtomicMass(),
           m.getMoles()));
     }
-    return new Acid(dto.getAcidId(), dto.getName(), dto.getInventory(), betterMetals, dto.getSoluteId());
+    return new Acid(dto.getAcidId(), dto.getName(), dto.getInventory(), betterMetals, soluteType(dto.getSoluteType(), dto.getSoluteId()));
+  }
+
+
+  @Override
+  public List<Acid> filterByLowInventory() throws DomainModelException {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

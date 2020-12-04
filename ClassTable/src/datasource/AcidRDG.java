@@ -22,5 +22,7 @@ public interface AcidRDG {
   public void delete();
 
   public List<AcidRDGRDS> findSet(int i);
+  
+  public void setSoluteType(String s);
 
 }

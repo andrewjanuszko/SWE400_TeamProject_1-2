@@ -29,7 +29,7 @@ public class ClassTableInitializer {
           "CREATE TABLE IF NOT EXISTS Chemical(chemicalId INT NOT NULL AUTO_INCREMENT, name VARCHAR(20), "
               + "inventory DOUBLE, PRIMARY KEY (chemicalId));",
               
-          "CREATE TABLE IF NOT EXISTS Acid" + "(acidId INT NOT NULL, solute INT, " 
+          "CREATE TABLE IF NOT EXISTS Acid" + "(acidId INT NOT NULL, solute INT, soluteType VARCHAR(30), " 
               + "FOREIGN KEY(acidId) REFERENCES Chemical(chemicalId));",
               
           "CREATE TABLE IF NOT EXISTS Base(baseId INT NOT NULL, solute INT, "
@@ -83,24 +83,24 @@ public class ClassTableInitializer {
   public static void populateTables() {
     
     // Acids
-    AcidRDG acid = new AcidRDGRDS(51, "acidname1", 1.1);
-    acid = new AcidRDGRDS(52, "acidname2", 1.2);
-    acid = new AcidRDGRDS(53, "acidname3", 1.3);
-    acid = new AcidRDGRDS(54, "acidname4", 1.4);
-    acid = new AcidRDGRDS(55, "acidname5", 1.5);
-    acid = new AcidRDGRDS(55, "acidname6", 1.6);
-    acid = new AcidRDGRDS(12, "funkyacid1", 41.2); 
-    acid = new AcidRDGRDS(15, "funkyacid2", 42.4); 
+    AcidRDG acid = new AcidRDGRDS(51, "acidname1", 1.1, "acid");
+    acid = new AcidRDGRDS(52, "acidname2", 1.2, "acid");
+    acid = new AcidRDGRDS(53, "acidname3", 1.3, "acid");
+    acid = new AcidRDGRDS(54, "acidname4", 1.4, "acid");
+    acid = new AcidRDGRDS(55, "acidname5", 1.5, "acid");
+    acid = new AcidRDGRDS(55, "acidname6", 1.6, "acid");
+    acid = new AcidRDGRDS(12, "funkyacid1", 41.2, "acid"); 
+    acid = new AcidRDGRDS(15, "funkyacid2", 42.4, "acid"); 
     
     // Bases
-    BaseRDG base = new BaseRDGRDS(51, "basename1", 1.1);
-    base = new BaseRDGRDS(52, "basename2", 1.2);
-    base = new BaseRDGRDS(53, "basename3", 1.3);
-    base = new BaseRDGRDS(54, "basename4", 1.4);
-    base = new BaseRDGRDS(55, "basename5", 1.5);
-    base = new BaseRDGRDS(55, "basename6", 1.6);
-    base = new BaseRDGRDS(12, "funkybase1", 41.2); 
-    base = new BaseRDGRDS(15, "funkybase2", 42.4); 
+    BaseRDG base = new BaseRDGRDS(51, "basename1", 1.1, "base");
+    base = new BaseRDGRDS(52, "basename2", 1.2, "base");
+    base = new BaseRDGRDS(53, "basename3", 1.3, "base");
+    base = new BaseRDGRDS(54, "basename4", 1.4, "base");
+    base = new BaseRDGRDS(55, "basename5", 1.5, "base");
+    base = new BaseRDGRDS(55, "basename6", 1.6, "base");
+    base = new BaseRDGRDS(12, "funkybase1", 41.2, "base"); 
+    base = new BaseRDGRDS(15, "funkybase2", 42.4, "base"); 
     
     // Elements
     ElementRDG element = new ElementRDGRDS(24, 19.2, "elementname1", 11.9);

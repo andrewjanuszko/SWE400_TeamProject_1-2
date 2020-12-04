@@ -37,7 +37,7 @@ public class AcidRDGRDS implements AcidRDG {
     Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
     ResultSet rs = statement.executeQuery(select);
     rs.next(); // Get result
-    acid = new AcidDTO(id, rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory"));
+    acid = new AcidDTO(id, rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory"), rs.getString("soluteType"));
   }
   
   /**
@@ -47,7 +47,7 @@ public class AcidRDGRDS implements AcidRDG {
    * @param name of acid to insert
    * @param inhabits of acid to insert
    */
-  public AcidRDGRDS(int solute, String name, double inventory) {
+  public AcidRDGRDS(int solute, String name, double inventory, String soluteType) {
     
     try {
       // Insert chemical 
@@ -58,8 +58,9 @@ public class AcidRDGRDS implements AcidRDG {
       
       // Insert Acid
       PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
-        .prepareStatement("INSERT INTO Acid (acidId, solute) VALUES (LAST_INSERT_ID(), ?);");
+        .prepareStatement("INSERT INTO Acid (acidId, solute) VALUES (LAST_INSERT_ID(), ?, ?);");
       insertAcid.setInt(1, solute); // set solute id
+      insertChemical.setString(2, soluteType); // solute type
       
       insertChemical.execute(); // Insert chemical
       insertAcid.execute();  // Insert acid
@@ -69,7 +70,7 @@ public class AcidRDGRDS implements AcidRDG {
       ResultSet rs = statement.executeQuery(fetchId);
       rs.next();
       
-      acid = new AcidDTO(rs.getInt("LAST_INSERT_ID()"), solute, name, inventory);
+      acid = new AcidDTO(rs.getInt("LAST_INSERT_ID()"), solute, name, inventory, soluteType);
       
     } catch(SQLException | DatabaseException e) {
       e.printStackTrace();
@@ -108,7 +109,7 @@ public class AcidRDGRDS implements AcidRDG {
   @Override
   public void update() {
     String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inventory = ? WHERE chemicalID = " + acid.getAcidId() + ";";
-    String updateAcidSQL = "UPDATE Acid SET acidId = ?, solute = ? WHERE acidId = " + acid.getAcidId() + ";";
+    String updateAcidSQL = "UPDATE Acid SET acidId = ?, solute = ?, soluteType = ? WHERE acidId = " + acid.getAcidId() + ";";
     
     try {
       // Chemical
@@ -123,6 +124,7 @@ public class AcidRDGRDS implements AcidRDG {
       PreparedStatement acid = DatabaseManager.getSingleton().getConnection().prepareStatement(updateAcidSQL);
       acid.setInt(1, this.acid.getAcidId());
       acid.setInt(2, this.acid.getSoluteId());
+      acid.setString(3, this.acid.getSoluteType());
       
       acid.execute();
       
@@ -165,6 +167,10 @@ public class AcidRDGRDS implements AcidRDG {
   public void setSolute(int newSolute) {
     acid.setSoluteId(newSolute);
   }
+  
+  public void setSoluteType(String soluteType) {
+    acid.setSoluteType(soluteType);
+  }
 
   /**
    * Set name
@@ -189,5 +195,5 @@ public class AcidRDGRDS implements AcidRDG {
   public AcidDTO getAcid() {
     return acid;
   }
-	
+
 }

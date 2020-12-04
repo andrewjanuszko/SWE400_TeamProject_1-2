@@ -39,7 +39,7 @@ public class BaseRDGRDS implements BaseRDG {
     ResultSet rs = statement.executeQuery(select);
     rs.next(); // Get result
 
-    base = new BaseDTO(id, rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory"));
+    base = new BaseDTO(id, rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory"), rs.getString("soluteType"));
 
   }
 
@@ -51,7 +51,7 @@ public class BaseRDGRDS implements BaseRDG {
    * @param name
    * @param inhabits
    */
-  public BaseRDGRDS(int solute, String name, double inventory) {
+  public BaseRDGRDS(int solute, String name, double inventory, String soluteType) {
 
     try {
       // Insert chemical
@@ -62,8 +62,9 @@ public class BaseRDGRDS implements BaseRDG {
 
       // Insert Base
       PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Base (baseId, solute)" + "VALUES (LAST_INSERT_ID(), ?);");
+          .prepareStatement("INSERT INTO Base (baseId, solute)" + "VALUES (LAST_INSERT_ID(), ?, ?);");
       insertAcid.setInt(1, solute); // set solute id
+      insertAcid.setString(2, soluteType); // set solute id
 
       insertChemical.execute(); // Insert chemical
       insertAcid.execute(); // Insert acid
@@ -73,7 +74,7 @@ public class BaseRDGRDS implements BaseRDG {
       ResultSet rs = statement.executeQuery(fetchId);
       rs.next();
 
-      base = new BaseDTO(rs.getInt("LAST_INSERT_ID()"), solute, name, inventory);
+      base = new BaseDTO(rs.getInt("LAST_INSERT_ID()"), solute, name, inventory, soluteType);
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();
       System.out.println("Failed to insert acid through constructor");
@@ -106,7 +107,7 @@ public class BaseRDGRDS implements BaseRDG {
   public void update() {
     String updateChemicalSQL = "UPDATE Chemical SET chemicalId = ?, name = ?, inventory = ? WHERE chemicalID = "
         + base.getBaseId() + ";",
-        updateBaseSQL = "UPDATE Base SET baseId = ?, solute = ? WHERE baseId = " + base.getBaseId() + ";";
+        updateBaseSQL = "UPDATE Base SET baseId = ?, solute = ?, soluteType = ? WHERE baseId = " + base.getBaseId() + ";";
 
     try {
       // Chemical
@@ -121,6 +122,7 @@ public class BaseRDGRDS implements BaseRDG {
       PreparedStatement acid = DatabaseManager.getSingleton().getConnection().prepareStatement(updateBaseSQL);
       acid.setInt(1, base.getBaseId());
       acid.setInt(2, base.getSoluteId());
+      acid.setString(3, base.getSoluteType());
 
       acid.execute();
 
@@ -179,6 +181,11 @@ public class BaseRDGRDS implements BaseRDG {
 
   public BaseDTO getBase() {
     return base;
+  }
+
+  @Override
+  public void setSoluteType(String soluteType) {
+    base.setSoluteType(soluteType);
   }
 
 }
