@@ -32,7 +32,7 @@ public class ClassTableInitializer {
           "CREATE TABLE IF NOT EXISTS Acid" + "(acidId INT NOT NULL, solute INT, soluteType VARCHAR(30), " 
               + "FOREIGN KEY(acidId) REFERENCES Chemical(chemicalId));",
               
-          "CREATE TABLE IF NOT EXISTS Base(baseId INT NOT NULL, solute INT, "
+          "CREATE TABLE IF NOT EXISTS Base(baseId INT NOT NULL, solute INT, soluteType VARCHAR(30), "
               + "FOREIGN KEY(baseId) REFERENCES Chemical(chemicalId));",
               
           "CREATE TABLE IF NOT EXISTS Element(elementId INT NOT NULL, atomicNumber INT, "

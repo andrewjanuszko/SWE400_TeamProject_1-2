@@ -179,19 +179,19 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   private Chemical soluteType(String s, int i) {
     // very possible there is infinite loading shenanigans
     try {
-      if (s.contains("Acid")) {
+      if (s.toLowerCase().contains("acid")) {
         AcidDataMapper m = new AcidDataMapper();
         return m.read(i);
-      } else if (s.contains("Base")) {
+      } else if (s.toLowerCase().contains("base")) {
         BaseDataMapper m = new BaseDataMapper();
         return m.read(i);
-      } else if (s.contains("Compound")) {
+      } else if (s.toLowerCase().contains("compound")) {
         CompoundDataMapper m = new CompoundDataMapper();
         return m.read(i);
-      } else if (s.contains("Element")) {
+      } else if (s.toLowerCase().contains("element")) {
         ElementDataMapper m = new ElementDataMapper();
         return m.read(i);
-      } else if (s.contains("Metal")) {
+      } else if (s.toLowerCase().contains("metal")) {
         BaseDataMapper m = new BaseDataMapper();
         return m.read(i);
       }
