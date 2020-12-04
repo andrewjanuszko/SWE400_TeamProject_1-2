@@ -25,6 +25,7 @@ public class BaseDTO {
     this.soluteId = soluteId;
     this.name = name;
     this.inventory = inventory;
+    this.soluteType = soluteType; 
   }
   
   public void setSoluteType(String soluteType) {
