@@ -77,9 +77,9 @@ public abstract class CompoundTableDataGatewayRDS {
         double inventory = rs.getDouble("inventory");
         CompoundDTO a = new CompoundDTO(compoundID, name, inventory);
         compoundDTOs.add(a);
-        return compoundDTOs;
+        
       }
-
+      return compoundDTOs;
     } catch (SQLException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
