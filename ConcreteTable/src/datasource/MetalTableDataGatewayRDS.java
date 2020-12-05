@@ -82,9 +82,9 @@ public class MetalTableDataGatewayRDS {
         int dissolvedBy = rs.getInt("dissolvedBy");
         MetalDTO a = new MetalDTO(metalID, name, inventory, atomicNumber, atomicMass, acidAmount, dissolvedBy);
         metalDTOs.add(a);
-        return metalDTOs;
+        
       }
-
+      return metalDTOs;
     } catch (SQLException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -335,7 +335,7 @@ public class MetalTableDataGatewayRDS {
 
     } catch (SQLException | DatabaseException e) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+      //e.printStackTrace();
     }
     return metalDTOs;
   }

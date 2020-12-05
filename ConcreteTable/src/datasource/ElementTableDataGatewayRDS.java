@@ -68,9 +68,8 @@ public class ElementTableDataGatewayRDS {
         double atomicMass = rs.getDouble("atomicMass");
         ElementDTO a = new ElementDTO(elementID, name, inventory, atomicNumber, atomicMass);
         elementDTOs.add(a);
-        return elementDTOs;
       }
-
+      return elementDTOs;
     } catch (SQLException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

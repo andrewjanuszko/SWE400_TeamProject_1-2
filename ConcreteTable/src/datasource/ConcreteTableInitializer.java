@@ -76,8 +76,8 @@ public class ConcreteTableInitializer {
   }
   
   private static void populate() throws DatabaseException {
-    ElementRowDataGateway e1 = new ElementRowDataGatewayRDS("Hydrogen", 10, 1, 50.0);
     ElementRowDataGateway e2 = new ElementRowDataGatewayRDS("Helium", 2, 2, 1000.0);
+    ElementRowDataGateway e1 = new ElementRowDataGatewayRDS("Hydrogen", 10, 1, 50.0);
     ElementRowDataGateway e3 = new ElementRowDataGatewayRDS("Chlorine", 10, 17, 50.0);
     ElementRowDataGateway e4 = new ElementRowDataGatewayRDS("Oxygen", 10, 8, 50.0);
 
