@@ -64,7 +64,7 @@ class TestChemical extends DatabaseTest {
   @Test
   static void testUpdate() throws SQLException, DatabaseException {
     // Create acid and getter for it
-    ChemicalRDG chem_setter = new ChemicalRDGRDS("chemname9", 1.9), chem_getter = new ChemicalRDGRDS(35);
+    ChemicalRDG chem_setter = new ChemicalRDGRDS("chemname9", 1.9), chem_getter = new ChemicalRDGRDS(37);
 
     // Ensure it was added
     assertEquals("chemname9", chem_getter.getChemical().getName());
@@ -74,7 +74,7 @@ class TestChemical extends DatabaseTest {
     chem_setter.setName("chemname6");
     chem_setter.setInventory(1.8);
     chem_setter.update();
-    chem_getter = new ChemicalRDGRDS(35);
+    chem_getter = new ChemicalRDGRDS(37);
 
     // Make sure update worked
     assertEquals("chemname6", chem_getter.getChemical().getName());
@@ -118,7 +118,7 @@ class TestChemical extends DatabaseTest {
     try {
       getAll = new ChemicalTDGRDS().getAllChemicals().executeQuery();
       
-      assertEquals(29, getAll.size());
+      assertEquals(31, getAll.size());
     } catch(DatabaseException e) {
       e.printStackTrace();
     }

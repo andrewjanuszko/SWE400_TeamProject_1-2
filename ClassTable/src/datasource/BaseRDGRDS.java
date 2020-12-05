@@ -63,9 +63,13 @@ public class BaseRDGRDS implements BaseRDG {
       // Insert Base
       PreparedStatement insertBase = DatabaseManager.getSingleton().getConnection()
           .prepareStatement("INSERT INTO Base (baseId, solute, soluteType)" + "VALUES (LAST_INSERT_ID(), ?, ?);");
-      insertBase.setInt(1, solute); // set solute id
-      insertBase.setString(2, soluteType); // set solute id
-
+      if(solute > 0 ) {
+        insertBase.setInt(1, solute); // set solute id
+        insertBase.setString(2, soluteType); // set solute id
+      } else {
+        insertBase.setInt(1, java.sql.Types.INTEGER);
+        insertBase.setString(2, null);
+      }
       insertChemical.execute(); // Insert chemical
       insertBase.execute(); // Insert base
 

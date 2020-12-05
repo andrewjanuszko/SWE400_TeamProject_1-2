@@ -177,6 +177,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
    * @return Solute
    */
   private Chemical soluteType(String s, int i) {
+    System.out.println(s + " " + i);
     // very possible there is infinite loading shenanigans
     try {
       if (s.toLowerCase().contains("acid")) {
@@ -194,6 +195,8 @@ public class BaseDataMapper implements BaseDataMapperInterface {
       } else if (s.toLowerCase().contains("metal")) {
         BaseDataMapper m = new BaseDataMapper();
         return m.read(i);
+      } else {
+        return null; 
       }
 
     } catch (DomainModelException e) {

@@ -26,8 +26,8 @@ class TestBase extends DatabaseTest {
   @Test
   static void testGetName() throws SQLException, DatabaseException {
     // Fetch bases
-    BaseRDG base1 = new BaseRDGRDS(9), base2 = new BaseRDGRDS(10), base3 = new BaseRDGRDS(11),
-        base4 = new BaseRDGRDS(12);
+    BaseRDG base1 = new BaseRDGRDS(11), base2 = new BaseRDGRDS(12), base3 = new BaseRDGRDS(13),
+        base4 = new BaseRDGRDS(14);
 
     // Tests
     assertEquals("basename1", base1.getBase().getName());
@@ -45,8 +45,8 @@ class TestBase extends DatabaseTest {
   @Test
   static void testGetInventory() throws SQLException, DatabaseException {
     // Fetch bases
-    BaseRDG base1 = new BaseRDGRDS(9), base2 = new BaseRDGRDS(10), base3 = new BaseRDGRDS(11),
-        base4 = new BaseRDGRDS(12);
+    BaseRDG base1 = new BaseRDGRDS(11), base2 = new BaseRDGRDS(12), base3 = new BaseRDGRDS(13),
+        base4 = new BaseRDGRDS(14);
 
     // Tests
     assertEquals(1.1, base1.getBase().getInventory(), 0.1);
@@ -64,14 +64,14 @@ class TestBase extends DatabaseTest {
   @Test
   static void testGetSolute() throws SQLException, DatabaseException {
     // Fetch bases
-    BaseRDG base1 = new BaseRDGRDS(9), base2 = new BaseRDGRDS(10), base3 = new BaseRDGRDS(11),
-        base4 = new BaseRDGRDS(12);
+    BaseRDG base1 = new BaseRDGRDS(11), base2 = new BaseRDGRDS(12), base3 = new BaseRDGRDS(13),
+        base4 = new BaseRDGRDS(14);
 
     // Tests
-    assertEquals(51, base1.getBase().getSoluteId());
-    assertEquals(52, base2.getBase().getSoluteId());
-    assertEquals(53, base3.getBase().getSoluteId());
-    assertEquals(54, base4.getBase().getSoluteId());
+    assertEquals(1, base1.getBase().getSoluteId());
+    assertEquals(1, base2.getBase().getSoluteId());
+    assertEquals(2, base3.getBase().getSoluteId());
+    assertEquals(2, base4.getBase().getSoluteId());
   }
 
   /**
@@ -83,7 +83,7 @@ class TestBase extends DatabaseTest {
   @Test
   static void testUpdate() throws SQLException, DatabaseException {
     // Create a new base and getter for the base
-    BaseRDG base_setter = new BaseRDGRDS(59, "basename9", 1.9, "base"), base_getter = new BaseRDGRDS(33);
+    BaseRDG base_setter = new BaseRDGRDS(59, "basename9", 1.9, "base"), base_getter = new BaseRDGRDS(37);
 
     // Ensure the base has been added properly
     assertEquals("basename9", base_getter.getBase().getName());
@@ -93,14 +93,15 @@ class TestBase extends DatabaseTest {
     // Set new values and update, update getter
     base_setter.setName("basename6");
     base_setter.setInventory(1.8);
-    base_setter.setSolute(56);
+    base_setter.setSolute(2);
+    base_setter.setSoluteType("base");
     base_setter.update();
-    base_getter = new BaseRDGRDS(33);
+    base_getter = new BaseRDGRDS(37);
 
     // Ensure update method changed our values
     assertEquals("basename6", base_getter.getBase().getName());
     assertEquals(1.8, base_getter.getBase().getInventory(), 0.1);
-    assertEquals(56, base_getter.getBase().getSoluteId());
+    assertEquals(2, base_getter.getBase().getSoluteId());
 
     base_getter.delete(); // Delete because we don't need
   }
@@ -115,7 +116,7 @@ class TestBase extends DatabaseTest {
 
     // Ensure the base has been added properly
     assertEquals("basename9", base.getBase().getName());
-    assertEquals(9, base.getBase().getSoluteId());
+    assertEquals(2, base.getBase().getSoluteId());
     assertEquals(1.9, base.getBase().getInventory(), 0.1);
 
     // Delete
@@ -152,7 +153,7 @@ class TestBase extends DatabaseTest {
       getAll = new BaseTDGRDS().getAllBases().executeQuery();
       
       // Assert that we have 6 bases, and that they are the right ids. 
-      assertEquals(8, getAll.size());
+      assertEquals(9, getAll.size());
       assertEquals(9, getAll.get(0).getBaseId());
       assertEquals(10, getAll.get(1).getBaseId());
       assertEquals(11, getAll.get(2).getBaseId());

@@ -26,7 +26,7 @@ class TestAcid extends DatabaseTest {
   @Test
   static void testGetName() throws SQLException, DatabaseException {
     // Fetch acids
-    AcidRDG acid1 = new AcidRDGRDS(1), acid2 = new AcidRDGRDS(2), acid3 = new AcidRDGRDS(3), acid4 = new AcidRDGRDS(4);
+    AcidRDG acid1 = new AcidRDGRDS(3), acid2 = new AcidRDGRDS(4), acid3 = new AcidRDGRDS(5), acid4 = new AcidRDGRDS(6);
 
     // Test
     assertEquals("acidname1", acid1.getAcid().getName());
@@ -44,7 +44,7 @@ class TestAcid extends DatabaseTest {
   @Test
   static void testGetInventory() throws SQLException, DatabaseException {
     // Fetch acids
-    AcidRDG acid1 = new AcidRDGRDS(1), acid2 = new AcidRDGRDS(2), acid3 = new AcidRDGRDS(3), acid4 = new AcidRDGRDS(4);
+    AcidRDG acid1 = new AcidRDGRDS(3), acid2 = new AcidRDGRDS(4), acid3 = new AcidRDGRDS(5), acid4 = new AcidRDGRDS(6);
 
     // Test
     assertEquals(1.1, acid1.getAcid().getInventory(), 0.1);
@@ -62,7 +62,7 @@ class TestAcid extends DatabaseTest {
   @Test
   static void testGetSolute() throws SQLException, DatabaseException {
     // Fetch acids
-    AcidRDG acid1 = new AcidRDGRDS(1), acid2 = new AcidRDGRDS(2), acid3 = new AcidRDGRDS(3), acid4 = new AcidRDGRDS(4);
+    AcidRDG acid1 = new AcidRDGRDS(3), acid2 = new AcidRDGRDS(4), acid3 = new AcidRDGRDS(5), acid4 = new AcidRDGRDS(6);
 
     // Test
     assertEquals(51, acid1.getAcid().getSoluteId());
@@ -77,8 +77,8 @@ class TestAcid extends DatabaseTest {
   @Test
   static void testDelete() {
     // Create acid
-    AcidRDG acid = new AcidRDGRDS(59, "acidname1", 1.9, "Acid");
-
+    AcidRDG acid = new AcidRDGRDS(1, "acidname100", 1.9, "acid");
+    acid = new AcidRDGRDS();
     // Ensure it has been added
     assertEquals("acidname1", acid.getAcid().getName());
     assertEquals(1.9, acid.getAcid().getInventory(), 0.1);
@@ -105,7 +105,7 @@ class TestAcid extends DatabaseTest {
   static void testUpdate() throws SQLException, DatabaseException {
     // Create acid and getter for that acid
     AcidRDG acid_setter = new AcidRDGRDS(59, "acidname9", 1.9, "Acid"), 
-        acid_getter = new AcidRDGRDS(31);
+        acid_getter = new AcidRDGRDS(33);
 
     // Ensure that acid has been added and fetches the right information
     assertEquals("acidname9", acid_getter.getAcid().getName());
@@ -117,7 +117,7 @@ class TestAcid extends DatabaseTest {
     acid_setter.setInventory(1.8);
     acid_setter.setSolute(56);
     acid_setter.update();
-    acid_getter = new AcidRDGRDS(31);
+    acid_getter = new AcidRDGRDS(33);
 
     // Test that the new information has been updated
     assertEquals("acidname6", acid_getter.getAcid().getName());
@@ -152,13 +152,13 @@ class TestAcid extends DatabaseTest {
       List<AcidDTO> getAll = acid.executeQuery();
       
       // Assert that we have 6 acids, and that they are the right ids.
-      assertEquals(8, getAll.size());
-      assertEquals(1, getAll.get(0).getAcidId());
-      assertEquals(2, getAll.get(1).getAcidId());
-      assertEquals(3, getAll.get(2).getAcidId());
-      assertEquals(4, getAll.get(3).getAcidId());
-      assertEquals(5, getAll.get(4).getAcidId());
-      assertEquals(6, getAll.get(5).getAcidId());
+      assertEquals(9, getAll.size());
+      assertEquals(3, getAll.get(0).getAcidId());
+      assertEquals(4, getAll.get(1).getAcidId());
+      assertEquals(5, getAll.get(2).getAcidId());
+      assertEquals(6, getAll.get(3).getAcidId());
+      assertEquals(7, getAll.get(4).getAcidId());
+      assertEquals(8, getAll.get(5).getAcidId());
       
     } catch (DatabaseException e) {
       System.out.println("Failed testGetAll()");
@@ -172,8 +172,8 @@ class TestAcid extends DatabaseTest {
       List<AcidDTO> get = new AcidTDGRDS().getAllAcids().filterByName("funky").executeQuery();
       
       assertEquals(2, get.size());
-      assertEquals(7, get.get(0).getAcidId());
-      assertEquals(8, get.get(1).getAcidId());
+      assertEquals(9, get.get(0).getAcidId());
+      assertEquals(10, get.get(1).getAcidId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -186,16 +186,16 @@ class TestAcid extends DatabaseTest {
     try {
       List<AcidDTO> get = new AcidTDGRDS().getAllAcids().filterByInventory(41.2).executeQuery();
       
-      assertEquals(7, get.get(0).getAcidId());
+      assertEquals(9, get.get(0).getAcidId());
       
       get = new AcidTDGRDS().getAllAcids().filterByInventoryRange(42, 40).executeQuery();
       
-      assertEquals(7, get.get(0).getAcidId());
+      assertEquals(9, get.get(0).getAcidId());
       
       get = new AcidTDGRDS().getAllAcids().filterByInventoryRange(43, 40).executeQuery();
       
-      assertEquals(7, get.get(0).getAcidId());
-      assertEquals(8, get.get(1).getAcidId());
+      assertEquals(9, get.get(0).getAcidId());
+      assertEquals(10, get.get(1).getAcidId());
       
     } catch (DatabaseException e) {
       e.printStackTrace();
@@ -205,9 +205,9 @@ class TestAcid extends DatabaseTest {
   @Test
   public static void testFilterBySolute() {
     try {
-      List<AcidDTO> get = new AcidTDGRDS().getAllAcids().filterBySolute(15).executeQuery();
+      List<AcidDTO> get = new AcidTDGRDS().getAllAcids().filterBySolute(2).executeQuery();
       
-      assertEquals(15, get.get(0).getSoluteId());
+      assertEquals(4, get.size());
       
     } catch(DatabaseException e) {
       e.printStackTrace();

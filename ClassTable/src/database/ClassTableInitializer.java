@@ -82,25 +82,28 @@ public class ClassTableInitializer {
   @SuppressWarnings("unused")
   public static void populateTables() {
     
-    // Acids
-    AcidRDG acid = new AcidRDGRDS(51, "acidname1", 1.1, "acid");
-    acid = new AcidRDGRDS(52, "acidname2", 1.2, "acid");
-    acid = new AcidRDGRDS(53, "acidname3", 1.3, "acid");
-    acid = new AcidRDGRDS(54, "acidname4", 1.4, "acid");
-    acid = new AcidRDGRDS(55, "acidname5", 1.5, "acid");
-    acid = new AcidRDGRDS(55, "acidname6", 1.6, "acid");
-    acid = new AcidRDGRDS(12, "funkyacid1", 41.2, "acid"); 
-    acid = new AcidRDGRDS(15, "funkyacid2", 42.4, "acid"); 
+    // Insert solutes
+    AcidRDG solute1 = new AcidRDGRDS(-1, "acidsoluteboy", 62.4, null);
+    BaseRDG solute2 = new BaseRDGRDS(-1, "basesoluteboy", 64.2, null); 
+    
+    AcidRDG acid = new AcidRDGRDS(30, "acidname1", 1.1, "acid");
+    acid = new AcidRDGRDS(30, "acidname2", 1.2, "acid");
+    acid = new AcidRDGRDS(30, "acidname3", 1.3, "acid");
+    acid = new AcidRDGRDS(30, "acidname4", 1.4, "acid");
+    acid = new AcidRDGRDS(31, "acidname5", 1.5, "base");
+    acid = new AcidRDGRDS(31, "acidname6", 1.6, "base");
+    acid = new AcidRDGRDS(31, "funkyacid1", 41.2, "base"); 
+    acid = new AcidRDGRDS(31, "funkyacid2", 42.4, "base"); 
     
     // Bases
-    BaseRDG base = new BaseRDGRDS(51, "basename1", 1.1, "base");
-    base = new BaseRDGRDS(52, "basename2", 1.2, "base");
-    base = new BaseRDGRDS(53, "basename3", 1.3, "base");
-    base = new BaseRDGRDS(54, "basename4", 1.4, "base");
-    base = new BaseRDGRDS(55, "basename5", 1.5, "base");
-    base = new BaseRDGRDS(55, "basename6", 1.6, "base");
-    base = new BaseRDGRDS(12, "funkybase1", 41.2, "base"); 
-    base = new BaseRDGRDS(15, "funkybase2", 42.4, "base"); 
+    BaseRDG base = new BaseRDGRDS(30, "basename1", 1.1, "acid");
+    base = new BaseRDGRDS(30, "basename2", 1.2, "acid");
+    base = new BaseRDGRDS(30, "basename3", 1.3, "acid");
+    base = new BaseRDGRDS(30, "basename4", 1.4, "acid");
+    base = new BaseRDGRDS(31, "basename5", 1.5, "base");
+    base = new BaseRDGRDS(31, "basename6", 1.6, "base");
+    base = new BaseRDGRDS(31, "funkybase1", 41.2, "base"); 
+    base = new BaseRDGRDS(31, "funkybase2", 42.4, "base"); 
     
     // Elements
     ElementRDG element = new ElementRDGRDS(24, 19.2, "elementname1", 11.9);
@@ -128,6 +131,7 @@ public class ClassTableInitializer {
     metal = new MetalRDGRDS(3, 3, 3.1, 13.3, "metalname3", 43.1);
     metal = new MetalRDGRDS(4, 4, 4.1, 14.4, "metalname4", 44.1);
     metal = new MetalRDGRDS(5, 5, 5.1, 15.4, "metalname5", 45.1);
+    
     
   }
 }

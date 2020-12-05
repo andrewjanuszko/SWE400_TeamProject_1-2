@@ -37,7 +37,12 @@ public class AcidRDGRDS implements AcidRDG {
     Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
     ResultSet rs = statement.executeQuery(select);
     rs.next(); // Get result
-    acid = new AcidDTO(id, rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory"), rs.getString("soluteType"));
+    if(rs.getInt("solute") < 0) {
+      acid = new AcidDTO(id, -1, rs.getString("name"), rs.getDouble("inventory"), null);
+    } else {
+      acid = new AcidDTO(id, rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory"), rs.getString("soluteType"));
+    }
+    
   }
   
   /**
@@ -59,8 +64,13 @@ public class AcidRDGRDS implements AcidRDG {
       // Insert Acid
       PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
         .prepareStatement("INSERT INTO Acid (acidId, solute, soluteType) VALUES (LAST_INSERT_ID(), ?, ?);");
-      insertAcid.setInt(1, solute); // set solute id
-      insertAcid.setString(2, soluteType); // solute type
+      if(solute > 0) {
+        insertAcid.setInt(1, solute); // set solute id
+        insertAcid.setString(2, soluteType); // solute type
+      } else {
+        insertAcid.setInt(1, java.sql.Types.INTEGER);
+        insertAcid.setString(2, null);
+      }
       
       insertChemical.execute(); // Insert chemical
       insertAcid.execute();  // Insert acid
