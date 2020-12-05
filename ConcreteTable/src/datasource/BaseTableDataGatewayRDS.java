@@ -75,9 +75,9 @@ public abstract class BaseTableDataGatewayRDS {
         
         BaseDTO a = new BaseDTO(baseID, name, inventory, solute, soluteType);
         baseDTOs.add(a);
-        return baseDTOs;
+        
       }
-
+      return baseDTOs;
     } catch (SQLException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

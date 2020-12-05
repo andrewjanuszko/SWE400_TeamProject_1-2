@@ -76,9 +76,11 @@ class ElementDataMapperTest {
   void testGetAll() throws DomainModelException {
     ElementDataMapper mapper = new ElementDataMapper();
     Element element1 = mapper.create("name1", 1.0, 1, 1.0);
+    Element element2 = mapper.create("name2", 1.0, 1, 1.0);
     List<Element> result = mapper.getAll();
 
     assertEquals(element1.getID(), result.get(0).getID());
+    assertEquals(element2.getID(), result.get(1).getID());
   }
   
   @Test

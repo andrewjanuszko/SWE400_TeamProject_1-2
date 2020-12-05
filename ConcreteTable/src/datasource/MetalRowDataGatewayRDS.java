@@ -283,6 +283,7 @@ public class MetalRowDataGatewayRDS implements MetalRowDataGateway{
       rs.next();
       this.metalID = rs.getInt("LAST_INSERT_ID()");
 		} catch(SQLException e) {
+		  e.printStackTrace();
 			new DatabaseException("could not insert into Metal table");
 		}
 	}

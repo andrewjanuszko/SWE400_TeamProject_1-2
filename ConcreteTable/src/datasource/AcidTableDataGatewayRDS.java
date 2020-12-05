@@ -82,9 +82,9 @@ public abstract class AcidTableDataGatewayRDS {
         String soluteType = rs.getString("soluteType");
         AcidDTO a = new AcidDTO(acidID, name, inventory, solute, soluteType);
         acidDTOs.add(a);
-        return acidDTOs;
+       
       }
-
+      return acidDTOs;
     } catch (SQLException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

@@ -21,12 +21,19 @@ class ElementRowDataGatewayRDSTest extends DatabaseTest{
 	@Test
 	void testGetters() throws DatabaseException {
 		ElementRowDataGateway element = new ElementRowDataGatewayRDS("element", 1.0, 5, 10.0);
+		ElementRowDataGateway element2 = new ElementRowDataGatewayRDS("element2", 1.0, 5, 10.0);
 		
 		assertEquals(1, element.getElementID());
 		assertEquals("element", element.getName());
 		assertEquals(1.0, element.getInventory());
 		assertEquals(5, element.getAtomicNumber());
 		assertEquals(10.0, element.getAtomicMass());
+		
+		assertEquals(2, element2.getElementID());
+    assertEquals("element2", element2.getName());
+    assertEquals(1.0, element2.getInventory());
+    assertEquals(5, element2.getAtomicNumber());
+    assertEquals(10.0, element2.getAtomicMass());
 	}
 	
 	@Test
@@ -55,8 +62,10 @@ class ElementRowDataGatewayRDSTest extends DatabaseTest{
 	@Test
 	void testConstructors() throws DatabaseException{
 	    ElementRowDataGateway element1 = new ElementRowDataGatewayRDS("element", 1.0, 5, 10.0);
+	    ElementRowDataGateway element2 = new ElementRowDataGatewayRDS("element2", 1.0, 5, 10.0);
 	   // ElementRowDataGateway element1FindByID = new ElementRowDataGatewayRDS(1);
 	    ElementRowDataGateway element1FindByName = new ElementRowDataGatewayRDS("element");
+	    ElementRowDataGateway element2FindByName = new ElementRowDataGatewayRDS("element2");
 	    
 //	    assertEquals(element1.getElementID(), element1FindByID.getElementID());
 //	    assertEquals(element1.getName(), element1FindByID.getName());
@@ -69,6 +78,12 @@ class ElementRowDataGatewayRDSTest extends DatabaseTest{
 	    assertEquals(element1.getInventory(), element1FindByName.getInventory());
 	    assertEquals(element1.getAtomicNumber(), element1FindByName.getAtomicNumber());
 	    assertEquals(element1.getAtomicMass(), element1FindByName.getAtomicMass());
+	    
+	    assertEquals(element2.getElementID(), element2FindByName.getElementID());
+      assertEquals(element2.getName(), element2FindByName.getName());
+      assertEquals(element2.getInventory(), element2FindByName.getInventory());
+      assertEquals(element2.getAtomicNumber(), element2FindByName.getAtomicNumber());
+      assertEquals(element2.getAtomicMass(), element2FindByName.getAtomicMass());
 	}
 	
 	@Test
