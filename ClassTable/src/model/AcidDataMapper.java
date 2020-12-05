@@ -9,6 +9,9 @@ import datasource.AcidDTO;
 import datasource.AcidRDG;
 import datasource.AcidRDGRDS;
 import datasource.AcidTDGRDS;
+import datasource.BaseRDGRDS;
+import datasource.ChemicalRDG;
+import datasource.ChemicalRDGRDS;
 import datasource.MetalDTO;
 import datasource.MetalRDG;
 import datasource.MetalRDGRDS;
@@ -16,18 +19,24 @@ import datasource.MetalRDGRDS;
 public class AcidDataMapper implements AcidDataMapperInterface {
   
   @Override
-  public Acid create(String name, double inventory, List<Metal> dissolves, Chemical solute) throws DomainModelException {
+  public Acid create(String name, double inventory, List<Metal> dissolves, Chemical solute)
+      throws DomainModelException {
     // Create acid using AcidRDG
-    AcidRDG row = new AcidRDGRDS(solute.getID(), name, inventory, solute.getName());
+    AcidRDG row;
+    try {
+      row = new AcidRDGRDS(solute.getID(), name, inventory, getSoluteType(solute.getID()));
+      Acid a = convertFromDTO(row.getAcid());
 
-    // Set dissolvedById for metals
-    Acid a = convertFromDTO(row.getAcid());
-    for (Metal m : dissolves) {
-      MetalRDG metal = new MetalRDGRDS(m.getID());
-      metal.setDissolvedById(a.getID());
+      // Set dissolvedById for metals
+      for (Metal m : dissolves) {
+        MetalRDG metal = new MetalRDGRDS(m.getID());
+        metal.setDissolvedById(a.getID());
+      }
+
+      return a;
+    } catch (DomainModelException | SQLException | DatabaseException e) {
+      throw new DomainModelException("Failed to create acid through data mapper");
     }
-
-    return a;
   }
 
   @Override
@@ -50,12 +59,14 @@ public class AcidDataMapper implements AcidDataMapperInterface {
       // Use setters to update values
       row.setName(acid.getName());
       row.setInventory(acid.getInventory());
-      row.setSolute(acid.getSolute().getID());
-      row.setSoluteType(acid.getSolute().getName());
+      if(acid.getSolute().getID() > 0) {
+        row.setSolute(acid.getSolute().getID());
+        row.setSoluteType(getSoluteType(acid.getSolute().getID())); 
+      }
 
       // Update the acid
       row.update();
-    } catch (SQLException | DatabaseException e) {
+    } catch (SQLException | DatabaseException | DomainModelException e) {
       System.out.println("Problem updating Acid " + acid.getID());
       e.printStackTrace();
     }
@@ -79,7 +90,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   public ArrayList<Acid> getAll() {
     ArrayList<Acid> acids = new ArrayList<>();
     try {
-      // Get all acids 
+      // Get all acids
       List<AcidDTO> dtos = AcidTDGRDS.getSingleton().getAllAcids().executeQuery();
       // For all acids, convert dto to acid and add to list
       for (AcidDTO a : dtos) {
@@ -151,9 +162,9 @@ public class AcidDataMapper implements AcidDataMapperInterface {
   public ArrayList<Acid> filterBySolute(int chemicalID) {
     ArrayList<Acid> acids = new ArrayList<>();
     try {
-      // Get all acids  with specific solute id
+      // Get all acids with specific solute id
       List<AcidDTO> dtos = AcidTDGRDS.getSingleton().filterBySolute(chemicalID).executeQuery();
-      // Get all acids 
+      // Get all acids
       for (AcidDTO a : dtos) {
         acids.add(convertFromDTO(a));
       }
@@ -164,36 +175,10 @@ public class AcidDataMapper implements AcidDataMapperInterface {
 
     return acids;
   }
-  
-  private Chemical soluteType(String s, int i) {
-    // very possible there is infinite loading shenanigans
-    try {
-      if (s.toLowerCase().contains("acid")) {
-        AcidDataMapper m = new AcidDataMapper();
-        return m.read(i);
-      } else if (s.toLowerCase().contains("base")) {
-        BaseDataMapper m = new BaseDataMapper();
-        return m.read(i);
-      } else if (s.toLowerCase().contains("compound")) {
-        CompoundDataMapper m = new CompoundDataMapper();
-        return m.read(i);
-      } else if (s.toLowerCase().contains("element")) {
-        ElementDataMapper m = new ElementDataMapper();
-        return m.read(i);
-      } else if (s.toLowerCase().contains("Metal")) {
-        BaseDataMapper m = new BaseDataMapper();
-        return m.read(i);
-      }
-
-    } catch (DomainModelException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
 
   /**
    * Convert dto to acid
+   * 
    * @param dto to convert
    * @return converted acid
    */
@@ -204,9 +189,21 @@ public class AcidDataMapper implements AcidDataMapperInterface {
       betterMetals.add(new Metal(m.getMetalId(), m.getName(), m.getInventory(), m.getAtomicNumber(), m.getAtomicMass(),
           m.getMoles()));
     }
-    return new Acid(dto.getAcidId(), dto.getName(), dto.getInventory(), betterMetals, soluteType(dto.getSoluteType(), dto.getSoluteId()));
+    // id name inv
+    try {
+      return new Acid(dto.getAcidId(), dto.getName(), dto.getInventory(), betterMetals, makeSolute(dto.getSoluteId()));
+    } catch (SQLException | DatabaseException e) {
+      // yea
+      e.printStackTrace();
+      return null; 
+    }
   }
-
+  
+  private Solute makeSolute(int id) throws SQLException, DatabaseException {
+    ChemicalRDG c = new ChemicalRDGRDS(id); 
+    return new Solute(c.getChemical().getChemicalId(), c.getChemical().getName(), c.getChemical().getInventory());
+  }
+  
 
   @Override
   public List<Acid> filterByLowInventory() throws DomainModelException {
@@ -214,4 +211,38 @@ public class AcidDataMapper implements AcidDataMapperInterface {
     return null;
   }
 
+  /**
+   * @param s Solute Type
+   * @param i ID
+   * @return Solute
+   * @throws DatabaseException 
+   * @throws SQLException 
+   */
+  private int getSoluteType(int id) throws DomainModelException, SQLException, DatabaseException {
+    int type = new ChemicalRDGRDS(id).getChemical().getSoluteType(); 
+      switch (type) {
+      case (0): 
+        return 0; 
+      case (1): // acid
+        return new AcidRDGRDS(id).getAcid().getSoluteType();
+      case (2): // base
+        return new BaseRDGRDS(id).getBase().getSoluteType(); 
+      case (3): // compound
+        return new ChemicalRDGRDS(id).getChemical().getSoluteType(); 
+      case (4): // element
+        return new ChemicalRDGRDS(id).getChemical().getSoluteType();
+      case (5): // metal
+        return new ChemicalRDGRDS(id).getChemical().getSoluteType();
+      default:
+        // MetalDataMapper e = new MetalDataMapper(); 
+        throw new DomainModelException("Bad solute type"); 
+      } 
+  }
+  
+}
+
+class Solute extends Chemical {
+  public Solute(int id, String name, double inventory) {
+    super(id, name, inventory);
+  }
 }

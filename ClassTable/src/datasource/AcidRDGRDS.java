@@ -38,9 +38,9 @@ public class AcidRDGRDS implements AcidRDG {
     ResultSet rs = statement.executeQuery(select);
     rs.next(); // Get result
     if(rs.getInt("solute") < 0) {
-      acid = new AcidDTO(id, -1, rs.getString("name"), rs.getDouble("inventory"), null);
+      acid = new AcidDTO(id, -1, rs.getString("name"), rs.getDouble("inventory"), -1);
     } else {
-      acid = new AcidDTO(id, rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory"), rs.getString("soluteType"));
+      acid = new AcidDTO(id, rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory"), rs.getInt("type"));
     }
     
   }
@@ -50,26 +50,26 @@ public class AcidRDGRDS implements AcidRDG {
    * @param id of acid to insert
    * @param solute of acid to insert
    * @param name of acid to insert
-   * @param inhabits of acid to insert
+   * @param solutetype of acid to insert
    */
-  public AcidRDGRDS(int solute, String name, double inventory, String soluteType) {
+  public AcidRDGRDS(int solute, String name, double inventory, int soluteType) {
     
     try {
       // Insert chemical 
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (name, inventory) VALUES (?, ?);");
+          .prepareStatement("INSERT INTO Chemical (name, inventory, type) VALUES (?, ?, ?);");
       insertChemical.setString(1, name);
       insertChemical.setDouble(2, inventory);
       
       // Insert Acid
       PreparedStatement insertAcid = DatabaseManager.getSingleton().getConnection()
-        .prepareStatement("INSERT INTO Acid (acidId, solute, soluteType) VALUES (LAST_INSERT_ID(), ?, ?);");
+        .prepareStatement("INSERT INTO Acid (acidId, solute) VALUES (LAST_INSERT_ID(), ?);");
       if(solute > 0) {
         insertAcid.setInt(1, solute); // set solute id
-        insertAcid.setString(2, soluteType); // solute type
+        insertChemical.setInt(3, soluteType); // solute type
       } else {
         insertAcid.setInt(1, java.sql.Types.INTEGER);
-        insertAcid.setString(2, null);
+        insertChemical.setInt(3, java.sql.Types.INTEGER);
       }
       
       insertChemical.execute(); // Insert chemical
@@ -134,7 +134,7 @@ public class AcidRDGRDS implements AcidRDG {
       PreparedStatement acid = DatabaseManager.getSingleton().getConnection().prepareStatement(updateAcidSQL);
       acid.setInt(1, this.acid.getAcidId());
       acid.setInt(2, this.acid.getSoluteId());
-      acid.setString(3, this.acid.getSoluteType());
+      acid.setInt(3, this.acid.getSoluteType());
       
       acid.execute();
       
@@ -178,7 +178,7 @@ public class AcidRDGRDS implements AcidRDG {
     acid.setSoluteId(newSolute);
   }
   
-  public void setSoluteType(String soluteType) {
+  public void setSoluteType(int soluteType) {
     acid.setSoluteType(soluteType);
   }
 

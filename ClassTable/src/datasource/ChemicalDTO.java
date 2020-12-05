@@ -6,7 +6,7 @@ package datasource;
  * @author Isabella Boone, Kim O'Neill
  */
 public class ChemicalDTO {
-  int chemicalId;
+  int chemicalId, soluteType;
   String name;
   double inventory;
 
@@ -41,6 +41,13 @@ public class ChemicalDTO {
     return name;
   }
 
+  public int getSoluteType() {
+    return soluteType;
+  }
+  
+  public void setSoluteType(int soluteType) {
+    this.soluteType = soluteType;
+  }
   /**
    * Get inventory
    * 

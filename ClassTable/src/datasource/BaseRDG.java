@@ -11,7 +11,7 @@ public interface BaseRDG {
 
   public void setSolute(int newSolute);
   
-  public void setSoluteType(String soluteType); 
+  public void setSoluteType(int soluteType); 
 
   public void setName(String newName);
 

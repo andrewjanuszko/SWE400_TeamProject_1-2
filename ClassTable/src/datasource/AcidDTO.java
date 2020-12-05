@@ -7,8 +7,8 @@ package datasource;
  *
  */
 public class AcidDTO {
-  private int acidId, soluteId;
-  private String name, soluteType;
+  private int acidId, soluteId, soluteType;
+  private String name;
   private double inventory;
 
   /**
@@ -19,7 +19,7 @@ public class AcidDTO {
    * @param name      String
    * @param inventory double
    */
-  public AcidDTO(int acidId, int soluteId, String name, double inventory, String soluteType) {
+  public AcidDTO(int acidId, int soluteId, String name, double inventory, int soluteType) {
     this.acidId = acidId;
     this.soluteId = soluteId;
     this.name = name;
@@ -27,11 +27,11 @@ public class AcidDTO {
     this.soluteType = soluteType; 
   }
 
-  public void setSoluteType(String soluteType) {
+  public void setSoluteType(int soluteType) {
     this.soluteType = soluteType; 
   }
   
-  public String getSoluteType() {
+  public int getSoluteType() {
     return soluteType;
   }
   

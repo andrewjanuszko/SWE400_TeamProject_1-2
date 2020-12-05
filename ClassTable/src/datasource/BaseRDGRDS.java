@@ -39,7 +39,7 @@ public class BaseRDGRDS implements BaseRDG {
     ResultSet rs = statement.executeQuery(select);
     rs.next(); // Get result
 
-    base = new BaseDTO(id, rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory"), rs.getString("soluteType"));
+    base = new BaseDTO(id, rs.getInt("solute"), rs.getString("name"), rs.getDouble("inventory"), rs.getInt("soluteType"));
 
   }
 
@@ -51,24 +51,24 @@ public class BaseRDGRDS implements BaseRDG {
    * @param name
    * @param inhabits
    */
-  public BaseRDGRDS(int solute, String name, double inventory, String soluteType) {
+  public BaseRDGRDS(int solute, String name, double inventory, int soluteType) {
 
     try {
       // Insert chemical
       PreparedStatement insertChemical = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Chemical (name, inventory)" + "VALUES (?, ?);");
+          .prepareStatement("INSERT INTO Chemical (name, inventory, type)" + "VALUES (?, ?, ?);");
       insertChemical.setString(1, name);
       insertChemical.setDouble(2, inventory);
 
       // Insert Base
       PreparedStatement insertBase = DatabaseManager.getSingleton().getConnection()
-          .prepareStatement("INSERT INTO Base (baseId, solute, soluteType)" + "VALUES (LAST_INSERT_ID(), ?, ?);");
+          .prepareStatement("INSERT INTO Base (baseId, solute)" + "VALUES (LAST_INSERT_ID(), ?);");
       if(solute > 0 ) {
         insertBase.setInt(1, solute); // set solute id
-        insertBase.setString(2, soluteType); // set solute id
+        insertChemical.setInt(3, soluteType); // set solute id
       } else {
         insertBase.setInt(1, java.sql.Types.INTEGER);
-        insertBase.setString(2, null);
+        insertChemical.setInt(3, java.sql.Types.INTEGER);
       }
       insertChemical.execute(); // Insert chemical
       insertBase.execute(); // Insert base
@@ -126,7 +126,7 @@ public class BaseRDGRDS implements BaseRDG {
       PreparedStatement acid = DatabaseManager.getSingleton().getConnection().prepareStatement(updateBaseSQL);
       acid.setInt(1, base.getBaseId());
       acid.setInt(2, base.getSoluteId());
-      acid.setString(3, base.getSoluteType());
+      acid.setInt(3, base.getSoluteType());
 
       acid.execute();
 
@@ -188,7 +188,7 @@ public class BaseRDGRDS implements BaseRDG {
   }
 
   @Override
-  public void setSoluteType(String soluteType) {
+  public void setSoluteType(int soluteType) {
     base.setSoluteType(soluteType);
   }
 

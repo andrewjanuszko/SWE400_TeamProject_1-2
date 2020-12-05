@@ -131,10 +131,10 @@ public class FilterChemicalFrame extends JFrame{
 				filter = "1" + "-" +  jtfName.getText();
 				break;
 			case 2:
-				filter = "" + filterType + "-" + Integer.parseInt(jtfInventory.getText());
+				filter = "" + filterType + "-" + Double.parseDouble(jtfInventory.getText());
 				break;
 			case 3:
-				filter = "3" + "-"+ Integer.parseInt(jtfInventoryRange1.getText()) + "-" + Integer.parseInt(jtfInventoryRange2.getText());
+				filter = "3" + "-"+ Double.parseDouble(jtfInventoryRange1.getText()) + "-" + Double.parseDouble(jtfInventoryRange2.getText());
 				break;
 			case 4:
 				filter = "4";

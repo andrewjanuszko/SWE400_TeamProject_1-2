@@ -88,7 +88,7 @@ public class BaseTDGRDS implements BaseTDG {
           int soluteId = results.getInt("solute");
           String name = results.getString("name");
           double inventory = results.getDouble("inventory");
-          String soluteType = results.getString("soluteType");
+          int soluteType = results.getInt("type");
           BaseDTO base = new BaseDTO(baseId, soluteId, name, inventory, soluteType);
           listDTO.add(base);
         }

@@ -43,6 +43,7 @@ public class ElementRDGRDS implements ElementRDG {
 
       return;
     } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
       System.out.println("couldn't find element with id " + id);
     }
   }

@@ -13,16 +13,16 @@ public interface AcidRDG {
 
   public void setName(String newName);
 
-  void setInventory(double inventory);
+  public void setInventory(double inventory);
+  
+  public void setSoluteType(int s);
 
-  AcidDTO getAcid();
+  public AcidDTO getAcid();
 
   public void update();
 
   public void delete();
 
   public List<AcidRDGRDS> findSet(int i);
-  
-  public void setSoluteType(String s);
 
 }

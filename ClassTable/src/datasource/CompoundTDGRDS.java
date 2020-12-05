@@ -17,7 +17,7 @@ import database.DatabaseManager;
  *
  */
 public class CompoundTDGRDS implements CompoundTDG {
-  String sql = "SELECT * FROM Compound INNER JOIN Chemical ";
+  String sql = "SELECT * FROM Compound INNER JOIN Chemical WHERE Compound.CompoundId = Chemical.chemicalId ";
 
   private static CompoundTDGRDS singleton;
 
@@ -45,7 +45,7 @@ public class CompoundTDGRDS implements CompoundTDG {
    * Get all compounds with a similar name
    */
   public CompoundTDGRDS filterByName(String name) {
-    sql += " AND (Chemical.name LIKE '%" + name + "%') ";
+    System.out.println(sql);
     return getSingleton();
   }
 
@@ -77,7 +77,7 @@ public class CompoundTDGRDS implements CompoundTDG {
    * Get all compounds with a specific compound id.
    */
   public CompoundTDGRDS filterByCompoundId(int compoundId) {
-    sql += "AND Compound.compoundId = " + compoundId + ")";
+    sql += "AND Compound.compoundId = " + compoundId + ") ";
     return getSingleton();
   }
   
@@ -87,13 +87,12 @@ public class CompoundTDGRDS implements CompoundTDG {
   @Override
   public List<CompoundDTO> executeQuery() throws DatabaseException {
     List<CompoundDTO> listDTO = new ArrayList<>();
-
+    sql+= ";";
     try {
-      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(this.sql + ";");
+      PreparedStatement statement = DatabaseManager.getSingleton().getConnection().prepareStatement(this.sql);
 
       ResultSet results = statement.executeQuery();
 
-      sql = "";
       while (results.next()) {
         listDTO.add(getDTO(results.getInt("compoundId")));
       }
@@ -101,6 +100,7 @@ public class CompoundTDGRDS implements CompoundTDG {
     } catch (Exception e) {
       throw new DatabaseException("Failed to execute query.", e);
     }
+    sql = "SELECT * FROM Compound INNER JOIN Chemical WHERE Compound.CompoundId = Chemical.chemicalId ";
     return listDTO;
   }
   
@@ -124,17 +124,25 @@ public class CompoundTDGRDS implements CompoundTDG {
    */
   private CompoundDTO getDTO(int id) throws Exception {
     try {
-      String sql = "SELECT * FROM Compound WHERE compoundId = " + id + ";";
+      String sql = "SELECT * FROM Compound INNER JOIN Chemical WHERE Chemical.chemicalId"
+          + " = Compound.compoundId AND Compound.compoundId = " + id + ";";
       Statement statement = DatabaseManager.getSingleton().getConnection().createStatement();
       ResultSet rs = statement.executeQuery(sql);
 
       // Get all elements connected to compound
       List<ElementDTO> elements = new ArrayList<>();
+      String name = null;
+      double inventory = -1 ;
       while (rs.next()) {
+        // shhhh i know this is dumb.......
+        name = rs.getString("name");
+        inventory = rs.getDouble("inventory");
+        
         elements.add(elementIdToDTO(rs.getInt("elementId")));
       }
 
-      return (new CompoundDTO(id, elements, rs.getString("name"), rs.getDouble("inventory")));
+      
+      return (new CompoundDTO(id, elements, name, inventory));
 
     } catch (SQLException | DatabaseException e) {
       e.printStackTrace();

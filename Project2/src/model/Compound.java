@@ -43,4 +43,28 @@ public class Compound extends Chemical {
     return madeOf;
   }
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((madeOf == null) ? 0 : madeOf.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Compound other = (Compound) obj;
+    if (madeOf == null) {
+      if (other.madeOf != null)
+        return false;
+    } else if (!madeOf.equals(other.madeOf))
+      return false;
+    return true;
+  }
 }

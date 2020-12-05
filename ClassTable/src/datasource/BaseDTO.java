@@ -7,10 +7,9 @@ package datasource;
  *
  */
 public class BaseDTO {
-  private int baseId, soluteId;
+  private int baseId, soluteId, soluteType;
   private String name;
-  private double inventory;
-  private String soluteType; 
+  private double inventory; 
 
   /**
    * Initialize a base DTO
@@ -20,7 +19,7 @@ public class BaseDTO {
    * @param name      of the base
    * @param inventory of the base
    */
-  public BaseDTO(int baseId, int soluteId, String name, double inventory, String soluteType) {
+  public BaseDTO(int baseId, int soluteId, String name, double inventory, int soluteType) {
     this.baseId = baseId;
     this.soluteId = soluteId;
     this.name = name;
@@ -28,11 +27,11 @@ public class BaseDTO {
     this.soluteType = soluteType; 
   }
   
-  public void setSoluteType(String soluteType) {
+  public void setSoluteType(int soluteType) {
     this.soluteType = soluteType; 
   }
   
-  public String getSoluteType() {
+  public int getSoluteType() {
     return soluteType;
   }
 

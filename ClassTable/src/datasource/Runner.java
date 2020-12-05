@@ -13,12 +13,14 @@ public class Runner {
     database.ClassTableInitializer.createTables();
     database.ClassTableInitializer.populateTables();
 
-    try {
-      TestAll.testAllTests();
-      System.out.println("Tests ran successfully");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+//    try {
+//      TestAll.testAllTests();
+//      System.out.println("Tests ran successfully");
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+    
+    System.out.println("DONE");
   }
 
 }

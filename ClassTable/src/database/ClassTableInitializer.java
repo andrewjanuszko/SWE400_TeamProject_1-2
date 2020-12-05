@@ -27,12 +27,12 @@ public class ClassTableInitializer {
       String[] create = { 
           
           "CREATE TABLE IF NOT EXISTS Chemical(chemicalId INT NOT NULL AUTO_INCREMENT, name VARCHAR(20), "
-              + "inventory DOUBLE, PRIMARY KEY (chemicalId));",
+          + "type INT, inventory DOUBLE, PRIMARY KEY (chemicalId));",
               
-          "CREATE TABLE IF NOT EXISTS Acid" + "(acidId INT NOT NULL, solute INT, soluteType VARCHAR(30), " 
+          "CREATE TABLE IF NOT EXISTS Acid" + "(acidId INT NOT NULL, solute INT, " 
               + "FOREIGN KEY(acidId) REFERENCES Chemical(chemicalId));",
               
-          "CREATE TABLE IF NOT EXISTS Base(baseId INT NOT NULL, solute INT, soluteType VARCHAR(30), "
+          "CREATE TABLE IF NOT EXISTS Base(baseId INT NOT NULL, solute INT, "
               + "FOREIGN KEY(baseId) REFERENCES Chemical(chemicalId));",
               
           "CREATE TABLE IF NOT EXISTS Element(elementId INT NOT NULL, atomicNumber INT, "
@@ -83,27 +83,27 @@ public class ClassTableInitializer {
   public static void populateTables() {
     
     // Insert solutes
-    AcidRDG solute1 = new AcidRDGRDS(-1, "acidsoluteboy", 62.4, null);
-    BaseRDG solute2 = new BaseRDGRDS(-1, "basesoluteboy", 64.2, null); 
+    AcidRDG solute1 = new AcidRDGRDS(0, "acidsoluteboy", 62.4, 0);
+    BaseRDG solute2 = new BaseRDGRDS(0, "basesoluteboy", 64.2, 0); 
     
-    AcidRDG acid = new AcidRDGRDS(30, "acidname1", 1.1, "acid");
-    acid = new AcidRDGRDS(30, "acidname2", 1.2, "acid");
-    acid = new AcidRDGRDS(30, "acidname3", 1.3, "acid");
-    acid = new AcidRDGRDS(30, "acidname4", 1.4, "acid");
-    acid = new AcidRDGRDS(31, "acidname5", 1.5, "base");
-    acid = new AcidRDGRDS(31, "acidname6", 1.6, "base");
-    acid = new AcidRDGRDS(31, "funkyacid1", 41.2, "base"); 
-    acid = new AcidRDGRDS(31, "funkyacid2", 42.4, "base"); 
+    AcidRDG acid = new AcidRDGRDS(1, "acidname1", 1.1, 1);
+    acid = new AcidRDGRDS(1, "acidname2", 1.2, 1);
+    acid = new AcidRDGRDS(1, "acidname3", 1.3, 1);
+    acid = new AcidRDGRDS(1, "acidname4", 1.4, 1);
+    acid = new AcidRDGRDS(2, "acidname5", 1.5, 2);
+    acid = new AcidRDGRDS(2, "acidname6", 1.6, 2);
+    acid = new AcidRDGRDS(2, "funkyacid1", 41.2, 2); 
+    acid = new AcidRDGRDS(2, "funkyacid2", 42.4, 2); 
     
     // Bases
-    BaseRDG base = new BaseRDGRDS(30, "basename1", 1.1, "acid");
-    base = new BaseRDGRDS(30, "basename2", 1.2, "acid");
-    base = new BaseRDGRDS(30, "basename3", 1.3, "acid");
-    base = new BaseRDGRDS(30, "basename4", 1.4, "acid");
-    base = new BaseRDGRDS(31, "basename5", 1.5, "base");
-    base = new BaseRDGRDS(31, "basename6", 1.6, "base");
-    base = new BaseRDGRDS(31, "funkybase1", 41.2, "base"); 
-    base = new BaseRDGRDS(31, "funkybase2", 42.4, "base"); 
+    BaseRDG base = new BaseRDGRDS(1, "basename1", 1.1, 1);
+    base = new BaseRDGRDS(1, "basename2", 1.2, 1);
+    base = new BaseRDGRDS(1, "basename3", 1.3, 1);
+    base = new BaseRDGRDS(1, "basename4", 1.4, 1);
+    base = new BaseRDGRDS(2, "basename5", 1.5, 2);
+    base = new BaseRDGRDS(2, "basename6", 1.6, 2);
+    base = new BaseRDGRDS(2, "funkybase1", 41.2, 2); 
+    base = new BaseRDGRDS(2, "funkybase2", 42.4, 2); 
     
     // Elements
     ElementRDG element = new ElementRDGRDS(24, 19.2, "elementname1", 11.9);
@@ -117,10 +117,10 @@ public class ClassTableInitializer {
     
     // Compounds
     List<Integer> madeOf1 = new ArrayList<Integer>(), madeOf2 = new ArrayList<Integer>();
-    madeOf1.add(17);
-    madeOf1.add(18);
-    madeOf2.add(19);
-    madeOf2.add(20);
+    madeOf1.add(19);
+    madeOf1.add(20);
+    madeOf1.add(21);
+    madeOf2.add(22);
 
     CompoundRDG RDG1 = new CompoundRDGRDS(madeOf1, "compoundname1", 1.1); 
     CompoundRDG RDG2 = new CompoundRDGRDS(madeOf2, "compoundname2", 1.2); 

@@ -34,10 +34,10 @@ public class ChemicalFilterCommand implements FilterCommandInterface {
     case 1:
       return new ChemicalDataMapper().filterByNameLike(filter[1]);
     case 2:
-      return new ChemicalDataMapper().filterByInventory(Integer.parseInt(filter[1]));
+      return new ChemicalDataMapper().filterByInventory(Double.parseDouble(filter[1]));
     case 3:
-      return new ChemicalDataMapper().filterByInventoryBetween(Integer.parseInt(filter[1]),
-          Integer.parseInt(filter[2]));
+      return new ChemicalDataMapper().filterByInventoryBetween(Double.parseDouble(filter[1]),
+          Double.parseDouble(filter[2]));
     case 4:
       return new ChemicalDataMapper().getAll();
     default:

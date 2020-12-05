@@ -34,9 +34,9 @@ public class BaseFilterCommand implements FilterCommandInterface {
     case 1:
       return new BaseDataMapper().filterByNameLike(filter[1]);
     case 2:
-      return new BaseDataMapper().filterByInventory(Integer.parseInt(filter[1]));
+      return new BaseDataMapper().filterByInventory(Double.parseDouble(filter[1]));
     case 3:
-      return new BaseDataMapper().filterByInventoryBetween(Integer.parseInt(filter[1]), Integer.parseInt(filter[2]));
+      return new BaseDataMapper().filterByInventoryBetween(Double.parseDouble(filter[1]), Double.parseDouble(filter[2]));
     case 4:
       return new BaseDataMapper().filterBySolute(Integer.parseInt(filter[1]));
     case 5:

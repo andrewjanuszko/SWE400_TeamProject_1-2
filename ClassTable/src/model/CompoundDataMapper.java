@@ -1,7 +1,9 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import database.DatabaseException;
 import datasource.CompoundDTO;
@@ -66,7 +68,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     try {
       // Use CompoundTDG to get all compounds, convert DTOs to Compounds, and return
       // that list
-      return ListDTOToListCompound(new CompoundTDGRDS().getAllCompounds().executeQuery());
+      return filterList(ListDTOToListCompound(new CompoundTDGRDS().getAllCompounds().executeQuery()));
     } catch (DatabaseException e) {
       // If something goes wrong with executeQuery()
       throw new DomainModelException("Failed getAll()", e);
@@ -78,7 +80,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     try {
       // Use CompoundTDG to get all compoundDTOs filtered by name, convert DTOs to
       // Compounds, and return that list
-      return ListDTOToListCompound(new CompoundTDGRDS().getAllCompounds().filterByName(wildCard).executeQuery());
+      return filterList(ListDTOToListCompound(CompoundTDGRDS.getSingleton().filterByName(wildCard).executeQuery()));
     } catch (DatabaseException e) {
       // If something goes wrong with executeQuery()
       throw new DomainModelException("Failed filterByWildCardName()", e);
@@ -90,7 +92,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     try {
       // Use CompoundTDG to get all compoundDTOs filtered by inventory, convert DTOs
       // to Compounds, return that list
-      return ListDTOToListCompound(new CompoundTDGRDS().getAllCompounds().filterByInventory(inventory).executeQuery());
+      return filterList(ListDTOToListCompound(new CompoundTDGRDS().filterByInventory(inventory).executeQuery()));
     } catch (DatabaseException e) {
       // If something goes wrong with executeQuery()
       throw new DomainModelException("Failed filterByInventory()", e);
@@ -102,8 +104,8 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     try {
       // Use CompoundTDG to get all compounds, filter by inventory range, convert DTOs
       // to Compounds, return that list
-      return ListDTOToListCompound(
-          new CompoundTDGRDS().getAllCompounds().filterByInventoryRange(max, min).executeQuery());
+      return filterList(ListDTOToListCompound(
+          new CompoundTDGRDS().getAllCompounds().filterByInventoryRange(max, min).executeQuery()));
     } catch (DatabaseException e) {
       // If something goes wrong with executeQuery()
       throw new DomainModelException("Failed filterByInventoryRange()", e);
@@ -115,7 +117,7 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     try {
       // Use CompoundTDG to get all compounds, filter by madeOf (elementId), convert
       // DTOs to Compounds, return that list
-      return ListDTOToListCompound(new CompoundTDGRDS().getAllCompounds().filterByElements(elementID).executeQuery());
+      return filterList(ListDTOToListCompound(new CompoundTDGRDS().getAllCompounds().filterByElements(elementID).executeQuery()));
     } catch (DatabaseException e) {
       // If something goes wrong with executeQuery()
       throw new DomainModelException("Failed filterByMadeOf()", e);
@@ -185,11 +187,14 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     
     for (CompoundDTO c : listCompoundDTOs) {
       // Use that compounds information to make a compound and add it to our list
-      listCompounds.add(new Compound(c.getCompoundId(), c.getName(), c.getInventory(), DTOToElement(c.getElements())));
+      Compound com = new Compound(c.getCompoundId(), c.getName(), c.getInventory(), DTOToElement(c.getElements()));
+      System.out.println(com.getID());
+      listCompounds.add(com); 
+//      listCompounds.add(new Compound(c.getCompoundId(), c.getName(), c.getInventory(), DTOToElement(c.getElements())));
     }
     
     // Return list of compounds
-    return listCompounds;
+    return filterList(listCompounds);
   }
 
   @Override
@@ -197,4 +202,31 @@ public class CompoundDataMapper implements CompoundDataMapperInterface {
     return null;
   }
   
+  private List<Compound> filterList(List<Compound> list) {
+    Set<Compound> set = new HashSet<>(list);
+    
+    List<Compound> filtered = new ArrayList<>(); 
+    filtered.addAll(set);
+    return filtered; 
+    
+//    List<Compound> filtered = new ArrayList<>(); 
+//    
+//    for (Compound c : list) {
+//      if (filtered.isEmpty()) {
+//        filtered.add(c);
+//      } else {
+//        for (Compound f : filtered) {
+//          if (!(c.equals(f))) {
+//            filtered.add(c);
+//          }
+//        }
+//      }
+//    }
+    
+//    for(Compound c : list) {
+//      if(!(filtered.contains(c))) {
+//        filtered.add(c);
+//      }
+//    }
+  }
 }

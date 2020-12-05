@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseException;
+import datasource.AcidRDGRDS;
 import datasource.BaseDTO;
 import datasource.BaseRDG;
 import datasource.BaseRDGRDS;
 import datasource.BaseTDGRDS;
+import datasource.ChemicalRDG;
+import datasource.ChemicalRDGRDS;
 
 /**
  * Maps BaseDataMapperInterface functions to class table implementation.
@@ -19,11 +22,17 @@ import datasource.BaseTDGRDS;
 public class BaseDataMapper implements BaseDataMapperInterface {
   @Override
   public Base create(String name, double inventory, Chemical solute) throws DomainModelException {
-    BaseRDG row = new BaseRDGRDS(solute.getID(), name, inventory, solute.getName());
-    // Use BaseRDG to create base
+    BaseRDG row;
+    try {
+      row = new BaseRDGRDS(solute.getID(), name, inventory, getSoluteType(solute.getID()));
+      // Use BaseRDG to create base
 
-    return convertFromDTO(row.getBase());
-    // Convert DTO to Base and return it
+      return convertFromDTO(row.getBase());
+      // Convert DTO to Base and return it
+    } catch (DomainModelException | SQLException | DatabaseException e) {
+      e.printStackTrace();
+      return null; 
+    }
   }
 
   @Override
@@ -49,11 +58,11 @@ public class BaseDataMapper implements BaseDataMapperInterface {
       row.setName(base.getName());
       row.setInventory(base.getInventory());
       row.setSolute(base.getSolute().getID());
-      row.setSoluteType(base.getSolute().getName());
+      row.setSoluteType(getSoluteType(base.getSolute().getID()));
 
       // Update
       row.update();
-    } catch (SQLException | DatabaseException e) {
+    } catch (SQLException | DatabaseException | DomainModelException e) {
       System.out.println("Failed to update");
       e.printStackTrace();
     }
@@ -170,40 +179,29 @@ public class BaseDataMapper implements BaseDataMapperInterface {
   }
 
   /**
-   * Fetches a solute by it's type
-   * 
    * @param s Solute Type
    * @param i ID
    * @return Solute
+   * @throws DatabaseException 
+   * @throws SQLException 
    */
-  private Chemical soluteType(String s, int i) {
-    System.out.println(s + " " + i);
-    // very possible there is infinite loading shenanigans
-    try {
-      if (s.toLowerCase().contains("acid")) {
-        AcidDataMapper m = new AcidDataMapper();
-        return m.read(i);
-      } else if (s.toLowerCase().contains("base")) {
-        BaseDataMapper m = new BaseDataMapper();
-        return m.read(i);
-      } else if (s.toLowerCase().contains("compound")) {
-        CompoundDataMapper m = new CompoundDataMapper();
-        return m.read(i);
-      } else if (s.toLowerCase().contains("element")) {
-        ElementDataMapper m = new ElementDataMapper();
-        return m.read(i);
-      } else if (s.toLowerCase().contains("metal")) {
-        BaseDataMapper m = new BaseDataMapper();
-        return m.read(i);
-      } else {
-        return null; 
-      }
-
-    } catch (DomainModelException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    return null;
+  private int getSoluteType(int id) throws DomainModelException, SQLException, DatabaseException {
+    int type = new ChemicalRDGRDS(id).getChemical().getSoluteType(); 
+      switch (type) {
+      case (1): // acid
+        return new AcidRDGRDS(id).getAcid().getSoluteType();
+      case (2): // base
+        return new BaseRDGRDS(id).getBase().getSoluteType(); 
+      case (3): // compound
+        return new ChemicalRDGRDS(id).getChemical().getSoluteType(); 
+      case (4): // element
+        return new ChemicalRDGRDS(id).getChemical().getSoluteType();
+      case (5): // metal
+        return new ChemicalRDGRDS(id).getChemical().getSoluteType();
+      default:
+        // MetalDataMapper e = new MetalDataMapper(); 
+        throw new DomainModelException("Bad solute type"); 
+      } 
   }
 
   /**
@@ -213,7 +211,17 @@ public class BaseDataMapper implements BaseDataMapperInterface {
    * @return converted Base
    */
   private Base convertFromDTO(BaseDTO dto) {
-    return new Base(dto.getBaseId(), dto.getName(), dto.getInventory(), soluteType(dto.getSoluteType(), dto.getSoluteId()));
+    try {
+      return new Base(dto.getBaseId(), dto.getName(), dto.getInventory(), makeSolute(dto.getSoluteId()));
+    } catch (SQLException | DatabaseException e) {
+      e.printStackTrace();
+      return null; 
+    }
+  }
+  
+  private Solute makeSolute(int id) throws SQLException, DatabaseException {
+    ChemicalRDG c = new ChemicalRDGRDS(id); 
+    return new Solute(c.getChemical().getChemicalId(), c.getChemical().getName(), c.getChemical().getInventory());
   }
 
   @Override
