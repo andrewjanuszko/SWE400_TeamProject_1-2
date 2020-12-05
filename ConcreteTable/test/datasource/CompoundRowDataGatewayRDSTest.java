@@ -12,10 +12,9 @@ class CompoundRowDataGatewayRDSTest extends DatabaseTest{
    */
   @BeforeEach
   void setup() throws DatabaseException{
-    CompoundMadeOfTableDataGatewayRDS.dropTable();
-    CompoundRowDataGatewayRDS.createTable();
-    ElementRowDataGatewayRDS.createTable();
-    CompoundMadeOfTableDataGatewayRDS.createTable();
+    ConcreteTableInitializer.clearMaps();
+    ConcreteTableInitializer.dropTables();
+    ConcreteTableInitializer.createTables();
   }
   /**
    * Tests constructors.

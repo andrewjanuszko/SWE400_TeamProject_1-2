@@ -16,7 +16,9 @@ class BaseRowDataGatewayRDSTest extends DatabaseTest{
    */
   @BeforeEach
   void setup() throws DatabaseException{
-    BaseRowDataGatewayRDS.createTable();
+    ConcreteTableInitializer.clearMaps();
+    ConcreteTableInitializer.dropTables();
+    ConcreteTableInitializer.createTables();
   }
   
   /**

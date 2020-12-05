@@ -46,7 +46,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
         MetalDataMapper metalMapper = new MetalDataMapper();
 
         Acid acid = new Acid(gateway.getAcidID(), gateway.getName(), gateway.getInventory(),
-            metalMapper.filterByDissolvedBy(id), soluteType(gateway.getSoluteType(), gateway.getSolute()));
+            metalMapper.filterByDissolvedBy(id), new ChemicalSoluteGhost(gateway.getSolute(), gateway.getSoluteType()));
 
         acidMap.add(acid);
         return acid;
@@ -101,39 +101,6 @@ public class AcidDataMapper implements AcidDataMapperInterface {
 
   }
 
-  /**
-   * Fetches a solute by it's type
-   * 
-   * @param s Solute Type
-   * @param i ID
-   * @return Solute
-   */
-  private Chemical soluteType(String s, int i) {
-    // very possible there is infinite loading shenanigans
-    try {
-      if (s.contains("Acid")) {
-        AcidDataMapper m = new AcidDataMapper();
-        return m.read(i);
-      } else if (s.contains("Base")) {
-        BaseDataMapper m = new BaseDataMapper();
-        return m.read(i);
-      } else if (s.contains("Compound")) {
-        CompoundDataMapper m = new CompoundDataMapper();
-        return m.read(i);
-      } else if (s.contains("Element")) {
-        ElementDataMapper m = new ElementDataMapper();
-        return m.read(i);
-      } else if (s.contains("Metal")) {
-        BaseDataMapper m = new BaseDataMapper();
-        return m.read(i);
-      }
-
-    } catch (DomainModelException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    return null;
-  }
 
   /**
    * Converts a list of AcidDTOs to a list of Acids.
@@ -149,7 +116,7 @@ public class AcidDataMapper implements AcidDataMapperInterface {
         String name = dto.getName();
         int soluteId = dto.getSoluteID();
         String soluteType = dto.getSoluteType();
-        Chemical solute = soluteType(soluteType, soluteId);
+        Chemical solute = new ChemicalSoluteGhost(soluteId, soluteType);
         MetalDataMapper metalMapper = new MetalDataMapper();
         List<Metal> dissolves = metalMapper.filterByDissolvedBy(dto.getAcidID());
         double inventory = dto.getInventory();

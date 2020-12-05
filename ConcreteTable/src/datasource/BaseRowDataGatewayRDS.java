@@ -22,7 +22,7 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 				"name VARCHAR(30) NOT NULL, " +                      
 				"inventory DOUBLE, " +
 				"solute INT, " + 
-				"soluteType VARCHAR(30)" +
+				"soluteType VARCHAR(30)," +
 				"UNIQUE(name), " +
 				"PRIMARY KEY(baseID)) ;";
 		
@@ -180,13 +180,14 @@ public class BaseRowDataGatewayRDS implements BaseRowDataGateway{
 	  try {
   		PreparedStatement stmt = conn.prepareStatement("UPDATE Base SET"
   				+ " name = '" + name
-  				+ "', inventory = '" + inventory
-  				+ "', solute = " + solute
+  				+ "', inventory = " + inventory
+  				+ ", solute = " + solute
   				+ " , soluteType = '" + soluteType
-  				+ "', WHERE baseID = " + baseID);
+  				+ "' WHERE baseID = " + baseID);
   		stmt.executeUpdate();
   		return true;
 	  } catch (SQLException e) {
+	    e.printStackTrace();
   		new DatabaseException("Couldn't update Base table");
   		return false;
 	  }

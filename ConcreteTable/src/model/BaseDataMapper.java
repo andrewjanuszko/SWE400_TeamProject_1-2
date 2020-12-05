@@ -36,7 +36,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
     try {
       if (baseMap.get(id) == null) {
         BaseRowDataGateway gateway = new BaseRowDataGatewayRDS(id);
-        Base base = new Base(gateway.getBaseID(), gateway.getName(), gateway.getInventory(), soluteType(gateway.getSoluteType(), gateway.getSolute()));
+        Base base = new Base(gateway.getBaseID(), gateway.getName(), gateway.getInventory(), new ChemicalSoluteGhost(gateway.getSolute(), gateway.getSoluteType()));
 
         baseMap.add(base);
         return base;
@@ -80,40 +80,6 @@ public class BaseDataMapper implements BaseDataMapperInterface {
 
   }
 
-  /**
-   * Fetches a solute by it's type
-   * 
-   * @param s Solute Type
-   * @param i ID
-   * @return Solute
-   */
-  private Chemical soluteType(String s, int i) {
-    // very possible there is infinite loading shenanigans
-    try {
-      if (s.contains("Acid")) {
-        AcidDataMapper m = new AcidDataMapper();
-        return m.read(i);
-      } else if (s.contains("Base")) {
-        BaseDataMapper m = new BaseDataMapper();
-        return m.read(i);
-      } else if (s.contains("Compound")) {
-        CompoundDataMapper m = new CompoundDataMapper();
-        return m.read(i);
-      } else if (s.contains("Element")) {
-        ElementDataMapper m = new ElementDataMapper();
-        return m.read(i);
-      } else if (s.contains("Metal")) {
-        BaseDataMapper m = new BaseDataMapper();
-        return m.read(i);
-      }
-
-    } catch (DomainModelException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    return null;
-  }
-
   public List<Base> DTOListToBaseList(List<BaseDTO> baseDTOList) {
     List<Base> bases = new ArrayList<Base>();
     for (BaseDTO dto : baseDTOList) {
@@ -123,7 +89,7 @@ public class BaseDataMapper implements BaseDataMapperInterface {
       int solute = dto.getSoluteID();
       String soluteType = dto.getSoluteType();
 
-      Base base = new Base(baseID, name, inventory, soluteType(soluteType, solute));
+      Base base = new Base(baseID, name, inventory, new ChemicalSoluteGhost(solute, soluteType));
       bases.add(base);
       baseMap.add(base);
     }

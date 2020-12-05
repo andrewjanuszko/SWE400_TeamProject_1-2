@@ -11,6 +11,7 @@ class CompoundMadeOfTableDataGatewayRDSTest extends DatabaseTest{
   
   @BeforeEach
   void setup() throws DatabaseException {
+    ConcreteTableInitializer.clearMaps();
     ConcreteTableInitializer.dropTables();
     ConcreteTableInitializer.createTables();
   }
