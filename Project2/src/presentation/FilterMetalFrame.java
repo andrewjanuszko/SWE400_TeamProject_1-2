@@ -349,13 +349,13 @@ public class FilterMetalFrame extends JFrame{
 					filter = filter + "-" + Double.parseDouble(jtfMassRange1.getText()) + "-" + Double.parseDouble(jtfMassRange2.getText());
 					break;
 				case 7:
-					
+					filter = filter + "-" + Double.parseDouble(jtfAcidAmount.getText());
 					break;
 				case 8:
-					
+					filter = filter + "-" + Double.parseDouble(jtfAcidAmountRange1.getText() + "-" + Double.parseDouble(jtfAcidAmountRange2.getText()));
 					break;
 				case 9:
-					
+					filter = filter + "-" + Integer.parseInt(jtfDissolvedBy.getText());
 					break;
 				case 10:
 					filter = filter + "-" + Integer.parseInt(jtfPartOf.getText());
