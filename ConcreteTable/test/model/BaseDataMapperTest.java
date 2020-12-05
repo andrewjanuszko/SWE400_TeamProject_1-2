@@ -89,7 +89,7 @@ class BaseDataMapperTest {
     assertEquals(dto.getBaseID(), base.getID());
     assertEquals(dto.getName(), base.getName());
     assertEquals(dto.getInventory(), base.getInventory());
-    assertEquals(dto.getSoluteID(), base.getSolute());
+    assertEquals(dto.getSoluteID(), base.getSolute().getID());
   }
   
   @Test

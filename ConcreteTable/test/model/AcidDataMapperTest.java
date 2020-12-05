@@ -85,6 +85,7 @@ class AcidDataMapperTest {
     String name = "name";
     double inventory = 1.0;
     List<Metal> dissolves = new ArrayList<Metal>();
+    
     Element e = new Element(13, "Name", 1, 1, 1);
     int solute = 13;
     String soluteType = "Element";
@@ -97,7 +98,7 @@ class AcidDataMapperTest {
     assertEquals(dto.getAcidID(), acid.getID());
     assertEquals(dto.getName(), acid.getName());
     assertEquals(dto.getInventory(), acid.getInventory());
-    assertEquals(dto.getSoluteID(), acid.getSolute());
+    assertEquals(dto.getSoluteID(), acid.getSolute().getID());
     
   }
   

@@ -14,10 +14,9 @@ class MetalRowDataGatewayRDSTest extends DatabaseTest {
    */
   @BeforeEach
   void setup() throws DatabaseException {
-    MetalRowDataGatewayRDS.dropTable();
-    AcidRowDataGatewayRDS.dropTable();
-    AcidRowDataGatewayRDS.createTable();
-    MetalRowDataGatewayRDS.createTable();
+    ConcreteTableInitializer.clearMaps();
+    ConcreteTableInitializer.dropTables();
+    ConcreteTableInitializer.createTables();
   }
 
   @Test
